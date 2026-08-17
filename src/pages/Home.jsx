@@ -17,10 +17,12 @@ const serviceImages = {
 
 // ── Car For Rents data (matches Figma)
 const rentCars = [
-  { name: 'La Ferrari', model: '2017', speed: '211mph', auto: '7-speed', engine: '963hp', img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&h=240&fit=crop' },
   { name: 'McLaren',    model: '2020', speed: '212mph', auto: '7-speed', engine: '710hp', img: 'https://images.unsplash.com/photo-1558981852-426c373d4a83?w=400&h=240&fit=crop' },
   { name: 'Lamborghini',model: '2021', speed: '218mph', auto: '7-speed', engine: '631hp', img: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&h=240&fit=crop' },
   { name: 'Bugatti',    model: '2022', speed: '304mph', auto: '7-speed', engine: '1500hp',img: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&h=240&fit=crop' },
+  { name: 'Mercedes',   model: '2023', speed: '190mph', auto: '9-speed', engine: '577hp', img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=240&fit=crop' },
+  { name: 'Rolls Royce',model: '2023', speed: '155mph', auto: '8-speed', engine: '563hp', img: 'https://images.unsplash.com/photo-1631521958611-6677f52f360f?w=400&h=240&fit=crop' },
+  { name: 'La Ferrari', model: '2017', speed: '211mph', auto: '7-speed', engine: '963hp', img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&h=240&fit=crop' },
 ];
 
 export default function Home() {
@@ -214,32 +216,33 @@ export default function Home() {
           </div>
         </div>
 
-        {/* White car cards — horizontal scroll on mobile, grid on desktop */}
-        <div className="flex gap-6 overflow-x-auto no-scrollbar px-8 md:px-16 lg:px-24 pb-6 lg:grid lg:grid-cols-4 lg:overflow-visible">
-          {rentCars.map((car, i) => (
-            <Link
-              to="/car-rental"
-              key={i}
-              id={`rent-car-${i}`}
-              className={`flex-shrink-0 w-64 lg:w-auto bg-white rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(255,255,255,0.15)] group ${visible['cars-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
-              style={{ animationDelay: `${i * 0.15}s` }}
-            >
-              {/* Car image */}
-              <div className="aspect-[16/10] overflow-hidden bg-gray-100">
-                <img src={car.img} alt={car.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              </div>
-              {/* Details */}
-              <div className="p-4">
-                <h3 className="text-gray-900 font-black text-xl mb-3 text-center">{car.name}</h3>
-                <div className="grid grid-cols-2 gap-1.5 text-xs text-gray-600 font-semibold">
-                  <span className="bg-gray-100 rounded-lg px-2 py-1.5">Model: {car.model}</span>
-                  <span className="bg-gray-100 rounded-lg px-2 py-1.5">Speed: {car.speed}</span>
-                  <span className="bg-gray-100 rounded-lg px-2 py-1.5">Auto: {car.auto}</span>
-                  <span className="bg-gray-100 rounded-lg px-2 py-1.5">Engine: {car.engine}</span>
+        {/* Continuous Horizontal Scroll Carousel */}
+        <div className={`relative flex overflow-hidden group ${visible['cars-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
+          <div className="flex gap-6 animate-marquee min-w-max hover:[animation-play-state:paused] pb-6 px-3">
+            {/* Double the array for infinite loop effect */}
+            {[...rentCars, ...rentCars].map((car, i) => (
+              <Link
+                to="/car-rental"
+                key={i}
+                className="flex-shrink-0 w-64 md:w-72 bg-white rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(255,255,255,0.15)] group/card"
+              >
+                {/* Car image */}
+                <div className="aspect-[16/10] overflow-hidden bg-gray-100">
+                  <img src={car.img} alt={car.name} className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500" />
                 </div>
-              </div>
-            </Link>
-          ))}
+                {/* Details */}
+                <div className="p-4">
+                  <h3 className="text-gray-900 font-black text-xl mb-3 text-center">{car.name}</h3>
+                  <div className="grid grid-cols-2 gap-1.5 text-xs text-gray-600 font-semibold">
+                    <span className="bg-gray-100 rounded-lg px-2 py-1.5">Model: {car.model}</span>
+                    <span className="bg-gray-100 rounded-lg px-2 py-1.5">Speed: {car.speed}</span>
+                    <span className="bg-gray-100 rounded-lg px-2 py-1.5">Auto: {car.auto}</span>
+                    <span className="bg-gray-100 rounded-lg px-2 py-1.5">Engine: {car.engine}</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
