@@ -10,8 +10,8 @@ const serviceImages = {
   emergency:      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop',
   spareParts:     'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=600&h=400&fit=crop',
   carRental:      'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=400&h=250&fit=crop',
-  workshop:       'https://images.unsplash.com/photo-1504222490345-c075b7c75e31?w=400&h=250&fit=crop',
-  fuelDelivery:   'https://images.unsplash.com/photo-1545012820-8f24ce54d4f5?w=400&h=250&fit=crop',
+  workshop:       'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=400&h=250&fit=crop',
+  fuelDelivery:   'https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=400&h=250&fit=crop',
   driverHire:     'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=250&fit=crop',
 };
 
@@ -21,7 +21,7 @@ const rentCars = [
   { name: 'Lamborghini',model: '2021', speed: '218mph', auto: '7-speed', engine: '631hp', img: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&h=240&fit=crop' },
   { name: 'Bugatti',    model: '2022', speed: '304mph', auto: '7-speed', engine: '1500hp',img: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&h=240&fit=crop' },
   { name: 'Mercedes',   model: '2023', speed: '190mph', auto: '9-speed', engine: '577hp', img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=240&fit=crop' },
-  { name: 'Rolls Royce',model: '2023', speed: '155mph', auto: '8-speed', engine: '563hp', img: 'https://images.unsplash.com/photo-1631521958611-6677f52f360f?w=400&h=240&fit=crop' },
+  { name: 'Rolls Royce',model: '2023', speed: '155mph', auto: '8-speed', engine: '563hp', img: 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=400&h=240&fit=crop' },
   { name: 'La Ferrari', model: '2017', speed: '211mph', auto: '7-speed', engine: '963hp', img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&h=240&fit=crop' },
 ];
 
