@@ -177,36 +177,111 @@ export default function Home() {
               </div>
             </div>
 
-            {/* RIGHT — Image with animated glow + floating effect */}
+            {/* RIGHT — Animated visual panel */}
             <div className="flex items-center justify-center animate-slideInRight">
-              <div className="relative w-full max-w-[560px]">
-                {/* Outer glow ring */}
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-red-600/30 via-transparent to-red-900/20 blur-2xl scale-110 pointer-events-none" />
+              <div className="relative w-full max-w-[520px] aspect-square">
 
-                {/* Image container — animate-float for gentle bob */}
-                <div className="relative animate-float">
-                  {/* Decorative ring */}
-                  <div className="absolute -inset-3 rounded-3xl border border-red-600/20" />
-                  <div className="absolute -inset-6 rounded-3xl border border-red-600/10" />
+                {/* ── Outermost ambient glow ── */}
+                <div className="absolute inset-0 rounded-full bg-red-600/10 blur-3xl scale-125 pointer-events-none" />
 
-                  {/* Main image */}
-                  <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_80px_rgba(220,38,38,0.35)]">
-                    <img
-                      src={imgHeroCar}
-                      alt="Mechify hero car"
-                      className={`w-full h-full object-cover transition-opacity duration-700 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
-                      onLoad={() => setImgLoaded(true)}
+                {/* ── Spinning orbit ring 1 (slow, dashed) ── */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div
+                    className="animate-spinOrbit"
+                    style={{
+                      width: '105%', height: '105%',
+                      borderRadius: '50%',
+                      border: '1.5px dashed rgba(220,38,38,0.35)',
+                      position: 'absolute',
+                    }}
+                  />
+                </div>
+
+                {/* ── Spinning orbit ring 2 (faster, solid, reverse) ── */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div
+                    className="animate-spinOrbitReverse"
+                    style={{
+                      width: '88%', height: '88%',
+                      borderRadius: '50%',
+                      border: '1px solid rgba(220,38,38,0.2)',
+                      position: 'absolute',
+                    }}
+                  />
+                </div>
+
+                {/* ── Radar sweep cone ── */}
+                <div
+                  className="absolute inset-[8%] rounded-full overflow-hidden pointer-events-none"
+                  style={{ zIndex: 1 }}
+                >
+                  <div
+                    className="animate-radarSweep"
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background:
+                        'conic-gradient(from 0deg, transparent 0deg, rgba(220,38,38,0.18) 40deg, transparent 41deg)',
+                      borderRadius: '50%',
+                    }}
+                  />
+                </div>
+
+                {/* ── Orbit dot markers ── */}
+                {[0, 72, 144, 216, 288].map((deg, i) => (
+                  <div
+                    key={i}
+                    className="absolute top-1/2 left-1/2 pointer-events-none"
+                    style={{
+                      width: '8px', height: '8px',
+                      marginLeft: '-4px', marginTop: '-4px',
+                      transform: `rotate(${deg}deg) translateX(${252}px)`,
+                    }}
+                  >
+                    <div
+                      className="w-2 h-2 rounded-full bg-red-500 animate-pulse-slow"
+                      style={{ animationDelay: `${i * 0.3}s`, opacity: 0.8 }}
                     />
-                    {/* Overlay gradient — bottom fade */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
                   </div>
+                ))}
 
-                  {/* Floating status badge */}
-                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 glass rounded-full px-5 py-2 flex items-center gap-2 border border-red-600/30 shadow-lg whitespace-nowrap">
-                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                    <span className="text-sm font-semibold text-white">Live Support Active</span>
+                {/* ── Main image — floats gently ── */}
+                <div className="absolute inset-[12%] z-10">
+                  <div className="relative w-full h-full animate-float">
+                    {/* Red glow behind image */}
+                    <div className="absolute inset-0 rounded-2xl bg-red-600/25 blur-xl" />
+
+                    {/* Image */}
+                    <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_60px_rgba(220,38,38,0.4)] z-10">
+                      <img
+                        src={imgHeroCar}
+                        alt="Mechify — fast, reliable vehicle support"
+                        className={`w-full h-full object-cover transition-opacity duration-700 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                        onLoad={() => setImgLoaded(true)}
+                      />
+                      {/* Subtle bottom fade */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                    </div>
+
+                    {/* ── Floating micro-badges ── */}
+                    {/* Top-left: ETA */}
+                    <div className="absolute -top-3 -left-4 glass rounded-xl px-3 py-1.5 flex items-center gap-1.5 border border-white/10 shadow-lg z-20 text-xs font-bold whitespace-nowrap">
+                      <span className="text-green-400">⚡</span> ETA &lt;15 min
+                    </div>
+
+                    {/* Top-right: coverage */}
+                    <div className="absolute -top-3 -right-4 glass rounded-xl px-3 py-1.5 flex items-center gap-1.5 border border-red-600/30 shadow-lg z-20 text-xs font-bold whitespace-nowrap">
+                      📍 Live Tracking
+                    </div>
+
+                    {/* Bottom-centre: live status */}
+                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 glass rounded-full px-5 py-2 flex items-center gap-2 border border-red-600/30 shadow-lg z-20 whitespace-nowrap">
+                      <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                      <span className="text-sm font-semibold text-white">Live Support Active</span>
+                    </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -314,77 +389,6 @@ export default function Home() {
               </div>
             </Link>
           ))}
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════
-          WORKSHOP SECTION
-      ════════════════════════════════════════ */}
-      <section
-        className="py-24 px-6 md:px-12 lg:px-20 bg-[#050505]"
-        id="workshop-section"
-        data-animate
-      >
-        <div
-          className={`flex flex-col lg:flex-row items-center gap-16 max-w-[1400px] mx-auto ${
-            visible['workshop-section'] ? 'animate-fadeInUp' : 'opacity-0'
-          }`}
-        >
-          {/* Left Text */}
-          <div className="w-full lg:w-1/2">
-            <span className="text-red-500 font-semibold tracking-widest text-sm uppercase">
-              Expert Care
-            </span>
-            <h2 className="text-5xl md:text-6xl font-black mt-2 mb-6 leading-tight">
-              Book a <span className="text-red-500">Workshop</span>
-              <br />
-              Appointment
-            </h2>
-            <p className="text-gray-300 text-lg leading-relaxed mb-8">
-              Schedule inspections, upgrades, or full repairs at one of our verified partner
-              workshops across Dhaka. Fast booking, transparent pricing, expert technicians.
-            </p>
-
-            <div className="space-y-4 mb-10">
-              {[
-                { icon: '🔍', title: 'Full Inspection', desc: 'Complete vehicle diagnostics and health check' },
-                { icon: '⚡', title: 'Performance Upgrades', desc: 'Boost horsepower, handling, and aesthetics' },
-                { icon: '🛡️', title: 'Certified Mechanics', desc: '500+ verified and rated professionals' },
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-4 glass rounded-xl p-4">
-                  <span className="text-3xl flex-shrink-0">{item.icon}</span>
-                  <div>
-                    <div className="font-bold text-white">{item.title}</div>
-                    <div className="text-gray-400 text-sm">{item.desc}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <Link to="/workshop" className="btn-red-glow inline-flex items-center gap-2 px-8 py-4 text-lg font-bold">
-              Find Nearest Workshop →
-            </Link>
-          </div>
-
-          {/* Right Grid */}
-          <div className="w-full lg:w-1/2 grid grid-cols-2 gap-4">
-            {[
-              { area: 'Mirpur', img: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop' },
-              { area: 'Banani', img: 'https://images.unsplash.com/photo-1504222490345-c075b7c75e31?w=400&h=300&fit=crop' },
-              { area: 'Badda', img: 'https://images.unsplash.com/photo-1615906655593-ad0386982a0f?w=400&h=300&fit=crop' },
-              { area: 'Motijheel', img: 'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=400&h=300&fit=crop' },
-            ].map((ws, i) => (
-              <Link to="/workshop" key={i} className="relative rounded-xl overflow-hidden group aspect-[4/3] cursor-pointer">
-                <img
-                  src={ws.img}
-                  alt={ws.area}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                <div className="absolute bottom-3 left-3 font-bold text-white text-sm">{ws.area}</div>
-              </Link>
-            ))}
-          </div>
         </div>
       </section>
 

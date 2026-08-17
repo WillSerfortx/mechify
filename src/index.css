@@ -92,6 +92,22 @@ body {
   50% { background-position: 100% 50%; }
 }
 
+/* ─── Orbit Ring Spin ─── */
+@keyframes spinOrbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes spinOrbitReverse {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+/* ─── Radar Sweep ─── */
+@keyframes radarSweep {
+  0%   { transform: rotate(0deg); opacity: 0.8; }
+  100% { transform: rotate(360deg); opacity: 0.8; }
+}
+
 /* ─── Glow Pulse ─── */
 @keyframes glowPulse {
   0%, 100% { text-shadow: 0 0 10px rgba(220, 38, 38, 0.3); }
@@ -113,6 +129,9 @@ body {
 .animate-autoScroll { animation: autoScroll 30s linear infinite; }
 .animate-marquee { animation: marquee 20s linear infinite; }
 .animate-glowPulse { animation: glowPulse 2s ease-in-out infinite; }
+.animate-spinOrbit { animation: spinOrbit 8s linear infinite; }
+.animate-spinOrbitReverse { animation: spinOrbitReverse 12s linear infinite; }
+.animate-radarSweep { animation: radarSweep 3s linear infinite; }
 
 /* ─── Delays ─── */
 .delay-100 { animation-delay: 0.1s; }
