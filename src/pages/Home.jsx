@@ -131,7 +131,7 @@ export default function Home() {
           SERVICES SECTION
           3 large + 4 small — matches Figma Desktop-16
       ══════════════════════════════════════════ */}
-      <section className="py-20 px-6 md:px-12 lg:px-20 bg-black" id="services-section" data-animate>
+      <section className="py-20 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center" id="services-section" data-animate>
         {/* Heading */}
         <div className={`text-center mb-6 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
           <h2 className="text-5xl md:text-7xl font-black text-white">Services</h2>
@@ -145,7 +145,7 @@ export default function Home() {
         </div>
 
         {/* 3 Large service cards */}
-        <div className="flex flex-wrap justify-center gap-4 mb-4 max-w-[1400px] mx-auto w-full">
+        <div className="flex flex-wrap justify-center items-center gap-4 mb-4 w-full max-w-[1400px]">
           {[
             { name: 'Home Service',         icon: '🔧', img: serviceImages.homeService,  link: '/workshop',  badge: null },
             { name: 'Emergency Assistance', icon: '🚨', img: serviceImages.emergency,    link: '/services',  badge: 'Emergency' },
@@ -179,7 +179,7 @@ export default function Home() {
         </div>
 
         {/* 4 Small service cards */}
-        <div className="flex flex-wrap justify-center gap-4 max-w-[1400px] mx-auto w-full">
+        <div className="flex flex-wrap justify-center items-center gap-4 w-full max-w-[1400px]">
           {[
             { name: 'Car Rental',    icon: '🚗', img: serviceImages.carRental,    link: '/car-rental' },
             { name: 'Workshop',      icon: '🏭', img: serviceImages.workshop,     link: '/workshop' },
