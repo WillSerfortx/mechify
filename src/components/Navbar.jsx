@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import imgLogo from '../assets/react.svg';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -20,52 +19,69 @@ export default function Navbar() {
 
   const handleSOS = () => {
     setSosActive(true);
-    alert('🚨 SOS Emergency Activated!\nMechify Emergency Team has been notified.\nHelp is on the way!');
+    alert('🚨 SOS Emergency Activated!\nMechify Emergency Response Team notified.\nETA: 12 minutes. Stay calm, help is coming!');
     setTimeout(() => setSosActive(false), 3000);
   };
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrolled ? 'bg-black/95 shadow-lg shadow-black/50 backdrop-blur-md border-b border-white/5' : 'bg-gradient-to-b from-black/80 to-transparent'}`}>
-      <div className="max-w-[1920px] mx-auto flex items-center justify-between px-4 md:px-10 py-3">
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+      scrolled ? 'bg-black/95 backdrop-blur-md border-b border-white/10 shadow-lg' : 'bg-black/70 backdrop-blur-sm'
+    }`}>
+      <div className="max-w-[1920px] mx-auto flex items-center justify-between px-6 md:px-12 py-3">
 
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center shadow-lg shadow-red-600/30 group-hover:shadow-red-600/60 transition-shadow duration-300">
-            <span className="text-white font-black text-lg">M</span>
+        {/* ── Logo — matches Figma red M + truck ── */}
+        <Link to="/" className="flex items-center gap-3 group">
+          {/* Red M with truck SVG */}
+          <div className="relative">
+            <svg width="56" height="48" viewBox="0 0 56 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* Background red shape */}
+              <rect width="56" height="48" rx="4" fill="#CC0000"/>
+              {/* M letter */}
+              <text x="4" y="34" fontFamily="Arial Black, Arial" fontWeight="900" fontSize="32" fill="white">M</text>
+              {/* Tiny truck icon at bottom right */}
+              <g transform="translate(32,30) scale(0.55)">
+                <rect x="0" y="4" width="28" height="14" rx="2" fill="white"/>
+                <rect x="22" y="0" width="10" height="18" rx="2" fill="white"/>
+                <circle cx="6" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
+                <circle cx="24" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
+              </g>
+            </svg>
           </div>
-          <span className="text-white font-black text-2xl tracking-tight hidden sm:block">
-            Mech<span className="text-red-500">ify</span>
-          </span>
+          <div className="leading-tight">
+            <div className="text-white font-black text-xl tracking-widest">MECHIFY</div>
+            <div className="text-gray-400 text-[9px] tracking-[0.2em] uppercase">Vehicle Support</div>
+          </div>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-6 lg:gap-10">
+        {/* ── Desktop Nav ── */}
+        <nav className="hidden md:flex items-center gap-8 lg:gap-12">
           {[
             { path: '/', label: 'Home' },
             { path: '/about', label: 'About' },
             { path: '/services', label: 'Services' },
-            { path: '/idriver', label: 'iDriver' },
             { path: '/contact', label: 'Contact' },
           ].map(({ path, label }) => (
             <Link
               key={path}
               to={path}
-              className={`font-semibold text-base lg:text-lg transition-all duration-300 relative group ${
-                isActive(path) ? 'text-red-400' : 'text-gray-300 hover:text-white'
+              className={`font-semibold text-base lg:text-lg transition-all duration-300 relative group pb-1 ${
+                isActive(path) ? 'text-white' : 'text-gray-300 hover:text-white'
               }`}
             >
               {label}
-              <span className={`absolute -bottom-1 left-0 h-0.5 bg-red-500 transition-all duration-300 ${isActive(path) ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+              <span className={`absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 ${
+                isActive(path) ? 'w-full' : 'w-0 group-hover:w-full'
+              }`} />
             </Link>
           ))}
         </nav>
 
-        {/* Right Side Actions */}
+        {/* ── Right Actions ── */}
         <div className="flex items-center gap-3">
-          {/* Sign Out Button */}
+          {/* Sign Out button */}
           <Link
             to="/profile"
-            className="hidden md:flex items-center gap-2 border-2 border-white/30 rounded-full px-5 py-2 text-white font-bold text-sm hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 active:scale-95"
+            className="hidden md:flex items-center gap-2 border-2 border-white rounded-full px-6 py-2 text-white font-bold text-sm hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 active:scale-95"
           >
             Sign Out
           </Link>
@@ -74,15 +90,15 @@ export default function Navbar() {
           <button
             id="sos-button"
             onClick={handleSOS}
-            className={`relative flex items-center justify-center w-12 h-12 rounded-full font-black text-white text-xs tracking-widest transition-all duration-300 ${
-              sosActive ? 'bg-red-800 scale-90' : 'bg-red-600 hover:bg-red-700 hover:scale-110'
-            } animate-sosPulse sos-ring`}
+            className={`relative flex items-center justify-center w-12 h-12 rounded-full font-black text-white text-xs tracking-widest transition-all duration-300 animate-sosPulse sos-ring ${
+              sosActive ? 'bg-red-900 scale-90' : 'bg-red-600 hover:bg-red-700 hover:scale-110'
+            }`}
             title="SOS Emergency"
           >
             SOS
           </button>
 
-          {/* Mobile Menu Toggle */}
+          {/* Mobile toggle */}
           <button
             className="md:hidden text-white text-2xl p-2 rounded-lg hover:bg-white/10 transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -92,28 +108,24 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Nav */}
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-black/98 backdrop-blur-xl absolute top-full left-0 w-full border-t border-white/10 flex flex-col p-6 gap-5 shadow-2xl animate-slideDown">
           {[
             { path: '/', label: 'Home' },
             { path: '/about', label: 'About' },
             { path: '/services', label: 'Services' },
-            { path: '/idriver', label: 'iDriver' },
             { path: '/contact', label: 'Contact' },
           ].map(({ path, label }) => (
             <Link
               key={path}
               to={path}
-              className={`font-bold text-xl py-2 border-b border-white/10 ${isActive(path) ? 'text-red-400' : 'text-gray-200'}`}
+              className={`font-bold text-xl py-2 border-b border-white/10 ${isActive(path) ? 'text-white' : 'text-gray-300'}`}
             >
               {label}
             </Link>
           ))}
-          <Link
-            to="/profile"
-            className="bg-white text-black text-center rounded-full px-6 py-3 font-bold text-lg mt-2 hover:bg-gray-100 transition-colors"
-          >
+          <Link to="/profile" className="bg-white text-black text-center rounded-full px-6 py-3 font-bold text-lg mt-2">
             Sign Out
           </Link>
         </div>

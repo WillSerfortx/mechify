@@ -1,78 +1,98 @@
 import { Link } from 'react-router-dom';
 
-const imgLogo = "https://placehold.co/163x131/111/fff?text=Logo";
-
 export default function Footer() {
   return (
-    <footer className="bg-black pt-16 pb-8 border-t border-gray-800 text-white font-sora">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        {/* Newsletter */}
-        <div className="mb-16 animate-fadeInUp text-center lg:text-left">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Signup for Newsletter</h2>
-          <p className="text-lg md:text-xl text-gray-300 mb-6 max-w-2xl mx-auto lg:mx-0">We may send you information about new cars related events, webinars, news and services which we believe</p>
-          <div className="flex flex-col sm:flex-row items-center gap-4 max-w-2xl mx-auto lg:mx-0">
-            <input type="email" placeholder="Enter your email address" className="w-full sm:flex-1 bg-transparent border-b-2 border-gray-500 text-white text-lg py-3 px-2 outline-none focus:border-white transition-colors" />
-            <button className="w-full sm:w-auto bg-black border-2 border-white rounded-full px-10 py-3 text-white text-xl font-bold hover:bg-white hover:text-black transition-all duration-300 shadow-lg hover:shadow-white/20">Subscribe</button>
+    <footer className="bg-black text-white py-16 px-6 md:px-12 lg:px-20 border-t border-white/10 font-outfit">
+      <div className="max-w-[1400px] mx-auto">
+        {/* Newsletter Section */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-16 gap-8 border-b border-white/10 pb-12">
+          <div className="max-w-md">
+            <h2 className="text-3xl font-black mb-3">Signup for Newsletter</h2>
+            <p className="text-gray-400 text-sm">
+              We may send you information about new cars related events, webinars, news and services which we believe
+            </p>
+          </div>
+          <div className="flex items-center gap-4 w-full lg:w-auto">
+            <input
+              type="email"
+              placeholder="Enter your email address"
+              className="bg-transparent border-b border-gray-600 px-2 py-2 focus:outline-none focus:border-red-500 transition-colors w-full sm:w-64 text-sm"
+            />
+            <button className="border border-white rounded-full px-6 py-2 text-sm font-semibold hover:bg-white hover:text-black transition-colors shrink-0">
+              Subscribe
+            </button>
           </div>
         </div>
 
-        {/* Footer Links */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mt-16 pt-12 border-t border-gray-800">
-          <div className="col-span-1 sm:col-span-2 lg:col-span-1 flex justify-center lg:justify-start">
-            <div className="w-32 h-24 lg:w-40 lg:h-32 overflow-hidden bg-white/5 p-4 rounded-xl">
-              <img src={imgLogo} alt="Mechify" className="w-full h-full object-contain" />
+        {/* Links Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
+          {/* Logo Column */}
+          <div className="lg:col-span-1">
+            <Link to="/" className="flex items-center gap-2 group mb-4">
+              <svg width="42" height="36" viewBox="0 0 56 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="56" height="48" rx="4" fill="#CC0000"/>
+                <text x="4" y="34" fontFamily="Arial Black, Arial" fontWeight="900" fontSize="32" fill="white">M</text>
+                <g transform="translate(32,30) scale(0.55)">
+                  <rect x="0" y="4" width="28" height="14" rx="2" fill="white"/>
+                  <rect x="22" y="0" width="10" height="18" rx="2" fill="white"/>
+                  <circle cx="6" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
+                  <circle cx="24" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
+                </g>
+              </svg>
+              <div className="leading-tight">
+                <div className="text-white font-black text-lg tracking-widest">MECHIFY</div>
+                <div className="text-gray-400 text-[8px] tracking-[0.2em] uppercase">Vehicle Support</div>
+              </div>
+            </Link>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+              <span className="w-1 h-4 bg-red-600 rounded-full"></span> Quick Links
+            </h3>
+            <ul className="space-y-2 text-gray-400 text-sm">
+              {['Home', 'About Us', 'Cars', 'Sell', 'Rentals', 'Careers', 'Contact'].map((link) => (
+                <li key={link}><Link to="#" className="hover:text-white transition-colors">{link}</Link></li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Brands */}
+          <div>
+            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+              <span className="w-1 h-4 bg-red-600 rounded-full"></span> Brands
+            </h3>
+            <ul className="space-y-2 text-gray-400 text-sm">
+              {['Ferrari In Dubai', 'Mercedes In Dubai', 'Rolls-Royce In Dubai', 'Porsche In Dubai', 'Lamborghini In Dubai'].map((link) => (
+                <li key={link}><Link to="#" className="hover:text-white transition-colors">{link}</Link></li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Information */}
+          <div>
+            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+              <span className="w-1 h-4 bg-red-600 rounded-full"></span> Information
+            </h3>
+            <ul className="space-y-2 text-gray-400 text-sm">
+              {['Meet', 'Showroom Virtual Tour', 'Sold Cars', 'Privacy Policy', 'Terms & Conditions', 'Sitemap'].map((link) => (
+                <li key={link}><Link to="#" className="hover:text-white transition-colors">{link}</Link></li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Information */}
+          <div>
+            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+              <span className="w-1 h-4 bg-red-600 rounded-full"></span> Contact Information
+            </h3>
+            <div className="space-y-4 text-gray-400 text-sm">
+              <p>Address: House 3, Lane 1 Baridhara DOHS, Dhaka 1206</p>
+              <p>Mail: <a href="mailto:washiurrahman7771@kuet.ac.bd" className="hover:text-white transition-colors underline underline-offset-2">washiurrahman7771@kuet.ac.bd</a></p>
+              <p>Call US: <a href="tel:+8801516520602" className="hover:text-white transition-colors">+880 1516 520602</a></p>
             </div>
           </div>
-
-          <div>
-            <h3 className="text-xl font-bold mb-6 border-l-4 border-red-600 pl-3 uppercase tracking-wider">Quick Links</h3>
-            <ul className="space-y-3 text-gray-400 font-medium">
-              <li><Link to="/" className="hover:text-white transition-colors flex items-center gap-2"><span className="text-red-600">›</span> Home</Link></li>
-              <li><Link to="/about" className="hover:text-white transition-colors flex items-center gap-2"><span className="text-red-600">›</span> About Us</Link></li>
-              <li><Link to="/services" className="hover:text-white transition-colors flex items-center gap-2"><span className="text-red-600">›</span> Cars</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition-colors flex items-center gap-2"><span className="text-red-600">›</span> Sell</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition-colors flex items-center gap-2"><span className="text-red-600">›</span> Media</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition-colors flex items-center gap-2"><span className="text-red-600">›</span> Careers</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition-colors flex items-center gap-2"><span className="text-red-600">›</span> Contact</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-bold mb-6 border-l-4 border-red-600 pl-3 uppercase tracking-wider">Brands</h3>
-            <ul className="space-y-3 text-gray-400 font-medium">
-              <li className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"><span className="text-red-600">›</span> Ferrari in Dubai</li>
-              <li className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"><span className="text-red-600">›</span> Rolls-Royce in Dubai</li>
-              <li className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"><span className="text-red-600">›</span> Porsche in Dubai</li>
-              <li className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"><span className="text-red-600">›</span> Lamborghini in Dubai</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-bold mb-6 border-l-4 border-red-600 pl-3 uppercase tracking-wider">Information</h3>
-            <ul className="space-y-3 text-gray-400 font-medium">
-              <li className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"><span className="text-red-600">›</span> News</li>
-              <li className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"><span className="text-red-600">›</span> Showroom Virtual Tour</li>
-              <li className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"><span className="text-red-600">›</span> Sold Cars</li>
-              <li className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"><span className="text-red-600">›</span> Privacy Policy</li>
-              <li className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"><span className="text-red-600">›</span> Terms & Conditions</li>
-              <li className="hover:text-white transition-colors cursor-pointer flex items-center gap-2"><span className="text-red-600">›</span> Sitemap</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-bold mb-6 border-l-4 border-red-600 pl-3 uppercase tracking-wider">Contact Us</h3>
-            <div className="space-y-4 text-gray-400">
-              <p className="flex items-start gap-3"><span className="text-red-600 mt-1">📍</span> <span>House 5, Lane 1 Baridhara<br/>Dohs. Dhaka 1216</span></p>
-              <div className="border-b border-gray-800 my-2"></div>
-              <p className="flex items-center gap-3"><span className="text-red-600">✉</span> <a href="mailto:mrahman2331077@bscse.uiu.ac.bd" className="hover:text-white transition-colors break-all">mrahman2331077@bscse.uiu.ac.bd</a></p>
-              <div className="border-b border-gray-800 my-2"></div>
-              <p className="flex items-center gap-3"><span className="text-red-600">📞</span> <a href="tel:+8801516520602" className="hover:text-white transition-colors">+8801516520602</a></p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-16 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-          <p>© {new Date().getFullYear()} Mechify. All rights reserved.</p>
         </div>
       </div>
     </footer>

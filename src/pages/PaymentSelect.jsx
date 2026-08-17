@@ -2,34 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const methods = [
-  {
-    name: 'Visa',
-    subtitle: 'Credit / Debit Card',
-    icon: '💳',
-    color: '#1A1F71',
-    gradient: 'from-[#1A1F71] to-[#2a3080]',
-  },
-  {
-    name: 'bKash',
-    subtitle: 'Mobile Banking',
-    icon: '📱',
-    color: '#E2136E',
-    gradient: 'from-[#E2136E] to-[#b50d57]',
-  },
-  {
-    name: 'Nagad',
-    subtitle: 'Digital Payment',
-    icon: '💰',
-    color: '#F7941D',
-    gradient: 'from-[#F7941D] to-[#c97a18]',
-  },
-  {
-    name: 'Cash on Delivery',
-    subtitle: 'Pay when service arrives',
-    icon: '💵',
-    color: '#16a34a',
-    gradient: 'from-[#16a34a] to-[#15803d]',
-  },
+  { name: 'Visa', id: 'visa', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/800px-Visa_Inc._logo.svg.png' },
+  { name: 'Bkash', id: 'bkash', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/BKash_Logo.svg/1024px-BKash_Logo.svg.png' },
+  { name: 'Nagad', id: 'nagad', logo: 'https://upload.wikimedia.org/wikipedia/bn/thumb/8/87/Nagad_Logo.svg/1024px-Nagad_Logo.svg.png' },
+  { name: 'Cash On DELIVERY', id: 'cash', logo: 'https://cdn-icons-png.flaticon.com/512/2489/2489756.png' }, // Generic cash icon
 ];
 
 export default function PaymentSelect() {
@@ -41,89 +17,61 @@ export default function PaymentSelect() {
       alert('Please select a payment method.');
       return;
     }
-    navigate('/card-payment');
+    navigate('/payment-success');
   };
 
   return (
     <div className="bg-black min-h-screen flex items-center justify-center py-12 px-6 font-outfit">
-      <div className="w-full max-w-xl animate-scaleIn">
+      <div className="w-full max-w-lg relative">
+        
+        {/* Back Arrow (Left of box) */}
+        <button 
+          onClick={() => navigate(-1)}
+          className="absolute -left-20 top-1/2 -translate-y-1/2 w-12 h-12 border-2 border-white flex items-center justify-center text-white text-3xl font-black hover:bg-white hover:text-black transition-colors"
+        >
+          &lt;
+        </button>
 
-        {/* Header */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-red-600/20 border border-red-600/40 rounded-full px-4 py-1.5 mb-4">
-            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-            <span className="text-red-400 text-sm font-semibold">Secure Transaction</span>
+        {/* Payment Box */}
+        <div className="border border-white rounded-3xl p-10 bg-black">
+          <div className="mb-8">
+            <h1 className="text-white text-2xl font-black mb-2">Select Payment METHOD</h1>
+            <p className="text-gray-400 text-xs">Payment Method with secure transaction</p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black mb-2">Select Payment</h1>
-          <p className="text-gray-400">Choose your preferred payment method</p>
-        </div>
 
-        {/* Payment Options */}
-        <div className="space-y-3 mb-8">
-          {methods.map((method, i) => (
-            <button
-              key={i}
-              id={`payment-${method.name.toLowerCase().replace(/\s+/g, '-')}`}
-              onClick={() => setSelected(i)}
-              className={`w-full flex items-center gap-5 rounded-2xl px-6 py-5 transition-all duration-300 border-2 hover:-translate-y-0.5 animate-fadeInUp group ${
-                selected === i
-                  ? 'border-transparent shadow-2xl scale-[1.02]'
-                  : 'border-white/10 bg-white/5 hover:border-white/20'
-              }`}
-              style={selected === i ? {
-                background: `linear-gradient(135deg, ${method.color}dd, ${method.color}99)`,
-                boxShadow: `0 8px 32px ${method.color}44`,
-              } : {}}
-              aria-label={`Select ${method.name}`}
-            >
-              {/* Icon */}
-              <div
-                className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 transition-all duration-300 ${
-                  selected === i ? 'bg-white/20' : 'bg-white/10 group-hover:bg-white/15'
+          <div className="space-y-6 mb-12">
+            {methods.map((method, i) => (
+              <button
+                key={method.id}
+                onClick={() => setSelected(i)}
+                className={`w-full bg-white rounded-full flex items-center px-8 py-3 transition-all duration-300 ${
+                  selected === i ? 'ring-4 ring-red-600 shadow-[0_0_15px_rgba(220,38,38,0.5)] scale-105' : 'hover:bg-gray-100'
                 }`}
               >
-                {method.icon}
-              </div>
-
-              {/* Text */}
-              <div className="flex-1 text-left">
-                <div className="font-black text-xl text-white">{method.name}</div>
-                <div className={`text-sm ${selected === i ? 'text-white/80' : 'text-gray-400'}`}>
-                  {method.subtitle}
+                <div className="w-16 h-8 flex items-center justify-center mr-6">
+                  <img src={method.logo} alt={method.name} className="max-h-full max-w-full object-contain" />
                 </div>
-              </div>
+                <span className="text-black text-lg font-semibold">{method.name}</span>
+              </button>
+            ))}
+          </div>
 
-              {/* Checkmark */}
-              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-                selected === i ? 'bg-white border-white' : 'border-gray-600'
-              }`}>
-                {selected === i && <span className="text-gray-900 text-sm font-black">✓</span>}
-              </div>
+          <div className="space-y-6">
+            <button
+              onClick={handleContinue}
+              className="w-full bg-red-600 hover:bg-red-700 text-white font-black text-xl py-4 rounded-full transition-colors shadow-[0_0_15px_rgba(220,38,38,0.3)]"
+            >
+              Continue
             </button>
-          ))}
+            <button
+              onClick={() => navigate(-1)}
+              className="w-full bg-black border border-white text-white font-black text-xl py-4 rounded-full transition-colors hover:bg-white/10"
+            >
+              Go Back
+            </button>
+          </div>
         </div>
 
-        {/* Actions */}
-        <div className="space-y-3">
-          <button
-            id="payment-continue-btn"
-            onClick={handleContinue}
-            className={`btn-red-glow w-full py-4 text-xl font-black ${selected === null ? 'opacity-60 cursor-not-allowed' : ''}`}
-          >
-            Continue →
-          </button>
-          <button
-            onClick={() => navigate(-1)}
-            className="w-full border-2 border-white/20 text-white font-bold text-lg py-4 rounded-full hover:bg-white hover:text-black transition-all duration-300"
-          >
-            ← Go Back
-          </button>
-        </div>
-
-        {/* Security note */}
-        <p className="text-center text-gray-600 text-xs mt-6">
-          🔒 256-bit SSL encrypted · Your payment info is never stored
-        </p>
       </div>
     </div>
   );

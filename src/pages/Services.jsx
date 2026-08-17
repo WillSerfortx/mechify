@@ -1,40 +1,79 @@
-import { Link } from 'react-router-dom';
-
-const imgImage14 = "https://placehold.co/600x400/222/fff?text=Home+Service";
-const imgImage15 = "https://placehold.co/600x400/222/fff?text=Emergency+Assistance";
-const imgImage18 = "https://placehold.co/600x400/222/fff?text=Spare+Parts";
-const imgImage20 = "https://placehold.co/600x400/222/fff?text=Car+Rental";
-const imgImage21 = "https://placehold.co/600x400/222/fff?text=Workshop+Repair";
-const imgImage22 = "https://placehold.co/600x400/222/fff?text=Fuel+Delivery";
-const imgImage23 = "https://placehold.co/600x400/222/fff?text=Driver+Hire";
-
-const allServices = [
-  { name: 'Home Service', desc: 'Professional mechanics come to your doorstep for routine maintenance and repairs.', img: imgImage14, link: '/workshop' },
-  { name: 'Emergency Road Assistance', desc: '24/7 emergency breakdown support wherever you are on the road.', img: imgImage15, link: '/workshop' },
-  { name: 'Spare Parts Store', desc: 'Browse and order genuine spare parts with fast delivery.', img: imgImage18, link: '/payment-select' },
-  { name: 'Car Rental', desc: 'Rent premium vehicles for any duration with flexible plans.', img: imgImage20, link: '/car-rental' },
-  { name: 'Workshop Repair', desc: 'Book appointments at verified workshops near your location.', img: imgImage21, link: '/workshop' },
-  { name: 'Fuel Delivery', desc: 'Get fuel delivered to your location when you run out.', img: imgImage22, link: '/payment-select' },
-  { name: 'Driver Hire', desc: 'Hire professional drivers for your personal or business needs.', img: imgImage23, link: '/car-rental' },
-];
-
 export default function Services() {
-  return (
-    <div className="bg-black min-h-screen pt-32 px-6 md:px-12 lg:px-24 pb-24 text-white font-sora">
-      <h1 className="text-5xl md:text-6xl lg:text-8xl font-bold text-center mb-16 animate-fadeInUp">All Services</h1>
+  const storeCategories = [
+    {
+      title: 'Tyres',
+      items: [
+        { name: 'Basic Tyre', img: 'https://images.unsplash.com/photo-1590483562300-85b1916cb03d?w=400&h=400&fit=crop' },
+        { name: 'Business Tyre', img: 'https://images.unsplash.com/photo-1590483562300-85b1916cb03d?w=400&h=400&fit=crop' },
+        { name: 'Premium Tyre', img: 'https://images.unsplash.com/photo-1590483562300-85b1916cb03d?w=400&h=400&fit=crop' },
+      ]
+    },
+    {
+      title: 'Brake Components',
+      items: [
+        { name: 'Red Rotor', img: 'https://images.unsplash.com/photo-1577785566373-cf6776dbd8f5?w=400&h=400&fit=crop' },
+        { name: 'Calipers', img: 'https://images.unsplash.com/photo-1577785566373-cf6776dbd8f5?w=400&h=400&fit=crop' },
+        { name: 'Rotor', img: 'https://images.unsplash.com/photo-1577785566373-cf6776dbd8f5?w=400&h=400&fit=crop' },
+      ]
+    },
+    {
+      title: 'Filters',
+      items: [
+        { name: 'Diesel', img: 'https://images.unsplash.com/photo-1628189689917-c8340d859e99?w=400&h=400&fit=crop' },
+        { name: 'Air Filter', img: 'https://images.unsplash.com/photo-1628189689917-c8340d859e99?w=400&h=400&fit=crop' },
+      ]
+    },
+    {
+      title: 'Engine & Fuel System Parts',
+      items: [
+        { name: 'Injectors', img: 'https://images.unsplash.com/photo-1486262715619-670810a0740f?w=400&h=400&fit=crop' },
+        { name: 'Alternators', img: 'https://images.unsplash.com/photo-1486262715619-670810a0740f?w=400&h=400&fit=crop' },
+      ]
+    }
+  ];
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {allServices.map((service, i) => (
-          <Link to={service.link} key={i}
-            className="group relative rounded-2xl overflow-hidden aspect-[4/3] cursor-pointer animate-fadeInUp shadow-lg"
-            style={{animationDelay: `${i * 0.1}s`}}>
-            <img src={service.img} alt={service.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent group-hover:from-black transition-all duration-500" />
-            <div className="absolute bottom-0 left-0 right-0 p-8 transform transition-transform duration-500 group-hover:-translate-y-2">
-              <h3 className="text-2xl md:text-3xl font-bold mb-3">{service.name}</h3>
-              <p className="text-base md:text-lg text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 line-clamp-2">{service.desc}</p>
+  return (
+    <div className="bg-black min-h-screen text-white font-outfit pb-24">
+      {/* Hero */}
+      <section className="relative h-[60vh] flex flex-col items-center justify-center pt-20">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1552599727-46dc0fb2c5ff?w=1920&h=1080&fit=crop" 
+            alt="Store" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/60" />
+        </div>
+        <div className="relative z-10 text-center">
+          <div className="w-16 h-16 bg-red-600 rounded-xl mx-auto mb-6 flex items-center justify-center">
+             <span className="text-3xl text-white">🛍️</span>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-black mb-4">Welcome To Mechify Store</h1>
+          <p className="text-2xl font-semibold mb-2">Flash sell on Tyres</p>
+          <p className="text-red-500 font-bold text-xl">Up to 40% discount</p>
+        </div>
+      </section>
+
+      {/* Store Categories */}
+      <div className="px-6 md:px-12 lg:px-20 mt-12 space-y-16">
+        {storeCategories.map((cat, i) => (
+          <div key={i}>
+            <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+              <h2 className="text-2xl md:text-3xl font-black">{cat.title}</h2>
+              <span className="text-3xl text-white cursor-pointer hover:text-red-500 transition-colors">➔</span>
             </div>
-          </Link>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {cat.items.map((item, j) => (
+                <div key={j} className="bg-white rounded-xl overflow-hidden aspect-square flex flex-col items-center justify-center p-6 hover:-translate-y-2 transition-transform duration-300">
+                  <div className="flex-1 w-full flex items-center justify-center p-4">
+                     <img src={item.img} alt={item.name} className="max-h-full max-w-full object-contain drop-shadow-xl filter grayscale contrast-125" />
+                  </div>
+                  <h3 className="text-black font-black text-center text-lg mt-4 w-full border-t border-gray-100 pt-4">{item.name}</h3>
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </div>
