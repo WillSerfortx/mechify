@@ -216,50 +216,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Booking Form (Ride-sharing style) */}
-        <div className={`max-w-[1200px] mx-auto px-6 md:px-12 -mt-8 relative z-20 mb-12 ${visible['cars-section'] ? 'animate-fadeInUp delay-200' : 'opacity-0'}`}>
-          <div className="bg-white rounded-2xl md:rounded-full p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-[0_20px_50px_rgba(255,255,255,0.1)] border border-gray-200">
-            
-            {/* Location */}
-            <div className="flex-1 w-full md:w-auto px-4 border-b md:border-b-0 md:border-r border-gray-300 pb-4 md:pb-0">
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Pick-up Location</label>
-              <div className="flex items-center gap-2">
-                <span className="text-red-600">📍</span>
-                <input type="text" placeholder="Enter city, airport, or address" className="w-full bg-transparent text-black font-semibold focus:outline-none placeholder-gray-400" />
-              </div>
-            </div>
-
-            {/* Pick-up Date & Time */}
-            <div className="flex-1 w-full md:w-auto px-4 border-b md:border-b-0 md:border-r border-gray-300 pb-4 md:pb-0">
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Pick-up</label>
-              <div className="flex items-center gap-2 text-black font-semibold">
-                <span className="text-red-600">📅</span>
-                <input type="date" className="bg-transparent focus:outline-none text-sm w-full md:w-auto cursor-pointer" />
-                <input type="time" className="bg-transparent focus:outline-none text-sm w-full md:w-auto cursor-pointer" />
-              </div>
-            </div>
-
-            {/* Return Date & Time */}
-            <div className="flex-1 w-full md:w-auto px-4 pb-4 md:pb-0">
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Return</label>
-              <div className="flex items-center gap-2 text-black font-semibold">
-                <span className="text-red-600">📅</span>
-                <input type="date" className="bg-transparent focus:outline-none text-sm w-full md:w-auto cursor-pointer" />
-                <input type="time" className="bg-transparent focus:outline-none text-sm w-full md:w-auto cursor-pointer" />
-              </div>
-            </div>
-
-            {/* Search Button */}
-            <div className="w-full md:w-auto">
-              <button className="w-full md:w-auto bg-red-600 hover:bg-red-700 text-white font-black text-lg px-8 py-4 rounded-xl md:rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] active:scale-95 whitespace-nowrap">
-                Search Cars
-              </button>
-            </div>
-          </div>
-        </div>
-
         {/* Continuous Horizontal Scroll Carousel */}
-        <div className={`relative flex overflow-hidden group ${visible['cars-section'] ? 'animate-fadeInUp delay-300' : 'opacity-0'}`}>
+        <div className={`relative flex overflow-hidden group ${visible['cars-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
           <div className="flex gap-6 animate-marquee min-w-max hover:[animation-play-state:paused] pb-6 px-3">
             {/* Double the array for infinite loop effect */}
             {[...rentCars, ...rentCars].map((car, i) => (
