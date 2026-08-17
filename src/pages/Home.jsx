@@ -89,14 +89,14 @@ export default function Home() {
             <Link
               to="/services"
               id="roadside-btn"
-              className="bg-red-600 hover:bg-red-700 text-white font-bold text-lg px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] active:scale-95"
+              className="bg-red-600 hover:bg-red-700 text-white font-bold text-xl px-10 py-5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(220,38,38,0.6)] active:scale-95"
             >
               Roadside Assistance
             </Link>
             <Link
               to="/fuel-terms"
               id="fuel-btn"
-              className="bg-red-600 hover:bg-red-700 text-white font-bold text-lg px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] active:scale-95"
+              className="bg-red-600 hover:bg-red-700 text-white font-bold text-xl px-10 py-5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(220,38,38,0.6)] active:scale-95"
             >
               Fuel Service
             </Link>
@@ -131,7 +131,7 @@ export default function Home() {
           SERVICES SECTION
           3 large + 4 small — matches Figma Desktop-16
       ══════════════════════════════════════════ */}
-      <section className="py-20 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center" id="services-section" data-animate>
+      <section className="pt-20 pb-32 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center mb-16" id="services-section" data-animate>
         {/* Heading */}
         <div className={`text-center mb-6 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
           <h2 className="text-5xl md:text-7xl font-black text-white">Services</h2>

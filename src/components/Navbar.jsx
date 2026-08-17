@@ -81,7 +81,7 @@ export default function Navbar() {
           {/* Sign Out button */}
           <Link
             to="/profile"
-            className="hidden md:flex items-center gap-2 border-2 border-white rounded-full px-6 py-2 text-white font-bold text-sm hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 active:scale-95"
+            className="hidden md:flex items-center gap-2 border-2 border-white rounded-full px-8 py-3 text-white font-bold text-base hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 active:scale-95"
           >
             Sign Out
           </Link>
@@ -125,7 +125,7 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
-          <Link to="/profile" className="bg-white text-black text-center rounded-full px-6 py-3 font-bold text-lg mt-2">
+          <Link to="/profile" className="bg-white text-black text-center rounded-full px-8 py-4 font-bold text-xl mt-4">
             Sign Out
           </Link>
         </div>
