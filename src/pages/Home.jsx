@@ -137,20 +137,9 @@ export default function Home() {
           <h2 className="text-5xl md:text-7xl font-black text-white">Services</h2>
         </div>
 
-        {/* Down arrow & Contact Bar */}
-        <div className={`flex flex-col items-center justify-center mb-10 relative ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
-          <div className="flex flex-col md:flex-row gap-3 md:gap-8 bg-white/10 backdrop-blur-md border border-white/20 px-6 py-3 rounded-2xl md:rounded-full mb-4 shadow-[0_0_20px_rgba(255,255,255,0.05)] text-sm md:text-base items-center">
-            <a href="tel:+8801516520602" className="flex items-center gap-2 hover:text-red-500 transition-colors group">
-              <span className="text-red-500 group-hover:scale-110 transition-transform">📞</span>
-              <span className="font-bold tracking-wide">+8801516520602</span>
-            </a>
-            <div className="w-full md:w-px h-px md:h-5 bg-white/30"></div>
-            <a href="mailto:support@mechify.com" className="flex items-center gap-2 hover:text-red-500 transition-colors group">
-              <span className="text-red-500 group-hover:scale-110 transition-transform">✉️</span>
-              <span className="font-bold tracking-wide">support@mechify.com</span>
-            </a>
-          </div>
-          <svg className="w-8 h-8 text-white animate-float" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* Down arrow */}
+        <div className={`flex justify-center mb-10 ${visible['services-section'] ? 'animate-float' : 'opacity-0'}`}>
+          <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
           </svg>
         </div>
