@@ -17,7 +17,13 @@ export default function PaymentSelect() {
       alert('Please select a payment method.');
       return;
     }
-    navigate('/payment-success');
+    
+    // If Cash On Delivery is selected (index 3 based on methods array)
+    if (selected === 3) {
+      navigate('/profile', { state: { activeDelivery: true } });
+    } else {
+      navigate('/payment-success');
+    }
   };
 
   return (

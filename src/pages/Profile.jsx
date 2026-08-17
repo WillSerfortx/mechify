@@ -1,249 +1,138 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-
-const imgLogo = null; // using text logo
-const imgAvatar = 'https://i.pravatar.cc/400?img=68';
-
-const previousServices = [
-  { name: 'Fuel Delivery', price: '৳4,999', date: 'Aug 14, 2026', icon: '⛽' },
-  { name: 'Emergency Service', price: '৳10,999', date: 'Aug 10, 2026', icon: '🚨' },
-  { name: 'Workshop Repair', price: '৳7,500', date: 'Jul 28, 2026', icon: '🔧' },
-  { name: 'Car Rental', price: '৳15,000', date: 'Jul 20, 2026', icon: '🚗' },
-  { name: 'Driver Hire', price: '৳3,200', date: 'Jul 15, 2026', icon: '👨‍✈️' },
-];
-
-const paymentMethods = [
-  { name: 'Visa', last4: '4242', color: '#1A1F71', icon: '💳', type: 'card' },
-  { name: 'bKash', number: '01516-XXXXX', color: '#E2136E', icon: '📱', type: 'mobile' },
-  { name: 'Nagad', number: '01516-XXXXX', color: '#F7941D', icon: '💰', type: 'mobile' },
-  { name: 'Cash on Delivery', number: 'Pay when arrived', color: '#16a34a', icon: '💵', type: 'cash' },
-];
-
-const vehicle = {
-  make: 'Toyota',
-  model: 'Corolla',
-  year: '2020',
-  plate: 'Dhaka Metro-Gha 11-2345',
-  color: 'Pearl White',
-  type: 'Sedan',
-};
-
-const sidebarItems = [
-  { label: 'My Profile', icon: '👤' },
-  { label: 'My Vehicle', icon: '🚗' },
-  { label: 'Payment Methods', icon: '💳' },
-  { label: 'Drivers', icon: '👨‍✈️' },
-  { label: 'Settings', icon: '⚙️' },
-];
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function Profile() {
-  const [activeTab, setActiveTab] = useState(0);
-  const navigate = useNavigate();
+  const location = useLocation();
+  const hasActiveDelivery = location.state?.activeDelivery || false;
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (hasActiveDelivery) {
+      const interval = setInterval(() => {
+        setProgress(p => (p < 100 ? p + 1 : 100));
+      }, 300); // Simulate progress over 30 seconds
+      return () => clearInterval(interval);
+    }
+  }, [hasActiveDelivery]);
 
   return (
-    <div className="bg-[#050505] min-h-screen pb-16 text-white font-outfit">
-      {/* Top Bar */}
-      <div className="flex items-center justify-between px-6 md:px-12 py-5 border-b border-white/10 bg-black/80 backdrop-blur-md">
-        <div className="flex items-center gap-4">
-          <button onClick={() => navigate(-1)} className="text-white text-xl hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-white/10">
-            ←
-          </button>
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 bg-red-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-black text-base">M</span>
-            </div>
-            <span className="text-white font-black text-xl">Mech<span className="text-red-500">ify</span></span>
-          </div>
-        </div>
-        <h1 className="text-xl md:text-2xl font-black hidden sm:block">User Dashboard</h1>
-        <div className="flex items-center gap-3">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-          <span className="text-green-400 text-sm font-semibold hidden sm:block">Online</span>
-        </div>
-      </div>
-
-      <div className="flex flex-col lg:flex-row mt-6 px-6 md:px-12 gap-6 max-w-[1600px] mx-auto">
-        {/* Sidebar */}
-        <div className="w-full lg:w-64 flex-shrink-0">
-          <div className="glass rounded-2xl p-4 space-y-2">
-            {/* User mini card */}
-            <div className="flex items-center gap-3 p-3 mb-4 border-b border-white/10">
-              <img src={imgAvatar} alt="Avatar" className="w-12 h-12 rounded-full object-cover border-2 border-red-500" />
-              <div>
-                <div className="font-bold text-sm">Washiur Rahman</div>
-                <div className="text-gray-400 text-xs">Premium Member</div>
+    <div className="bg-black min-h-screen text-white font-outfit pb-24 pt-32 px-6 md:px-12 lg:px-20">
+      
+      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-8">
+        
+        {/* Left Sidebar: User Info */}
+        <div className="w-full lg:w-1/4">
+          <div className="bg-white/5 border border-white/10 rounded-3xl p-6 shadow-xl sticky top-32">
+            <div className="flex flex-col items-center mb-6">
+              <div className="w-24 h-24 bg-gray-800 rounded-full border-2 border-red-600 mb-4 overflow-hidden">
+                <img src="https://ui-avatars.com/api/?name=User+Name&background=random&color=fff&size=128" alt="Profile" className="w-full h-full object-cover" />
               </div>
+              <h2 className="text-2xl font-black">John Doe</h2>
+              <p className="text-gray-400 text-sm">Premium Member</p>
             </div>
-
-            {sidebarItems.map((item, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveTab(i)}
-                className={`w-full text-left px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-3 transition-all duration-300 ${
-                  activeTab === i
-                    ? 'bg-red-600 text-white shadow-lg shadow-red-600/20'
-                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                }`}
-              >
-                <span className="text-xl">{item.icon}</span>
-                {item.label}
+            
+            <div className="space-y-4">
+              <button className="w-full text-left bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl transition-colors">
+                Active Orders
               </button>
-            ))}
-
-            <button
-              className="mt-4 w-full bg-transparent border border-red-600 text-red-400 font-bold py-3 px-4 rounded-xl hover:bg-red-600 hover:text-white transition-all duration-300 flex items-center gap-2 text-sm"
-              onClick={() => navigate('/')}
-            >
-              <span>🚪</span> Log Out
-            </button>
+              <button className="w-full text-left bg-transparent hover:bg-white/10 text-gray-300 font-bold py-3 px-4 rounded-xl transition-colors">
+                Order History
+              </button>
+              <button className="w-full text-left bg-transparent hover:bg-white/10 text-gray-300 font-bold py-3 px-4 rounded-xl transition-colors">
+                Payment Methods
+              </button>
+              <button className="w-full text-left bg-transparent hover:bg-white/10 text-gray-300 font-bold py-3 px-4 rounded-xl transition-colors">
+                Settings
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 space-y-6">
-          {/* Tab: My Profile */}
-          {activeTab === 0 && (
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 animate-fadeIn">
-              {/* Profile Card */}
-              <div className="xl:col-span-2 glass rounded-2xl p-8">
-                <div className="flex flex-col sm:flex-row items-start gap-6 mb-8">
-                  <div className="relative">
-                    <img src={imgAvatar} alt="Profile" className="w-28 h-28 rounded-2xl object-cover border-2 border-white/20" />
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-xs cursor-pointer hover:bg-red-700 transition-colors">✏️</div>
-                  </div>
+        {/* Right Content: Map / Dashboard */}
+        <div className="w-full lg:w-3/4">
+          <h1 className="text-4xl font-black mb-8">Dashboard</h1>
+          
+          {hasActiveDelivery ? (
+            <div className="bg-white/5 border border-red-600/50 rounded-3xl p-1 shadow-[0_0_30px_rgba(220,38,38,0.15)] animate-fadeIn">
+              <div className="bg-black rounded-[22px] p-6 md:p-8">
+                
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                   <div>
-                    <h2 className="text-3xl font-black mb-1">Washiur Rahman</h2>
-                    <div className="flex items-center gap-2">
-                      <span className="bg-red-600/20 text-red-400 text-xs font-bold px-3 py-1 rounded-full border border-red-600/40">Premium Member</span>
-                      <span className="text-green-400 text-xs">● Active</span>
+                    <div className="flex items-center gap-3 mb-1">
+                      <span className="animate-pulse w-3 h-3 bg-red-600 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.8)]"></span>
+                      <h2 className="text-2xl font-bold text-red-500 uppercase tracking-widest">Active Delivery</h2>
+                    </div>
+                    <p className="text-gray-400 font-semibold">Emergency Fuel Truck is en route to your location.</p>
+                  </div>
+                  <div className="mt-4 md:mt-0 bg-red-900/40 border border-red-500/50 text-red-200 px-4 py-2 rounded-lg font-mono font-bold text-xl">
+                    ETA: 12 MIN
+                  </div>
+                </div>
+
+                {/* Simulated Map Container */}
+                <div className="w-full h-[400px] md:h-[500px] bg-gray-900 rounded-2xl border border-white/20 relative overflow-hidden mb-6 group cursor-crosshair">
+                  {/* Google Maps Embed iframe (Simulation of a map) */}
+                  <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14602.700312014169!2d90.4125!3d23.8103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c655075c3dbb%3A0xc39f9972cc945892!2sBaridhara%20DOHS%2C%20Dhaka!5e0!3m2!1sen!2sbd!4v1715000000000!5m2!1sen!2sbd&maptype=satellite" 
+                    width="100%" 
+                    height="100%" 
+                    style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) contrast(120%)' }} // Dark mode filter
+                    allowFullScreen="" 
+                    loading="lazy" 
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Active Route Map"
+                  ></iframe>
+                  
+                  {/* Overlay simulating a route line and moving truck */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <svg className="w-full h-full" viewBox="0 0 1000 500" preserveAspectRatio="none">
+                      {/* Fake Route Line */}
+                      <path d="M 800 100 C 600 200, 400 300, 200 400" fill="none" stroke="#dc2626" strokeWidth="6" strokeDasharray="15 10" className="animate-[marquee_20s_linear_infinite]" opacity="0.6" />
+                      
+                      {/* User Pin */}
+                      <circle cx="200" cy="400" r="10" fill="white" stroke="#dc2626" strokeWidth="4" />
+                      <text x="220" y="405" fill="white" fontSize="16" fontWeight="bold">You</text>
+                    </svg>
+
+                    {/* Fake Truck marker moving along path */}
+                    <div 
+                      className="absolute w-12 h-12 bg-red-600 rounded-full border-4 border-white flex items-center justify-center text-xl shadow-[0_0_20px_rgba(220,38,38,0.8)] transition-all duration-300"
+                      style={{ 
+                        left: `${80 - (progress * 0.6)}%`, 
+                        top: `${20 + (progress * 0.6)}%`,
+                        transform: 'translate(-50%, -50%)' 
+                      }}
+                    >
+                      🚚
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  {[
-                    { label: 'Full Name', value: 'Washiur Rahman', icon: '👤' },
-                    { label: 'Email', value: 'wrmahi777@gmail.com', icon: '✉️' },
-                    { label: 'Phone', value: '+880 1516-520602', icon: '📱' },
-                    { label: 'Address', value: 'Lane 1, Baridhara DOHS, Dhaka', icon: '📍' },
-                  ].map((field, i) => (
-                    <div key={i} className="flex items-center gap-4 bg-white/5 rounded-xl px-5 py-4 border border-white/10">
-                      <span className="text-xl flex-shrink-0">{field.icon}</span>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-gray-400 text-xs mb-0.5">{field.label}</div>
-                        <div className="text-white font-semibold text-sm truncate">{field.value}</div>
-                      </div>
-                      <button className="text-gray-500 hover:text-red-400 transition-colors text-sm">Edit</button>
-                    </div>
-                  ))}
+                {/* Progress Bar */}
+                <div>
+                  <div className="flex justify-between text-xs font-bold text-gray-400 mb-2 uppercase tracking-wide">
+                    <span>Dispatched</span>
+                    <span>Arriving</span>
+                  </div>
+                  <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden border border-white/10">
+                    <div 
+                      className="h-full bg-gradient-to-r from-red-800 to-red-500 rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(220,38,38,0.8)]"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-center text-gray-400 mt-3 text-sm">Payment Method: <span className="text-white font-bold">Cash On Delivery</span></p>
                 </div>
-
-                <button className="btn-red-glow mt-6 px-8 py-3 font-bold">
-                  Save Changes
-                </button>
+                
               </div>
-
-              {/* Side Panels */}
-              <div className="space-y-5">
-                {/* Previous Services */}
-                <div className="glass rounded-2xl p-6">
-                  <h3 className="text-xl font-black mb-5">Recent Services</h3>
-                  <div className="space-y-3">
-                    {previousServices.map((s, i) => (
-                      <div key={i} className="flex items-center gap-3 py-2 border-b border-white/5 last:border-0">
-                        <span className="text-2xl">{s.icon}</span>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm font-semibold truncate">{s.name}</div>
-                          <div className="text-gray-500 text-xs">{s.date}</div>
-                        </div>
-                        <span className="text-red-400 font-bold text-sm flex-shrink-0">{s.price}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Ongoing */}
-                <div className="glass rounded-2xl p-6 border border-red-600/30">
-                  <h3 className="text-xl font-black mb-3">Ongoing Service</h3>
-                  <div className="flex items-center gap-3 bg-red-600/10 rounded-xl p-4">
-                    <span className="text-3xl">🔧</span>
-                    <div>
-                      <div className="font-bold text-red-400">Workshop Appointment</div>
-                      <div className="text-gray-400 text-xs mt-1">Mirpur Workshop · Today 3PM</div>
-                      <div className="flex items-center gap-1 mt-2">
-                        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                        <span className="text-green-400 text-xs font-semibold">In Progress</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            </div>
+          ) : (
+            <div className="bg-white/5 border border-white/10 rounded-3xl p-12 text-center text-gray-400">
+              <span className="text-5xl block mb-4 opacity-50">📦</span>
+              <p className="text-xl font-bold">No active orders right now.</p>
+              <p className="mt-2 text-sm">When you request a service, it will appear here.</p>
             </div>
           )}
 
-          {/* Tab: My Vehicle */}
-          {activeTab === 1 && (
-            <div className="glass rounded-2xl p-8 animate-fadeIn">
-              <h2 className="text-3xl font-black mb-8">My Vehicle</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  {Object.entries(vehicle).map(([key, val]) => (
-                    <div key={key} className="flex items-center justify-between bg-white/5 rounded-xl px-5 py-4 border border-white/10">
-                      <span className="text-gray-400 text-sm capitalize">{key}</span>
-                      <span className="text-white font-bold">{val}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex flex-col gap-4">
-                  <div className="glass rounded-2xl p-6 text-center border border-white/10">
-                    <div className="text-6xl mb-4">🚗</div>
-                    <div className="text-2xl font-black">{vehicle.make} {vehicle.model}</div>
-                    <div className="text-gray-400">{vehicle.year} · {vehicle.color}</div>
-                    <div className="mt-4 bg-red-600/20 text-red-400 rounded-xl py-2 px-4 text-sm font-semibold border border-red-600/30">
-                      {vehicle.plate}
-                    </div>
-                  </div>
-                  <button className="btn-red-glow py-3 font-bold">+ Add Another Vehicle</button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Tab: Payment Methods */}
-          {activeTab === 2 && (
-            <div className="glass rounded-2xl p-8 animate-fadeIn">
-              <h2 className="text-3xl font-black mb-8">Payment Methods</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                {paymentMethods.map((method, i) => (
-                  <div
-                    key={i}
-                    className="relative rounded-2xl p-6 border border-white/10 hover:border-white/30 transition-all duration-300 hover:-translate-y-1 cursor-pointer overflow-hidden"
-                    style={{ background: `linear-gradient(135deg, ${method.color}22, ${method.color}08)` }}
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-4xl">{method.icon}</span>
-                      <span className="text-xs bg-white/10 rounded-full px-3 py-1 text-gray-300 capitalize">{method.type}</span>
-                    </div>
-                    <div className="font-black text-xl mb-1">{method.name}</div>
-                    <div className="text-gray-400 text-sm">
-                      {method.last4 ? `•••• •••• •••• ${method.last4}` : method.number}
-                    </div>
-                    <div className="absolute top-3 right-3 w-2 h-2 bg-green-400 rounded-full" title="Active" />
-                  </div>
-                ))}
-              </div>
-              <button className="btn-red-glow px-8 py-3 font-bold">+ Add Payment Method</button>
-            </div>
-          )}
-
-          {/* Other tabs */}
-          {activeTab >= 3 && (
-            <div className="glass rounded-2xl p-12 text-center animate-fadeIn">
-              <div className="text-6xl mb-4">{sidebarItems[activeTab].icon}</div>
-              <h2 className="text-2xl font-black mb-2">{sidebarItems[activeTab].label}</h2>
-              <p className="text-gray-400">This section is coming soon.</p>
-            </div>
-          )}
         </div>
       </div>
     </div>

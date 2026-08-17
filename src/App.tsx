@@ -13,6 +13,8 @@ import CardPayment from './pages/CardPayment';
 import PaymentSuccess from './pages/PaymentSuccess';
 import Profile from './pages/Profile';
 import IDriver from './pages/IDriver';
+import FuelTerms from './pages/FuelTerms';
+import FuelRequest from './pages/FuelRequest';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -41,11 +43,13 @@ export default function App() {
         <Route path="/services" element={<Layout><Services /></Layout>} />
         <Route path="/workshop" element={<Layout><Workshop /></Layout>} />
         <Route path="/idriver" element={<Layout><IDriver /></Layout>} />
+        <Route path="/fuel-terms" element={<Layout showFooter={false}><FuelTerms /></Layout>} />
+        <Route path="/fuel-request" element={<Layout showNav={false} showFooter={false}><FuelRequest /></Layout>} />
         <Route path="/car-rental" element={<Layout showFooter={false}><CarRental /></Layout>} />
         <Route path="/payment-select" element={<Layout showNav={false} showFooter={false}><PaymentSelect /></Layout>} />
         <Route path="/card-payment" element={<Layout showNav={false} showFooter={false}><CardPayment /></Layout>} />
         <Route path="/payment-success" element={<Layout showNav={false} showFooter={false}><PaymentSuccess /></Layout>} />
-        <Route path="/profile" element={<Layout showNav={false} showFooter={false}><Profile /></Layout>} />
+        <Route path="/profile" element={<Layout><Profile /></Layout>} />
       </Routes>
     </BrowserRouter>
   );

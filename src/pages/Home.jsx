@@ -94,7 +94,7 @@ export default function Home() {
               Roadside Assistance
             </Link>
             <Link
-              to="/services"
+              to="/fuel-terms"
               id="fuel-btn"
               className="bg-red-600 hover:bg-red-700 text-white font-bold text-lg px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] active:scale-95"
             >
@@ -167,7 +167,7 @@ export default function Home() {
           {[
             { name: 'Car Rental',    icon: '🚗', img: serviceImages.carRental,    link: '/car-rental' },
             { name: 'Workshop',      icon: '🏭', img: serviceImages.workshop,     link: '/workshop' },
-            { name: 'Fuel Delivery', icon: '⛽', img: serviceImages.fuelDelivery, link: '/services', badge: 'Emergency' },
+            { name: 'Fuel Delivery', icon: '⛽', img: serviceImages.fuelDelivery, link: '/fuel-terms', badge: 'Emergency' },
             { name: 'Driver Hire',   icon: '👨‍✈️', img: serviceImages.driverHire,  link: '/idriver' },
           ].map((s, i) => (
             <Link
