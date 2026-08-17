@@ -7,6 +7,8 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Services from './pages/Services';
 import Workshop from './pages/Workshop';
+import WorkshopSelect from './pages/WorkshopSelect';
+import TimeSelect from './pages/TimeSelect';
 import CarRental from './pages/CarRental';
 import PaymentSelect from './pages/PaymentSelect';
 import CardPayment from './pages/CardPayment';
@@ -42,6 +44,8 @@ export default function App() {
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/services" element={<Layout><Services /></Layout>} />
         <Route path="/workshop" element={<Layout><Workshop /></Layout>} />
+        <Route path="/workshop-select" element={<Layout showNav={false} showFooter={false}><WorkshopSelect /></Layout>} />
+        <Route path="/workshop-time" element={<Layout showNav={false} showFooter={false}><TimeSelect /></Layout>} />
         <Route path="/idriver" element={<Layout><IDriver /></Layout>} />
         <Route path="/fuel-terms" element={<Layout showFooter={false}><FuelTerms /></Layout>} />
         <Route path="/fuel-request" element={<Layout showNav={false} showFooter={false}><FuelRequest /></Layout>} />

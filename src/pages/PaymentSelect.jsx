@@ -20,7 +20,11 @@ export default function PaymentSelect() {
     
     // If Cash On Delivery is selected (index 3 based on methods array)
     if (selected === 3) {
-      navigate('/profile', { state: { activeDelivery: true } });
+      if (location.state?.fromWorkshopBooking) {
+        navigate('/profile', { state: { activeWorkshop: true, date: location.state?.date, time: location.state?.time } });
+      } else {
+        navigate('/profile', { state: { activeDelivery: true } });
+      }
     } else {
       navigate('/payment-success');
     }

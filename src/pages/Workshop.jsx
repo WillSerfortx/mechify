@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const specialists = [
   { name: 'Tony Stark', role: 'Founder of Mechify', img: 'https://images.unsplash.com/photo-1549405615-559d28dbd69c?w=400&h=400&fit=crop' }, // Using Iron Man-esque placeholder
@@ -8,6 +9,13 @@ const specialists = [
 ];
 
 export default function Workshop() {
+  const navigate = useNavigate();
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    navigate('/workshop-select');
+  };
+
   return (
     <div className="bg-black min-h-screen text-white font-outfit pb-24">
       
@@ -42,13 +50,14 @@ export default function Workshop() {
         {/* 3 Highlight Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
           {[
-            { title: 'Performance\nCheck', icon: '⚙️' },
-            { title: 'Auto\nRepair', icon: '🔧' },
-            { title: 'Fleet\nService', icon: '🚗' },
+            { title: 'Performance\nCheck', icon: '⚙️', desc: 'Comprehensive diagnostics to ensure peak engine performance.' },
+            { title: 'Auto\nRepair', icon: '🔧', desc: 'Expert mechanics handling everything from brakes to transmissions.' },
+            { title: 'Fleet\nService', icon: '🚗', desc: 'Reliable maintenance plans for commercial and business fleets.' },
           ].map((card, i) => (
-            <div key={i} className="bg-black border-2 border-white/20 rounded-2xl p-8 flex flex-col items-center justify-center text-center aspect-[4/3] hover:border-white/40 transition-colors">
-              <div className="text-5xl mb-4">{card.icon}</div>
-              <h3 className="text-xl font-bold whitespace-pre-line leading-tight">{card.title}</h3>
+            <div key={i} className="group bg-black border-2 border-white/20 rounded-2xl p-8 flex flex-col items-center justify-center text-center aspect-[4/3] hover:border-red-600 transition-all duration-300 hover:-translate-y-4 hover:shadow-[0_20px_40px_rgba(220,38,38,0.2)]">
+              <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">{card.icon}</div>
+              <h3 className="text-xl font-bold whitespace-pre-line leading-tight mb-2">{card.title}</h3>
+              <p className="text-sm text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-0 group-hover:h-auto overflow-hidden">{card.desc}</p>
             </div>
           ))}
         </div>
@@ -83,15 +92,16 @@ export default function Workshop() {
         {/* Gallery Strip */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-32">
           {[
-            { label: 'SCHEDULE', img: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=400&h=600&fit=crop' },
-            { label: 'ENGINE', img: 'https://images.unsplash.com/photo-1486262715619-670810a0740f?w=400&h=600&fit=crop' },
-            { label: 'PAINTING', img: 'https://images.unsplash.com/photo-1599304918731-cd8e7b1c4e97?w=400&h=600&fit=crop' },
-            { label: 'DETAILING', img: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=400&h=600&fit=crop' },
+            { label: 'SCHEDULE', img: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=400&h=600&fit=crop', info: 'Book a convenient time slot' },
+            { label: 'ENGINE', img: 'https://images.unsplash.com/photo-1486262715619-670810a0740f?w=400&h=600&fit=crop', info: 'Deep engine diagnostics & repair' },
+            { label: 'PAINTING', img: 'https://images.unsplash.com/photo-1599304918731-cd8e7b1c4e97?w=400&h=600&fit=crop', info: 'Premium quality body painting' },
+            { label: 'DETAILING', img: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=400&h=600&fit=crop', info: 'Interior & exterior deep clean' },
           ].map((item, i) => (
-            <div key={i} className="relative aspect-[3/4] rounded-xl overflow-hidden border border-white/20">
-              <img src={item.img} alt={item.label} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-black/40 flex items-end justify-center pb-6">
-                <span className="font-black text-lg tracking-widest">{item.label}</span>
+            <div key={i} className="group relative aspect-[3/4] rounded-xl overflow-hidden border border-white/20 cursor-pointer">
+              <img src={item.img} alt={item.label} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-end pb-6 group-hover:bg-red-900/80 transition-colors duration-300">
+                <span className="font-black text-lg tracking-widest mb-2 transition-transform duration-300 group-hover:-translate-y-2">{item.label}</span>
+                <p className="text-sm font-semibold text-center px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0">{item.info}</p>
               </div>
             </div>
           ))}
@@ -114,42 +124,42 @@ export default function Workshop() {
         </div>
 
         {/* Appointment Form */}
-        <div className="flex flex-col lg:flex-row gap-16 items-start bg-[#0a0a0a] border border-white/5 p-8 md:p-12 rounded-3xl">
-          <div className="flex-1 w-full space-y-6">
+        <div className="flex flex-col lg:flex-row gap-16 items-start bg-[#0a0a0a] border border-white/5 p-8 md:p-12 rounded-3xl shadow-2xl">
+          <form onSubmit={handleFormSubmit} className="flex-1 w-full space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-xs font-semibold mb-2">Name</label>
-                <input type="text" className="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500" />
+                <label className="block text-xs font-semibold mb-2 text-gray-400">Name</label>
+                <input type="text" required className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 transition-colors" />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-2">Phone</label>
-                <input type="text" className="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500" />
+                <label className="block text-xs font-semibold mb-2 text-gray-400">Phone</label>
+                <input type="tel" required className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 transition-colors" />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-2">Car model</label>
-                <input type="text" className="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500" />
+                <label className="block text-xs font-semibold mb-2 text-gray-400">Car model</label>
+                <input type="text" required className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 transition-colors" />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-2">Email Address</label>
-                <input type="email" className="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500" />
+                <label className="block text-xs font-semibold mb-2 text-gray-400">Email Address</label>
+                <input type="email" required className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 transition-colors" />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-2">Car Reg Number</label>
-                <input type="text" className="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500" />
+                <label className="block text-xs font-semibold mb-2 text-gray-400">Car Reg Number</label>
+                <input type="text" required className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 transition-colors" />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-2">NID Number</label>
-                <input type="text" className="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500" />
+                <label className="block text-xs font-semibold mb-2 text-gray-400">NID Number</label>
+                <input type="text" required className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 transition-colors" />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-2">Message</label>
-              <textarea rows="4" className="w-full bg-transparent border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 resize-none"></textarea>
+              <label className="block text-xs font-semibold mb-2 text-gray-400">Message</label>
+              <textarea rows="4" className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 resize-none transition-colors"></textarea>
             </div>
-            <button className="bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-3 rounded-full transition-transform hover:scale-105">
+            <button type="submit" className="bg-red-600 hover:bg-red-700 text-white font-bold px-10 py-4 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.5)]">
               Get a Workshop now
             </button>
-          </div>
+          </form>
 
           <div className="w-full lg:w-1/3 text-white">
             <h2 className="text-4xl font-black mb-10 leading-tight uppercase">Get a Free<br/>Appointment</h2>

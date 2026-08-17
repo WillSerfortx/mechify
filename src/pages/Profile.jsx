@@ -4,6 +4,9 @@ import { useLocation } from 'react-router-dom';
 export default function Profile() {
   const location = useLocation();
   const hasActiveDelivery = location.state?.activeDelivery || false;
+  const hasActiveWorkshop = location.state?.activeWorkshop || false;
+  const workshopDate = location.state?.date || 'Today';
+  const workshopTime = location.state?.time || '10:00 AM';
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -52,8 +55,8 @@ export default function Profile() {
         <div className="w-full lg:w-3/4">
           <h1 className="text-4xl font-black mb-8">Dashboard</h1>
           
-          {hasActiveDelivery ? (
-            <div className="bg-white/5 border border-red-600/50 rounded-3xl p-1 shadow-[0_0_30px_rgba(220,38,38,0.15)] animate-fadeIn">
+          {hasActiveDelivery && (
+            <div className="bg-white/5 border border-red-600/50 rounded-3xl p-1 shadow-[0_0_30px_rgba(220,38,38,0.15)] animate-fadeIn mb-8">
               <div className="bg-black rounded-[22px] p-6 md:p-8">
                 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
@@ -125,7 +128,29 @@ export default function Profile() {
                 
               </div>
             </div>
-          ) : (
+          )}
+
+          {hasActiveWorkshop && (
+            <div className="bg-white/5 border border-white/20 rounded-3xl p-6 shadow-xl animate-fadeIn mb-8">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                <span className="text-red-500">🗓️</span> Workshop Appointment
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-black border border-white/10 rounded-xl p-6">
+                  <p className="text-gray-400 text-sm mb-1 uppercase tracking-wider font-bold">Location</p>
+                  <p className="text-xl font-black">Mechify Workshop</p>
+                  <p className="text-gray-400 text-sm mt-1">Confirmed</p>
+                </div>
+                <div className="bg-black border border-white/10 rounded-xl p-6">
+                  <p className="text-gray-400 text-sm mb-1 uppercase tracking-wider font-bold">Date & Time</p>
+                  <p className="text-xl font-black text-red-500">{workshopDate}</p>
+                  <p className="text-xl font-black">{workshopTime}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {(!hasActiveDelivery && !hasActiveWorkshop) && (
             <div className="bg-white/5 border border-white/10 rounded-3xl p-12 text-center text-gray-400">
               <span className="text-5xl block mb-4 opacity-50">📦</span>
               <p className="text-xl font-bold">No active orders right now.</p>
