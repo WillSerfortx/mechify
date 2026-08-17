@@ -145,7 +145,7 @@ export default function Home() {
         </div>
 
         {/* 3 Large service cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 max-w-[1400px] mx-auto justify-center place-content-center place-items-center w-full">
           {[
             { name: 'Home Service',         icon: '🔧', img: serviceImages.homeService,  link: '/workshop',  badge: null },
             { name: 'Emergency Assistance', icon: '🚨', img: serviceImages.emergency,    link: '/services',  badge: 'Emergency' },
@@ -179,7 +179,7 @@ export default function Home() {
         </div>
 
         {/* 4 Small service cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-[1400px] mx-auto justify-center place-content-center place-items-center w-full">
           {[
             { name: 'Car Rental',    icon: '🚗', img: serviceImages.carRental,    link: '/car-rental' },
             { name: 'Workshop',      icon: '🏭', img: serviceImages.workshop,     link: '/workshop' },
