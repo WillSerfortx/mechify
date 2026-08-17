@@ -12,6 +12,7 @@ import PaymentSelect from './pages/PaymentSelect';
 import CardPayment from './pages/CardPayment';
 import PaymentSuccess from './pages/PaymentSuccess';
 import Profile from './pages/Profile';
+import IDriver from './pages/IDriver';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/services" element={<Layout><Services /></Layout>} />
         <Route path="/workshop" element={<Layout><Workshop /></Layout>} />
+        <Route path="/idriver" element={<Layout><IDriver /></Layout>} />
         <Route path="/car-rental" element={<Layout showFooter={false}><CarRental /></Layout>} />
         <Route path="/payment-select" element={<Layout showNav={false} showFooter={false}><PaymentSelect /></Layout>} />
         <Route path="/card-payment" element={<Layout showNav={false} showFooter={false}><CardPayment /></Layout>} />
