@@ -42,7 +42,7 @@ const generateMockCars = () => {
     });
     
     return {
-      ...brand,
+      ...category,
       cars
     };
   });
