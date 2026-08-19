@@ -54,10 +54,28 @@ export default function CarBooking() {
       </div>
 
       {/* Main Content Layout */}
-      <div className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-8 flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-24 min-h-[80vh]">
+      <div className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-12 flex flex-col items-center justify-center gap-12 min-h-[80vh]">
         
-        {/* Left Side: Form Card */}
-        <div className="w-full max-w-[550px] bg-white rounded-3xl p-10 shadow-2xl animate-fadeInUp">
+        {/* Top Typographic Overlays */}
+        <div className="flex flex-col items-center justify-center text-center w-full relative animate-fadeInDown">
+          {/* Top Title */}
+          <div className="w-full whitespace-nowrap mb-8">
+            <h1 className="text-white text-6xl md:text-7xl xl:text-[90px] font-black tracking-tighter drop-shadow-2xl">
+              Choose Your Plans
+            </h1>
+            <div className="h-2 w-48 bg-[#E50914] mt-4 shadow-[0_0_15px_rgba(229,9,20,0.6)] mx-auto" />
+          </div>
+
+          {/* Main Body Text */}
+          <div>
+            <h2 className="text-white text-4xl md:text-5xl xl:text-6xl font-black leading-tight drop-shadow-xl opacity-90 mix-blend-overlay">
+              Car hire at All Over Bangladesh
+            </h2>
+          </div>
+        </div>
+
+        {/* Center: Form Card */}
+        <div className="w-full max-w-[750px] bg-white rounded-3xl p-10 shadow-2xl animate-fadeInUp">
           
           <h2 className="text-3xl font-black text-black mb-8">Start your booking</h2>
           <SelectField label="Choose Location" options={locations} />
@@ -85,27 +103,6 @@ export default function CarBooking() {
             Next
           </button>
         </div>
-
-        {/* Right Side: Typographic Overlays */}
-        <div className="hidden lg:flex flex-col items-center justify-center text-center w-full flex-1 relative animate-slideInRight">
-          {/* Top Title */}
-          <div className="w-full whitespace-nowrap mb-12">
-            <h1 className="text-white text-7xl xl:text-[90px] font-black tracking-tighter drop-shadow-2xl">
-              Choose Your Plans
-            </h1>
-            <div className="h-2 w-1/2 bg-[#E50914] mt-4 shadow-[0_0_15px_rgba(229,9,20,0.6)] mx-auto" />
-          </div>
-
-          {/* Main Body Text */}
-          <div>
-            <h2 className="text-white text-7xl xl:text-8xl font-black leading-tight drop-shadow-xl opacity-90 mix-blend-overlay">
-              Car hire at<br />
-              All Over<br />
-              Bangladesh
-            </h2>
-          </div>
-        </div>
-
       </div>
     </div>
   );
