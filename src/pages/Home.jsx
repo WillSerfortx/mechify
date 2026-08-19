@@ -57,7 +57,7 @@ export default function Home() {
         {/* Background video */}
         <div className="absolute inset-0 bg-black">
           <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60">
-            <source src="https://videos.pexels.com/video-files/3141208/3141208-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+            <source src="https://videos.pexels.com/video-files/5191924/5191924-uhd_2560_1440_25fps.mp4" type="video/mp4" />
           </video>
           {/* Dark gradient overlay — right heavy for text readability */}
           <div className="absolute inset-0 bg-gradient-to-l from-black/90 via-black/50 to-transparent" />
@@ -65,7 +65,7 @@ export default function Home() {
         </div>
 
         {/* Hero content */}
-        <div className="relative z-10 px-8 md:px-16 lg:px-24 pt-28 pb-16 flex flex-col items-end text-right ml-auto">
+        <div className="relative z-10 px-8 pt-28 pb-16 flex flex-col items-start text-left ml-auto mr-[5%] md:mr-[10%] lg:mr-[15%] max-w-4xl">
           {/* Main tagline */}
           <h1 className="text-5xl md:text-6xl lg:text-8xl font-black leading-tight mb-6 max-w-4xl animate-slideInRight">
             We are reliable<br />
@@ -73,7 +73,7 @@ export default function Home() {
           </h1>
 
           {/* Sub-claims row */}
-          <div className="flex flex-wrap justify-end gap-6 md:gap-12 mb-10 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
+          <div className="flex flex-wrap justify-start gap-6 md:gap-12 mb-10 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
             {[
               { icon: '⚡', text: '24/7 Emergency Service' },
               { icon: '🕐', text: 'Quick response time' },
@@ -87,18 +87,18 @@ export default function Home() {
           </div>
 
           {/* CTA buttons — red pills matching Figma */}
-          <div className="flex flex-wrap justify-end gap-6 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
+          <div className="flex flex-wrap justify-start gap-6 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
             <Link
               to="/services"
               id="roadside-btn"
-              className="bg-red-600 hover:bg-red-700 text-white font-black text-2xl px-12 py-6 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
+              className="bg-red-600 hover:bg-red-700 text-white font-black text-2xl px-14 py-7 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
             >
               Roadside Assistance
             </Link>
             <Link
               to="/fuel-terms"
               id="fuel-btn"
-              className="bg-red-600 hover:bg-red-700 text-white font-black text-2xl px-12 py-6 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
+              className="bg-red-600 hover:bg-red-700 text-white font-black text-2xl px-14 py-7 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
             >
               Fuel Service
             </Link>
