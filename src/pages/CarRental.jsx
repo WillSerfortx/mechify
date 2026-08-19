@@ -54,9 +54,9 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
   return (
     <div className="py-12 relative">
       {/* Brand Header */}
-      <div className="flex items-center gap-4 px-6 md:px-12 lg:px-20 mb-8">
-        {logo && <img src={logo} alt={`${name} logo`} className="h-14 w-auto max-w-[90px] object-contain bg-black rounded-xl p-3 border border-gray-800" onError={(e) => e.target.style.display = 'none'} />}
-        <h2 className="text-4xl font-black">{name}</h2>
+      <div className="flex items-center gap-5 px-6 md:px-12 lg:px-20 mb-8">
+        {logo && <img src={logo} alt={`${name} logo`} className="h-16 w-16 object-contain bg-black rounded-2xl p-1.5 border-2 border-slate-700" onError={(e) => e.target.style.display = 'none'} />}
+        <h2 className="text-5xl font-black tracking-wide">{name}</h2>
       </div>
 
       {/* Endless Marquee Container */}
