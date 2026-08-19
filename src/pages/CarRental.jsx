@@ -88,8 +88,9 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
               </div>
               
               {/* Card Footer */}
-              <div className="p-4 bg-white flex flex-col items-center justify-center border-t border-gray-100">
-                <h3 className="text-black font-black text-3xl">{car.name}</h3>
+              <div className="p-4 bg-white flex flex-row items-center justify-center gap-3 border-t border-gray-100">
+                {logo && <img src={logo} alt={`${name} logo`} className="h-10 w-auto max-w-[40px] object-contain bg-black rounded-md p-1.5 border border-gray-800" onError={(e) => e.target.style.display = 'none'} />}
+                <h3 className="text-black font-black text-2xl">{car.name}</h3>
               </div>
             </div>
           ))}
