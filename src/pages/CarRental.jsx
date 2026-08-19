@@ -3,16 +3,16 @@ import { useMemo } from 'react';
 
 // ─── Constants & Mock Data Generation ───
 const BRANDS = [
-  { name: 'Bugatti', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Bugatti_logo.svg/1200px-Bugatti_logo.svg.png' },
-  { name: 'Mercedes', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/1024px-Mercedes-Logo.svg.png' },
-  { name: 'McLaren', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/McLaren_logo.svg/1200px-McLaren_logo.svg.png' },
-  { name: 'Ferrari', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/d1/Ferrari-Logo.svg/1200px-Ferrari-Logo.svg.png' },
-  { name: 'Lamborghini', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Lamborghini_Logo.svg/1200px-Lamborghini_Logo.svg.png' },
-  { name: 'Porsche', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Porsche_logo.svg/1200px-Porsche_logo.svg.png' },
-  { name: 'BMW', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/BMW.svg/1200px-BMW.svg.png' },
-  { name: 'Audi', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Audi-Logo_2016.svg/1200px-Audi-Logo_2016.svg.png' },
-  { name: 'Aston Martin', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/b3/Aston_Martin_logo.svg/1200px-Aston_Martin_logo.svg.png' },
-  { name: 'Rolls Royce', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/Rolls-Royce_Motor_Cars_logo.svg/1200px-Rolls-Royce_Motor_Cars_logo.svg.png' },
+  { name: 'Bugatti', logo: 'https://cdn.worldvectorlogo.com/logos/bugatti-1.svg' },
+  { name: 'Mercedes', logo: 'https://cdn.worldvectorlogo.com/logos/mercedes-benz-9.svg' },
+  { name: 'McLaren', logo: 'https://cdn.worldvectorlogo.com/logos/mclaren-1.svg' },
+  { name: 'Ferrari', logo: 'https://cdn.worldvectorlogo.com/logos/ferrari-ges-1.svg' },
+  { name: 'Lamborghini', logo: 'https://cdn.worldvectorlogo.com/logos/lamborghini-1.svg' },
+  { name: 'Porsche', logo: 'https://cdn.worldvectorlogo.com/logos/porsche-6.svg' },
+  { name: 'BMW', logo: 'https://cdn.worldvectorlogo.com/logos/bmw-logo-2020.svg' },
+  { name: 'Audi', logo: 'https://cdn.worldvectorlogo.com/logos/audi-13.svg' },
+  { name: 'Aston Martin', logo: 'https://cdn.worldvectorlogo.com/logos/aston-martin-1.svg' },
+  { name: 'Rolls Royce', logo: 'https://cdn.worldvectorlogo.com/logos/rolls-royce-motor-cars.svg' },
 ];
 
 const CAR_IMAGES = [
@@ -58,11 +58,11 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
   const animationClass = isReversed ? 'animate-marqueeReverse' : 'animate-marquee';
 
   return (
-    <div className="mb-16 relative">
+    <div className="mb-24 relative">
       {/* Brand Header */}
-      <div className="flex items-center gap-4 px-6 md:px-12 lg:px-20 mb-6">
-        {logo && <img src={logo} alt={`${name} logo`} className="h-10 object-contain bg-white/10 rounded-lg p-1" />}
-        <h2 className="text-3xl font-black">{name}</h2>
+      <div className="flex items-center gap-4 px-6 md:px-12 lg:px-20 mb-8">
+        {logo && <img src={logo} alt={`${name} logo`} className="h-12 w-auto max-w-[80px] object-contain bg-white rounded-lg p-2 shadow-sm" onError={(e) => e.target.style.display = 'none'} />}
+        <h2 className="text-4xl font-black">{name}</h2>
       </div>
 
       {/* Endless Marquee Container */}
@@ -95,7 +95,7 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
               
               {/* Card Footer */}
               <div className="p-4 bg-white flex flex-col items-center justify-center border-t border-gray-100">
-                <h3 className="text-black font-black text-xl">{car.name}</h3>
+                <h3 className="text-black font-black text-3xl">{car.name}</h3>
               </div>
             </div>
           ))}
