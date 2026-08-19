@@ -57,7 +57,7 @@ export default function Home() {
         {/* Background video */}
         <div className="absolute inset-0 bg-black">
           <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60">
-            <source src="https://videos.pexels.com/video-files/5191924/5191924-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+            <source src="https://ak.picdn.net/shutterstock/videos/1027160756/preview/stock-footage-car-driving-on-a-road-in-forest-aerial-view.mp4" type="video/mp4" />
           </video>
           {/* Dark gradient overlay — right heavy for text readability */}
           <div className="absolute inset-0 bg-gradient-to-l from-black/90 via-black/50 to-transparent" />
@@ -65,8 +65,10 @@ export default function Home() {
         </div>
 
         {/* Hero content */}
-        <div className="relative z-10 px-8 pt-28 pb-16 flex flex-col items-start text-left ml-auto mr-[5%] md:mr-[10%] lg:mr-[15%] max-w-4xl">
-          {/* Main tagline */}
+        <div className="relative z-10 px-8 md:px-16 lg:px-24 pt-28 pb-16 w-full max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>{/* Empty column to push content to the right */}</div>
+          <div className="flex flex-col items-start text-left">
+            {/* Main tagline */}
           <h1 className="text-5xl md:text-6xl lg:text-8xl font-black leading-tight mb-6 max-w-4xl animate-slideInRight">
             We are reliable<br />
             Anytime,<span className="text-red-500">Anywhere</span>
@@ -86,22 +88,23 @@ export default function Home() {
             ))}
           </div>
 
-          {/* CTA buttons — red pills matching Figma */}
-          <div className="flex flex-wrap justify-start gap-6 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
-            <Link
-              to="/services"
-              id="roadside-btn"
-              className="bg-red-600 hover:bg-red-700 text-white font-black text-2xl px-14 py-7 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
-            >
-              Roadside Assistance
-            </Link>
-            <Link
-              to="/fuel-terms"
-              id="fuel-btn"
-              className="bg-red-600 hover:bg-red-700 text-white font-black text-2xl px-14 py-7 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
-            >
-              Fuel Service
-            </Link>
+            {/* CTA buttons — red pills matching Figma */}
+            <div className="flex flex-wrap justify-start gap-6 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
+              <Link
+                to="/services"
+                id="roadside-btn"
+                className="bg-red-600 hover:bg-red-700 text-white font-black text-xl px-10 py-5 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
+              >
+                Roadside Assistance
+              </Link>
+              <Link
+                to="/fuel-terms"
+                id="fuel-btn"
+                className="bg-red-600 hover:bg-red-700 text-white font-black text-xl px-10 py-5 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
+              >
+                Fuel Service
+              </Link>
+            </div>
           </div>
         </div>
 
