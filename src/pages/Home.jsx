@@ -65,17 +65,15 @@ export default function Home() {
         </div>
 
         {/* Hero content */}
-        <div className="relative z-10 px-8 md:px-16 lg:px-24 pt-28 pb-16 w-full max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div>{/* Empty column to push content to the right */}</div>
-          <div className="flex flex-col items-start text-left">
-            {/* Main tagline */}
+        <div className="relative z-10 px-8 md:px-16 lg:px-24 pt-28 pb-16 w-full max-w-[1600px] mx-auto flex flex-col items-end text-right lg:pr-[10%]">
+          {/* Main tagline */}
           <h1 className="text-5xl md:text-6xl lg:text-8xl font-black leading-tight mb-6 max-w-4xl animate-slideInRight">
             We are reliable<br />
             Anytime,<span className="text-red-500">Anywhere</span>
           </h1>
 
           {/* Sub-claims row */}
-          <div className="flex flex-wrap justify-start gap-6 md:gap-12 mb-10 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
+          <div className="flex flex-wrap justify-end gap-6 md:gap-12 mb-10 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
             {[
               { icon: '⚡', text: '24/7 Emergency Service' },
               { icon: '🕐', text: 'Quick response time' },
@@ -89,7 +87,7 @@ export default function Home() {
           </div>
 
             {/* CTA buttons — red pills matching Figma */}
-            <div className="flex flex-wrap justify-start gap-6 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
+            <div className="flex flex-wrap justify-end gap-6 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
               <Link
                 to="/services"
                 id="roadside-btn"
@@ -105,7 +103,6 @@ export default function Home() {
                 Fuel Service
               </Link>
             </div>
-          </div>
         </div>
 
         {/* Scroll arrow */}
