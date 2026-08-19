@@ -2,17 +2,17 @@ import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 
 // ─── Constants & Mock Data Generation ───
-const BRANDS = [
-  { name: 'Bugatti', logo: 'https://cdn.worldvectorlogo.com/logos/bugatti-1.svg' },
-  { name: 'Mercedes', logo: 'https://cdn.worldvectorlogo.com/logos/mercedes-benz-9.svg' },
-  { name: 'McLaren', logo: 'https://cdn.worldvectorlogo.com/logos/mclaren-1.svg' },
-  { name: 'Ferrari', logo: 'https://cdn.worldvectorlogo.com/logos/ferrari-ges-1.svg' },
-  { name: 'Lamborghini', logo: 'https://cdn.worldvectorlogo.com/logos/lamborghini-1.svg' },
-  { name: 'Porsche', logo: 'https://cdn.worldvectorlogo.com/logos/porsche-6.svg' },
-  { name: 'BMW', logo: 'https://cdn.worldvectorlogo.com/logos/bmw-logo-2020.svg' },
-  { name: 'Audi', logo: 'https://cdn.worldvectorlogo.com/logos/audi-13.svg' },
-  { name: 'Aston Martin', logo: 'https://cdn.worldvectorlogo.com/logos/aston-martin-1.svg' },
-  { name: 'Rolls Royce', logo: 'https://cdn.worldvectorlogo.com/logos/rolls-royce-2.svg' },
+const CATEGORIES = [
+  { name: 'Sedan' },
+  { name: 'SUV' },
+  { name: 'Hatchback' },
+  { name: 'Crossover' },
+  { name: 'MPV' },
+  { name: 'Luxury' },
+  { name: 'Luxury SUV' },
+  { name: 'Micro Bus' },
+  { name: 'Coupe' },
+  { name: 'Mini Van' },
 ];
 
 const CAR_IMAGES = [
@@ -23,17 +23,19 @@ const CAR_IMAGES = [
 ];
 
 const generateMockCars = () => {
-  return BRANDS.map((brand, brandIndex) => {
-    // Generate 10 cars for each brand
+  return CATEGORIES.map((category, categoryIndex) => {
+    // Generate 10 cars for each category
     const cars = Array.from({ length: 10 }).map((_, carIndex) => {
       // Pick an image dynamically (mix it up a bit)
-      const imageIndex = (brandIndex + carIndex) % CAR_IMAGES.length;
+      const imageIndex = (categoryIndex + carIndex) % CAR_IMAGES.length;
       // Randomly assign availability
       const isAvailable = Math.random() > 0.3; // 70% available
       
       return {
-        id: `${brand.name}-${carIndex}`,
-        name: `${brand.name} Model ${carIndex + 1}`,
+        id: `${category.name}-${carIndex}`,
+        name: `${category.name} ${carIndex + 1}`,
+        category: category.name,
+        speed: Math.floor(Math.random() * 50 + 150) + 'mph',
         img: CAR_IMAGES[imageIndex],
         isAvailable,
       };
@@ -47,27 +49,16 @@ const generateMockCars = () => {
 };
 
 // ─── Reusable Marquee Row Component ───
-const CarMarqueeRow = ({ brandData, isReversed }) => {
+const CarMarqueeRow = ({ categoryData, isReversed }) => {
   const navigate = useNavigate();
-  const { name, logo, cars } = brandData;
+  const { name, cars } = categoryData;
   const animationClass = isReversed ? 'animate-marqueeReverse' : 'animate-marquee';
 
   return (
     <div className="py-12 relative">
-      {/* Brand Header */}
+      {/* Category Header */}
       <div className="flex items-center gap-5 px-6 md:px-12 lg:px-20 mb-8">
-        {logo && (
-          <img 
-            src={logo} 
-            alt={`${name} logo`} 
-            className="h-16 w-16 object-contain bg-black rounded-2xl p-1.5 border-2 border-slate-700" 
-            onError={(e) => { 
-              e.target.onerror = null; 
-              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=000&color=fff&size=128`; 
-            }} 
-          />
-        )}
-        <h2 className="text-5xl font-black tracking-wide">{name}</h2>
+        <h2 className="text-5xl font-black tracking-wide text-white capitalize">{name}</h2>
       </div>
 
       {/* Endless Marquee Container */}
@@ -144,10 +135,10 @@ export default function CarRental() {
 
       {/* Render the 10 Marquee Rows */}
       <div className="flex flex-col gap-16 mt-8">
-        {brandRows.map((brandData, index) => (
+        {brandRows.map((categoryData, index) => (
           <CarMarqueeRow 
-            key={brandData.name} 
-            brandData={brandData} 
+            key={categoryData.name} 
+            categoryData={categoryData} 
             isReversed={index % 2 !== 0} 
           />
         ))}
