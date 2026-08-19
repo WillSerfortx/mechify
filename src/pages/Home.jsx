@@ -106,28 +106,28 @@ export default function Home() {
         </div>
 
         {/* Scroll arrow */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-float">
+        <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-float">
           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
           </svg>
         </div>
-      </section>
 
-      {/* ══════════════════════════════════════════
-          MARQUEE BAR
-      ══════════════════════════════════════════ */}
-      <div className="bg-red-600 text-white py-2 overflow-hidden flex whitespace-nowrap text-sm font-bold tracking-widest border-y border-red-500 shadow-[0_0_15px_rgba(220,38,38,0.3)] relative z-20">
-        <div className="flex animate-marquee gap-12">
-          {/* Duplicate contents to make the scroll seamless */}
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="flex items-center gap-12">
-              <span className="flex items-center gap-2">⭐ 24/7 EMERGENCY SERVICE</span>
-              <span className="flex items-center gap-2">📞 +8801516520602</span>
-              <span className="flex items-center gap-2">✉️ SUPPORT@MECHIFY.COM</span>
-            </div>
-          ))}
+        {/* ══════════════════════════════════════════
+            MARQUEE BAR
+        ══════════════════════════════════════════ */}
+        <div className="absolute bottom-0 w-full bg-red-600 text-white py-2 overflow-hidden flex whitespace-nowrap text-sm font-bold tracking-widest border-y border-red-500 shadow-[0_0_15px_rgba(220,38,38,0.3)] z-30">
+          <div className="flex animate-marquee gap-12">
+            {/* Duplicate contents to make the scroll seamless */}
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="flex items-center gap-12">
+                <span className="flex items-center gap-2">⭐ 24/7 EMERGENCY SERVICE</span>
+                <span className="flex items-center gap-2">📞 +8801516520602</span>
+                <span className="flex items-center gap-2">✉️ SUPPORT@MECHIFY.COM</span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* ══════════════════════════════════════════
           SERVICES SECTION
