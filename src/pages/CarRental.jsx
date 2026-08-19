@@ -52,7 +52,7 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
   const animationClass = isReversed ? 'animate-marqueeReverse' : 'animate-marquee';
 
   return (
-    <div className="mb-32 relative">
+    <div className="mb-48 relative">
       {/* Brand Header */}
       <div className="flex items-center gap-4 px-6 md:px-12 lg:px-20 mb-8">
         {logo && <img src={logo} alt={`${name} logo`} className="h-14 w-auto max-w-[90px] object-contain bg-black rounded-xl p-3 border border-gray-800" onError={(e) => e.target.style.display = 'none'} />}
@@ -66,7 +66,7 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
           {[...cars, ...cars].map((car, i) => (
             <div 
               key={`${car.id}-${i}`} 
-              className="relative bg-white w-[300px] flex-shrink-0 rounded-xl overflow-hidden flex flex-col mx-6 transition-transform duration-300 hover:scale-[1.03] hover:z-10 hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] cursor-pointer group/card"
+              className="relative bg-white w-[300px] flex-shrink-0 rounded-xl overflow-hidden flex flex-col mx-12 transition-transform duration-300 hover:scale-[1.03] hover:z-10 hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] cursor-pointer group/card"
             >
               {/* Image Container */}
               <div className="h-44 p-4 flex items-center justify-center bg-gray-100 relative overflow-hidden">
