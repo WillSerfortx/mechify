@@ -57,7 +57,7 @@ export default function Home() {
         {/* Background video */}
         <div className="absolute inset-0 bg-black">
           <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60">
-            <source src="https://ak.picdn.net/shutterstock/videos/1027160756/preview/stock-footage-car-driving-on-a-road-in-forest-aerial-view.mp4" type="video/mp4" />
+            <source src="/hero-car.mp4" type="video/mp4" />
           </video>
           {/* Dark gradient overlay — right heavy for text readability */}
           <div className="absolute inset-0 bg-gradient-to-l from-black/90 via-black/50 to-transparent" />
