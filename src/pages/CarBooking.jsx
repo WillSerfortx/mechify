@@ -3,9 +3,9 @@ import { useState } from 'react';
 
 const SelectField = ({ label, options }) => {
   return (
-    <div className="relative group w-full mb-4">
+    <div className="relative group w-full mb-6">
       <select 
-        className="w-full appearance-none bg-white border border-gray-300 text-gray-700 font-medium py-3 px-4 pr-10 rounded-lg outline-none cursor-pointer transition-all duration-300 hover:border-gray-500 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+        className="w-full appearance-none bg-white border border-gray-300 text-gray-700 font-semibold py-4 px-5 pr-10 text-lg rounded-xl outline-none cursor-pointer transition-all duration-300 hover:border-gray-500 focus:border-red-500 focus:ring-2 focus:ring-red-200"
         defaultValue=""
       >
         <option value="" disabled hidden>{label}</option>
@@ -54,50 +54,50 @@ export default function CarBooking() {
       </div>
 
       {/* Main Content Layout */}
-      <div className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-8 flex flex-col lg:flex-row items-center lg:items-start justify-between gap-16">
+      <div className="relative z-10 flex-1 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-8 flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-24 min-h-[80vh]">
         
         {/* Left Side: Form Card */}
-        <div className="w-full max-w-[450px] bg-white rounded-2xl p-8 shadow-2xl animate-fadeInUp">
+        <div className="w-full max-w-[550px] bg-white rounded-3xl p-10 shadow-2xl animate-fadeInUp">
           
-          <h2 className="text-2xl font-black text-black mb-6">Start your booking</h2>
+          <h2 className="text-3xl font-black text-black mb-8">Start your booking</h2>
           <SelectField label="Choose Location" options={locations} />
           <SelectField label="Select Date" options={dates} />
           <SelectField label="Time" options={times} />
 
-          <h2 className="text-2xl font-black text-black mt-8 mb-6">Return</h2>
+          <h2 className="text-3xl font-black text-black mt-10 mb-8">Return</h2>
           <SelectField label="Choose Location" options={locations} />
           <SelectField label="Select Date" options={dates} />
           <SelectField label="Time" options={times} />
 
           {/* Driver's age checkbox */}
-          <div className="flex items-center gap-2 mt-4 mb-8 cursor-pointer group" onClick={() => setDriverAge(!driverAge)}>
-            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors duration-300 ${driverAge ? 'border-red-600 bg-red-600' : 'border-gray-400 group-hover:border-gray-600'}`}>
-              {driverAge && <div className="w-2.5 h-2.5 bg-white rounded-full" />}
+          <div className="flex items-center gap-3 mt-6 mb-10 cursor-pointer group" onClick={() => setDriverAge(!driverAge)}>
+            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors duration-300 ${driverAge ? 'border-red-600 bg-red-600' : 'border-gray-400 group-hover:border-gray-600'}`}>
+              {driverAge && <div className="w-3 h-3 bg-white rounded-full" />}
             </div>
-            <span className="text-sm font-semibold text-gray-700">Driver's age 25+</span>
+            <span className="text-lg font-bold text-gray-700">Driver's age 25+</span>
           </div>
 
           {/* Next Button */}
           <button 
             onClick={() => navigate('/payment-select')}
-            className="w-full bg-[#E50914] hover:bg-red-700 text-white font-black text-2xl py-4 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-[0_5px_20px_rgba(229,9,20,0.4)]"
+            className="w-full bg-[#E50914] hover:bg-red-700 text-white font-black text-3xl py-5 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-[0_5px_20px_rgba(229,9,20,0.4)]"
           >
             Next
           </button>
         </div>
 
         {/* Right Side: Typographic Overlays */}
-        <div className="hidden lg:flex flex-col items-end text-right w-full flex-1 pt-12 relative animate-slideInRight">
+        <div className="hidden lg:flex flex-col items-center justify-center text-center w-full flex-1 relative animate-slideInRight">
           {/* Top Title */}
-          <div className="absolute -top-32 right-0 w-full whitespace-nowrap">
+          <div className="w-full whitespace-nowrap mb-12">
             <h1 className="text-white text-7xl xl:text-[90px] font-black tracking-tighter drop-shadow-2xl">
               Choose Your Plans
             </h1>
-            <div className="h-2 w-3/4 bg-[#E50914] mt-2 shadow-[0_0_15px_rgba(229,9,20,0.6)] ml-auto" />
+            <div className="h-2 w-1/2 bg-[#E50914] mt-4 shadow-[0_0_15px_rgba(229,9,20,0.6)] mx-auto" />
           </div>
 
           {/* Main Body Text */}
-          <div className="mt-32">
+          <div>
             <h2 className="text-white text-7xl xl:text-8xl font-black leading-tight drop-shadow-xl opacity-90 mix-blend-overlay">
               Car hire at<br />
               All Over<br />
