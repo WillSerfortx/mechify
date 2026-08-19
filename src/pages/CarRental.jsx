@@ -12,20 +12,14 @@ const BRANDS = [
   { name: 'BMW', logo: 'https://cdn.worldvectorlogo.com/logos/bmw-logo-2020.svg' },
   { name: 'Audi', logo: 'https://cdn.worldvectorlogo.com/logos/audi-13.svg' },
   { name: 'Aston Martin', logo: 'https://cdn.worldvectorlogo.com/logos/aston-martin-1.svg' },
-  { name: 'Rolls Royce', logo: 'https://cdn.worldvectorlogo.com/logos/rolls-royce-motor-cars.svg' },
+  { name: 'Rolls Royce', logo: 'https://cdn.worldvectorlogo.com/logos/rolls-royce-2.svg' },
 ];
 
 const CAR_IMAGES = [
-  'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&h=400&fit=crop', // Bugatti-ish
-  'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600&h=400&fit=crop', // Mercedes
-  'https://images.unsplash.com/photo-1558981852-426c373d4a83?w=600&h=400&fit=crop', // McLaren
-  'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=600&h=400&fit=crop', // Ferrari
-  'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&h=400&fit=crop', // Lambo
-  'https://images.unsplash.com/photo-1503376713431-150d65942289?w=600&h=400&fit=crop', // Porsche
-  'https://images.unsplash.com/photo-1555353540-64fd8b0ebd28?w=600&h=400&fit=crop', // BMW
-  'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600&h=400&fit=crop', // Audi
-  'https://images.unsplash.com/photo-1543465077-db45d34b88a5?w=600&h=400&fit=crop', // Aston
-  'https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=600&h=400&fit=crop', // Rolls Royce
+  '/car-1.jpg', // Bugatti
+  '/car-2.jpg', // McLaren
+  '/car-3.jpg', // Mercedes
+  '/car-4.jpg', // Rolls Royce
 ];
 
 const generateMockCars = () => {
@@ -58,10 +52,10 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
   const animationClass = isReversed ? 'animate-marqueeReverse' : 'animate-marquee';
 
   return (
-    <div className="mb-24 relative">
+    <div className="mb-32 relative">
       {/* Brand Header */}
       <div className="flex items-center gap-4 px-6 md:px-12 lg:px-20 mb-8">
-        {logo && <img src={logo} alt={`${name} logo`} className="h-12 w-auto max-w-[80px] object-contain bg-white rounded-lg p-2 shadow-sm" onError={(e) => e.target.style.display = 'none'} />}
+        {logo && <img src={logo} alt={`${name} logo`} className="h-14 w-auto max-w-[90px] object-contain bg-black rounded-xl p-3 border border-gray-800" onError={(e) => e.target.style.display = 'none'} />}
         <h2 className="text-4xl font-black">{name}</h2>
       </div>
 
@@ -72,7 +66,7 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
           {[...cars, ...cars].map((car, i) => (
             <div 
               key={`${car.id}-${i}`} 
-              className="relative bg-white w-[300px] flex-shrink-0 rounded-xl overflow-hidden flex flex-col mx-3 transition-transform duration-300 hover:scale-[1.03] hover:z-10 hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] cursor-pointer group/card"
+              className="relative bg-white w-[300px] flex-shrink-0 rounded-xl overflow-hidden flex flex-col mx-6 transition-transform duration-300 hover:scale-[1.03] hover:z-10 hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] cursor-pointer group/card"
             >
               {/* Image Container */}
               <div className="h-44 p-4 flex items-center justify-center bg-gray-100 relative overflow-hidden">
