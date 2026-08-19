@@ -55,7 +55,17 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
     <div className="py-12 relative">
       {/* Brand Header */}
       <div className="flex items-center gap-5 px-6 md:px-12 lg:px-20 mb-8">
-        {logo && <img src={logo} alt={`${name} logo`} className="h-16 w-16 object-contain bg-black rounded-2xl p-1.5 border-2 border-slate-700" onError={(e) => e.target.style.display = 'none'} />}
+        {logo && (
+          <img 
+            src={logo} 
+            alt={`${name} logo`} 
+            className="h-16 w-16 object-contain bg-black rounded-2xl p-1.5 border-2 border-slate-700" 
+            onError={(e) => { 
+              e.target.onerror = null; 
+              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=000&color=fff&size=128`; 
+            }} 
+          />
+        )}
         <h2 className="text-5xl font-black tracking-wide">{name}</h2>
       </div>
 
