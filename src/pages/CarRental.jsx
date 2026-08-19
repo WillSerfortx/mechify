@@ -52,7 +52,7 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
   const animationClass = isReversed ? 'animate-marqueeReverse' : 'animate-marquee';
 
   return (
-    <div className="mb-20 relative">
+    <div className="py-12 relative">
       {/* Brand Header */}
       <div className="flex items-center gap-4 px-6 md:px-12 lg:px-20 mb-8">
         {logo && <img src={logo} alt={`${name} logo`} className="h-14 w-auto max-w-[90px] object-contain bg-black rounded-xl p-3 border border-gray-800" onError={(e) => e.target.style.display = 'none'} />}
@@ -62,11 +62,11 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
       {/* Endless Marquee Container */}
       <div className="relative flex overflow-hidden group">
         {/* We duplicate the inner content twice to achieve the seamless endless loop */}
-        <div className={`flex shrink-0 ${animationClass} group-hover:[animation-play-state:paused]`}>
+        <div className={`flex shrink-0 gap-8 ${animationClass} group-hover:[animation-play-state:paused]`}>
           {[...cars, ...cars].map((car, i) => (
             <div 
               key={`${car.id}-${i}`} 
-              className="relative bg-white w-[300px] flex-shrink-0 rounded-xl overflow-hidden flex flex-col mx-4 transition-transform duration-300 hover:scale-[1.03] hover:z-10 hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] cursor-pointer group/card"
+              className="relative bg-white w-[300px] flex-shrink-0 rounded-xl overflow-hidden flex flex-col transition-transform duration-300 hover:scale-[1.03] hover:z-10 hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] cursor-pointer group/card"
             >
               {/* Image Container */}
               <div className="h-44 p-4 flex items-center justify-center bg-gray-100 relative overflow-hidden">
@@ -132,7 +132,7 @@ export default function CarRental() {
       </div>
 
       {/* Render the 10 Marquee Rows */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-16 mt-8">
         {brandRows.map((brandData, index) => (
           <CarMarqueeRow 
             key={brandData.name} 
