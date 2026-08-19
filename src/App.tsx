@@ -10,6 +10,7 @@ import Workshop from './pages/Workshop';
 import WorkshopSelect from './pages/WorkshopSelect';
 import TimeSelect from './pages/TimeSelect';
 import CarRental from './pages/CarRental';
+import CarBooking from './pages/CarBooking';
 import PaymentSelect from './pages/PaymentSelect';
 import CardPayment from './pages/CardPayment';
 import PaymentSuccess from './pages/PaymentSuccess';
@@ -50,6 +51,7 @@ export default function App() {
         <Route path="/fuel-terms" element={<Layout showFooter={false}><FuelTerms /></Layout>} />
         <Route path="/fuel-request" element={<Layout showNav={false} showFooter={false}><FuelRequest /></Layout>} />
         <Route path="/car-rental" element={<Layout showFooter={false}><CarRental /></Layout>} />
+        <Route path="/car-booking" element={<Layout showNav={false} showFooter={false}><CarBooking /></Layout>} />
         <Route path="/payment-select" element={<Layout showNav={false} showFooter={false}><PaymentSelect /></Layout>} />
         <Route path="/card-payment" element={<Layout showNav={false} showFooter={false}><CardPayment /></Layout>} />
         <Route path="/payment-success" element={<Layout showNav={false} showFooter={false}><PaymentSuccess /></Layout>} />

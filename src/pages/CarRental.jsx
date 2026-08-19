@@ -48,6 +48,7 @@ const generateMockCars = () => {
 
 // ─── Reusable Marquee Row Component ───
 const CarMarqueeRow = ({ brandData, isReversed }) => {
+  const navigate = useNavigate();
   const { name, logo, cars } = brandData;
   const animationClass = isReversed ? 'animate-marqueeReverse' : 'animate-marquee';
 
@@ -87,7 +88,7 @@ const CarMarqueeRow = ({ brandData, isReversed }) => {
                   {car.isAvailable ? (
                     <>
                       <span className="bg-green-500 text-white font-bold px-4 py-1 rounded-full text-sm">Available</span>
-                      <button className="bg-red-600 hover:bg-red-700 text-white font-black px-6 py-2 rounded-full transition-all hover:scale-105">
+                      <button onClick={() => navigate('/car-booking')} className="bg-red-600 hover:bg-red-700 text-white font-black px-6 py-2 rounded-full transition-all hover:scale-105">
                         Rent Now
                       </button>
                     </>
