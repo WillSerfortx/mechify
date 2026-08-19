@@ -50,28 +50,30 @@ export default function Home() {
     <div className="bg-black min-h-screen text-white font-outfit overflow-x-hidden">
 
       {/* ══════════════════════════════════════════
-          HERO — Full-bleed background, text overlay
+          HERO — Full-bleed video background, right-aligned text
           Matches Figma Desktop-16
       ══════════════════════════════════════════ */}
       <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
-        {/* Background image */}
-        <div className="absolute inset-0">
-          <img src={heroBg} alt="Hero background" className="w-full h-full object-cover" />
-          {/* Dark gradient overlay — left heavy for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+        {/* Background video */}
+        <div className="absolute inset-0 bg-black">
+          <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60">
+            <source src="https://videos.pexels.com/video-files/3141208/3141208-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+          </video>
+          {/* Dark gradient overlay — right heavy for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-l from-black/90 via-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
         </div>
 
         {/* Hero content */}
-        <div className="relative z-10 px-8 md:px-16 lg:px-24 pt-28 pb-16">
+        <div className="relative z-10 px-8 md:px-16 lg:px-24 pt-28 pb-16 flex flex-col items-end text-right ml-auto">
           {/* Main tagline */}
-          <h1 className="text-5xl md:text-6xl lg:text-8xl font-black leading-tight mb-6 max-w-4xl animate-slideInLeft">
+          <h1 className="text-5xl md:text-6xl lg:text-8xl font-black leading-tight mb-6 max-w-4xl animate-slideInRight">
             We are reliable<br />
             Anytime,<span className="text-red-500">Anywhere</span>
           </h1>
 
           {/* Sub-claims row */}
-          <div className="flex flex-wrap gap-6 md:gap-12 mb-10 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
+          <div className="flex flex-wrap justify-end gap-6 md:gap-12 mb-10 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
             {[
               { icon: '⚡', text: '24/7 Emergency Service' },
               { icon: '🕐', text: 'Quick response time' },
@@ -85,18 +87,18 @@ export default function Home() {
           </div>
 
           {/* CTA buttons — red pills matching Figma */}
-          <div className="flex flex-wrap gap-4 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
+          <div className="flex flex-wrap justify-end gap-6 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
             <Link
               to="/services"
               id="roadside-btn"
-              className="bg-red-600 hover:bg-red-700 text-white font-bold text-xl px-10 py-5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(220,38,38,0.6)] active:scale-95"
+              className="bg-red-600 hover:bg-red-700 text-white font-black text-2xl px-12 py-6 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
             >
               Roadside Assistance
             </Link>
             <Link
               to="/fuel-terms"
               id="fuel-btn"
-              className="bg-red-600 hover:bg-red-700 text-white font-bold text-xl px-10 py-5 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(220,38,38,0.6)] active:scale-95"
+              className="bg-red-600 hover:bg-red-700 text-white font-black text-2xl px-12 py-6 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
             >
               Fuel Service
             </Link>
