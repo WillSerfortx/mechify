@@ -57,7 +57,7 @@ export default function CarBooking() {
         <h1 className="text-white text-6xl md:text-7xl xl:text-8xl font-bold tracking-wide drop-shadow-xl mb-5">
           Choose Your Plans
         </h1>
-        <div className="h-3 md:h-4 w-[500px] max-w-[80%] bg-[#E50914] mx-auto shadow-lg" />
+        <div className="h-3 md:h-4 w-[90%] max-w-5xl bg-[#E50914] mx-auto shadow-lg" />
       </div>
 
       {/* Centered Content Wrapper */}
