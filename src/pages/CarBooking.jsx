@@ -53,11 +53,13 @@ export default function CarBooking() {
       </div>
 
       {/* Top Title & Red Strip — pinned to top, centered */}
-      <div className="relative z-20 w-full text-center animate-fadeInDown mt-16 mb-10">
+      <div className="relative z-20 w-full text-center animate-fadeInDown mt-16 mb-10 px-0">
         <h1 className="text-white text-6xl md:text-7xl xl:text-8xl font-bold tracking-wide drop-shadow-xl mb-5">
           Choose Your Plans
         </h1>
-        <div className="h-3 md:h-4 w-[90%] max-w-5xl bg-[#E50914] mx-auto shadow-lg" />
+        <div className="flex justify-center w-full">
+          <div className="h-3 md:h-4 w-[90%] max-w-5xl bg-[#E50914] shadow-lg" />
+        </div>
       </div>
 
       {/* Centered Content Wrapper */}
