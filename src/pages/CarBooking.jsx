@@ -5,7 +5,7 @@ const SelectField = ({ label, options }) => {
   return (
     <div className="relative group w-full mb-4">
       <select 
-        className="w-full appearance-none bg-white border border-gray-400 text-black py-2.5 px-4 pr-10 text-sm rounded outline-none cursor-pointer focus:border-red-500 focus:ring-1 focus:ring-red-500"
+        className="w-full appearance-none bg-white border border-gray-400 text-black py-3.5 px-5 pr-12 text-base rounded-lg outline-none cursor-pointer focus:border-red-500 focus:ring-1 focus:ring-red-500"
         defaultValue=""
       >
         <option value="" disabled hidden>{label}</option>
@@ -52,28 +52,28 @@ export default function CarBooking() {
         </button>
       </div>
 
-      {/* Centered Wrapper for Title and Content */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 flex-1 flex flex-col items-center justify-center pt-8 pb-20">
+      {/* Full-Page Centered Wrapper */}
+      <div className="relative z-10 w-full mx-auto px-6 flex-1 flex flex-col items-center justify-center">
         
         {/* Top Title & Red Strip */}
-        <div className="w-full text-center animate-fadeInDown mb-16">
+        <div className="w-full text-center animate-fadeInDown mb-14">
           <h1 className="text-white text-5xl md:text-6xl xl:text-7xl font-bold tracking-wide drop-shadow-xl mb-4">
             Choose Your Plans
           </h1>
-          <div className="h-2 md:h-3 w-full max-w-4xl bg-[#E50914] mx-auto shadow-lg" />
+          <div className="h-2 md:h-3 w-[90%] max-w-5xl bg-[#E50914] mx-auto shadow-lg" />
         </div>
 
-        {/* Side-by-Side Content Block */}
-        <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-24">
+        {/* Side-by-Side Content — Form + Text, centered together */}
+        <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-14 lg:gap-20">
           
-          {/* Left Side: Form Card */}
-          <div className="w-full max-w-[450px] bg-white rounded-3xl p-8 shadow-2xl animate-fadeInLeft relative z-20">
-            <h2 className="text-2xl font-bold text-black mb-6">Start your booking</h2>
+          {/* Form Card — bigger */}
+          <div className="w-full max-w-[520px] bg-white rounded-3xl p-10 shadow-2xl animate-fadeInLeft relative z-20">
+            <h2 className="text-3xl font-bold text-black mb-6">Start your booking</h2>
             <SelectField label="Choose Location" options={locations} />
             <SelectField label="Select Date" options={dates} />
             <SelectField label="Time" options={times} />
 
-            <h2 className="text-2xl font-bold text-black mt-8 mb-6">Return</h2>
+            <h2 className="text-3xl font-bold text-black mt-8 mb-6">Return</h2>
             <SelectField label="Choose Location" options={locations} />
             <SelectField label="Select Date" options={dates} />
             <SelectField label="Time" options={times} />
@@ -87,30 +87,19 @@ export default function CarBooking() {
 
             <button 
               onClick={() => navigate('/payment-select')}
-              className="w-full bg-[#E50914] hover:bg-red-700 text-white font-bold text-xl py-3 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-md"
+              className="w-full bg-[#E50914] hover:bg-red-700 text-white font-bold text-2xl py-4 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-md"
             >
               Next
             </button>
           </div>
 
-          {/* Right Side: Text & Car Image */}
-          <div className="relative flex items-center justify-center animate-fadeInRight z-10">
-            {/* Main Body Text */}
-            <div className="relative z-10 text-left">
-              <h2 className="text-white text-5xl md:text-6xl xl:text-7xl font-bold leading-tight drop-shadow-2xl">
-                Car hire at<br />
-                <span className="font-black text-6xl md:text-7xl xl:text-[90px]">All Over</span><br />
-                <span className="font-black text-6xl md:text-7xl xl:text-[90px]">Bangladesh</span>
-              </h2>
-            </div>
-            
-            {/* Black Car Overlay Image */}
-            <img 
-              src="/car-3.jpg" 
-              alt="Black Car" 
-              className="absolute top-1/2 left-[50%] -translate-y-1/2 w-[400px] lg:w-[650px] object-contain drop-shadow-2xl z-0 pointer-events-none mix-blend-lighten"
-              style={{ transform: 'translate(-20%, -60%) scaleX(-1)' }}
-            />
+          {/* Right Side: Text only */}
+          <div className="flex items-center justify-center animate-fadeInRight z-10">
+            <h2 className="text-white text-5xl md:text-6xl xl:text-7xl font-bold leading-tight drop-shadow-2xl text-left">
+              Car hire at<br />
+              <span className="font-black text-6xl md:text-7xl xl:text-[90px]">All Over</span><br />
+              <span className="font-black text-6xl md:text-7xl xl:text-[90px]">Bangladesh</span>
+            </h2>
           </div>
 
         </div>
