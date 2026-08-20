@@ -35,11 +35,11 @@ export default function CarBooking() {
       {/* Background Map Image */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1920&h=1080&fit=crop" 
-          alt="Vintage Map Background" 
-          className="w-full h-full object-cover opacity-60 mix-blend-luminosity"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Bangladesh_relief_location_map.jpg/1200px-Bangladesh_relief_location_map.jpg" 
+          alt="Bangladesh Map Background" 
+          className="w-full h-full object-cover opacity-50 mix-blend-luminosity"
         />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
 
       {/* Header Bar */}
@@ -62,7 +62,7 @@ export default function CarBooking() {
       </div>
 
       {/* Main Content Layout */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 mb-10">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 mb-10 pl-10 lg:pl-32">
         
         {/* Left Side: Form Card */}
         <div className="w-full max-w-[500px] bg-white rounded-3xl p-10 shadow-2xl animate-fadeInLeft relative z-20">
@@ -94,7 +94,7 @@ export default function CarBooking() {
           </button>
         </div>
 
-        {/* Right Side: Typographic Overlays & Car Image */}
+        {/* Right Side: Typographic Overlays */}
         <div className="flex-1 w-full relative flex items-center justify-center lg:justify-start animate-fadeInRight z-10 py-20">
           {/* Main Body Text */}
           <div className="relative z-10">
@@ -104,14 +104,6 @@ export default function CarBooking() {
               <span className="font-black text-7xl md:text-8xl xl:text-[100px]">Bangladesh</span>
             </h2>
           </div>
-          
-          {/* Black Car Overlay Image */}
-          <img 
-            src="/car-3.jpg" 
-            alt="Black Car" 
-            className="absolute top-1/2 left-[40%] md:left-[50%] lg:left-[55%] -translate-y-1/2 w-[400px] md:w-[500px] lg:w-[650px] xl:w-[800px] object-contain drop-shadow-2xl z-0 pointer-events-none mix-blend-lighten"
-            style={{ transform: 'translate(-30%, -60%) scaleX(-1)' }}
-          />
         </div>
       </div>
     </div>
