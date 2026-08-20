@@ -62,46 +62,46 @@ export default function CarBooking() {
       </div>
 
       {/* Main Content Layout */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex flex-col lg:flex-row items-center lg:items-start justify-between gap-12 lg:gap-24">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 mb-10">
         
         {/* Left Side: Form Card */}
-        <div className="w-full max-w-[400px] bg-white rounded-2xl p-8 shadow-2xl animate-fadeInLeft relative z-20">
+        <div className="w-full max-w-[500px] bg-white rounded-3xl p-10 shadow-2xl animate-fadeInLeft relative z-20">
           
-          <h2 className="text-2xl font-bold text-black mb-6">Start your booking</h2>
+          <h2 className="text-3xl font-bold text-black mb-6">Start your booking</h2>
           <SelectField label="Choose Location" options={locations} />
           <SelectField label="Select Date" options={dates} />
           <SelectField label="Time" options={times} />
 
-          <h2 className="text-2xl font-bold text-black mt-8 mb-6">Return</h2>
+          <h2 className="text-3xl font-bold text-black mt-8 mb-6">Return</h2>
           <SelectField label="Choose Location" options={locations} />
           <SelectField label="Select Date" options={dates} />
           <SelectField label="Time" options={times} />
 
           {/* Driver's age checkbox */}
-          <div className="flex items-center gap-2 mt-4 mb-8 cursor-pointer group" onClick={() => setDriverAge(!driverAge)}>
-            <div className={`w-4 h-4 rounded-full border border-gray-400 flex items-center justify-center transition-colors duration-300 ${driverAge ? 'border-black' : ''}`}>
-              {driverAge && <div className="w-2 h-2 bg-black rounded-full" />}
+          <div className="flex items-center gap-3 mt-4 mb-10 cursor-pointer group" onClick={() => setDriverAge(!driverAge)}>
+            <div className={`w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center transition-colors duration-300 ${driverAge ? 'border-black' : ''}`}>
+              {driverAge && <div className="w-3 h-3 bg-black rounded-full" />}
             </div>
-            <span className="text-xs font-semibold text-black">Driver's age 25+</span>
+            <span className="text-sm font-semibold text-black">Driver's age 25+</span>
           </div>
 
           {/* Next Button */}
           <button 
             onClick={() => navigate('/payment-select')}
-            className="w-full bg-[#E50914] hover:bg-red-700 text-white font-bold text-xl py-3 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-md"
+            className="w-full bg-[#E50914] hover:bg-red-700 text-white font-bold text-2xl py-4 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-md"
           >
             Next
           </button>
         </div>
 
         {/* Right Side: Typographic Overlays & Car Image */}
-        <div className="flex-1 w-full relative h-[400px] lg:h-[500px] flex items-center justify-start lg:justify-center animate-fadeInRight z-10">
+        <div className="flex-1 w-full relative flex items-center justify-center lg:justify-start animate-fadeInRight z-10 py-20">
           {/* Main Body Text */}
-          <div className="relative z-10 pl-4 lg:pl-0">
-            <h2 className="text-white text-5xl md:text-6xl xl:text-7xl font-bold leading-tight drop-shadow-2xl">
+          <div className="relative z-10">
+            <h2 className="text-white text-6xl md:text-7xl xl:text-8xl font-bold leading-tight drop-shadow-2xl">
               Car hire at<br />
-              <span className="font-black text-6xl md:text-7xl xl:text-[90px]">All Over</span><br />
-              <span className="font-black text-6xl md:text-7xl xl:text-[90px]">Bangladesh</span>
+              <span className="font-black text-7xl md:text-8xl xl:text-[100px]">All Over</span><br />
+              <span className="font-black text-7xl md:text-8xl xl:text-[100px]">Bangladesh</span>
             </h2>
           </div>
           
@@ -109,7 +109,7 @@ export default function CarBooking() {
           <img 
             src="/car-3.jpg" 
             alt="Black Car" 
-            className="absolute top-1/2 left-[40%] md:left-[50%] lg:left-[60%] -translate-y-1/2 w-[350px] md:w-[450px] lg:w-[600px] xl:w-[700px] object-contain drop-shadow-2xl z-0 pointer-events-none mix-blend-lighten"
+            className="absolute top-1/2 left-[40%] md:left-[50%] lg:left-[55%] -translate-y-1/2 w-[400px] md:w-[500px] lg:w-[650px] xl:w-[800px] object-contain drop-shadow-2xl z-0 pointer-events-none mix-blend-lighten"
             style={{ transform: 'translate(-30%, -60%) scaleX(-1)' }}
           />
         </div>
