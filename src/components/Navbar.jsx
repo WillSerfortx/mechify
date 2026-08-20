@@ -59,7 +59,6 @@ export default function Navbar() {
             { path: '/', label: 'Home' },
             { path: '/about', label: 'About' },
             { path: '/services', label: 'Services' },
-            { path: '/spare-parts', label: 'Spare Parts' },
             { path: '/contact', label: 'Contact' },
           ].map(({ path, label }) => (
             <Link
@@ -116,7 +115,6 @@ export default function Navbar() {
             { path: '/', label: 'Home' },
             { path: '/about', label: 'About' },
             { path: '/services', label: 'Services' },
-            { path: '/spare-parts', label: 'Spare Parts' },
             { path: '/contact', label: 'Contact' },
           ].map(({ path, label }) => (
             <Link

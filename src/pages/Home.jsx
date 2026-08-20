@@ -151,7 +151,7 @@ export default function Home() {
           {[
             { name: 'Home Service',         icon: '🔧', img: serviceImages.homeService,  link: '/workshop',  badge: null },
             { name: 'Emergency Assistance', icon: '🚨', img: serviceImages.emergency,    link: '/services',  badge: 'Emergency' },
-            { name: 'Spare Parts Store',    icon: '⚙️', img: serviceImages.spareParts,   link: '/services',  badge: null },
+            { name: 'Spare Parts Store',    icon: '⚙️', img: serviceImages.spareParts,   link: '/spare-parts',  badge: null },
           ].map((s, i) => (
             <Link
               key={i}
