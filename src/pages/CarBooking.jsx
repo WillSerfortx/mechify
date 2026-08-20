@@ -52,16 +52,16 @@ export default function CarBooking() {
         </button>
       </div>
 
-      {/* Full-Page Centered Wrapper */}
-      <div className="relative z-10 w-full mx-auto px-6 flex-1 flex flex-col items-center justify-center">
-        
-        {/* Top Title & Red Strip */}
-        <div className="w-full text-center animate-fadeInDown mb-14">
-          <h1 className="text-white text-6xl md:text-7xl xl:text-8xl font-bold tracking-wide drop-shadow-xl mb-5">
-            Choose Your Plans
-          </h1>
-          <div className="h-3 md:h-4 w-[90%] max-w-5xl bg-[#E50914] mx-auto shadow-lg" />
-        </div>
+      {/* Top Title & Red Strip — pinned to top, centered */}
+      <div className="relative z-20 w-full text-center animate-fadeInDown mt-16 mb-10">
+        <h1 className="text-white text-6xl md:text-7xl xl:text-8xl font-bold tracking-wide drop-shadow-xl mb-5">
+          Choose Your Plans
+        </h1>
+        <div className="h-3 md:h-4 w-[90%] max-w-5xl bg-[#E50914] mx-auto shadow-lg" />
+      </div>
+
+      {/* Centered Content Wrapper */}
+      <div className="relative z-10 w-full mx-auto px-6 flex-1 flex flex-col items-center justify-center pb-20">
 
         {/* Side-by-Side Content — Form + Text, centered together */}
         <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-14 lg:gap-20">
