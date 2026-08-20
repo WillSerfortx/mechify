@@ -35,7 +35,7 @@ export default function CarBooking() {
       {/* Background Map Image */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Bangladesh_relief_location_map.jpg/1200px-Bangladesh_relief_location_map.jpg" 
+          src="/bd-map.jpg" 
           alt="Bangladesh Map Background" 
           className="w-full h-full object-cover opacity-50 mix-blend-luminosity"
         />
