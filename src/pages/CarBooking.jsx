@@ -52,51 +52,67 @@ export default function CarBooking() {
         </button>
       </div>
 
-      {/* Top Title & Red Strip */}
-      <div className="relative z-20 w-full text-center px-6 animate-fadeInDown mb-10">
-        <h1 className="text-white text-5xl md:text-6xl xl:text-7xl font-bold tracking-wide drop-shadow-xl mb-4">
-          Choose Your Plans
-        </h1>
-        <div className="h-2 md:h-3 w-full max-w-3xl bg-[#E50914] mx-auto shadow-lg" />
-      </div>
-
-      {/* Main Content Layout - Centered Stack */}
-      <div className="relative z-10 w-full max-w-2xl mx-auto px-6 flex-1 flex flex-col items-center justify-center gap-12 pb-20">
+      {/* Centered Wrapper for Title and Content */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 flex-1 flex flex-col items-center justify-center pt-8 pb-20">
         
-        {/* Form Card */}
-        <div className="w-full bg-white rounded-3xl p-10 shadow-2xl animate-fadeInUp relative z-20">
-          <h2 className="text-3xl font-bold text-black mb-6">Start your booking</h2>
-          <SelectField label="Choose Location" options={locations} />
-          <SelectField label="Select Date" options={dates} />
-          <SelectField label="Time" options={times} />
-
-          <h2 className="text-3xl font-bold text-black mt-8 mb-6">Return</h2>
-          <SelectField label="Choose Location" options={locations} />
-          <SelectField label="Select Date" options={dates} />
-          <SelectField label="Time" options={times} />
-
-          <div className="flex items-center gap-3 mt-4 mb-10 cursor-pointer group" onClick={() => setDriverAge(!driverAge)}>
-            <div className={`w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center transition-colors duration-300 ${driverAge ? 'border-black' : ''}`}>
-              {driverAge && <div className="w-3 h-3 bg-black rounded-full" />}
-            </div>
-            <span className="text-sm font-semibold text-black">Driver's age 25+</span>
-          </div>
-
-          <button 
-            onClick={() => navigate('/payment-select')}
-            className="w-full bg-[#E50914] hover:bg-red-700 text-white font-bold text-2xl py-4 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-md"
-          >
-            Next
-          </button>
+        {/* Top Title & Red Strip */}
+        <div className="w-full text-center animate-fadeInDown mb-16">
+          <h1 className="text-white text-5xl md:text-6xl xl:text-7xl font-bold tracking-wide drop-shadow-xl mb-4">
+            Choose Your Plans
+          </h1>
+          <div className="h-2 md:h-3 w-full max-w-4xl bg-[#E50914] mx-auto shadow-lg" />
         </div>
 
-        {/* Text */}
-        <div className="w-full text-center relative z-10 animate-fadeInUp">
-          <h2 className="text-white text-5xl md:text-6xl font-bold leading-tight drop-shadow-2xl">
-            Car hire at<br />
-            <span className="font-black text-6xl md:text-7xl">All Over</span><br />
-            <span className="font-black text-6xl md:text-7xl">Bangladesh</span>
-          </h2>
+        {/* Side-by-Side Content Block */}
+        <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-24">
+          
+          {/* Left Side: Form Card */}
+          <div className="w-full max-w-[450px] bg-white rounded-3xl p-8 shadow-2xl animate-fadeInLeft relative z-20">
+            <h2 className="text-2xl font-bold text-black mb-6">Start your booking</h2>
+            <SelectField label="Choose Location" options={locations} />
+            <SelectField label="Select Date" options={dates} />
+            <SelectField label="Time" options={times} />
+
+            <h2 className="text-2xl font-bold text-black mt-8 mb-6">Return</h2>
+            <SelectField label="Choose Location" options={locations} />
+            <SelectField label="Select Date" options={dates} />
+            <SelectField label="Time" options={times} />
+
+            <div className="flex items-center gap-3 mt-4 mb-10 cursor-pointer group" onClick={() => setDriverAge(!driverAge)}>
+              <div className={`w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center transition-colors duration-300 ${driverAge ? 'border-black' : ''}`}>
+                {driverAge && <div className="w-3 h-3 bg-black rounded-full" />}
+              </div>
+              <span className="text-sm font-semibold text-black">Driver's age 25+</span>
+            </div>
+
+            <button 
+              onClick={() => navigate('/payment-select')}
+              className="w-full bg-[#E50914] hover:bg-red-700 text-white font-bold text-xl py-3 rounded-full transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-md"
+            >
+              Next
+            </button>
+          </div>
+
+          {/* Right Side: Text & Car Image */}
+          <div className="relative flex items-center justify-center animate-fadeInRight z-10">
+            {/* Main Body Text */}
+            <div className="relative z-10 text-left">
+              <h2 className="text-white text-5xl md:text-6xl xl:text-7xl font-bold leading-tight drop-shadow-2xl">
+                Car hire at<br />
+                <span className="font-black text-6xl md:text-7xl xl:text-[90px]">All Over</span><br />
+                <span className="font-black text-6xl md:text-7xl xl:text-[90px]">Bangladesh</span>
+              </h2>
+            </div>
+            
+            {/* Black Car Overlay Image */}
+            <img 
+              src="/car-3.jpg" 
+              alt="Black Car" 
+              className="absolute top-1/2 left-[50%] -translate-y-1/2 w-[400px] lg:w-[650px] object-contain drop-shadow-2xl z-0 pointer-events-none mix-blend-lighten"
+              style={{ transform: 'translate(-20%, -60%) scaleX(-1)' }}
+            />
+          </div>
+
         </div>
       </div>
     </div>
