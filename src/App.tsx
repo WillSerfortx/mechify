@@ -20,6 +20,7 @@ import FuelTerms from './pages/FuelTerms';
 import FuelRequest from './pages/FuelRequest';
 import DriverList from './pages/DriverList';
 import DriverChat from './pages/DriverChat';
+import SparePartsStore from './pages/SparePartsStore';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -54,6 +55,7 @@ export default function App() {
         <Route path="/driver-chat" element={<Layout showNav={false} showFooter={false}><DriverChat /></Layout>} />
         <Route path="/fuel-terms" element={<Layout showFooter={false}><FuelTerms /></Layout>} />
         <Route path="/fuel-request" element={<Layout showNav={false} showFooter={false}><FuelRequest /></Layout>} />
+        <Route path="/spare-parts" element={<Layout><SparePartsStore /></Layout>} />
         <Route path="/car-rental" element={<Layout showFooter={false}><CarRental /></Layout>} />
         <Route path="/car-booking" element={<Layout showNav={false} showFooter={false}><CarBooking /></Layout>} />
         <Route path="/payment-select" element={<Layout showNav={false} showFooter={false}><PaymentSelect /></Layout>} />
