@@ -6,11 +6,6 @@ const occasions = [
   { label: 'Hourly bookings', img: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=300&fit=crop' },
 ];
 
-const drivers = [
-  { name: 'Baby Driver', stars: 3.5, img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop' },
-  { name: 'TOM CRUISE', stars: 4.5, img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop' },
-  { name: 'JOHN WICK', stars: 4.5, img: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=200&h=200&fit=crop' },
-];
 
 export default function IDriver() {
   const navigate = useNavigate();
@@ -109,29 +104,20 @@ export default function IDriver() {
         </div>
       </section>
 
-      {/* Select Drivers */}
-      <section className="px-6 md:px-12 lg:px-20">
-        <h2 className="text-4xl font-black mb-12">Select Drivers</h2>
-        <div className="space-y-6 max-w-4xl mx-auto">
-          {drivers.map((driver, i) => (
-            <div key={i} className="flex bg-black border border-white/20 rounded-lg overflow-hidden h-40 md:h-48 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-shadow">
-              <div className="w-1/3 h-full">
-                <img src={driver.img} alt={driver.name} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" />
-              </div>
-              <div className="w-2/3 p-6 flex flex-col justify-center">
-                <h3 className="text-2xl md:text-3xl font-black uppercase mb-3">{driver.name}</h3>
-                <div className="flex gap-1 text-white text-2xl">
-                  {/* Simple star rating renderer */}
-                  {Array.from({ length: 5 }).map((_, idx) => (
-                    <span key={idx}>
-                      {idx < Math.floor(driver.stars) ? '★' : idx < driver.stars ? '⯨' : '☆'}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* Choose Driver CTA */}
+      <section className="px-6 md:px-12 lg:px-20 flex justify-center">
+        <button 
+          onClick={() => navigate('/choose-driver')}
+          className="group relative bg-[#E50914] text-white font-black text-3xl md:text-4xl px-16 py-6 rounded-full overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_0_40px_rgba(229,9,20,0.6)] active:scale-95"
+        >
+          <span className="relative z-10 flex items-center gap-4">
+            Choose Driver
+            <svg className="w-8 h-8 transition-transform duration-300 group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </span>
+          <div className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </button>
       </section>
 
     </div>
