@@ -80,24 +80,14 @@ export default function Navbar() {
           {/* Profile / Dashboard button */}
           <Link
             to="/profile"
-            className="hidden md:flex items-center justify-center w-12 h-12 bg-white/10 border-2 border-white/20 rounded-full text-2xl transition-all duration-300 hover:bg-white/30 hover:border-white hover:scale-110 active:scale-95 animate-bounce"
+            className="flex items-center justify-center w-12 h-12 bg-white/10 border-2 border-white/20 rounded-full text-2xl transition-all duration-300 hover:bg-white/30 hover:border-white hover:scale-110 active:scale-95 animate-bounce"
             style={{ animationDuration: '3s' }}
             title="Dashboard"
           >
             🧑
           </Link>
 
-          {/* SOS Button */}
-          <button
-            id="sos-button"
-            onClick={handleSOS}
-            className={`relative flex items-center justify-center w-12 h-12 rounded-full font-black text-white text-xs tracking-widest transition-all duration-300 animate-sosPulse sos-ring ${
-              sosActive ? 'bg-red-900 scale-90' : 'bg-red-600 hover:bg-red-700 hover:scale-110'
-            }`}
-            title="SOS Emergency"
-          >
-            SOS
-          </button>
+
 
           {/* Mobile toggle */}
           <button
