@@ -77,12 +77,14 @@ export default function Navbar() {
 
         {/* ── Right Actions ── */}
         <div className="flex items-center gap-3">
-          {/* Sign Out button */}
+          {/* Profile / Dashboard button */}
           <Link
             to="/profile"
-            className="hidden md:flex items-center gap-2 border-2 border-white rounded-full px-8 py-3 text-white font-bold text-base hover:bg-white hover:text-black transition-all duration-300 hover:scale-105 active:scale-95"
+            className="hidden md:flex items-center justify-center w-12 h-12 bg-white/10 border-2 border-white/20 rounded-full text-2xl transition-all duration-300 hover:bg-white/30 hover:border-white hover:scale-110 active:scale-95 animate-bounce"
+            style={{ animationDuration: '3s' }}
+            title="Dashboard"
           >
-            Sign Out
+            🧑
           </Link>
 
           {/* SOS Button */}
@@ -123,8 +125,8 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
-          <Link to="/profile" className="bg-white text-black text-center rounded-full px-8 py-4 font-bold text-xl mt-4">
-            Sign Out
+          <Link to="/profile" className="bg-white/10 text-white text-center rounded-full py-4 text-3xl mt-4 flex items-center justify-center transition-colors hover:bg-white/20">
+            <span className="animate-bounce" style={{ animationDuration: '3s' }}>🧑</span>
           </Link>
         </div>
       )}
