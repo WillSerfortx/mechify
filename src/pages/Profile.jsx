@@ -65,7 +65,7 @@ export default function Profile() {
         </div>
 
         {/* Right Content: Dashboard */}
-        <div className="w-full lg:w-3/4">
+        <div className="w-full lg:w-3/4" style={{ marginTop: '120px' }}>
           <div className="flex items-center gap-4 mb-8">
             <span className="text-5xl animate-bounce" style={{ animationDuration: '3s' }}>🧑</span>
             <div>

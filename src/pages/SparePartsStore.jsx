@@ -61,7 +61,7 @@ export default function SparePartsStore() {
           &lt;
         </button>
 
-        <div className="max-w-7xl mx-auto text-center relative z-10">
+        <div className="max-w-7xl mx-auto text-center relative z-10" style={{ marginTop: '120px' }}>
           <h1 className="text-5xl md:text-6xl xl:text-7xl font-black mb-4 tracking-tight uppercase">
             Spare Parts <span className="text-[#E50914]">Store</span>
           </h1>
