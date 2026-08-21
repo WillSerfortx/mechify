@@ -23,7 +23,7 @@ export default function Profile() {
   }, [hasActiveDelivery]);
 
   return (
-    <div className="bg-black min-h-screen text-white font-outfit pb-24 pt-40 md:pt-48 px-6 md:px-12 lg:px-20">
+    <div className="bg-black min-h-screen text-white font-outfit pb-24 pt-56 md:pt-64 px-6 md:px-12 lg:px-20">
       
       <div className="max-w-[1500px] mx-auto flex flex-col lg:flex-row gap-8">
         

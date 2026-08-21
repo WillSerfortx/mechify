@@ -53,10 +53,10 @@ export default function SparePartsStore() {
   return (
     <div className="bg-black min-h-screen text-white font-outfit pb-24">
       {/* Hero Header */}
-      <div className="relative bg-gradient-to-b from-[#1a0000] via-black to-black pt-40 md:pt-48 pb-12 px-6 md:px-12 lg:px-20">
+      <div className="relative bg-gradient-to-b from-[#1a0000] via-black to-black pt-56 md:pt-64 pb-12 px-6 md:px-12 lg:px-20">
         <button
           onClick={() => navigate(-1)}
-          className="absolute top-28 left-6 md:left-12 w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center text-2xl hover:bg-white/20 transition-colors border border-white/20 z-20"
+          className="absolute top-40 left-6 md:left-12 w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center text-2xl hover:bg-white/20 transition-colors border border-white/20 z-20"
         >
           &lt;
         </button>
