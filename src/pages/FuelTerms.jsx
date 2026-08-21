@@ -16,7 +16,7 @@ export default function FuelTerms() {
   return (
     <div className="bg-black min-h-screen text-white font-outfit pb-24">
       {/* Back Button */}
-      <div className="absolute top-24 left-6 md:left-12 lg:left-20 z-50">
+      <div className="absolute top-32 left-6 md:left-12 lg:left-20 z-50">
         <button 
           onClick={() => navigate(-1)}
           className="w-12 h-12 bg-black/50 backdrop-blur-md rounded-xl flex items-center justify-center text-2xl hover:bg-black/70 transition-colors border border-white/20"
@@ -101,7 +101,7 @@ export default function FuelTerms() {
 
         {/* Right Column: Tall Image */}
         <div className="hidden lg:block w-1/3">
-          <div className="sticky top-24 w-full h-[800px] rounded-2xl overflow-hidden">
+          <div className="sticky top-32 w-full h-[800px] rounded-2xl overflow-hidden">
              <img src="https://images.unsplash.com/photo-1616788417724-4f248bb017b8?w=800&h=1200&fit=crop" alt="Fuel Truck on Road" className="w-full h-full object-cover" />
           </div>
         </div>

@@ -35,7 +35,7 @@ export default function Services() {
   return (
     <div className="bg-black min-h-screen text-white font-outfit pb-24">
       {/* Hero */}
-      <section className="relative h-[60vh] flex flex-col items-center justify-center pt-20">
+      <section className="relative h-[60vh] flex flex-col items-center justify-center pt-32">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.unsplash.com/photo-1552599727-46dc0fb2c5ff?w=1920&h=1080&fit=crop" 

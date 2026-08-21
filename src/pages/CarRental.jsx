@@ -137,7 +137,7 @@ export default function CarRental() {
   const brandRows = useMemo(() => generateMockCars(), []);
 
   return (
-    <div className="bg-black min-h-screen text-white font-outfit pb-24 pt-24 overflow-x-hidden">
+    <div className="bg-black min-h-screen text-white font-outfit pb-24 pt-32 overflow-x-hidden">
       {/* Back Button */}
       <div className="px-6 md:px-12 lg:px-20 mb-6">
         <button 

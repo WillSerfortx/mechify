@@ -14,7 +14,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="bg-black min-h-screen pt-24 md:pt-32 relative overflow-hidden font-sora text-white">
+    <div className="bg-black min-h-screen pt-32 md:pt-40 relative overflow-hidden font-sora text-white">
       <div className="absolute inset-0 opacity-30 z-0">
         <img src={imgContactBg} alt="" className="w-full h-full object-cover" />
       </div>

@@ -23,7 +23,7 @@ export default function TimeSelect() {
   };
 
   return (
-    <div className="bg-black min-h-screen text-white font-outfit py-24 px-6 md:px-12 lg:px-20 relative">
+    <div className="bg-black min-h-screen text-white font-outfit pt-32 pb-24 px-6 md:px-12 lg:px-20 relative">
       
       {/* Back Button */}
       <div className="absolute top-12 left-6 md:left-12 lg:left-20 z-50">

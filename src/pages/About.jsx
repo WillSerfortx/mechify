@@ -6,7 +6,7 @@ const imgAbout3 = "https://placehold.co/800x600/222/fff?text=Fuel+Delivery";
 
 export default function About() {
   return (
-    <div className="bg-black min-h-screen pt-32 px-6 md:px-12 lg:px-24 pb-20 text-white font-sora overflow-hidden">
+    <div className="bg-black min-h-screen pt-40 px-6 md:px-12 lg:px-24 pb-20 text-white font-sora overflow-hidden">
       <div className="flex flex-col lg:flex-row gap-16 items-center lg:items-start max-w-7xl mx-auto">
         {/* Images Grid */}
         <div className="w-full lg:w-1/2 relative min-h-[500px] sm:min-h-[600px] flex-shrink-0 animate-slideInLeft hidden sm:block">

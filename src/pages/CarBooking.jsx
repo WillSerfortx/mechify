@@ -31,7 +31,7 @@ export default function CarBooking() {
   const times = ["08:00 AM", "10:00 AM", "12:00 PM", "02:00 PM", "04:00 PM", "06:00 PM"];
 
   return (
-    <div className="relative min-h-screen bg-black overflow-hidden font-outfit flex flex-col pt-12 pb-20">
+    <div className="relative min-h-screen bg-black overflow-hidden font-outfit flex flex-col pt-32 pb-20">
       {/* Background Map Image */}
       <div className="absolute inset-0 z-0">
         <img 
