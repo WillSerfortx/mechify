@@ -114,7 +114,6 @@ export default function Navbar() {
           {[
             { path: '/', label: 'Home' },
             { path: '/about', label: 'About' },
-            { path: '/services', label: 'Services' },
             { path: '/contact', label: 'Contact' },
           ].map(({ path, label }) => (
             <Link
