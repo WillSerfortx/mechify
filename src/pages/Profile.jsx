@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Profile() {
+  const navigate = useNavigate();
   const location = useLocation();
   // We'll default these to true for demonstration purposes so the user can see the whole dashboard in action.
   const hasActiveDelivery = location.state?.activeDelivery ?? true;
@@ -59,6 +60,17 @@ export default function Profile() {
               </button>
               <button className="w-full text-left bg-white/5 hover:bg-white/10 text-gray-300 font-bold py-3 px-4 rounded-xl transition-colors">
                 Settings
+              </button>
+            </div>
+
+            {/* Sign Out */}
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <button
+                onClick={() => navigate('/landing')}
+                className="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-red-600/20 border border-white/10 hover:border-red-500/50 text-gray-400 hover:text-red-400 font-bold py-3 px-4 rounded-xl transition-all duration-300 group"
+              >
+                <span className="text-lg group-hover:rotate-180 transition-transform duration-300">↩️</span>
+                Sign Out
               </button>
             </div>
           </div>

@@ -30,7 +30,7 @@ export default function Navbar() {
       <div className="max-w-[1920px] mx-auto flex items-center justify-between px-6 md:px-12 py-3">
 
         {/* ── Logo — matches Figma red M + truck ── */}
-        <Link to="/" className="flex items-center gap-3 group">
+        <Link to="/landing" className="flex items-center gap-3 group">
           {/* Red M with truck SVG */}
           <div className="relative">
             <svg width="56" height="48" viewBox="0 0 56 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -56,7 +56,7 @@ export default function Navbar() {
         {/* ── Desktop Nav ── */}
         <nav className="hidden md:flex items-center gap-8 lg:gap-12">
           {[
-            { path: '/', label: 'Home' },
+            { path: '/home', label: 'Home' },
             { path: '/about', label: 'About' },
             { path: '/contact', label: 'Contact' },
           ].map(({ path, label }) => (
@@ -103,7 +103,7 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-black/98 backdrop-blur-xl absolute top-full left-0 w-full border-t border-white/10 flex flex-col p-6 gap-5 shadow-2xl animate-slideDown">
           {[
-            { path: '/', label: 'Home' },
+            { path: '/home', label: 'Home' },
             { path: '/about', label: 'About' },
             { path: '/contact', label: 'Contact' },
           ].map(({ path, label }) => (

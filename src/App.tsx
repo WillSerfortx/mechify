@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Landing from './pages/Landing';
+import Auth from './pages/Auth';
+import Register from './pages/Register';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -43,7 +46,14 @@ export default function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Layout><Home /></Layout>} />
+        {/* Auth / Intro flows — no navbar/footer */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/landing" element={<Landing />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Main app — with navbar/footer */}
+        <Route path="/home" element={<Layout><Home /></Layout>} />
         <Route path="/about" element={<Layout><About /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/services" element={<Layout><Services /></Layout>} />
