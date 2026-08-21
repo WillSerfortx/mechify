@@ -11,14 +11,21 @@ export default function Auth() {
   const [resetSent, setResetSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const VALID_EMAIL = 'mahi@gmail.com';
+  const VALID_PASSWORD = '123';
+
   const handleSignIn = (e) => {
     e.preventDefault();
     if (!email || !password) { alert('Please fill in all fields.'); return; }
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      navigate('/home');
-    }, 1500);
+      if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+        navigate('/home');
+      } else {
+        alert('❌ Invalid email or password. Please try again.');
+      }
+    }, 1200);
   };
 
   const handleForgotPassword = (e) => {
