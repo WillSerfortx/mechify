@@ -1,146 +1,183 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
-const SERVICES = [
+/* ─── Scene definitions ───────────────────────────────────────── */
+const SCENES = [
   {
     id: 'rental',
-    icon: '🏎️',
-    title: 'Car Rental',
-    subtitle: 'Drive the extraordinary',
-    desc: 'Luxury & performance vehicles for every occasion. Instant booking, flexible returns.',
-    color: '#dc2626',
-    glow: 'rgba(220,38,38,0.6)',
-    side: 'left',
+    image: '/lambo_front.jpg',
+    accentColor: '#dc2626',
+    glowColor: 'rgba(220,38,38,0.55)',
+    bgTint: 'radial-gradient(ellipse 90% 70% at 50% 100%, rgba(220,38,38,0.25) 0%, transparent 65%)',
+    label: 'SCENE 01',
+    services: [
+      { icon: '🏎️', title: 'Car Rental', desc: 'Rent exotic Lamborghinis, Ferraris, and luxury sedans for any occasion. Instant booking, flexible returns.' },
+    ],
+    cameraHint: '📷 Front Angle',
+    annotation: { x: '48%', y: '62%', text: 'FRONT SPLITTER', line: 'down' },
   },
   {
     id: 'driver',
-    icon: '👨‍✈️',
-    title: 'Hire a Driver',
-    subtitle: 'Professional chauffeurs',
-    desc: 'Certified, background-checked drivers available 24/7 for any journey.',
-    color: '#f97316',
-    glow: 'rgba(249,115,22,0.6)',
-    side: 'right',
+    image: '/lambo_door.jpg',
+    accentColor: '#f97316',
+    glowColor: 'rgba(249,115,22,0.55)',
+    bgTint: 'radial-gradient(ellipse 90% 70% at 40% 100%, rgba(249,115,22,0.25) 0%, transparent 65%)',
+    label: 'SCENE 02',
+    services: [
+      { icon: '👨‍✈️', title: 'Hire a Driver', desc: 'Professional, certified chauffeurs available 24/7 for airport transfers, events, or hourly hire.' },
+    ],
+    cameraHint: '📷 Scissor Door Open',
+    annotation: { x: '55%', y: '45%', text: 'LUXURY COCKPIT', line: 'up' },
   },
   {
-    id: 'workshop',
-    icon: '🔧',
-    title: 'Workshop Service',
-    subtitle: 'Certified mechanics',
-    desc: 'Full diagnostics, servicing & repairs at our state-of-the-art workshops.',
-    color: '#eab308',
-    glow: 'rgba(234,179,8,0.5)',
-    side: 'left',
+    id: 'engine',
+    image: '/lambo_engine.jpg',
+    accentColor: '#f59e0b',
+    glowColor: 'rgba(245,158,11,0.55)',
+    bgTint: 'radial-gradient(ellipse 90% 70% at 50% 100%, rgba(245,158,11,0.2) 0%, transparent 65%)',
+    label: 'SCENE 03',
+    services: [
+      { icon: '🔧', title: 'Workshop Service', desc: 'Certified mechanics & state-of-the-art workshops for full diagnostics and repairs.' },
+      { icon: '🚗', title: 'Emergency Mechanic', desc: 'Broken down? We dispatch a mechanic to your location — day or night.' },
+      { icon: '⛽', title: 'Emergency Fuel', desc: 'Out of fuel anywhere in the city? We rush to your GPS pin in under 12 minutes.' },
+    ],
+    cameraHint: '📷 Engine Bay — V10 Exposed',
+    annotation: { x: '50%', y: '48%', text: '5.2L V10 ENGINE', line: 'down' },
   },
   {
-    id: 'fuel',
-    icon: '⛽',
-    title: 'Emergency Fuel',
-    subtitle: 'Fuel delivered to you',
-    desc: 'Ran out of fuel? We rush to your GPS location — average ETA 12 minutes.',
-    color: '#3b82f6',
-    glow: 'rgba(59,130,246,0.6)',
-    side: 'right',
-  },
-  {
-    id: 'mechanic',
-    icon: '🚗',
-    title: 'Emergency Mechanic',
-    subtitle: 'Roadside rescue',
-    desc: 'Broken down anywhere? Our mechanics come to you, day or night.',
-    color: '#a855f7',
-    glow: 'rgba(168,85,247,0.6)',
-    side: 'left',
-  },
-  {
-    id: 'parts',
-    icon: '🔩',
-    title: 'Spare Parts Store',
-    subtitle: '450+ genuine parts',
-    desc: 'Browse by category, check availability, and order original parts instantly.',
-    color: '#22c55e',
-    glow: 'rgba(34,197,94,0.5)',
-    side: 'right',
+    id: 'wheel',
+    image: '/lambo_wheel.jpg',
+    accentColor: '#3b82f6',
+    glowColor: 'rgba(59,130,246,0.55)',
+    bgTint: 'radial-gradient(ellipse 90% 70% at 50% 100%, rgba(59,130,246,0.25) 0%, transparent 65%)',
+    label: 'SCENE 04',
+    services: [
+      { icon: '🔩', title: 'Spare Parts Store', desc: '450+ genuine spare parts for all vehicle makes. Order online, check availability instantly.' },
+    ],
+    cameraHint: '📷 Wheel & Brake Caliper',
+    annotation: { x: '55%', y: '55%', text: 'BREMBO CALIPER', line: 'right' },
   },
 ];
 
+/* ─── Utility ─────────────────────────────────────────────────── */
+function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+function lerp(a, b, t) { return a + (b - a) * t; }
+
 export default function Landing() {
-  const scrollRef = useRef(null);
-  const [scrollProgress, setScrollProgress] = useState(0); // 0..1 through the scroll section
-  const [heroVisible, setHeroVisible] = useState(false);
-  const [activeService, setActiveService] = useState(-1);
+  const wrapRef = useRef(null);
+  const [rawProgress, setRawProgress] = useState(0); // 0..1 across the scroll zone
+  const [heroIn, setHeroIn] = useState(false);
+
+  /* Derived */
+  const totalScenes = SCENES.length;
+  // Which scene index (0-based), and how far within that scene (0..1)
+  const sceneF = rawProgress * totalScenes;
+  const sceneIdx = clamp(Math.floor(sceneF), 0, totalScenes - 1);
+  const sceneT = clamp(sceneF - sceneIdx, 0, 1); // progress within current scene
+
+  const scene = SCENES[sceneIdx];
+  const nextScene = SCENES[Math.min(sceneIdx + 1, totalScenes - 1)];
+
+  // Cross-fade: images cross-dissolve in the last 20% of each scene
+  const crossfade = clamp((sceneT - 0.8) / 0.2, 0, 1);
+
+  // Zoom: slightly zoom into the current image as scene progresses
+  const zoom = 1 + sceneT * 0.06;
+
+  // Pan: subtle X drift per scene
+  const panX = [-2, 2, -1, 0][sceneIdx] * sceneT;
 
   useEffect(() => {
-    // Trigger hero text entrance
-    const t = setTimeout(() => setHeroVisible(true), 200);
-    return () => clearTimeout(t);
+    setTimeout(() => setHeroIn(true), 300);
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    if (!wrapRef.current) return;
+    const rect = wrapRef.current.getBoundingClientRect();
+    const scrollable = wrapRef.current.offsetHeight - window.innerHeight;
+    const scrolled = clamp(-rect.top, 0, scrollable);
+    setRawProgress(scrolled / scrollable);
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!scrollRef.current) return;
-      const rect = scrollRef.current.getBoundingClientRect();
-      const sectionHeight = scrollRef.current.offsetHeight - window.innerHeight;
-      // How far we've scrolled past the top of the section
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / sectionHeight));
-      setScrollProgress(progress);
-
-      // Each service covers 1/6 of the scroll range
-      const idx = Math.floor(progress * 6) - 0;
-      setActiveService(Math.min(idx, 5));
-    };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [handleScroll]);
 
-  // Car transform: pans left/right and slightly rotates based on scroll
-  const carX = scrollProgress * -8; // % shift
-  const carRotate = Math.sin(scrollProgress * Math.PI * 1.5) * 4; // subtle rock
-  const carScale = 1 + scrollProgress * 0.08;
-
-  // Glow color interpolates through service colors
-  const currentSvc = SERVICES[activeService] || SERVICES[0];
-  const glowColor = currentSvc?.glow || 'rgba(220,38,38,0.4)';
-
-  // How many services are revealed
-  const revealCount = Math.ceil(scrollProgress * 6);
+  /* Service card entrance — stagger */
+  const cardVisible = sceneT > 0.25;
 
   return (
-    <div className="bg-black text-white font-outfit overflow-x-hidden">
+    <div className="bg-black text-white font-outfit">
 
-      {/* ═══════════════════════════════════════════
-          SECTION 1 — STICKY SCROLL DRIVE
-      ═══════════════════════════════════════════ */}
-      {/* Tall scroll container — 700vh so user has room to scroll */}
-      <div ref={scrollRef} className="relative" style={{ height: '700vh' }}>
-        {/* Sticky viewport */}
-        <div className="sticky top-0 left-0 w-full h-screen overflow-hidden flex flex-col">
+      {/* ═══ SCROLL CONTAINER — 500vh per scene ═══════════════════ */}
+      <div ref={wrapRef} style={{ height: `${totalScenes * 200}vh` }}>
 
-          {/* Ambient BG that morphs color */}
+        {/* ─── STICKY CINEMATIC VIEWPORT ─────────────────────────── */}
+        <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
+
+          {/* ── Background tint layer ── */}
           <div
-            className="absolute inset-0 transition-colors duration-700"
+            className="absolute inset-0 z-0 transition-all duration-700"
+            style={{ background: scene.bgTint + ', #000' }}
+          />
+
+          {/* ── CURRENT scene image ── */}
+          <div
+            className="absolute inset-0 z-1 overflow-hidden"
+          >
+            <img
+              key={scene.id}
+              src={scene.image}
+              alt={scene.id}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                transform: `scale(${zoom}) translateX(${panX}%)`,
+                transition: 'transform 0.1s linear',
+                filter: 'brightness(0.45)',
+              }}
+            />
+          </div>
+
+          {/* ── NEXT scene image (crossfade) ── */}
+          {crossfade > 0 && (
+            <div className="absolute inset-0 z-2 overflow-hidden">
+              <img
+                src={nextScene.image}
+                alt={nextScene.id}
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{
+                  transform: 'scale(1)',
+                  filter: 'brightness(0.45)',
+                  opacity: crossfade,
+                  transition: 'opacity 0.05s linear',
+                }}
+              />
+            </div>
+          )}
+
+          {/* ── Vignette overlay ── */}
+          <div
+            className="absolute inset-0 z-3 pointer-events-none"
             style={{
-              background: `radial-gradient(ellipse 80% 60% at 50% 100%, ${glowColor} 0%, transparent 70%), #000`,
+              background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, rgba(0,0,0,0.7) 100%)',
             }}
           />
 
-          {/* Grid overlay */}
-          <div
-            className="absolute inset-0 opacity-[0.04] pointer-events-none"
-            style={{
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)',
-              backgroundSize: '60px 60px',
-            }}
-          />
+          {/* ── Bottom gradient ── */}
+          <div className="absolute bottom-0 left-0 right-0 h-40 z-3 pointer-events-none"
+            style={{ background: 'linear-gradient(to top, #000 0%, transparent 100%)' }} />
 
-          {/* ── NAV BAR ── */}
-          <div className="relative z-30 flex items-center justify-between px-8 md:px-16 py-6">
+          {/* ── Top gradient ── */}
+          <div className="absolute top-0 left-0 right-0 h-32 z-3 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%)' }} />
+
+          {/* ─── NAVBAR ─────────────────────────────────── */}
+          <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-8 md:px-14 py-6">
             <Link to="/landing" className="flex items-center gap-3 group">
-              <svg width="48" height="40" viewBox="0 0 56 48" fill="none">
+              <svg width="44" height="38" viewBox="0 0 56 48" fill="none">
                 <rect width="56" height="48" rx="4" fill="#CC0000"/>
-                <text x="4" y="34" fontFamily="Arial Black, Arial" fontWeight="900" fontSize="32" fill="white">M</text>
+                <text x="4" y="34" fontFamily="Arial Black,Arial" fontWeight="900" fontSize="32" fill="white">M</text>
                 <g transform="translate(32,30) scale(0.55)">
                   <rect x="0" y="4" width="28" height="14" rx="2" fill="white"/>
                   <rect x="22" y="0" width="10" height="18" rx="2" fill="white"/>
@@ -149,240 +186,195 @@ export default function Landing() {
                 </g>
               </svg>
               <div>
-                <div className="font-black text-lg tracking-widest">MECHIFY</div>
+                <div className="font-black text-lg tracking-widest text-white">MECHIFY</div>
                 <div className="text-gray-500 text-[8px] tracking-[0.25em] uppercase">Vehicle Support</div>
               </div>
             </Link>
-
             <div className="flex items-center gap-4">
               <Link to="/auth" className="text-gray-300 hover:text-white font-semibold text-sm transition-colors">Sign In</Link>
-              <Link
-                to="/auth"
-                className="bg-red-600 hover:bg-red-500 text-white font-black text-sm px-6 py-2.5 rounded-full transition-all hover:scale-105 shadow-[0_0_20px_rgba(220,38,38,0.4)]"
+              <Link to="/auth"
+                className="font-black text-sm px-6 py-2.5 rounded-full transition-all hover:scale-105"
+                style={{ background: scene.accentColor, boxShadow: `0 0 20px ${scene.glowColor}` }}
               >
                 Get Started
               </Link>
             </div>
           </div>
 
-          {/* ── MAIN CONTENT AREA ── */}
-          <div className="relative flex-1 flex items-center justify-center">
-
-            {/* LEFT SERVICE CARDS */}
-            <div className="absolute left-6 md:left-12 lg:left-20 top-1/2 -translate-y-1/2 flex flex-col gap-5 z-20">
-              {SERVICES.filter(s => s.side === 'left').map((svc, i) => {
-                const globalIdx = SERVICES.indexOf(svc);
-                const isRevealed = revealCount > globalIdx;
-                const isActive = activeService === globalIdx;
-                return (
-                  <div
-                    key={svc.id}
-                    className="transition-all duration-700"
-                    style={{
-                      opacity: isRevealed ? 1 : 0,
-                      transform: isRevealed ? 'translateX(0)' : 'translateX(-60px)',
-                    }}
-                  >
-                    <div
-                      className="relative group w-56 md:w-64 rounded-2xl p-4 border cursor-default overflow-hidden"
-                      style={{
-                        background: isActive ? `linear-gradient(135deg, ${svc.color}22, #000)` : 'rgba(255,255,255,0.03)',
-                        borderColor: isActive ? svc.color : 'rgba(255,255,255,0.08)',
-                        boxShadow: isActive ? `0 0 30px ${svc.glow}` : 'none',
-                        transition: 'all 0.5s ease',
-                      }}
-                    >
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-3xl">{svc.icon}</span>
-                        <div>
-                          <p className="font-black text-sm text-white">{svc.title}</p>
-                          <p className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: svc.color }}>{svc.subtitle}</p>
-                        </div>
-                      </div>
-                      <p className="text-gray-400 text-xs leading-relaxed">{svc.desc}</p>
-
-                      {/* Active indicator bar */}
-                      <div
-                        className="absolute bottom-0 left-0 h-0.5 transition-all duration-700 rounded-full"
-                        style={{ width: isActive ? '100%' : '0%', background: svc.color }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+          {/* ─── SCENE LABEL (top-left) ─────────────────── */}
+          <div
+            className="absolute top-24 left-8 md:left-14 z-20 transition-all duration-500"
+            style={{ opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(-20px)' }}
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-6 h-px" style={{ background: scene.accentColor }} />
+              <span className="text-xs font-black tracking-[0.3em] uppercase" style={{ color: scene.accentColor }}>
+                {scene.label}
+              </span>
             </div>
+            <div className="text-xs text-gray-500 font-semibold tracking-widest">{scene.cameraHint}</div>
+          </div>
 
-            {/* RIGHT SERVICE CARDS */}
-            <div className="absolute right-6 md:right-12 lg:right-20 top-1/2 -translate-y-1/2 flex flex-col gap-5 z-20">
-              {SERVICES.filter(s => s.side === 'right').map((svc) => {
-                const globalIdx = SERVICES.indexOf(svc);
-                const isRevealed = revealCount > globalIdx;
-                const isActive = activeService === globalIdx;
-                return (
-                  <div
-                    key={svc.id}
-                    className="transition-all duration-700"
-                    style={{
-                      opacity: isRevealed ? 1 : 0,
-                      transform: isRevealed ? 'translateX(0)' : 'translateX(60px)',
-                    }}
-                  >
-                    <div
-                      className="relative group w-56 md:w-64 rounded-2xl p-4 border cursor-default overflow-hidden text-right"
-                      style={{
-                        background: isActive ? `linear-gradient(225deg, ${svc.color}22, #000)` : 'rgba(255,255,255,0.03)',
-                        borderColor: isActive ? svc.color : 'rgba(255,255,255,0.08)',
-                        boxShadow: isActive ? `0 0 30px ${svc.glow}` : 'none',
-                        transition: 'all 0.5s ease',
-                      }}
-                    >
-                      <div className="flex items-center justify-end gap-3 mb-2">
-                        <div>
-                          <p className="font-black text-sm text-white">{svc.title}</p>
-                          <p className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: svc.color }}>{svc.subtitle}</p>
-                        </div>
-                        <span className="text-3xl">{svc.icon}</span>
-                      </div>
-                      <p className="text-gray-400 text-xs leading-relaxed">{svc.desc}</p>
-
-                      <div
-                        className="absolute bottom-0 right-0 h-0.5 transition-all duration-700 rounded-full"
-                        style={{ width: isActive ? '100%' : '0%', background: svc.color }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* ── HERO TEXT (before scroll) ── */}
+          {/* ─── HERO TEXT (only on scene 0 before scrolling) ─────── */}
+          <div
+            className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none transition-all duration-700"
+            style={{ opacity: rawProgress < 0.02 ? 1 : Math.max(0, 1 - rawProgress * 60) }}
+          >
             <div
-              className="absolute top-0 left-0 right-0 flex flex-col items-center pt-8 z-10 pointer-events-none transition-all duration-700"
-              style={{ opacity: scrollProgress < 0.05 ? 1 : Math.max(0, 1 - scrollProgress * 20) }}
+              className="text-center px-6 transition-all duration-1000"
+              style={{ opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(40px)' }}
             >
-              <div
-                className="transition-all duration-1000"
-                style={{
-                  opacity: heroVisible ? 1 : 0,
-                  transform: heroVisible ? 'translateY(0)' : 'translateY(30px)',
-                }}
-              >
-                <div className="inline-flex items-center gap-2 bg-red-600/20 border border-red-500/30 text-red-400 text-xs font-bold px-5 py-1.5 rounded-full mb-4 tracking-widest uppercase">
-                  <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
-                  Bangladesh's #1 Vehicle Platform
-                </div>
-                <h1 className="text-center text-6xl md:text-8xl lg:text-[100px] font-black leading-none tracking-tight">
-                  <span className="block text-white">MECHIFY</span>
-                  <span
-                    className="block text-transparent bg-clip-text"
-                    style={{ backgroundImage: 'linear-gradient(90deg, #dc2626, #f97316, #dc2626)', backgroundSize: '200% auto', animation: 'gradientShift 3s linear infinite' }}
-                  >
-                    DRIVES YOU.
-                  </span>
-                </h1>
-                <p className="text-center text-gray-400 text-lg mt-4">Scroll to explore our services ↓</p>
+              <div className="inline-flex items-center gap-2 border border-red-500/30 text-red-400 text-[10px] font-black px-5 py-1.5 rounded-full mb-6 tracking-[0.25em] uppercase bg-red-600/10">
+                <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
+                Bangladesh's #1 Vehicle Platform
               </div>
-            </div>
-
-            {/* ── LAMBORGHINI CAR ── */}
-            <div
-              className="relative z-10 w-[60vw] md:w-[55vw] max-w-4xl select-none pointer-events-none"
-              style={{
-                transform: `translateX(${carX}%) rotate(${carRotate}deg) scale(${carScale})`,
-                transition: 'transform 0.1s linear',
-                filter: `drop-shadow(0 30px 60px ${glowColor})`,
-              }}
-            >
-              <img
-                src="/lamborghini.jpg"
-                alt="Lamborghini Huracán"
-                className="w-full object-contain"
-                style={{ mixBlendMode: 'screen' }}
-                draggable={false}
-              />
-
-              {/* Ground reflection */}
-              <div
-                className="absolute bottom-0 left-[10%] right-[10%] h-8 rounded-[50%] blur-xl"
-                style={{ background: glowColor, opacity: 0.5 }}
-              />
-            </div>
-
-            {/* ── ACTIVE SERVICE NAME (center bottom) ── */}
-            <div
-              className="absolute bottom-10 left-1/2 -translate-x-1/2 text-center pointer-events-none transition-all duration-500"
-              style={{ opacity: scrollProgress > 0.05 ? 1 : 0 }}
-            >
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-500 mb-1">Now Showing</p>
-              <h2
-                className="text-3xl md:text-4xl font-black transition-all duration-500"
-                style={{ color: currentSvc?.color || '#fff' }}
-              >
-                {currentSvc?.title}
-              </h2>
-              {/* Progress dots */}
-              <div className="flex gap-2 justify-center mt-3">
-                {SERVICES.map((s, i) => (
-                  <div
-                    key={s.id}
-                    className="h-1 rounded-full transition-all duration-500"
-                    style={{
-                      width: activeService === i ? '24px' : '8px',
-                      background: activeService >= i ? s.color : 'rgba(255,255,255,0.15)',
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Scroll progress bar on the right edge */}
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 h-48 w-1 bg-white/5 rounded-full overflow-hidden z-30">
-              <div
-                className="w-full bg-gradient-to-b from-red-500 to-orange-400 rounded-full transition-all duration-300"
-                style={{ height: `${scrollProgress * 100}%` }}
-              />
+              <h1 className="text-[clamp(56px,10vw,130px)] font-black leading-[0.9] tracking-tight mb-4">
+                <span className="block text-white">MECHIFY</span>
+                <span
+                  className="block text-transparent bg-clip-text"
+                  style={{ backgroundImage: 'linear-gradient(90deg,#dc2626,#f97316,#dc2626)', backgroundSize: '200%', animation: 'gradShift 3s linear infinite' }}
+                >
+                  DRIVES YOU.
+                </span>
+              </h1>
+              <p className="text-gray-400 text-base md:text-lg mt-4 animate-bounce" style={{ animationDuration: '2s' }}>
+                Scroll to explore ↓
+              </p>
             </div>
           </div>
+
+          {/* ─── SERVICE PANEL (appears after scene has loaded) ─── */}
+          <div
+            className="absolute bottom-0 left-0 right-0 z-10 pb-14 px-8 md:px-14 lg:px-20"
+            style={{ opacity: rawProgress > 0.02 ? 1 : 0, transition: 'opacity 0.5s ease' }}
+          >
+            {/* Service heading */}
+            <div
+              className="mb-5 transition-all duration-700"
+              style={{
+                opacity: cardVisible ? 1 : 0,
+                transform: cardVisible ? 'translateY(0)' : 'translateY(30px)',
+              }}
+            >
+              <h2
+                className="text-4xl md:text-6xl lg:text-7xl font-black leading-none mb-1"
+                style={{ color: scene.accentColor, textShadow: `0 0 40px ${scene.glowColor}` }}
+              >
+                {scene.services[0].title}
+              </h2>
+              {scene.services.length > 1 && (
+                <div className="flex gap-3 mt-1">
+                  {scene.services.slice(1).map(s => (
+                    <span key={s.title} className="text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full border"
+                      style={{ borderColor: scene.accentColor + '50', color: scene.accentColor }}>
+                      + {s.title}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Service cards row */}
+            <div className="flex gap-4 flex-wrap">
+              {scene.services.map((svc, i) => (
+                <div
+                  key={svc.title}
+                  className="flex-1 min-w-[220px] max-w-sm rounded-2xl p-5 border backdrop-blur-md"
+                  style={{
+                    background: `linear-gradient(135deg, ${scene.accentColor}15, rgba(0,0,0,0.7))`,
+                    borderColor: scene.accentColor + '40',
+                    boxShadow: `0 0 25px ${scene.glowColor}`,
+                    opacity: cardVisible ? 1 : 0,
+                    transform: cardVisible ? 'translateY(0)' : 'translateY(40px)',
+                    transition: `all 0.6s ease ${i * 0.1 + 0.1}s`,
+                  }}
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-3xl">{svc.icon}</span>
+                    <span className="font-black text-white text-base">{svc.title}</span>
+                  </div>
+                  <p className="text-gray-300 text-sm leading-relaxed">{svc.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ─── RIGHT SIDE: Scene progress & nav ─────────── */}
+          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-4">
+            {/* Progress track */}
+            <div className="h-48 w-0.5 bg-white/10 rounded-full relative overflow-hidden">
+              <div
+                className="absolute top-0 left-0 w-full rounded-full transition-all duration-300"
+                style={{ height: `${rawProgress * 100}%`, background: scene.accentColor }}
+              />
+            </div>
+            {/* Scene dots */}
+            <div className="flex flex-col gap-3">
+              {SCENES.map((sc, i) => (
+                <div
+                  key={sc.id}
+                  className="w-2 h-2 rounded-full transition-all duration-400"
+                  style={{
+                    background: i === sceneIdx ? sc.accentColor : 'rgba(255,255,255,0.2)',
+                    transform: i === sceneIdx ? 'scale(1.5)' : 'scale(1)',
+                    boxShadow: i === sceneIdx ? `0 0 8px ${sc.glowColor}` : 'none',
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* ─── BOTTOM RIGHT: Scene counter ──────────────── */}
+          <div className="absolute right-14 bottom-12 z-20 text-right pointer-events-none">
+            <div className="font-black text-5xl leading-none" style={{ color: scene.accentColor }}>
+              0{sceneIdx + 1}
+            </div>
+            <div className="text-gray-600 text-xs font-semibold tracking-widest">/ 04</div>
+          </div>
+
+          {/* ─── Glow highlight circle ──────────────────── */}
+          <div
+            className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-[80px] pointer-events-none z-0 transition-all duration-700"
+            style={{ background: scene.glowColor, opacity: 0.25 }}
+          />
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════
-          SECTION 2 — STATS
-      ═══════════════════════════════════════════ */}
-      <section className="py-20 px-6 bg-[#080808] border-y border-white/5">
+      {/* ═══ SECTION 2 — STATS ═════════════════════════════════════ */}
+      <section className="py-20 px-6 bg-[#060606] border-y border-white/5">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
-            { label: 'Happy Customers', value: '12,000+' },
-            { label: 'Services', value: '6' },
-            { label: 'Cities Covered', value: '24+' },
-            { label: 'Avg. ETA', value: '12 min' },
-          ].map(({ label, value }) => (
-            <div key={label}>
-              <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-red-500 mb-2">{value}</div>
+            { label: 'Happy Customers', val: '12,000+', color: '#dc2626' },
+            { label: 'Services', val: '6', color: '#f97316' },
+            { label: 'Cities Covered', val: '24+', color: '#f59e0b' },
+            { label: 'Avg. ETA', val: '12 min', color: '#3b82f6' },
+          ].map(({ label, val, color }) => (
+            <div key={label} className="group">
+              <div className="text-4xl md:text-5xl font-black mb-2 transition-colors" style={{ color }}>{val}</div>
               <p className="text-gray-500 text-xs uppercase tracking-widest font-semibold">{label}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          SECTION 3 — HOW IT WORKS
-      ═══════════════════════════════════════════ */}
+      {/* ═══ SECTION 3 — HOW IT WORKS ══════════════════════════════ */}
       <section className="py-28 px-6 md:px-12 lg:px-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-20">
             <p className="text-red-500 font-bold uppercase tracking-widest text-xs mb-3">Simple Process</p>
             <h2 className="text-5xl md:text-6xl font-black">How It Works</h2>
           </div>
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-4 gap-8 relative">
+            <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-px"
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.4), transparent)' }} />
             {[
               { num: '01', title: 'Create Account', desc: 'Sign up in seconds with your email.' },
               { num: '02', title: 'Pick a Service', desc: 'Choose from 6 premium vehicle services.' },
               { num: '03', title: 'Book Instantly', desc: 'Confirm in seconds, no wait time.' },
               { num: '04', title: 'Track Live', desc: 'Follow your service on a live map.' },
-            ].map((step, i) => (
+            ].map((step) => (
               <div key={step.num} className="group text-center">
-                <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-red-900/50 to-black border border-red-700/40 rounded-3xl flex items-center justify-center text-4xl font-black text-red-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-300">
+                <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-red-900/50 to-black border border-red-800/40 rounded-3xl flex items-center justify-center text-4xl font-black text-red-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-300">
                   {step.num}
                 </div>
                 <h3 className="text-xl font-black mb-2 group-hover:text-red-400 transition-colors">{step.title}</h3>
@@ -393,12 +385,10 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          SECTION 4 — FINAL CTA
-      ═══════════════════════════════════════════ */}
+      {/* ═══ SECTION 4 — CTA ══════════════════════════════════════ */}
       <section className="py-36 px-6 text-center relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-red-900/20 rounded-full blur-[150px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-red-900/20 rounded-full blur-[150px]" />
         </div>
         <div className="relative z-10 max-w-3xl mx-auto">
           <h2 className="text-6xl md:text-7xl font-black mb-6">Ready to drive?</h2>
@@ -415,8 +405,8 @@ export default function Landing() {
       </section>
 
       <style>{`
-        @keyframes gradientShift {
-          0% { background-position: 0% center; }
+        @keyframes gradShift {
+          0%   { background-position: 0% center; }
           100% { background-position: 200% center; }
         }
       `}</style>
