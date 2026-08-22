@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 /* ─── Scene definitions ───────────────────────────────────────── */
 const SCENES = [
@@ -15,6 +19,7 @@ const SCENES = [
     ],
     cameraHint: '📷 Front Angle',
     annotation: { x: '48%', y: '62%', text: 'FRONT SPLITTER', line: 'down' },
+    align: 'right', // User requested to change this to the other side
   },
   {
     id: 'driver',
@@ -28,6 +33,7 @@ const SCENES = [
     ],
     cameraHint: '📷 Scissor Door Open',
     annotation: { x: '55%', y: '45%', text: 'LUXURY COCKPIT', line: 'up' },
+    align: 'right', // User didn't ask to change this one
   },
   {
     id: 'engine',
@@ -43,6 +49,7 @@ const SCENES = [
     ],
     cameraHint: '📷 Engine Bay — V10 Exposed',
     annotation: { x: '50%', y: '48%', text: '5.2L V10 ENGINE', line: 'down' },
+    align: 'right', // User requested to change this to the other side
   },
   {
     id: 'wheel',
@@ -56,21 +63,37 @@ const SCENES = [
     ],
     cameraHint: '📷 Wheel & Brake Caliper',
     annotation: { x: '55%', y: '55%', text: 'BREMBO CALIPER', line: 'right' },
+    align: 'right', // User didn't ask to change this one
   },
+  {
+    id: 'conclusion',
+    image: '/lambo_wheel.jpg',
+    accentColor: '#ffffff',
+    glowColor: 'rgba(255,255,255,0.1)',
+    bgTint: 'rgba(0,0,0,0.85)',
+    label: 'SCENE 05',
+    services: [], // Custom layout used instead
+    cameraHint: '📷 Journey Complete',
+    align: 'center',
+    isCustom: true
+  }
 ];
 
 /* ─── Utility ─────────────────────────────────────────────────── */
 function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
-function lerp(a, b, t) { return a + (b - a) * t; }
 
 export default function Landing() {
   const wrapRef = useRef(null);
+  const bottomRef = useRef(null);
   const [rawProgress, setRawProgress] = useState(0); // 0..1 across the scroll zone
   const [heroIn, setHeroIn] = useState(false);
+  
+  // State for animated numbers
+  const statsRef = useRef({ customers: 0, services: 0, cities: 0, eta: 0 });
+  const [renderTrigger, setRenderTrigger] = useState(0);
 
   /* Derived */
   const totalScenes = SCENES.length;
-  // Which scene index (0-based), and how far within that scene (0..1)
   const sceneF = rawProgress * totalScenes;
   const sceneIdx = clamp(Math.floor(sceneF), 0, totalScenes - 1);
   const sceneT = clamp(sceneF - sceneIdx, 0, 1); // progress within current scene
@@ -78,18 +101,37 @@ export default function Landing() {
   const scene = SCENES[sceneIdx];
   const nextScene = SCENES[Math.min(sceneIdx + 1, totalScenes - 1)];
 
-  // Cross-fade: images cross-dissolve in the last 20% of each scene
-  const crossfade = clamp((sceneT - 0.8) / 0.2, 0, 1);
-
-  // Zoom: slightly zoom into the current image as scene progresses
+  const crossfade = clamp((sceneT - 0.75) / 0.25, 0, 1);
   const zoom = 1 + sceneT * 0.06;
-
-  // Pan: subtle X drift per scene
-  const panX = [-2, 2, -1, 0][sceneIdx] * sceneT;
+  const panX = [-2, 2, -1, 0, 0][sceneIdx] * sceneT;
 
   useEffect(() => {
     setTimeout(() => setHeroIn(true), 300);
   }, []);
+
+  useEffect(() => {
+    // Animate numbers when reaching Scene 5
+    if (sceneIdx === 4) {
+      gsap.to(statsRef.current, {
+        customers: 12000,
+        services: 6,
+        cities: 24,
+        eta: 12,
+        duration: 2,
+        ease: 'power2.out',
+        onUpdate: () => setRenderTrigger(v => v + 1)
+      });
+      
+      // Also trigger enter animations for the steps
+      gsap.fromTo('.step-item', 
+        { y: 50, opacity: 0, scale: 0.9 }, 
+        { y: 0, opacity: 1, scale: 1, duration: 0.8, stagger: 0.1, ease: 'back.out(1.5)' }
+      );
+    } else {
+      statsRef.current = { customers: 0, services: 0, cities: 0, eta: 0 };
+      setRenderTrigger(v => v + 1);
+    }
+  }, [sceneIdx]);
 
   const handleScroll = useCallback(() => {
     if (!wrapRef.current) return;
@@ -105,7 +147,7 @@ export default function Landing() {
   }, [handleScroll]);
 
   /* Service card entrance — stagger */
-  const cardVisible = sceneT > 0.25;
+  const cardVisible = sceneT > 0.15 && (sceneIdx === totalScenes - 1 || sceneT < 0.75);
 
   return (
     <div className="bg-black text-white font-outfit">
@@ -164,6 +206,12 @@ export default function Landing() {
             }}
           />
 
+          {/* ── Custom Scene Black Overlay ── */}
+          <div
+            className="absolute inset-0 z-5 pointer-events-none transition-all duration-1000"
+            style={{ backgroundColor: '#000', opacity: scene.isCustom ? 1 : 0 }}
+          />
+
           {/* ── Bottom gradient ── */}
           <div className="absolute bottom-0 left-0 right-0 h-40 z-3 pointer-events-none"
             style={{ background: 'linear-gradient(to top, #000 0%, transparent 100%)' }} />
@@ -191,28 +239,13 @@ export default function Landing() {
               </div>
             </Link>
             <div className="flex items-center gap-4">
-              <Link to="/auth" className="text-gray-300 hover:text-white font-semibold text-sm transition-colors">Sign In</Link>
               <Link to="/auth"
-                className="font-black text-sm px-6 py-2.5 rounded-full transition-all hover:scale-105"
-                style={{ background: scene.accentColor, boxShadow: `0 0 20px ${scene.glowColor}` }}
+                className="font-black text-sm tracking-widest uppercase transition-all hover:scale-105"
+                style={{ color: scene.accentColor, textShadow: `0 0 15px ${scene.glowColor}` }}
               >
-                Get Started
+                Sign In
               </Link>
             </div>
-          </div>
-
-          {/* ─── SCENE LABEL (top-left) ─────────────────── */}
-          <div
-            className="absolute top-24 left-8 md:left-14 z-20 transition-all duration-500"
-            style={{ opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(-20px)' }}
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-6 h-px" style={{ background: scene.accentColor }} />
-              <span className="text-xs font-black tracking-[0.3em] uppercase" style={{ color: scene.accentColor }}>
-                {scene.label}
-              </span>
-            </div>
-            <div className="text-xs text-gray-500 font-semibold tracking-widest">{scene.cameraHint}</div>
           </div>
 
           {/* ─── HERO TEXT (only on scene 0 before scrolling) ─────── */}
@@ -243,62 +276,138 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* ─── SERVICE PANEL (appears after scene has loaded) ─── */}
-          <div
-            className="absolute bottom-0 left-0 right-0 z-10 pb-14 px-8 md:px-14 lg:px-20"
-            style={{ opacity: rawProgress > 0.02 ? 1 : 0, transition: 'opacity 0.5s ease' }}
-          >
-            {/* Service heading */}
+          {/* ─── STANDARD SERVICE PANEL (Scenes 1-4) ─── */}
+          {!scene.isCustom && (
             <div
-              className="mb-5 transition-all duration-700"
-              style={{
-                opacity: cardVisible ? 1 : 0,
-                transform: cardVisible ? 'translateY(0)' : 'translateY(30px)',
-              }}
+              className="absolute inset-0 z-10 flex flex-col justify-center px-8 md:px-14 lg:px-24 pointer-events-none"
+              style={{ opacity: rawProgress > 0.02 ? 1 : 0, transition: 'opacity 0.5s ease' }}
             >
-              <h2
-                className="text-4xl md:text-6xl lg:text-7xl font-black leading-none mb-1"
-                style={{ color: scene.accentColor, textShadow: `0 0 40px ${scene.glowColor}` }}
+            <div
+              className={`w-full max-w-3xl pointer-events-auto transition-all duration-700 ${
+                scene.align === 'right' ? 'ml-auto text-right' : 'mr-auto text-left'
+              }`}
+            >
+              {/* Service heading */}
+              <div
+                className="mb-8 transition-all duration-700"
+                style={{
+                  opacity: cardVisible ? 1 : 0,
+                  transform: cardVisible ? 'translateY(0)' : 'translateY(30px)',
+                }}
               >
-                {scene.services[0].title}
-              </h2>
-              {scene.services.length > 1 && (
-                <div className="flex gap-3 mt-1">
-                  {scene.services.slice(1).map(s => (
-                    <span key={s.title} className="text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full border"
-                      style={{ borderColor: scene.accentColor + '50', color: scene.accentColor }}>
-                      + {s.title}
-                    </span>
+                <h2
+                  className="text-6xl md:text-8xl lg:text-[100px] font-black leading-none mb-4"
+                  style={{ color: scene.accentColor, textShadow: `0 0 40px ${scene.glowColor}` }}
+                >
+                  {scene.services[0].title}
+                </h2>
+                {scene.services.length > 1 && (
+                  <div className={`flex gap-4 mt-4 flex-wrap ${scene.align === 'right' ? 'justify-end' : 'justify-start'}`}>
+                    {scene.services.slice(1).map(s => (
+                      <span key={s.title} className="text-sm md:text-base font-black tracking-widest uppercase px-5 py-2 rounded-full border backdrop-blur-sm"
+                        style={{ borderColor: scene.accentColor + '50', color: scene.accentColor, background: 'rgba(0,0,0,0.4)' }}>
+                        + {s.title}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Service cards column */}
+              <div className={`flex gap-6 flex-col ${scene.align === 'right' ? 'items-end' : 'items-start'}`}>
+                {scene.services.map((svc, i) => (
+                  <div
+                    key={svc.title}
+                    className="flex-1 min-w-[280px] max-w-lg p-2"
+                    style={{
+                      opacity: cardVisible ? 1 : 0,
+                      transform: cardVisible ? 'translateY(0)' : 'translateY(40px)',
+                      transition: cardVisible ? `all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) ${i * 0.1 + 0.1}s` : `all 0.2s ease-out`,
+                      textShadow: '0px 4px 20px rgba(0,0,0,0.8)'
+                    }}
+                  >
+                    <div className={`flex items-center gap-4 mb-4 ${scene.align === 'right' ? 'justify-end flex-row-reverse' : 'justify-start'}`}>
+                      <span className="font-black text-white text-2xl md:text-4xl">{svc.title}</span>
+                    </div>
+                    <p className="text-gray-200 text-lg md:text-xl leading-relaxed">{svc.desc}</p>
+                  </div>
+                ))}
+              </div>
+              </div>
+            </div>
+          )}
+
+          {/* ─── CUSTOM CONCLUSION PANEL (Scene 5) ─── */}
+          {scene.isCustom && (
+            <div
+              className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-auto transition-all duration-1000 overflow-y-auto overflow-x-hidden"
+              style={{ opacity: cardVisible ? 1 : 0, transform: cardVisible ? 'translateY(0)' : 'translateY(40px)' }}
+            >
+              <div className="w-full max-w-5xl px-6 md:px-12 mx-auto flex flex-col gap-12 md:gap-20 py-24">
+                
+                {/* ── STATS ── */}
+                <div className="stats-container grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                  {[
+                    { label: 'Happy Customers', valKey: 'customers', format: (v) => `${Math.round(v).toLocaleString()}+`, color: '#dc2626' },
+                    { label: 'Services', valKey: 'services', format: (v) => Math.round(v), color: '#f97316' },
+                    { label: 'Cities Covered', valKey: 'cities', format: (v) => `${Math.round(v)}+`, color: '#f59e0b' },
+                    { label: 'Avg. ETA', valKey: 'eta', format: (v) => `${Math.round(v)} min`, color: '#3b82f6' },
+                  ].map(({ label, valKey, format, color }) => (
+                    <div key={label} className="stat-item group">
+                      <div className="text-4xl md:text-6xl font-black mb-3 transition-colors" style={{ color }}>
+                        {format(statsRef.current[valKey])}
+                      </div>
+                      <p className="text-gray-400 text-[10px] md:text-xs uppercase tracking-[0.3em] font-black">{label}</p>
+                    </div>
                   ))}
                 </div>
-              )}
-            </div>
 
-            {/* Service cards row */}
-            <div className="flex gap-4 flex-wrap">
-              {scene.services.map((svc, i) => (
-                <div
-                  key={svc.title}
-                  className="flex-1 min-w-[220px] max-w-sm rounded-2xl p-5 border backdrop-blur-md"
-                  style={{
-                    background: `linear-gradient(135deg, ${scene.accentColor}15, rgba(0,0,0,0.7))`,
-                    borderColor: scene.accentColor + '40',
-                    boxShadow: `0 0 25px ${scene.glowColor}`,
-                    opacity: cardVisible ? 1 : 0,
-                    transform: cardVisible ? 'translateY(0)' : 'translateY(40px)',
-                    transition: `all 0.6s ease ${i * 0.1 + 0.1}s`,
-                  }}
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-3xl">{svc.icon}</span>
-                    <span className="font-black text-white text-base">{svc.title}</span>
+                {/* ── HOW IT WORKS ── */}
+                <div className="how-it-works-container">
+                  <div className="text-center mb-16">
+                    <p className="text-red-500 font-black uppercase tracking-[0.4em] text-xs mb-3">Simple Process</p>
+                    <h2 className="text-4xl md:text-6xl font-black text-white">How It Works</h2>
                   </div>
-                  <p className="text-gray-300 text-sm leading-relaxed">{svc.desc}</p>
+                  <div className="grid md:grid-cols-4 gap-8 relative">
+                    <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-px"
+                      style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.4), transparent)' }} />
+                    {[
+                      { num: '01', title: 'Create Account', desc: 'Sign up in seconds.' },
+                      { num: '02', title: 'Pick a Service', desc: 'Choose from 6 premium services.' },
+                      { num: '03', title: 'Book Instantly', desc: 'Confirm instantly, no wait.' },
+                      { num: '04', title: 'Track Live', desc: 'Follow on a live map.' },
+                    ].map((step) => (
+                      <div key={step.num} className="step-item group text-center">
+                        <div className="w-16 h-16 md:w-24 md:h-24 mx-auto mb-6 bg-gradient-to-br from-red-900/50 to-black border border-red-800/40 rounded-3xl flex items-center justify-center text-2xl md:text-4xl font-black text-red-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-500">
+                          {step.num}
+                        </div>
+                        <h3 className="text-lg md:text-xl font-black mb-2 text-white group-hover:text-red-400 transition-colors">{step.title}</h3>
+                        <p className="text-gray-400 text-xs md:text-sm">{step.desc}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
 
+                {/* ── CTA ── */}
+                <div className="cta-container text-center relative">
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-red-900/10 rounded-full blur-[100px] pointer-events-none" />
+                  <div className="relative z-10">
+                    <h2 className="text-4xl md:text-5xl font-black mb-4 text-white">Ready to drive?</h2>
+                    <p className="text-gray-400 text-sm md:text-base mb-8">Join thousands of drivers who trust Mechify.</p>
+                    <Link
+                      to="/auth"
+                      className="group relative inline-block bg-red-600 hover:bg-red-500 text-white font-black text-sm md:text-base px-8 md:px-10 py-4 md:py-5 rounded-2xl transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(220,38,38,0.5)] hover:shadow-[0_0_60px_rgba(220,38,38,0.7)] overflow-hidden"
+                    >
+                      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                      Sign Up or Sign In Today →
+                    </Link>
+                    <p className="text-gray-600 text-[10px] md:text-xs mt-4">Free to join · No credit card required</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          )}
           {/* ─── RIGHT SIDE: Scene progress & nav ─────────── */}
           <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-4">
             {/* Progress track */}
@@ -324,14 +433,6 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* ─── BOTTOM RIGHT: Scene counter ──────────────── */}
-          <div className="absolute right-14 bottom-12 z-20 text-right pointer-events-none">
-            <div className="font-black text-5xl leading-none" style={{ color: scene.accentColor }}>
-              0{sceneIdx + 1}
-            </div>
-            <div className="text-gray-600 text-xs font-semibold tracking-widest">/ 04</div>
-          </div>
-
           {/* ─── Glow highlight circle ──────────────────── */}
           <div
             className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-[80px] pointer-events-none z-0 transition-all duration-700"
@@ -340,69 +441,7 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* ═══ SECTION 2 — STATS ═════════════════════════════════════ */}
-      <section className="py-20 px-6 bg-[#060606] border-y border-white/5">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            { label: 'Happy Customers', val: '12,000+', color: '#dc2626' },
-            { label: 'Services', val: '6', color: '#f97316' },
-            { label: 'Cities Covered', val: '24+', color: '#f59e0b' },
-            { label: 'Avg. ETA', val: '12 min', color: '#3b82f6' },
-          ].map(({ label, val, color }) => (
-            <div key={label} className="group">
-              <div className="text-4xl md:text-5xl font-black mb-2 transition-colors" style={{ color }}>{val}</div>
-              <p className="text-gray-500 text-xs uppercase tracking-widest font-semibold">{label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
 
-      {/* ═══ SECTION 3 — HOW IT WORKS ══════════════════════════════ */}
-      <section className="py-28 px-6 md:px-12 lg:px-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-20">
-            <p className="text-red-500 font-bold uppercase tracking-widest text-xs mb-3">Simple Process</p>
-            <h2 className="text-5xl md:text-6xl font-black">How It Works</h2>
-          </div>
-          <div className="grid md:grid-cols-4 gap-8 relative">
-            <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-px"
-              style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.4), transparent)' }} />
-            {[
-              { num: '01', title: 'Create Account', desc: 'Sign up in seconds with your email.' },
-              { num: '02', title: 'Pick a Service', desc: 'Choose from 6 premium vehicle services.' },
-              { num: '03', title: 'Book Instantly', desc: 'Confirm in seconds, no wait time.' },
-              { num: '04', title: 'Track Live', desc: 'Follow your service on a live map.' },
-            ].map((step) => (
-              <div key={step.num} className="group text-center">
-                <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-red-900/50 to-black border border-red-800/40 rounded-3xl flex items-center justify-center text-4xl font-black text-red-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-300">
-                  {step.num}
-                </div>
-                <h3 className="text-xl font-black mb-2 group-hover:text-red-400 transition-colors">{step.title}</h3>
-                <p className="text-gray-500 text-sm">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ SECTION 4 — CTA ══════════════════════════════════════ */}
-      <section className="py-36 px-6 text-center relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-red-900/20 rounded-full blur-[150px]" />
-        </div>
-        <div className="relative z-10 max-w-3xl mx-auto">
-          <h2 className="text-6xl md:text-7xl font-black mb-6">Ready to drive?</h2>
-          <p className="text-gray-400 text-xl mb-12">Join thousands of drivers who trust Mechify.</p>
-          <Link
-            to="/auth"
-            className="group relative inline-block bg-red-600 hover:bg-red-500 text-white font-black text-xl px-14 py-6 rounded-2xl transition-all duration-300 hover:scale-105 shadow-[0_0_50px_rgba(220,38,38,0.5)] hover:shadow-[0_0_80px_rgba(220,38,38,0.7)] overflow-hidden"
-          >
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-            Sign Up or Sign In Today →
-          </Link>
-          <p className="text-gray-600 text-sm mt-6">Free to join · No credit card required</p>
-        </div>
-      </section>
 
       <style>{`
         @keyframes gradShift {

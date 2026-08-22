@@ -39,15 +39,21 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-outfit flex flex-col lg:flex-row overflow-hidden">
+    <div className="min-h-screen bg-black text-white font-outfit flex flex-col lg:flex-row overflow-hidden relative">
+      
+      {/* ── Cinematic Background Animation ── */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-black">
+        <img
+          src="https://images.unsplash.com/photo-1558981852-426c373d4a83?w=1920&h=1080&fit=crop"
+          alt="Luxury Car"
+          className="absolute inset-0 w-full h-full object-cover animate-kenBurns"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent pointer-events-none" />
+      </div>
 
       {/* ── Left Panel: Branding ── */}
-      <div className="lg:w-1/2 relative flex flex-col justify-center items-center p-12 min-h-[35vh] lg:min-h-screen overflow-hidden">
-        {/* Background layers */}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-950 via-black to-black" />
-        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-red-900/30 rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDuration: '5s' }} />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-red-800/20 rounded-full blur-[80px] pointer-events-none" />
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+      <div className="lg:w-1/2 relative z-10 flex flex-col justify-center items-center p-12 min-h-[35vh] lg:min-h-screen overflow-hidden">
+        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-900/20 rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDuration: '5s' }} />
 
         <div className="relative z-10 text-center max-w-md">
           {/* Logo */}
@@ -90,7 +96,7 @@ export default function Auth() {
       </div>
 
       {/* ── Right Panel: Form ── */}
-      <div className="lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-[#0a0a0a] border-l border-white/5">
+      <div className="lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-black/50 backdrop-blur-xl border-l border-white/10 relative z-10 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
         <div className="w-full max-w-md">
 
           {/* ── SIGN IN FORM ── */}

@@ -53,10 +53,10 @@ export default function Home() {
           HERO — Full-bleed video background, right-aligned text
           Matches Figma Desktop-16
       ══════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+      <section className="relative h-[75vh] min-h-[600px] flex flex-col justify-center overflow-hidden">
         {/* Background video */}
-        <div className="absolute inset-0 bg-black">
-          <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60">
+        <div className="absolute inset-0 bg-black overflow-hidden">
+          <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60 scale-[1.35]">
             <source src="/hero-car.mp4" type="video/mp4" />
           </video>
           {/* Dark gradient overlay — right heavy for text readability */}
