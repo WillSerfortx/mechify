@@ -15,9 +15,9 @@ const SCENES = [
     bgTint: 'radial-gradient(ellipse 90% 70% at 50% 100%, rgba(220,38,38,0.25) 0%, transparent 65%)',
     label: 'SCENE 01',
     services: [
-      { icon: '🏎️', title: 'Car Rental', desc: 'Rent exotic Lamborghinis, Ferraris, and luxury sedans for any occasion. Instant booking, flexible returns.' },
+      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m8-1v1m-1-4V8a2 2 0 00-2-2H9a2 2 0 00-2 2v3" /></svg>, title: 'Car Rental', desc: 'Rent exotic Lamborghinis, Ferraris, and luxury sedans for any occasion. Instant booking, flexible returns.' },
     ],
-    cameraHint: '📷 Front Angle',
+    cameraHint: 'Camera: Front Angle',
     annotation: { x: '48%', y: '62%', text: 'FRONT SPLITTER', line: 'down' },
     align: 'right', // User requested to change this to the other side
   },
@@ -29,9 +29,9 @@ const SCENES = [
     bgTint: 'radial-gradient(ellipse 90% 70% at 40% 100%, rgba(249,115,22,0.25) 0%, transparent 65%)',
     label: 'SCENE 02',
     services: [
-      { icon: '👨‍✈️', title: 'Hire a Driver', desc: 'Professional, certified chauffeurs available 24/7 for airport transfers, events, or hourly hire.' },
+      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>, title: 'Hire a Driver', desc: 'Professional, certified chauffeurs available 24/7 for airport transfers, events, or hourly hire.' },
     ],
-    cameraHint: '📷 Scissor Door Open',
+    cameraHint: 'Camera: Scissor Door Open',
     annotation: { x: '55%', y: '45%', text: 'LUXURY COCKPIT', line: 'up' },
     align: 'right', // User didn't ask to change this one
   },
@@ -43,11 +43,11 @@ const SCENES = [
     bgTint: 'radial-gradient(ellipse 90% 70% at 50% 100%, rgba(245,158,11,0.2) 0%, transparent 65%)',
     label: 'SCENE 03',
     services: [
-      { icon: '🔧', title: 'Workshop Service', desc: 'Certified mechanics & state-of-the-art workshops for full diagnostics and repairs.' },
-      { icon: '🚗', title: 'Emergency Mechanic', desc: 'Broken down? We dispatch a mechanic to your location — day or night.' },
-      { icon: '⛽', title: 'Emergency Fuel', desc: 'Out of fuel anywhere in the city? We rush to your GPS pin in under 12 minutes.' },
+      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>, title: 'Workshop Service', desc: 'Certified mechanics & state-of-the-art workshops for full diagnostics and repairs.' },
+      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m8-1v1m-1-4V8a2 2 0 00-2-2H9a2 2 0 00-2 2v3" /></svg>, title: 'Emergency Mechanic', desc: 'Broken down? We dispatch a mechanic to your location — day or night.' },
+      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>, title: 'Emergency Fuel', desc: 'Out of fuel anywhere in the city? We rush to your GPS pin in under 12 minutes.' },
     ],
-    cameraHint: '📷 Engine Bay — V10 Exposed',
+    cameraHint: 'Camera: Engine Bay — V10 Exposed',
     annotation: { x: '50%', y: '48%', text: '5.2L V10 ENGINE', line: 'down' },
     align: 'right', // User requested to change this to the other side
   },
@@ -59,9 +59,9 @@ const SCENES = [
     bgTint: 'radial-gradient(ellipse 90% 70% at 50% 100%, rgba(59,130,246,0.25) 0%, transparent 65%)',
     label: 'SCENE 04',
     services: [
-      { icon: '🔩', title: 'Spare Parts Store', desc: '450+ genuine spare parts for all vehicle makes. Order online, check availability instantly.' },
+      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>, title: 'Spare Parts Store', desc: '450+ genuine spare parts for all vehicle makes. Order online, check availability instantly.' },
     ],
-    cameraHint: '📷 Wheel & Brake Caliper',
+    cameraHint: 'Camera: Wheel & Brake Caliper',
     annotation: { x: '55%', y: '55%', text: 'BREMBO CALIPER', line: 'right' },
     align: 'right', // User didn't ask to change this one
   },
@@ -73,7 +73,7 @@ const SCENES = [
     bgTint: 'rgba(0,0,0,0.85)',
     label: 'SCENE 05',
     services: [], // Custom layout used instead
-    cameraHint: '📷 Journey Complete',
+    cameraHint: 'Camera: Journey Complete',
     align: 'center',
     isCustom: true
   }

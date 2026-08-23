@@ -19,7 +19,7 @@ export default function Navbar() {
 
   const handleSOS = () => {
     setSosActive(true);
-    alert('🚨 SOS Emergency Activated!\nMechify Emergency Response Team notified.\nETA: 12 minutes. Stay calm, help is coming!');
+    alert('SOS Emergency Activated!\nMechify Emergency Response Team notified.\nETA: 12 minutes. Stay calm, help is coming!');
     setTimeout(() => setSosActive(false), 3000);
   };
 
@@ -80,21 +80,30 @@ export default function Navbar() {
           {/* Profile / Dashboard button */}
           <Link
             to="/profile"
-            className="flex items-center justify-center w-12 h-12 bg-white/10 border-2 border-white/20 rounded-full text-2xl transition-all duration-300 hover:bg-white/30 hover:border-white hover:scale-110 active:scale-95 animate-bounce"
+            className="flex items-center justify-center w-12 h-12 bg-white/10 border-2 border-white/20 rounded-full transition-all duration-300 hover:bg-white/30 hover:border-white hover:scale-110 active:scale-95 animate-bounce"
             style={{ animationDuration: '3s' }}
             title="Dashboard"
           >
-            🧑
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
           </Link>
 
 
 
-          {/* Mobile toggle */}
           <button
-            className="md:hidden text-white text-2xl p-2 rounded-lg hover:bg-white/10 transition-colors"
+            className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? '✕' : '☰'}
+            {mobileMenuOpen ? (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
           </button>
         </div>
       </div>
@@ -115,8 +124,12 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
-          <Link to="/profile" className="bg-white/10 text-white text-center rounded-full py-4 text-3xl mt-4 flex items-center justify-center transition-colors hover:bg-white/20">
-            <span className="animate-bounce" style={{ animationDuration: '3s' }}>🧑</span>
+          <Link to="/profile" className="bg-white/10 text-white text-center rounded-full py-4 mt-4 flex items-center justify-center transition-colors hover:bg-white/20">
+            <span className="animate-bounce" style={{ animationDuration: '3s' }}>
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </span>
           </Link>
         </div>
       )}

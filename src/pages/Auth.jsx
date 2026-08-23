@@ -23,7 +23,7 @@ export default function Auth() {
       if (email === VALID_EMAIL && password === VALID_PASSWORD) {
         navigate('/home');
       } else {
-        alert('❌ Invalid email or password. Please try again.');
+        alert('Invalid email or password. Please try again.');
       }
     }, 1200);
   };
@@ -41,14 +41,14 @@ export default function Auth() {
   return (
     <div className="min-h-screen bg-black text-white font-outfit flex flex-col lg:flex-row overflow-hidden relative">
       
-      {/* ── Cinematic Background Animation ── */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-black">
-        <img
-          src="https://images.unsplash.com/photo-1558981852-426c373d4a83?w=1920&h=1080&fit=crop"
-          alt="Luxury Car"
-          className="absolute inset-0 w-full h-full object-cover animate-kenBurns"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent pointer-events-none" />
+      {/* ── Simple Animated Background ── */}
+      <div className="absolute inset-0 z-0 bg-[#050505] overflow-hidden pointer-events-none">
+        {/* Animated glowing orbs */}
+        <div className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] bg-red-900/40 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '7s' }} />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-orange-900/20 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '10s', animationDelay: '1s' }} />
+        
+        {/* Subtle grid/texture overlay */}
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
       </div>
 
       {/* ── Left Panel: Branding ── */}
@@ -97,7 +97,7 @@ export default function Auth() {
 
       {/* ── Right Panel: Form ── */}
       <div className="lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-black/50 backdrop-blur-xl border-l border-white/10 relative z-10 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-lg">
 
           {/* ── SIGN IN FORM ── */}
           {mode === 'signin' && (
@@ -130,9 +130,9 @@ export default function Auth() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xl transition-colors"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-sm font-bold uppercase transition-colors"
                     >
-                      {showPassword ? '🙈' : '👁️'}
+                      {showPassword ? 'Hide' : 'Show'}
                     </button>
                   </div>
                 </div>

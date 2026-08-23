@@ -119,75 +119,70 @@ export default function DriverList() {
         </div>
       </div>
 
-      {/* Driver Grid */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mt-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {/* Driver List Container */}
+      <div className="w-[95%] max-w-[1200px] mx-auto mt-10 translate-x-12 md:translate-x-40">
+        <div className="flex flex-col gap-4">
           {filtered.map((driver) => (
             <div
               key={driver.id}
-              className="group bg-gradient-to-b from-white/[0.08] to-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:border-[#E50914]/50 hover:shadow-[0_0_30px_rgba(229,9,20,0.15)] transition-all duration-500 hover:-translate-y-1"
+              className="group bg-black/40 border border-white/10 rounded-2xl overflow-hidden hover:border-red-500/50 hover:shadow-[0_0_30px_rgba(220,38,38,0.15)] transition-all duration-300 flex flex-col md:flex-row items-center p-4 gap-6"
             >
               {/* Driver Photo */}
-              <div className="relative h-56 overflow-hidden">
+              <div className="relative w-full md:w-32 h-48 md:h-32 rounded-xl overflow-hidden flex-shrink-0">
                 <img
                   src={driver.photo}
                   alt={driver.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-
-                {/* Availability Badge */}
-                <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-bold ${driver.available ? 'bg-green-500/90 text-white' : 'bg-gray-600/90 text-gray-300'}`}>
-                  {driver.available ? '● Available' : '● Busy'}
-                </div>
-
-                {/* Rating Badge */}
-                <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm rounded-lg px-3 py-1">
-                  <Stars rating={driver.rating} />
+                <div className={`absolute top-2 right-2 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wide border border-black/20 ${driver.available ? 'bg-green-500 text-white shadow-[0_0_10px_rgba(34,197,94,0.5)]' : 'bg-gray-700 text-gray-300'}`}>
+                  {driver.available ? 'Available' : 'Busy'}
                 </div>
               </div>
 
               {/* Driver Info */}
-              <div className="p-5">
-                <h3 className="text-xl font-black mb-3 group-hover:text-[#E50914] transition-colors duration-300">{driver.name}</h3>
+              <div className="flex-1 text-left w-full">
+                <div className="flex flex-wrap items-center gap-3 mb-1">
+                  <h3 className="text-xl md:text-2xl font-black group-hover:text-red-500 transition-colors duration-300">{driver.name}</h3>
+                  <Stars rating={driver.rating} />
+                </div>
 
-                <div className="space-y-2 text-sm text-gray-400 mb-5">
-                  <div className="flex items-center gap-2">
-                    <span className="text-white/60">🚗</span>
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-400 mt-2">
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m8-1v1m-1-4V8a2 2 0 00-2-2H9a2 2 0 00-2 2v3" /></svg>
                     <span>{driver.vehicle} specialist</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-white/60">📅</span>
-                    <span>{driver.experience} years experience</span>
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <span>{driver.experience} years exp</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-white/60">🛣️</span>
-                    <span>{driver.totalTrips.toLocaleString()} trips completed</span>
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
+                    <span>{driver.totalTrips.toLocaleString()} trips</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-white/60">🌐</span>
+                  <div className="flex items-center gap-1.5">
+                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     <span>{driver.languages}</span>
                   </div>
                 </div>
+              </div>
 
-                {/* Action Buttons */}
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => navigate(`/driver-chat?id=${driver.id}&name=${encodeURIComponent(driver.name)}&rating=${driver.rating}`)}
-                    className="flex-1 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-2.5 rounded-xl text-sm transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                    Chat
-                  </button>
-                  <button
-                    onClick={() => navigate('/car-booking')}
-                    className="flex-1 bg-[#E50914] hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-sm transition-all duration-300 hover:shadow-[0_0_15px_rgba(229,9,20,0.4)]"
-                  >
-                    Book Driver
-                  </button>
-                </div>
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <button
+                  onClick={() => navigate(`/driver-chat?id=${driver.id}&name=${encodeURIComponent(driver.name)}&rating=${driver.rating}`)}
+                  className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                  Chat
+                </button>
+                <button
+                  onClick={() => navigate('/car-booking')}
+                  className="bg-red-600 hover:bg-red-500 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.3)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)] whitespace-nowrap"
+                >
+                  Book Driver
+                </button>
               </div>
             </div>
           ))}
