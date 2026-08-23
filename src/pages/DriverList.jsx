@@ -84,38 +84,12 @@ export default function DriverList() {
   return (
     <div className="bg-black min-h-screen text-white font-outfit pb-24">
       {/* Hero Header */}
-      <div className="relative bg-gradient-to-b from-[#1a0000] via-black to-black pt-28 pb-16 px-6 md:px-12 lg:px-20">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute top-8 left-6 md:left-12 w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center text-2xl hover:bg-white/20 transition-colors border border-white/20"
-        >
-          &lt;
-        </button>
+      <div className="relative bg-gradient-to-b from-[#1a0000] via-black to-black pb-16 px-6 md:px-12 lg:px-20" style={{ paddingTop: '180px' }}>
 
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl xl:text-7xl font-black mb-4 tracking-tight">
-            Our <span className="text-[#E50914]">Drivers</span>
+          <h1 className="text-4xl md:text-5xl xl:text-6xl font-black tracking-tight">
+            Hire Your <span className="text-[#E50914]">Professional</span> Driver Today
           </h1>
-          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10">
-            Choose from 100+ professional, verified drivers across Bangladesh. Every driver is background-checked, experienced, and ready to serve you.
-          </p>
-
-          {/* Search Bar */}
-          <div className="max-w-xl mx-auto relative">
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name or vehicle type..."
-              className="w-full bg-white/10 border border-white/20 backdrop-blur-md rounded-full py-4 px-6 pl-14 text-white placeholder-gray-500 text-lg outline-none focus:border-[#E50914] focus:ring-2 focus:ring-[#E50914]/30 transition-all"
-            />
-            <svg className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-
-          <p className="text-gray-500 mt-4 text-sm">{filtered.length} drivers found</p>
         </div>
       </div>
 
