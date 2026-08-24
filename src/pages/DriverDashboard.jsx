@@ -1,9 +1,30 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+// Custom Map Icons using HTML/Emojis to avoid asset loading issues
+const driverIcon = new L.DivIcon({
+  html: '<div style="font-size: 28px; text-align: center; margin-top: -14px; margin-left: -14px; filter: drop-shadow(0 0 10px rgba(59,130,246,0.8));">🏎️</div>',
+  className: 'custom-icon',
+  iconSize: [28, 28]
+});
+
+const passengerIcon = new L.DivIcon({
+  html: '<div style="font-size: 28px; text-align: center; margin-top: -24px; margin-left: -14px; filter: drop-shadow(0 0 10px rgba(239,68,68,0.8)); animation: bounce 1s infinite;">🙋‍♂️</div>',
+  className: 'custom-icon',
+  iconSize: [28, 28]
+});
+
+// Dhaka Coordinates
+const driverPos = [23.8103, 90.4125]; // Central Dhaka
+const passengerPos = [23.7925, 90.4078]; // Gulshan area
 
 export default function DriverDashboard() {
   const [isOnline, setIsOnline] = useState(false);
   const [incomingRequest, setIncomingRequest] = useState(false);
+  const [tripAccepted, setTripAccepted] = useState(false);
   const [chatInput, setChatInput] = useState('');
   const [messages, setMessages] = useState([
     { sender: 'passenger', text: 'Hi! Are you nearby?', time: '10:42 AM' }
@@ -30,12 +51,13 @@ export default function DriverDashboard() {
   }, [isOnline]);
 
   const handleAccept = () => {
-    alert("Request Accepted! Navigating to pickup...");
+    setTripAccepted(true);
     setIncomingRequest(false);
   };
 
   const handleDecline = () => {
     setIncomingRequest(false);
+    setTripAccepted(false);
   };
 
   const handleSendMessage = (e) => {
@@ -185,38 +207,67 @@ export default function DriverDashboard() {
           </div>
 
           {/* 2. Map Area (2 cols) */}
-          <div className="lg:col-span-2 relative h-[550px] rounded-3xl overflow-hidden border border-white/10 group shadow-[0_0_40px_rgba(0,0,0,0.8)]">
-            {/* Map Placeholder Gradient/Grid */}
-            <div className="absolute inset-0 bg-[#0a0a0a]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+          <div className="lg:col-span-2 relative h-[550px] rounded-3xl overflow-hidden border border-white/10 group shadow-[0_0_40px_rgba(0,0,0,0.8)] z-0">
             
-            {/* Map Glowing Orbs */}
-            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/20 rounded-full blur-[80px] animate-pulse"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-red-600/10 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: '2s' }}></div>
-            
-            {/* Mock Navigation Path */}
-            {isOnline && (
-              <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ filter: 'drop-shadow(0 0 10px rgba(59,130,246,0.6))' }}>
-                <path d="M100,400 Q300,350 400,200 T700,100" fill="none" stroke="#3b82f6" strokeWidth="4" strokeDasharray="8 8" className="animate-pulse" />
-                <circle cx="100" cy="400" r="8" fill="#3b82f6" />
-                <circle cx="700" cy="100" r="10" fill="#ef4444" className="animate-bounce" />
-              </svg>
+            {/* Real Dhaka City Map using Leaflet */}
+            <MapContainer 
+              center={driverPos} 
+              zoom={13} 
+              zoomControl={false}
+              style={{ height: '100%', width: '100%', filter: 'invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%)' }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; OpenStreetMap'
+              />
+              
+              {/* Always show Driver Location */}
+              <Marker position={driverPos} icon={driverIcon}>
+                <Popup>Your Location</Popup>
+              </Marker>
+
+              {/* Show Passenger and Route when online and (requested OR accepted) */}
+              {isOnline && (incomingRequest || tripAccepted) && (
+                <>
+                  <Marker position={passengerPos} icon={passengerIcon}>
+                    <Popup>Passenger Location</Popup>
+                  </Marker>
+                  <Polyline positions={[driverPos, passengerPos]} color="#22c55e" weight={5} dashArray="10, 10" className="animate-pulse" />
+                </>
+              )}
+            </MapContainer>
+
+            {/* Navigation Overlay (when trip is accepted) */}
+            {isOnline && tripAccepted && (
+              <div className="absolute top-6 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-10">
+                <div className="bg-green-900/80 backdrop-blur-xl px-8 py-4 rounded-full border border-green-500 flex items-center gap-3 shadow-[0_0_30px_rgba(34,197,94,0.5)]">
+                  <div className="w-3 h-3 rounded-full bg-green-400 animate-ping"></div>
+                  <span className="font-bold tracking-widest text-green-100">NAVIGATING TO PICKUP...</span>
+                </div>
+              </div>
             )}
 
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0">
-              {!isOnline ? (
+            {/* Scanning Overlay (when Online but no request yet) */}
+            {isOnline && !incomingRequest && !tripAccepted && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10 bg-black/40">
+                <div className="bg-blue-900/50 backdrop-blur-xl px-8 py-4 rounded-full border border-blue-500/30 flex items-center gap-3 shadow-[0_0_30px_rgba(59,130,246,0.5)]">
+                  <div className="w-3 h-3 rounded-full bg-blue-400 animate-ping"></div>
+                  <span className="font-bold tracking-widest text-blue-100">SCANNING AREA...</span>
+                </div>
+              </div>
+            )}
+
+            {/* Offline Overlay */}
+            {!isOnline && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10 bg-black/60 backdrop-blur-[2px]">
                 <div className="bg-black/90 backdrop-blur-md px-8 py-4 rounded-full border border-white/10 flex items-center gap-3 shadow-2xl">
                   <div className="w-3 h-3 rounded-full bg-gray-500"></div>
                   <span className="font-bold tracking-widest text-gray-300">YOU ARE OFFLINE</span>
                 </div>
-              ) : (
-                <div className="bg-blue-900/30 backdrop-blur-xl px-8 py-4 rounded-full border border-blue-500/30 flex items-center gap-3 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
-                  <div className="w-3 h-3 rounded-full bg-blue-400 animate-ping"></div>
-                  <span className="font-bold tracking-widest text-blue-200">SCANNING AREA...</span>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
 
-            {/* Incoming Request Overlay */}
+            {/* Incoming Request Details Card (Floats over the map) */}
             {incomingRequest && (
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-md bg-black/95 backdrop-blur-xl border-2 border-red-500/50 rounded-3xl p-6 shadow-[0_0_50px_rgba(220,38,38,0.4)] z-20">
                 <div className="flex justify-between items-start mb-5">
@@ -238,7 +289,7 @@ export default function DriverDashboard() {
                     <div className="mt-1 w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]"></div>
                     <div>
                       <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Pickup</p>
-                      <p className="font-semibold text-gray-200">123 Main St, Downtown</p>
+                      <p className="font-semibold text-gray-200">Gulshan-2 Circle</p>
                     </div>
                   </div>
                   <div className="w-0.5 h-6 bg-gradient-to-b from-blue-500 to-red-500 ml-1.5 opacity-50"></div>
@@ -246,14 +297,14 @@ export default function DriverDashboard() {
                     <div className="mt-1 w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div>
                     <div>
                       <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Dropoff</p>
-                      <p className="font-semibold text-gray-200">456 Airport Rd, Terminal 2</p>
+                      <p className="font-semibold text-gray-200">Hazrat Shahjalal Int. Airport</p>
                     </div>
                   </div>
                 </div>
                 
                 <div className="flex items-center justify-between mb-6 px-2">
                   <span className="text-gray-400 font-bold uppercase text-sm tracking-wider">Est. Earnings</span>
-                  <span className="text-3xl font-black text-green-400">$24.50</span>
+                  <span className="text-3xl font-black text-green-400">৳450.00</span>
                 </div>
 
                 <div className="flex gap-4">
@@ -277,12 +328,12 @@ export default function DriverDashboard() {
             
             <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
               {[
-                { name: "Sarah M.", time: "10 mins ago", amount: "$18.20", status: "Completed", type: "Ride", tip: "+$3" },
-                { name: "David L.", time: "1 hr ago", amount: "$32.50", status: "Completed", type: "Ride", tip: "+$5" },
-                { name: "Emma W.", time: "2 hrs ago", amount: "$14.00", status: "Completed", type: "Ride" },
-                { name: "Mike T.", time: "4 hrs ago", amount: "$45.00", status: "Completed", type: "Delivery", tip: "+$10" },
-                { name: "Jessica R.", time: "5 hrs ago", amount: "$22.30", status: "Completed", type: "Ride", tip: "+$4" },
-                { name: "Alex B.", time: "6 hrs ago", amount: "$15.00", status: "Completed", type: "Ride" }
+                { name: "Sarah M.", time: "10 mins ago", amount: "৳320", status: "Completed", type: "Ride", tip: "+৳30" },
+                { name: "David L.", time: "1 hr ago", amount: "৳550", status: "Completed", type: "Ride", tip: "+৳50" },
+                { name: "Emma W.", time: "2 hrs ago", amount: "৳210", status: "Completed", type: "Ride" },
+                { name: "Mike T.", time: "4 hrs ago", amount: "৳800", status: "Completed", type: "Delivery", tip: "+৳100" },
+                { name: "Jessica R.", time: "5 hrs ago", amount: "৳420", status: "Completed", type: "Ride", tip: "+৳40" },
+                { name: "Alex B.", time: "6 hrs ago", amount: "৳250", status: "Completed", type: "Ride" }
               ].map((trip, i) => (
                 <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-black/40 border border-white/5 hover:bg-white/5 transition-colors group cursor-pointer relative overflow-hidden">
                   <div className="flex items-center gap-3">
