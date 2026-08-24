@@ -12,6 +12,7 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
 
   const VALID_EMAIL = 'mahi@gmail.com';
+  const VALID_DRIVER_EMAIL = 'driver@gmail.com';
   const VALID_PASSWORD = '123';
 
   const handleSignIn = (e) => {
@@ -20,7 +21,11 @@ export default function Auth() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+      if (email === VALID_DRIVER_EMAIL && password === VALID_PASSWORD) {
+        localStorage.setItem('userRole', 'driver');
+        navigate('/home');
+      } else if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+        localStorage.setItem('userRole', 'user');
         navigate('/home');
       } else {
         alert('Invalid email or password. Please try again.');

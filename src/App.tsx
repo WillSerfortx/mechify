@@ -24,6 +24,8 @@ import FuelRequest from './pages/FuelRequest';
 import DriverList from './pages/DriverList';
 import DriverChat from './pages/DriverChat';
 import SparePartsStore from './pages/SparePartsStore';
+import DriverDashboard from './pages/DriverDashboard';
+
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -72,6 +74,7 @@ export default function App() {
         <Route path="/card-payment" element={<Layout showNav={false} showFooter={false}><CardPayment /></Layout>} />
         <Route path="/payment-success" element={<Layout showNav={false} showFooter={false}><PaymentSuccess /></Layout>} />
         <Route path="/profile" element={<Layout><Profile /></Layout>} />
+        <Route path="/driver-dashboard" element={<Layout showNav={false} showFooter={false}><DriverDashboard /></Layout>} />
       </Routes>
     </BrowserRouter>
   );
