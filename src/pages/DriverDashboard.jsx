@@ -104,8 +104,8 @@ export default function DriverDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-outfit pt-24 pb-12 px-4 md:px-8">
-      <div className="max-w-[1600px] mx-auto relative z-10">
+    <div className="min-h-screen bg-[#050505] text-white font-outfit py-10 px-4 md:px-12 flex flex-col justify-center">
+      <div className="w-full max-w-[1800px] mx-auto relative z-10 my-auto">
         
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-6">
@@ -183,7 +183,7 @@ export default function DriverDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           
           {/* 1. Messenger Chat Widget (1 col) */}
-          <div className="lg:col-span-1 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl flex flex-col h-[550px] shadow-xl relative overflow-hidden">
+          <div className="lg:col-span-1 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl flex flex-col h-[750px] shadow-xl relative overflow-hidden">
             
             {/* --- LIST VIEW --- */}
             {!activeChat ? (
@@ -279,7 +279,7 @@ export default function DriverDashboard() {
           </div>
 
           {/* 2. Map Area (2 cols) */}
-          <div className="lg:col-span-2 relative h-[550px] rounded-3xl overflow-hidden border border-white/10 group shadow-[0_0_40px_rgba(0,0,0,0.8)] z-0">
+          <div className="lg:col-span-2 relative h-[750px] rounded-3xl overflow-hidden border border-white/10 group shadow-[0_0_40px_rgba(0,0,0,0.8)] z-0">
             
             {/* Real Dhaka City Map using Leaflet */}
             <MapContainer 
@@ -392,7 +392,7 @@ export default function DriverDashboard() {
           </div>
 
           {/* 3. Right Sidebar - Recent Activity (1 col) */}
-          <div className="lg:col-span-1 bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-xl flex flex-col h-[550px] shadow-xl">
+          <div className="lg:col-span-1 bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-xl flex flex-col h-[750px] shadow-xl">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-black">Recent Activity</h2>
               <span className="text-xs font-bold bg-white/10 px-3 py-1 rounded-full text-gray-300">Today</span>
