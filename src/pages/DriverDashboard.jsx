@@ -411,7 +411,13 @@ export default function DriverDashboard() {
                 { name: "Emma W.", time: "2 hrs ago", amount: "৳210", status: "Completed", type: "Ride" },
                 { name: "Mike T.", time: "4 hrs ago", amount: "৳800", status: "Completed", type: "Delivery", tip: "+৳100" },
                 { name: "Jessica R.", time: "5 hrs ago", amount: "৳420", status: "Completed", type: "Ride", tip: "+৳40" },
-                { name: "Alex B.", time: "6 hrs ago", amount: "৳250", status: "Completed", type: "Ride" }
+                { name: "Alex B.", time: "6 hrs ago", amount: "৳250", status: "Completed", type: "Ride" },
+                { name: "Rafiq A.", time: "7 hrs ago", amount: "৳380", status: "Completed", type: "Ride", tip: "+৳20" },
+                { name: "Nadia K.", time: "7.5 hrs ago", amount: "৳150", status: "Completed", type: "Ride" },
+                { name: "Farhan S.", time: "8 hrs ago", amount: "৳900", status: "Completed", type: "Delivery", tip: "+৳150" },
+                { name: "Tasnim Z.", time: "9 hrs ago", amount: "৳400", status: "Completed", type: "Ride" },
+                { name: "Karim H.", time: "10 hrs ago", amount: "৳620", status: "Completed", type: "Ride", tip: "+৳50" },
+                { name: "Sonia P.", time: "11 hrs ago", amount: "৳280", status: "Completed", type: "Ride" }
               ].map((trip, i) => (
                 <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-black/40 border border-white/5 hover:bg-white/5 transition-colors group cursor-pointer relative overflow-hidden">
                   <div className="flex items-center gap-3">
