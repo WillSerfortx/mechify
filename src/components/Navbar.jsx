@@ -27,7 +27,7 @@ export default function Navbar() {
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
       scrolled ? 'bg-black/95 backdrop-blur-md border-b border-white/10 shadow-lg' : 'bg-black/70 backdrop-blur-sm'
     }`}>
-      <div className="max-w-[1920px] mx-auto flex items-center justify-between px-6 md:px-12 py-3">
+      <div className="max-w-[1920px] mx-auto flex items-center justify-between px-6 md:px-12 py-5">
 
         {/* ── Logo — matches Figma red M + truck ── */}
         <Link to="/landing" className="flex items-center gap-3 group">
