@@ -176,7 +176,7 @@ export default function DriverDashboard() {
             { label: "Total Trips", value: "14", trend: "4 ongoing requests in area", color: "from-blue-500/20 to-cyan-500/5", border: "border-blue-500/30", text: "text-blue-400" },
             { label: "Hours Online", value: "5h 20m", trend: "Target: 8 hours", color: "from-purple-500/20 to-pink-500/5", border: "border-purple-500/30", text: "text-purple-400" }
           ].map((stat, i) => (
-            <div key={i} className={`bg-gradient-to-br ${stat.color} border ${stat.border} rounded-3xl p-6 backdrop-blur-xl hover:scale-105 transition-transform duration-300 shadow-lg relative overflow-hidden group`}>
+            <div key={i} className={`bg-gradient-to-br ${stat.color} border ${stat.border} rounded-3xl p-6 backdrop-blur-xl hover:scale-105 transition-transform duration-300 shadow-lg relative overflow-hidden group flex flex-col items-center justify-center text-center`}>
               <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <h3 className="text-gray-400 font-semibold mb-2 uppercase tracking-wider text-xs">{stat.label}</h3>
               <div className="text-4xl font-black mb-2">{stat.value}</div>
