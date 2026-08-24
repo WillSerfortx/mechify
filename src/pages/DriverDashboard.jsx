@@ -18,26 +18,38 @@ const passengerIcon = new L.DivIcon({
 });
 
 // Dhaka Coordinates
-const driverPos = [23.8103, 90.4125]; // Central Dhaka
-const passengerPos = [23.7925, 90.4078]; // Gulshan area
+const driverPos = [23.8103, 90.4125];
+const passengerPos = [23.7925, 90.4078];
+
+// Generate 100 Mock Passengers for the Chat List
+const firstNames = ["Sarah", "David", "Emma", "Mike", "Jessica", "Alex", "John", "Rachel", "Tom", "Lisa", "Chris", "Anna", "Mark", "Emily", "Daniel"];
+const mockPassengers = Array.from({ length: 100 }).map((_, i) => ({
+  id: i + 1,
+  name: `${firstNames[i % firstNames.length]} ${String.fromCharCode(65 + (i % 26))}.`,
+  avatar: `https://i.pravatar.cc/150?img=${(i % 70) + 1}`,
+  lastMessage: i % 3 === 0 ? "Are you nearby?" : i % 2 === 0 ? "Okay, waiting outside!" : "I am at the main entrance.",
+  time: `${10 - (i % 10)}:${(i * 13) % 60 < 10 ? '0' : ''}${(i * 13) % 60} AM`,
+  unread: Math.random() > 0.8
+}));
 
 export default function DriverDashboard() {
   const [isOnline, setIsOnline] = useState(false);
   const [incomingRequest, setIncomingRequest] = useState(false);
   const [tripAccepted, setTripAccepted] = useState(false);
+  
+  // Messenger State
+  const [activeChat, setActiveChat] = useState(null); // null = list view, object = chat view
   const [chatInput, setChatInput] = useState('');
-  const [messages, setMessages] = useState([
-    { sender: 'passenger', text: 'Hi! Are you nearby?', time: '10:42 AM' }
-  ]);
+  const [messages, setMessages] = useState([]);
   
   const chatScrollRef = useRef(null);
 
-  // Auto-scroll chat
+  // Auto-scroll chat when in active chat view
   useEffect(() => {
-    if (chatScrollRef.current) {
+    if (chatScrollRef.current && activeChat) {
       chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, activeChat]);
 
   // Simulate an incoming request shortly after going online
   useEffect(() => {
@@ -60,6 +72,19 @@ export default function DriverDashboard() {
     setTripAccepted(false);
   };
 
+  const openChat = (passenger) => {
+    setActiveChat(passenger);
+    setMessages([
+      { sender: 'passenger', text: passenger.lastMessage, time: passenger.time }
+    ]);
+  };
+
+  const closeChat = () => {
+    setActiveChat(null);
+    setMessages([]);
+    setChatInput('');
+  };
+
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
@@ -72,7 +97,7 @@ export default function DriverDashboard() {
     setTimeout(() => {
       setMessages(prev => [...prev, { 
         sender: 'passenger', 
-        text: 'Got it, waiting outside!', 
+        text: 'Got it, thanks!', 
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
       }]);
     }, 2500);
@@ -140,8 +165,8 @@ export default function DriverDashboard() {
         {/* ── Stats Grid (4 Columns) ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {[
-            { label: "Today's Earnings", value: "$142.50", trend: "+12% from yesterday", color: "from-green-500/20 to-emerald-500/5", border: "border-green-500/30", text: "text-green-400" },
-            { label: "Total Tips", value: "$28.00", trend: "from 8 trips", color: "from-yellow-500/20 to-amber-500/5", border: "border-yellow-500/30", text: "text-yellow-400" },
+            { label: "Today's Earnings", value: "৳14,250", trend: "+12% from yesterday", color: "from-green-500/20 to-emerald-500/5", border: "border-green-500/30", text: "text-green-400" },
+            { label: "Total Tips", value: "৳2,800", trend: "from 8 trips", color: "from-yellow-500/20 to-amber-500/5", border: "border-yellow-500/30", text: "text-yellow-400" },
             { label: "Total Trips", value: "14", trend: "4 ongoing requests in area", color: "from-blue-500/20 to-cyan-500/5", border: "border-blue-500/30", text: "text-blue-400" },
             { label: "Hours Online", value: "5h 20m", trend: "Target: 8 hours", color: "from-purple-500/20 to-pink-500/5", border: "border-purple-500/30", text: "text-purple-400" }
           ].map((stat, i) => (
@@ -157,53 +182,100 @@ export default function DriverDashboard() {
         {/* ── Main Content Area (4-Column Grid Layout) ── */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           
-          {/* 1. Passenger Chatbar (1 col) */}
-          <div className="lg:col-span-1 bg-white/5 border border-white/10 rounded-3xl p-5 backdrop-blur-xl flex flex-col h-[550px] shadow-xl relative overflow-hidden">
-            <div className="flex items-center gap-3 mb-4 pb-4 border-b border-white/10">
-              <div className="relative">
-                <img src="https://i.pravatar.cc/150?img=5" alt="Passenger" className="w-10 h-10 rounded-full border border-white/20" />
-                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border border-black rounded-full"></div>
-              </div>
-              <div>
-                <h3 className="font-bold text-white text-sm">Sarah (Passenger)</h3>
-                <p className="text-xs text-gray-400">Current Trip</p>
-              </div>
-            </div>
-
-            {/* Chat Messages */}
-            <div ref={chatScrollRef} className="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-2 mb-4">
-              {messages.map((msg, idx) => (
-                <div key={idx} className={`flex flex-col ${msg.sender === 'driver' ? 'items-end' : 'items-start'}`}>
-                  <div className={`px-4 py-2.5 max-w-[85%] rounded-2xl text-sm shadow-sm ${
-                    msg.sender === 'driver' 
-                      ? 'bg-red-600 text-white rounded-br-none' 
-                      : 'bg-white/10 text-gray-200 border border-white/5 rounded-bl-none'
-                  }`}>
-                    {msg.text}
+          {/* 1. Messenger Chat Widget (1 col) */}
+          <div className="lg:col-span-1 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl flex flex-col h-[550px] shadow-xl relative overflow-hidden">
+            
+            {/* --- LIST VIEW --- */}
+            {!activeChat ? (
+              <div className="flex flex-col h-full">
+                <div className="p-5 border-b border-white/10 bg-black/20">
+                  <h3 className="font-black text-xl text-white">Messages</h3>
+                  <div className="relative mt-4">
+                    <input type="text" placeholder="Search passengers..." className="w-full bg-white/5 border border-white/10 rounded-full py-2.5 pl-10 pr-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors" />
+                    <svg className="w-4 h-4 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                   </div>
-                  <span className="text-[9px] text-gray-500 mt-1 mx-1 font-bold">{msg.time}</span>
                 </div>
-              ))}
-            </div>
+                
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
+                  {mockPassengers.map((passenger) => (
+                    <div 
+                      key={passenger.id} 
+                      onClick={() => openChat(passenger)}
+                      className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/10 transition-all duration-200 cursor-pointer group"
+                    >
+                      <div className="relative flex-shrink-0">
+                        <img src={passenger.avatar} alt={passenger.name} className="w-12 h-12 rounded-full object-cover border border-white/10 group-hover:border-white/30 transition-colors" />
+                        {passenger.unread && <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-[#151515] rounded-full"></div>}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-baseline mb-0.5">
+                          <h4 className={`text-sm truncate ${passenger.unread ? 'font-bold text-white' : 'font-medium text-gray-200'}`}>{passenger.name}</h4>
+                          <span className={`text-[10px] flex-shrink-0 ml-2 ${passenger.unread ? 'text-red-400 font-bold' : 'text-gray-500'}`}>{passenger.time}</span>
+                        </div>
+                        <p className={`text-xs truncate ${passenger.unread ? 'font-semibold text-gray-300' : 'text-gray-500'}`}>
+                          {passenger.lastMessage}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              
+            /* --- ACTIVE CHAT VIEW --- */
+              <div className="flex flex-col h-full animate-slideInRight">
+                <div className="p-4 border-b border-white/10 bg-black/40 flex items-center gap-3 shadow-md z-10">
+                  <button onClick={closeChat} className="p-2 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                  </button>
+                  <div className="relative">
+                    <img src={activeChat.avatar} alt={activeChat.name} className="w-10 h-10 rounded-full border border-white/20" />
+                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-black rounded-full"></div>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-white text-sm">{activeChat.name}</h3>
+                    <p className="text-[10px] text-green-400 font-bold uppercase tracking-wider">Active Now</p>
+                  </div>
+                </div>
 
-            {/* Chat Input */}
-            <form onSubmit={handleSendMessage} className="relative mt-auto">
-              <input 
-                type="text" 
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                placeholder="Message passenger..." 
-                className="w-full bg-black/50 border border-white/10 rounded-full py-3 pl-4 pr-12 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors"
-              />
-              <button 
-                type="submit" 
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-500 transition-colors"
-              >
-                <svg className="w-4 h-4 text-white -ml-0.5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                </svg>
-              </button>
-            </form>
+                {/* Chat Messages */}
+                <div ref={chatScrollRef} className="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-4">
+                  {messages.map((msg, idx) => (
+                    <div key={idx} className={`flex flex-col ${msg.sender === 'driver' ? 'items-end' : 'items-start'}`}>
+                      <div className={`px-4 py-2.5 max-w-[85%] rounded-2xl text-sm shadow-sm ${
+                        msg.sender === 'driver' 
+                          ? 'bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-br-none' 
+                          : 'bg-white/10 text-gray-200 border border-white/5 rounded-bl-none'
+                      }`}>
+                        {msg.text}
+                      </div>
+                      <span className="text-[9px] text-gray-500 mt-1 mx-1 font-bold">{msg.time}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Chat Input */}
+                <div className="p-4 border-t border-white/10 bg-black/20">
+                  <form onSubmit={handleSendMessage} className="relative">
+                    <input 
+                      type="text" 
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      placeholder="Message..." 
+                      className="w-full bg-black/50 border border-white/10 rounded-full py-3 pl-4 pr-12 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors"
+                    />
+                    <button 
+                      type="submit" 
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-500 transition-colors"
+                    >
+                      <svg className="w-4 h-4 text-white -ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                      </svg>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* 2. Map Area (2 cols) */}
