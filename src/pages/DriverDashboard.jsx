@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -33,6 +33,7 @@ const mockPassengers = Array.from({ length: 100 }).map((_, i) => ({
 }));
 
 export default function DriverDashboard() {
+  const navigate = useNavigate();
   const [isOnline, setIsOnline] = useState(false);
   const [incomingRequest, setIncomingRequest] = useState(false);
   const [tripAccepted, setTripAccepted] = useState(false);
@@ -72,6 +73,11 @@ export default function DriverDashboard() {
     setTripAccepted(false);
   };
 
+  const handleSignOut = () => {
+    localStorage.removeItem('userRole');
+    navigate('/auth');
+  };
+
   const openChat = (passenger) => {
     setActiveChat(passenger);
     setMessages([
@@ -104,8 +110,8 @@ export default function DriverDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-outfit py-10 px-4 md:px-12 flex flex-col justify-center">
-      <div className="w-full max-w-[1800px] mx-auto relative z-10 my-auto">
+    <div className="min-h-screen bg-[#050505] text-white font-outfit py-10 px-4 md:px-8 flex flex-col justify-center">
+      <div className="w-full mx-auto relative z-10 my-auto">
         
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-6">
@@ -429,10 +435,13 @@ export default function DriverDashboard() {
               ))}
             </div>
             
-            <div className="mt-4 pt-4 border-t border-white/10">
-              <Link to="/home" className="block text-center py-3 text-sm font-bold uppercase tracking-widest text-gray-400 hover:text-white transition-colors">
-                ← Exit Dashboard
+            <div className="mt-4 pt-4 border-t border-white/10 flex gap-4">
+              <Link to="/home" className="flex-1 text-center py-3 text-sm font-bold uppercase tracking-widest text-gray-400 hover:text-white transition-colors bg-white/5 rounded-xl hover:bg-white/10">
+                Home
               </Link>
+              <button onClick={handleSignOut} className="flex-1 text-center py-3 text-sm font-bold uppercase tracking-widest text-red-400 hover:text-white hover:bg-red-500/20 transition-colors bg-white/5 rounded-xl">
+                Sign Out
+              </button>
             </div>
           </div>
 
