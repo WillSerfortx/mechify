@@ -7,7 +7,7 @@ const heroBg = 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=1
 // ── Service card images
 const serviceImages = {
   homeService:    'https://images.unsplash.com/photo-1625047509248-ec889cbff17f?w=600&h=400&fit=crop',
-  emergency:      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop',
+  emergency:      '/images/roadside-assistance.png',
   spareParts:     'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=600&h=400&fit=crop',
   carRental:      'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=400&h=250&fit=crop',
   workshop:       'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=400&h=250&fit=crop',
