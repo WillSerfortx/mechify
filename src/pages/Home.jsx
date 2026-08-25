@@ -140,7 +140,7 @@ export default function Home() {
         </div>
 
         {/* Down arrow */}
-        <div className={`flex justify-center mb-10 ${visible['services-section'] ? 'animate-float' : 'opacity-0'}`}>
+        <div className={`flex justify-center mb-20 ${visible['services-section'] ? 'animate-float' : 'opacity-0'}`}>
           <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
           </svg>
