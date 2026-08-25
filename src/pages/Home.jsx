@@ -180,12 +180,11 @@ export default function Home() {
         </div>
 
         {/* GUARANTEED CLEAR GAP UNDER EMERGENCY CARDS */}
-        <div className="w-full h-[150px] md:h-[200px] bg-transparent flex items-center justify-center"></div>
+        <div className="w-full h-[150px] md:h-[200px] bg-transparent flex items-center justify-center">
+          <h2 className={`text-4xl md:text-6xl font-black text-white text-center ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>Other Services</h2>
+        </div>
 
         {/* 4 Small service cards */}
-        <div className={`text-center mb-10 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
-          <h2 className="text-4xl md:text-6xl font-black text-white">Other Services</h2>
-        </div>
         <div className="flex flex-wrap justify-center items-center gap-6 w-full max-w-[1800px] mx-auto">
           {[
             { name: 'Home Service',         icon: '🔧', img: serviceImages.homeService,  link: '/workshop', badge: null },
