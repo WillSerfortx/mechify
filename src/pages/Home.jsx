@@ -150,7 +150,7 @@ export default function Home() {
         <div className="flex flex-wrap justify-center items-center gap-6 mb-8 w-full max-w-[1800px] mx-auto">
           {[
             { name: 'Roadside Assistance',  icon: 'tow', img: serviceImages.emergency, link: '/services',  badge: null, desc: 'Instant emergency support with live location tracking and towing if required.' },
-            { name: 'Fuel Delivery',        icon: '⛽', img: serviceImages.fuelDelivery, link: '/fuel-terms', badge: 'Emergency' },
+            { name: 'Fuel Delivery',        icon: 'gas', img: serviceImages.fuelDelivery, link: '/fuel-terms', badge: null, desc: 'Doorstep fuel delivery for emergencies or added convenience.' },
             { name: 'Emergency Workshops near me', icon: '🏭', img: serviceImages.workshop,     link: '/workshop',  badge: null },
           ].map((s, i) => (
             <Link
@@ -180,6 +180,34 @@ export default function Home() {
                   <div className="absolute top-6 left-6 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <svg className="w-10 h-10 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" viewBox="0 0 640 512" fill="currentColor">
                       <path d="M48 0C21.5 0 0 21.5 0 48V368c0 26.5 21.5 48 48 48H64c0 53 43 96 96 96s96-43 96-96H384c0 53 43 96 96 96s96-43 96-96h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V288 256 237.3c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7H416V48c0-26.5-21.5-48-48-48H48zM416 160h50.7L544 237.3V256H416V160zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+                    </svg>
+                  </div>
+
+                  {/* White bottom info area */}
+                  <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-white p-8 flex flex-col justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                    <h3 className="text-black font-bold text-3xl md:text-4xl mb-3">{s.name}</h3>
+                    <p className="text-gray-500 text-base md:text-lg leading-snug font-light">
+                      {s.desc}
+                    </p>
+                  </div>
+                </div>
+              ) : s.name === 'Fuel Delivery' ? (
+                <div className="absolute inset-0 w-full h-full bg-white rounded-[2rem] overflow-hidden">
+                  {/* Image container */}
+                  <div className="absolute top-0 left-0 right-0 h-full group-hover:h-[65%] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                    <img src={s.img} alt={s.name} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
+                  </div>
+                  
+                  {/* Large bottom center text */}
+                  <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                    <span className="text-4xl font-black text-red-500 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]" style={{WebkitTextStroke: '1px black', WebkitTextFillColor: '#ef4444'}}>Emergency</span>
+                  </div>
+                  
+                  {/* Small top-left icon (persistent in both states) */}
+                  <div className="absolute top-6 left-6 pointer-events-none">
+                    <svg className="w-10 h-10 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" viewBox="0 0 512 512" fill="currentColor">
+                      <path d="M32 64C32 28.7 60.7 0 96 0H256c35.3 0 64 28.7 64 64V256h8.5c11.8 0 20.6 11.6 17.5 23.2l-11.3 43.1L383 318c-9.1-34.9-3-72.1 16.7-101.4C417.8 190.2 443.3 176 470 176H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H470c-9.9 0-19.4 5.3-25.1 14.1c-13.6 20.9-17.7 46.5-11.4 70.8L448.9 416H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H384c-11.6 0-22.3-6.2-28-16.4l-45.7-81.5c-5.7-10.2-5.7-22.7 0-32.9L320 336v64c0 61.9-50.1 112-112 112H96c-35.3 0-64-28.7-64-64V64zM256 128V64H96v64H256zM96 192v96H256V192H96z"/>
                     </svg>
                   </div>
 
