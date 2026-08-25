@@ -253,7 +253,7 @@ export default function Home() {
           {[
             { name: 'Home Service',         icon: '🔧', img: serviceImages.homeService,  link: '/workshop', badge: null },
             { name: 'Marketplace',          icon: 'cart', img: serviceImages.spareParts, link: '/spare-parts', badge: null, desc: 'An online platform to browse, compare, and order vehicle parts with doorstep delivery.' },
-            { name: 'Car Rental',           icon: '🚗', img: serviceImages.carRental,    link: '/car-rental', badge: null },
+            { name: 'Rent a Car',           icon: 'key', img: serviceImages.carRental,    link: '/car-rental', badge: null, desc: 'Temporary vehicle rental options with or without a driver.' },
             { name: 'Driver Hire',          icon: '👨‍✈️', img: serviceImages.driverHire,  link: '/idriver', badge: null },
           ].map((s, i) => (
             <Link
@@ -263,7 +263,7 @@ export default function Home() {
               className={`flex-none w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(25%-1.5rem)] max-w-[450px] relative rounded-[2rem] overflow-hidden group aspect-video cursor-pointer block ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
               style={{ animationDelay: `${(i + 3) * 0.1}s` }}
             >
-              {s.name === 'Marketplace' ? (
+              {s.name === 'Marketplace' || s.name === 'Rent a Car' ? (
                 <div className="absolute inset-0 w-full h-full bg-white rounded-[2rem] overflow-hidden">
                   {/* Image container */}
                   <div className="absolute top-0 left-0 right-0 h-full group-hover:h-[65%] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
@@ -271,18 +271,30 @@ export default function Home() {
                     <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
                   </div>
                   
-                  {/* Large center shopping cart */}
+                  {/* Large center icon */}
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                    <svg className="w-20 h-20 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
+                    {s.name === 'Marketplace' ? (
+                      <svg className="w-20 h-20 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                      </svg>
+                    ) : (
+                      <svg className="w-20 h-20 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" fill="currentColor" viewBox="0 0 24 24">
+                        <path fillRule="evenodd" d="M12 1.5a5.25 5.25 0 00-3.322 9.324l-6.538 6.538a.75.75 0 00-.22.53v1.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.53-.22l1.724-1.724A5.25 5.25 0 1012 1.5zm-2.25 4.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
                   </div>
                   
-                  {/* Small top-left shopping cart */}
+                  {/* Small top-left icon */}
                   <div className="absolute top-6 left-6 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <svg className="w-8 h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
+                    {s.name === 'Marketplace' ? (
+                      <svg className="w-8 h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                      </svg>
+                    ) : (
+                      <svg className="w-8 h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" fill="currentColor" viewBox="0 0 24 24">
+                        <path fillRule="evenodd" d="M12 1.5a5.25 5.25 0 00-3.322 9.324l-6.538 6.538a.75.75 0 00-.22.53v1.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.53-.22l1.724-1.724A5.25 5.25 0 1012 1.5zm-2.25 4.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
                   </div>
 
                   {/* White bottom info area */}
