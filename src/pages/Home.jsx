@@ -21,7 +21,7 @@ const rentCars = [
   { name: 'Lamborghini',model: '2023', speed: '218mph', auto: '7-speed', engine: '631hp', img: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=800' },
   { name: 'Bugatti',    model: '2023', speed: '304mph', auto: '7-speed', engine: '1500hp',img: '/custom-bugatti.png' },
   { name: 'Mercedes',   model: '2023', speed: '190mph', auto: '9-speed', engine: '577hp', img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=800' },
-  { name: 'Rolls Royce',model: '2023', speed: '155mph', auto: '8-speed', engine: '563hp', img: 'https://images.unsplash.com/photo-1631899144365-1d6ec6eefaf7?auto=format&fit=crop&q=80&w=800' },
+  { name: 'Rolls Royce',model: '2023', speed: '155mph', auto: '8-speed', engine: '563hp', img: '/custom-rolls-royce.png' },
   { name: 'Ferrari',    model: '2023', speed: '211mph', auto: '7-speed', engine: '963hp', img: '/custom-ferrari.jpg' },
 ];
 
