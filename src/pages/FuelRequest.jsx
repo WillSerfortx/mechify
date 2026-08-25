@@ -101,7 +101,7 @@ export default function FuelRequest() {
           {/* Left image — fuel pump */}
           <div className="w-[36%] h-full overflow-hidden">
             <img 
-              src="/images/fuel-delivery.png" 
+              src="/images/fuel/hero-left.png" 
               alt="Fuel pump" 
               className="w-full h-full object-cover"
             />
@@ -109,7 +109,7 @@ export default function FuelRequest() {
           {/* Center image — silos */}
           <div className="w-[28%] h-[72%] self-end overflow-hidden">
             <img 
-              src="https://images.unsplash.com/photo-1628189689917-c8340d859e99?w=800&h=600&fit=crop" 
+              src="/images/fuel/hero-center.png" 
               alt="Fuel silos" 
               className="w-full h-full object-cover"
             />
@@ -117,7 +117,7 @@ export default function FuelRequest() {
           {/* Right image — tanker truck */}
           <div className="w-[36%] h-full overflow-hidden self-end">
             <img 
-              src="https://images.unsplash.com/photo-1616788417724-4f248bb017b8?w=800&h=1200&fit=crop" 
+              src="/images/fuel/hero-right.png" 
               alt="Fuel tanker" 
               className="w-full h-full object-cover"
             />
@@ -359,7 +359,7 @@ export default function FuelRequest() {
         <div className="hidden lg:block w-1/3">
           <div className="sticky top-32 w-full h-[900px] overflow-hidden">
              <img 
-               src="https://images.unsplash.com/photo-1616788417724-4f248bb017b8?w=800&h=1200&fit=crop" 
+               src="/images/fuel/hero-right.png" 
                alt="Fuel Tanker on Road" 
                className="w-full h-full object-cover" 
              />
