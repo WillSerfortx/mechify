@@ -17,12 +17,12 @@ const serviceImages = {
 
 // ── Car For Rents data (matches Figma)
 const rentCars = [
-  { name: 'McLaren',    model: '2020', speed: '212mph', auto: '7-speed', engine: '710hp', img: 'https://images.unsplash.com/photo-1558981852-426c373d4a83?w=400&h=240&fit=crop' },
-  { name: 'Lamborghini',model: '2021', speed: '218mph', auto: '7-speed', engine: '631hp', img: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&h=240&fit=crop' },
-  { name: 'Bugatti',    model: '2022', speed: '304mph', auto: '7-speed', engine: '1500hp',img: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&h=240&fit=crop' },
-  { name: 'Mercedes',   model: '2023', speed: '190mph', auto: '9-speed', engine: '577hp', img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=240&fit=crop' },
-  { name: 'Rolls Royce',model: '2023', speed: '155mph', auto: '8-speed', engine: '563hp', img: 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=400&h=240&fit=crop' },
-  { name: 'La Ferrari', model: '2017', speed: '211mph', auto: '7-speed', engine: '963hp', img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&h=240&fit=crop' },
+  { name: 'McLaren',    model: '2023', speed: '212mph', auto: '7-speed', engine: '710hp', img: 'https://images.unsplash.com/photo-1621255855268-d0aeb8c9d1bd?auto=format&fit=crop&q=80&w=800' },
+  { name: 'Lamborghini',model: '2023', speed: '218mph', auto: '7-speed', engine: '631hp', img: 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=800' },
+  { name: 'Bugatti',    model: '2023', speed: '304mph', auto: '7-speed', engine: '1500hp',img: 'https://images.unsplash.com/photo-1600705607513-e4092b3a199d?auto=format&fit=crop&q=80&w=800' },
+  { name: 'Mercedes',   model: '2023', speed: '190mph', auto: '9-speed', engine: '577hp', img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=800' },
+  { name: 'Rolls Royce',model: '2023', speed: '155mph', auto: '8-speed', engine: '563hp', img: 'https://images.unsplash.com/photo-1631899144365-1d6ec6eefaf7?auto=format&fit=crop&q=80&w=800' },
+  { name: 'Ferrari',    model: '2023', speed: '211mph', auto: '7-speed', engine: '963hp', img: 'https://images.unsplash.com/photo-1592198084033-aade902d1aae?auto=format&fit=crop&q=80&w=800' },
 ];
 
 export default function Home() {
@@ -246,20 +246,33 @@ export default function Home() {
               <Link
                 to="/car-rental"
                 key={i}
-                className="flex-shrink-0 w-72 md:w-80 lg:w-96 bg-white rounded-3xl overflow-hidden hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_15px_50px_rgba(255,255,255,0.2)] group/card"
+                className="flex-shrink-0 w-72 md:w-80 lg:w-96 bg-white/5 border border-white/10 backdrop-blur-2xl rounded-3xl overflow-hidden hover:-translate-y-4 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(220,38,38,0.2)] group/card hover:bg-white/10"
               >
                 {/* Car image */}
-                <div className="aspect-[16/10] overflow-hidden bg-gray-100">
-                  <img src={car.img} alt={car.name} className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500" />
+                <div className="aspect-[16/10] overflow-hidden bg-black/50 relative">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+                  <img src={car.img} alt={car.name} className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700 relative z-0" />
                 </div>
                 {/* Details */}
                 <div className="p-6">
-                  <h3 className="text-gray-900 font-black text-2xl mb-4 text-center">{car.name}</h3>
-                  <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 font-semibold">
-                    <span className="bg-gray-100 rounded-xl px-3 py-2 text-center">Model: {car.model}</span>
-                    <span className="bg-gray-100 rounded-xl px-3 py-2 text-center">Speed: {car.speed}</span>
-                    <span className="bg-gray-100 rounded-xl px-3 py-2 text-center">Auto: {car.auto}</span>
-                    <span className="bg-gray-100 rounded-xl px-3 py-2 text-center">Engine: {car.engine}</span>
+                  <h3 className="text-white font-black text-2xl mb-4 text-center group-hover/card:text-red-500 transition-colors duration-300">{car.name}</h3>
+                  <div className="grid grid-cols-2 gap-3 text-sm text-gray-400 font-bold uppercase tracking-wider text-[10px] xl:text-xs">
+                    <div className="bg-black/50 border border-white/5 rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
+                      <span className="text-gray-500">Model</span>
+                      <span className="text-white">{car.model}</span>
+                    </div>
+                    <div className="bg-black/50 border border-white/5 rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
+                      <span className="text-gray-500">Speed</span>
+                      <span className="text-white">{car.speed}</span>
+                    </div>
+                    <div className="bg-black/50 border border-white/5 rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
+                      <span className="text-gray-500">Auto</span>
+                      <span className="text-white">{car.auto}</span>
+                    </div>
+                    <div className="bg-black/50 border border-white/5 rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
+                      <span className="text-gray-500">Engine</span>
+                      <span className="text-white">{car.engine}</span>
+                    </div>
                   </div>
                 </div>
               </Link>
