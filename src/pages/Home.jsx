@@ -189,7 +189,7 @@ export default function Home() {
         <div className="flex flex-wrap justify-center items-center gap-6 w-full max-w-[1800px] mx-auto">
           {[
             { name: 'Home Service',         icon: '🔧', img: serviceImages.homeService,  link: '/workshop', badge: null },
-            { name: 'Spare Parts Store',    icon: '⚙️', img: serviceImages.spareParts,   link: '/spare-parts', badge: null },
+            { name: 'Marketplace',          icon: 'cart', img: serviceImages.spareParts, link: '/spare-parts', badge: null, desc: 'An online platform to browse, compare, and order vehicle parts with doorstep delivery.' },
             { name: 'Car Rental',           icon: '🚗', img: serviceImages.carRental,    link: '/car-rental', badge: null },
             { name: 'Driver Hire',          icon: '👨‍✈️', img: serviceImages.driverHire,  link: '/idriver', badge: null },
           ].map((s, i) => (
@@ -200,18 +200,52 @@ export default function Home() {
               className={`flex-none w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(25%-1.5rem)] max-w-[450px] relative rounded-[2rem] overflow-hidden group aspect-video cursor-pointer block ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
               style={{ animationDelay: `${(i + 3) * 0.1}s` }}
             >
-              <img src={s.img} alt={s.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-              {/* Emergency badge */}
-              {s.badge && (
-                <div className="absolute top-4 right-4 bg-yellow-400 text-black text-xs font-black px-4 py-1.5 rounded-full uppercase">
-                  {s.badge}
+              {s.name === 'Marketplace' ? (
+                <div className="absolute inset-0 w-full h-full bg-white rounded-[2rem] overflow-hidden">
+                  {/* Image container */}
+                  <div className="absolute top-0 left-0 right-0 h-full group-hover:h-[65%] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                    <img src={s.img} alt={s.name} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
+                  </div>
+                  
+                  {/* Large center shopping cart */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                    <svg className="w-20 h-20 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                  </div>
+                  
+                  {/* Small top-left shopping cart */}
+                  <div className="absolute top-6 left-6 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <svg className="w-8 h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                  </div>
+
+                  {/* White bottom info area */}
+                  <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-white p-6 flex flex-col justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                    <h3 className="text-black font-bold text-xl md:text-2xl mb-1">{s.name}</h3>
+                    <p className="text-gray-500 text-xs md:text-sm leading-snug font-light">
+                      {s.desc}
+                    </p>
+                  </div>
                 </div>
+              ) : (
+                <>
+                  <img src={s.img} alt={s.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                  {/* Emergency badge */}
+                  {s.badge && (
+                    <div className="absolute top-4 right-4 bg-yellow-400 text-black text-xs font-black px-4 py-1.5 rounded-full uppercase">
+                      {s.badge}
+                    </div>
+                  )}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end gap-3">
+                    <span className="text-3xl">{s.icon}</span>
+                    <h3 className="text-white font-black text-xl">{s.name}</h3>
+                  </div>
+                </>
               )}
-              <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end gap-3">
-                <span className="text-3xl">{s.icon}</span>
-                <h3 className="text-white font-black text-xl">{s.name}</h3>
-              </div>
             </Link>
           ))}
         </div>
