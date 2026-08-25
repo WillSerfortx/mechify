@@ -133,7 +133,7 @@ export default function Home() {
           SERVICES SECTION
           3 large + 4 small — matches Figma Desktop-16
       ══════════════════════════════════════════ */}
-      <section className="pt-20 pb-32 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center mb-16" id="services-section" data-animate>
+      <section className="pt-20 pb-32 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center mb-40" id="services-section" data-animate>
         {/* Heading */}
         <div className={`text-center mb-6 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
           <h2 className="text-5xl md:text-7xl font-black text-white">Services</h2>
@@ -216,7 +216,7 @@ export default function Home() {
           CAR FOR RENTS — Matches Figma
           White cards with car image + specs
       ══════════════════════════════════════════ */}
-      <section className="py-16 overflow-hidden" id="cars-section" data-animate>
+      <section className="py-20 mb-40 overflow-hidden" id="cars-section" data-animate>
         {/* Curved top edge (ellipse effect from Figma) */}
         <div className="relative bg-black pb-4">
           <div
