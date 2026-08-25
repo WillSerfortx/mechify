@@ -213,7 +213,9 @@ export default function Home() {
       </section>
 
       {/* GUARANTEED CLEAR GAP BETWEEN SERVICES AND CARS */}
-      <div className="w-full h-[150px] md:h-[200px] lg:h-[250px] bg-transparent"></div>
+      <div className="w-full h-[150px] md:h-[200px] lg:h-[250px] bg-transparent flex items-center justify-center">
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white text-center">Car For Rents</h2>
+      </div>
 
       {/* ══════════════════════════════════════════
           CAR FOR RENTS — Matches Figma
@@ -233,7 +235,6 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
               </svg>
             </div>
-            <h2 className="text-4xl md:text-6xl font-black text-white">Car For Rents</h2>
           </div>
         </div>
 
@@ -268,7 +269,26 @@ export default function Home() {
       </section>
 
       {/* GUARANTEED CLEAR GAP BETWEEN CARS AND FOOTER */}
-      <div className="w-full h-[150px] md:h-[200px] lg:h-[250px] bg-transparent"></div>
+      <div className="w-full h-[150px] md:h-[200px] lg:h-[250px] bg-transparent flex items-center justify-center px-6 md:px-12 lg:px-20 xl:px-32">
+        <div className="max-w-[1800px] w-full mx-auto flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10">
+          <div className="max-w-2xl">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 text-white">Signup for Newsletter</h2>
+            <p className="text-gray-400 text-base md:text-lg">
+              We may send you information about new cars related events, webinars, news and services which we believe
+            </p>
+          </div>
+          <div className="flex items-center gap-6 w-full lg:w-auto">
+            <input
+              type="email"
+              placeholder="Enter your email address"
+              className="bg-transparent border-b-2 border-gray-600 px-4 py-3 focus:outline-none focus:border-red-500 transition-colors w-full sm:w-96 text-base md:text-lg placeholder-gray-500 text-white"
+            />
+            <button className="border-2 border-white rounded-full px-10 py-3 text-base md:text-lg font-bold hover:bg-white hover:text-black transition-colors shrink-0 uppercase tracking-wider text-white">
+              Subscribe
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Floating SOS */}
       <button

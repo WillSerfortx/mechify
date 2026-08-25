@@ -4,26 +4,6 @@ export default function Footer() {
   return (
     <footer className="bg-black text-white py-24 px-6 md:px-12 lg:px-20 xl:px-32 border-t border-white/10 font-outfit">
       <div className="max-w-[1800px] w-full mx-auto">
-        {/* Newsletter Section */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-20 gap-10 border-b border-white/10 pb-16">
-          <div className="max-w-2xl -mt-6">
-            <h2 className="text-4xl md:text-5xl font-black mb-4">Signup for Newsletter</h2>
-            <p className="text-gray-400 text-base md:text-lg">
-              We may send you information about new cars related events, webinars, news and services which we believe
-            </p>
-          </div>
-          <div className="flex items-center gap-6 w-full lg:w-auto">
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              className="bg-transparent border-b-2 border-gray-600 px-4 py-3 focus:outline-none focus:border-red-500 transition-colors w-full sm:w-96 text-base md:text-lg placeholder-gray-500"
-            />
-            <button className="border-2 border-white rounded-full px-10 py-3 text-base md:text-lg font-bold hover:bg-white hover:text-black transition-colors shrink-0 uppercase tracking-wider">
-              Subscribe
-            </button>
-          </div>
-        </div>
-
         {/* Links Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-16">
           {/* Logo Column */}
