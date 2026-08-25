@@ -79,7 +79,7 @@ export default function Contact() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/20 blur-[100px] rounded-full z-0"></div>
 
             <div className="relative z-10">
-              <h2 className="text-3xl xl:text-4xl font-black mb-8">Send a <span className="text-red-500">Message</span></h2>
+              <h2 className="text-3xl xl:text-4xl font-black mb-8 text-center">Send a <span className="text-red-500">Message</span></h2>
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
