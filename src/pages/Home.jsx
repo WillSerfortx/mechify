@@ -10,7 +10,7 @@ const serviceImages = {
   emergency:      '/images/roadside-assistance.png',
   spareParts:     'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=600&h=400&fit=crop',
   carRental:      'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=400&h=250&fit=crop',
-  workshop:       'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=400&h=250&fit=crop',
+  workshop:       '/images/workshop.jpg',
   fuelDelivery:   'https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=400&h=250&fit=crop',
   driverHire:     'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=250&fit=crop',
 };
