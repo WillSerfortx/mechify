@@ -147,7 +147,7 @@ export default function Home() {
         </div>
 
         {/* 3 Large service cards */}
-        <div className="flex flex-wrap justify-center items-center gap-4 mb-4 w-full max-w-[1400px]">
+        <div className="flex flex-wrap justify-center items-center gap-6 mb-8 w-full max-w-[1800px] mx-auto">
           {[
             { name: 'Home Service',         icon: '🔧', img: serviceImages.homeService,  link: '/workshop',  badge: null },
             { name: 'Emergency Assistance', icon: '🚨', img: serviceImages.emergency,    link: '/services',  badge: 'Emergency' },
@@ -157,31 +157,31 @@ export default function Home() {
               key={i}
               to={s.link}
               id={`large-service-${i}`}
-              className={`flex-none w-full md:w-[calc(33.333%-1rem)] max-w-[450px] relative rounded-2xl overflow-hidden group aspect-[4/3] cursor-pointer block ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
+              className={`flex-none w-full md:w-[calc(33.333%-1.5rem)] max-w-[600px] relative rounded-[2rem] overflow-hidden group aspect-[4/3] cursor-pointer block ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
               style={{ animationDelay: `${i * 0.12}s` }}
             >
               <img src={s.img} alt={s.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-black/90 transition-all duration-500" />
               {/* Icon badge top-left */}
-              <div className="absolute top-4 left-4 w-11 h-11 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl border border-white/30">
+              <div className="absolute top-6 left-6 w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-3xl border border-white/30">
                 {s.icon}
               </div>
               {/* Emergency badge */}
               {s.badge && (
-                <div className="absolute top-4 right-4 bg-yellow-400 text-black text-xs font-black px-3 py-1 rounded-full uppercase tracking-wide">
+                <div className="absolute top-6 right-6 bg-yellow-400 text-black text-sm font-black px-4 py-2 rounded-full uppercase tracking-wide">
                   {s.badge}
                 </div>
               )}
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <h3 className="text-xl font-black text-white mb-1">{s.name}</h3>
-                <p className="text-red-400 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">Learn more →</p>
+              <div className="absolute bottom-0 left-0 right-0 p-8">
+                <h3 className="text-3xl font-black text-white mb-2">{s.name}</h3>
+                <p className="text-red-400 text-lg font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">Learn more →</p>
               </div>
             </Link>
           ))}
         </div>
 
         {/* 4 Small service cards */}
-        <div className="flex flex-wrap justify-center items-center gap-4 w-full max-w-[1400px]">
+        <div className="flex flex-wrap justify-center items-center gap-6 w-full max-w-[1800px] mx-auto">
           {[
             { name: 'Car Rental',    icon: '🚗', img: serviceImages.carRental,    link: '/car-rental' },
             { name: 'Workshop',      icon: '🏭', img: serviceImages.workshop,     link: '/workshop' },
@@ -192,20 +192,20 @@ export default function Home() {
               key={i}
               to={s.link}
               id={`small-service-${i}`}
-              className={`flex-none w-[calc(50%-0.5rem)] lg:w-[calc(25%-1rem)] max-w-[320px] relative rounded-2xl overflow-hidden group aspect-video cursor-pointer block ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
+              className={`flex-none w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(25%-1.5rem)] max-w-[450px] relative rounded-[2rem] overflow-hidden group aspect-video cursor-pointer block ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
               style={{ animationDelay: `${(i + 3) * 0.1}s` }}
             >
               <img src={s.img} alt={s.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
               {/* Emergency badge */}
               {s.badge && (
-                <div className="absolute top-3 right-3 bg-yellow-400 text-black text-[10px] font-black px-2 py-0.5 rounded-full uppercase">
+                <div className="absolute top-4 right-4 bg-yellow-400 text-black text-xs font-black px-4 py-1.5 rounded-full uppercase">
                   {s.badge}
                 </div>
               )}
-              <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end gap-2">
-                <span className="text-xl">{s.icon}</span>
-                <h3 className="text-white font-bold text-sm">{s.name}</h3>
+              <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end gap-3">
+                <span className="text-3xl">{s.icon}</span>
+                <h3 className="text-white font-black text-xl">{s.name}</h3>
               </div>
             </Link>
           ))}
@@ -242,20 +242,20 @@ export default function Home() {
               <Link
                 to="/car-rental"
                 key={i}
-                className="flex-shrink-0 w-64 md:w-72 bg-white rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(255,255,255,0.15)] group/card"
+                className="flex-shrink-0 w-72 md:w-80 lg:w-96 bg-white rounded-3xl overflow-hidden hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_15px_50px_rgba(255,255,255,0.2)] group/card"
               >
                 {/* Car image */}
                 <div className="aspect-[16/10] overflow-hidden bg-gray-100">
                   <img src={car.img} alt={car.name} className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500" />
                 </div>
                 {/* Details */}
-                <div className="p-4">
-                  <h3 className="text-gray-900 font-black text-xl mb-3 text-center">{car.name}</h3>
-                  <div className="grid grid-cols-2 gap-1.5 text-xs text-gray-600 font-semibold">
-                    <span className="bg-gray-100 rounded-lg px-2 py-1.5">Model: {car.model}</span>
-                    <span className="bg-gray-100 rounded-lg px-2 py-1.5">Speed: {car.speed}</span>
-                    <span className="bg-gray-100 rounded-lg px-2 py-1.5">Auto: {car.auto}</span>
-                    <span className="bg-gray-100 rounded-lg px-2 py-1.5">Engine: {car.engine}</span>
+                <div className="p-6">
+                  <h3 className="text-gray-900 font-black text-2xl mb-4 text-center">{car.name}</h3>
+                  <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 font-semibold">
+                    <span className="bg-gray-100 rounded-xl px-3 py-2 text-center">Model: {car.model}</span>
+                    <span className="bg-gray-100 rounded-xl px-3 py-2 text-center">Speed: {car.speed}</span>
+                    <span className="bg-gray-100 rounded-xl px-3 py-2 text-center">Auto: {car.auto}</span>
+                    <span className="bg-gray-100 rounded-xl px-3 py-2 text-center">Engine: {car.engine}</span>
                   </div>
                 </div>
               </Link>
