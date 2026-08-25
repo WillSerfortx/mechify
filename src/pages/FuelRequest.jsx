@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function FuelRequest() {
   const navigate = useNavigate();
-  const [gpsActive, setGpsActive] = useState(false);
+  const fileInputRef = useRef(null);
+  const [gpsAllowed, setGpsAllowed] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
+  const [fileAdded, setFileAdded] = useState(false);
+  const [vehicleOpen, setVehicleOpen] = useState(false);
   const [formData, setFormData] = useState({
     vehicleType: '',
     fuelType: '',
     carReg: '',
-    license: '',
     name: '',
     nid: '',
     mobile: '',
@@ -21,11 +23,16 @@ export default function FuelRequest() {
   };
 
   const handleLocate = () => {
-    // Simulate GPS location finding
-    setTimeout(() => {
-      setGpsActive(true);
-      alert('Location acquired successfully!');
-    }, 1000);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        () => setGpsAllowed(true),
+        () => {
+          setGpsAllowed(true); // Simulate success for demo
+        }
+      );
+    } else {
+      setGpsAllowed(true);
+    }
   };
 
   const handleSendOTP = () => {
@@ -37,151 +44,328 @@ export default function FuelRequest() {
     alert(`OTP sent to ${formData.mobile}`);
   };
 
+  const handleFileUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFileAdded(true);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!gpsActive) {
+    if (!gpsAllowed) {
       alert('Please allow GPS location access first.');
       return;
     }
-    if (otpSent && formData.otp !== '1234') {
-      alert('Invalid OTP. Please enter 1234 for simulation.');
+    if (!otpSent) {
+      alert('Please send OTP first.');
       return;
     }
-    
-    // In simulation, proceed to payment
+    if (!formData.otp) {
+      alert('Please enter the OTP.');
+      return;
+    }
     navigate('/payment-select', { state: { fromFuelRequest: true } });
   };
 
+  const vehicleTypes = [
+    { value: 'sedan', label: 'Sedan / Saloon' },
+    { value: 'suv', label: 'SUV / CrossOver' },
+    { value: 'truck', label: 'Truck / Commercial' },
+    { value: 'bike', label: 'Motorcycle' },
+  ];
+
   return (
-    <div className="bg-black min-h-screen text-white font-outfit py-24 px-6 md:px-12 lg:px-20 relative">
+    <div className="bg-black min-h-screen text-white font-outfit">
       
-      {/* Back Button */}
-      <div className="absolute top-12 left-6 md:left-12 lg:left-20 z-50">
+      {/* ════════════════════════════════════════
+          HERO HEADER — Same as FuelTerms
+      ════════════════════════════════════════ */}
+      <div className="relative w-full">
+        {/* Red background bar */}
+        <div className="absolute top-0 right-0 w-full h-[200px] md:h-[280px] bg-red-600 z-0" />
+
+        {/* Back button */}
         <button 
           onClick={() => navigate(-1)}
-          className="w-12 h-12 bg-white/5 backdrop-blur-md rounded-xl flex items-center justify-center text-2xl hover:bg-white/20 transition-colors border border-white/20"
+          className="absolute top-[220px] md:top-[300px] left-4 md:left-6 z-30 w-12 h-12 md:w-16 md:h-16 bg-black border-4 border-white flex items-center justify-center text-white text-2xl md:text-3xl font-bold hover:bg-white/10 transition-colors"
         >
           &lt;
         </button>
-      </div>
 
-      <div className="max-w-3xl mx-auto mt-8">
-        <div className="text-center mb-12">
-          <div className="w-16 h-16 bg-red-600 rounded-2xl mx-auto flex items-center justify-center mb-4">
-            <span className="text-3xl">⛽</span>
+        {/* Image grid */}
+        <div className="relative z-10 flex w-full" style={{ height: 'clamp(300px, 35vw, 520px)' }}>
+          {/* Left image — fuel pump */}
+          <div className="w-[36%] h-full overflow-hidden">
+            <img 
+              src="/images/fuel-delivery.png" 
+              alt="Fuel pump" 
+              className="w-full h-full object-cover"
+            />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black mb-4 uppercase">Emergency Fuel Request</h1>
-          <p className="text-gray-400">Fill in the details below to dispatch a fuel truck to your location.</p>
+          {/* Center image — silos */}
+          <div className="w-[28%] h-[72%] self-end overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1628189689917-c8340d859e99?w=800&h=600&fit=crop" 
+              alt="Fuel silos" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+          {/* Right image — tanker truck */}
+          <div className="w-[36%] h-full overflow-hidden self-end">
+            <img 
+              src="https://images.unsplash.com/photo-1616788417724-4f248bb017b8?w=800&h=1200&fit=crop" 
+              alt="Fuel tanker" 
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8 bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl">
-          
-          {/* GPS Section */}
-          <div className="border-b border-white/10 pb-8">
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <span className="text-red-500">📍</span> Location Details
-            </h2>
-            <div className="flex items-center justify-between bg-black rounded-xl p-4 border border-white/20">
-              <div className="flex flex-col">
-                <span className="font-semibold text-lg">{gpsActive ? 'Location Acquired' : 'GPS Access Required'}</span>
-                <span className="text-xs text-gray-400">{gpsActive ? 'Lat: 23.8103° N, Lon: 90.4125° E' : 'Please allow access to locate your vehicle'}</span>
-              </div>
-              <button 
-                type="button" 
-                onClick={handleLocate}
-                className={`px-6 py-2 rounded-lg font-bold transition-colors ${
-                  gpsActive ? 'bg-green-600 text-white cursor-default' : 'bg-red-600 hover:bg-red-700 text-white'
-                }`}
-              >
-                {gpsActive ? 'Verified ✓' : 'Locate Me'}
-              </button>
-            </div>
-          </div>
+        {/* Title text overlay */}
+        <div className="absolute top-8 md:top-16 left-0 right-0 z-20 text-center px-4">
+          <h1 className="text-3xl md:text-5xl lg:text-7xl font-black text-white drop-shadow-lg">
+            Emergency Fuel Delivery
+          </h1>
+          <p className="text-sm md:text-base font-semibold tracking-widest uppercase mt-2 text-white/90">
+            Home / EMERGENCY FUEL DELIVERY
+          </p>
+        </div>
+      </div>
 
-          {/* Vehicle & Fuel */}
-          <div className="border-b border-white/10 pb-8">
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <span className="text-red-500">🚗</span> Vehicle & Fuel Information
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-300">Vehicle Type</label>
-                <select name="vehicleType" required value={formData.vehicleType} onChange={handleChange} className="w-full bg-black border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 appearance-none">
-                  <option value="" disabled>Select Vehicle Type</option>
-                  <option value="sedan">Sedan / Saloon</option>
-                  <option value="suv">SUV / CrossOver</option>
-                  <option value="truck">Truck / Commercial</option>
-                  <option value="bike">Motorcycle</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-300">Fuel Type Required</label>
-                <select name="fuelType" required value={formData.fuelType} onChange={handleChange} className="w-full bg-black border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 appearance-none">
-                  <option value="" disabled>Select Fuel Type</option>
-                  <option value="octane">Octane (95+)</option>
-                  <option value="petrol">Petrol (Regular)</option>
-                  <option value="diesel">Diesel</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-300">Car Registration Number</label>
-                <input type="text" name="carReg" required placeholder="e.g. Dhaka Metro Gha 12-3456" value={formData.carReg} onChange={handleChange} className="w-full bg-black border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500" />
-              </div>
-            </div>
-          </div>
-
-          {/* Personal Details */}
-          <div>
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <span className="text-red-500">👤</span> Personal Details
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-300">Full Name</label>
-                <input type="text" name="name" required value={formData.name} onChange={handleChange} className="w-full bg-black border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-300">Driving License Number</label>
-                <input type="text" name="license" required value={formData.license} onChange={handleChange} className="w-full bg-black border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-semibold mb-2 text-gray-300">NID Number (National ID)</label>
-                <input type="text" name="nid" required value={formData.nid} onChange={handleChange} className="w-full bg-black border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500" />
-              </div>
-            </div>
+      {/* ════════════════════════════════════════
+          FORM — Matches Figma 1-2076 & 1-2231
+      ════════════════════════════════════════ */}
+      <div className="max-w-[1800px] mx-auto px-6 md:px-12 lg:px-20 mt-12 flex flex-col lg:flex-row gap-12 pb-24">
+        
+        {/* Left Column: Form */}
+        <div className="w-full lg:w-2/3">
+          <form onSubmit={handleSubmit} className="space-y-8">
             
-            {/* OTP Section */}
-            <div className="bg-black/50 p-6 rounded-xl border border-white/10">
-              <label className="block text-sm font-semibold mb-2 text-gray-300">Mobile Number</label>
-              <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                <input type="tel" name="mobile" required placeholder="+880" value={formData.mobile} onChange={handleChange} className="w-full bg-black border border-white/20 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500" />
-                <button 
-                  type="button" 
-                  onClick={handleSendOTP}
-                  className="whitespace-nowrap bg-white text-black font-bold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
+            {/* GPS Location */}
+            <div>
+              <label className="block text-xl md:text-2xl font-normal mb-4">
+                Allow Auto-detect GPS location
+              </label>
+              <div className="relative">
+                <div 
+                  onClick={handleLocate}
+                  className="w-full md:w-[65%] border-4 border-white bg-black px-6 py-5 text-xl cursor-pointer flex items-center justify-between hover:bg-white/5 transition-colors"
                 >
-                  Send OTP
+                  <span className={gpsAllowed ? 'text-white' : 'text-gray-500'}>
+                    {gpsAllowed ? 'Allowed' : ''}
+                  </span>
+                  {/* Location pin icon */}
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Vehicle Type */}
+            <div>
+              <label className="block text-xl md:text-2xl font-normal mb-4">
+                Vehicle Type
+              </label>
+              <div className="relative w-full md:w-[45%]">
+                <button
+                  type="button"
+                  onClick={() => setVehicleOpen(!vehicleOpen)}
+                  className="w-full border-4 border-white bg-black px-6 py-5 text-xl font-semibold flex items-center justify-between hover:bg-white/5 transition-colors"
+                >
+                  <span>{formData.vehicleType ? vehicleTypes.find(v => v.value === formData.vehicleType)?.label : 'Vehicle Type'}</span>
+                  <svg className={`w-8 h-8 text-white transition-transform ${vehicleOpen ? '' : 'rotate-180'}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+                {vehicleOpen && (
+                  <div className="absolute top-full left-0 w-full bg-black border-4 border-t-0 border-white z-20">
+                    {vehicleTypes.map((type) => (
+                      <button
+                        key={type.value}
+                        type="button"
+                        onClick={() => {
+                          setFormData({ ...formData, vehicleType: type.value });
+                          setVehicleOpen(false);
+                        }}
+                        className="w-full text-left px-6 py-4 text-lg hover:bg-white/10 transition-colors border-b border-white/10 last:border-b-0"
+                      >
+                        {type.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Fuel Type */}
+            <div>
+              <label className="block text-xl md:text-2xl font-normal mb-4">
+                Fuel Type
+              </label>
+              <select
+                name="fuelType"
+                value={formData.fuelType}
+                onChange={handleChange}
+                required
+                className="w-full md:w-[45%] border-4 border-white bg-black px-6 py-5 text-xl focus:outline-none appearance-none cursor-pointer"
+              >
+                <option value="" disabled></option>
+                <option value="octane">Octane (95+)</option>
+                <option value="petrol">Petrol (Regular)</option>
+                <option value="diesel">Diesel</option>
+              </select>
+            </div>
+
+            {/* Car REG NUMBER */}
+            <div>
+              <label className="block text-xl md:text-2xl font-normal mb-4">
+                Car <span className="text-red-500">REG NUMBER</span>
+              </label>
+              <input
+                type="text"
+                name="carReg"
+                value={formData.carReg}
+                onChange={handleChange}
+                required
+                className="w-full md:w-[45%] border-4 border-white bg-black px-6 py-5 text-xl focus:outline-none"
+              />
+            </div>
+
+            {/* Driving License photo */}
+            <div>
+              <label className="block text-xl md:text-2xl font-normal mb-4 text-red-500">
+                Driving License photo
+              </label>
+              <div 
+                onClick={handleFileUpload}
+                className="w-full md:w-[65%] border-4 border-white bg-black px-2 py-3 flex items-center gap-6 cursor-pointer hover:bg-white/5 transition-colors"
+              >
+                <div className="w-16 h-16 bg-gray-300 flex items-center justify-center shrink-0">
+                  <span className="text-black text-4xl font-bold leading-none">+</span>
+                </div>
+                <span className="text-xl text-white">
+                  {fileAdded ? '1 File Added' : ''}
+                </span>
+              </div>
+              <input 
+                ref={fileInputRef}
+                type="file" 
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden" 
+              />
+            </div>
+
+            {/* Name */}
+            <div>
+              <label className="block text-xl md:text-2xl font-normal mb-4 text-red-500">
+                Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="w-full md:w-[65%] border-4 border-white bg-black px-6 py-5 text-xl text-center focus:outline-none"
+              />
+            </div>
+
+            {/* NID */}
+            <div>
+              <label className="block text-xl md:text-2xl font-normal mb-4 text-red-500">
+                NID
+              </label>
+              <input
+                type="text"
+                name="nid"
+                value={formData.nid}
+                onChange={handleChange}
+                required
+                className="w-full md:w-[65%] border-4 border-white bg-black px-6 py-5 text-xl text-center focus:outline-none"
+              />
+            </div>
+
+            {/* Mobile Number */}
+            <div>
+              <label className="block text-xl md:text-2xl font-normal mb-4 text-red-500">
+                Mobile Number
+              </label>
+              <input
+                type="tel"
+                name="mobile"
+                value={formData.mobile}
+                onChange={handleChange}
+                required
+                className="w-full md:w-[65%] border-4 border-white bg-black px-6 py-5 text-xl text-center focus:outline-none"
+              />
+            </div>
+
+            {/* Send OTP checkbox (before OTP sent) */}
+            {!otpSent && (
+              <div className="flex items-center gap-3">
+                <div 
+                  onClick={handleSendOTP}
+                  className="w-6 h-6 border-2 border-gray-500 rounded bg-black cursor-pointer hover:border-white transition-colors"
+                />
+                <span 
+                  onClick={handleSendOTP}
+                  className="text-red-500 font-bold text-lg cursor-pointer hover:text-red-400 transition-colors"
+                >
+                  Sent Otp and confirmation
+                </span>
+              </div>
+            )}
+
+            {/* Enter OTP (after OTP sent) */}
+            {otpSent && (
+              <div>
+                <label className="block text-xl md:text-2xl font-normal mb-4 text-red-500">
+                  Enter Otp
+                </label>
+                <input
+                  type="text"
+                  name="otp"
+                  value={formData.otp}
+                  onChange={handleChange}
+                  required
+                  maxLength="6"
+                  className="w-full md:w-[65%] border-4 border-white bg-black px-6 py-5 text-xl text-center focus:outline-none tracking-widest"
+                />
+              </div>
+            )}
+
+            {/* Confirm Request Button */}
+            {otpSent && (
+              <div className="flex justify-end mt-8">
+                <button
+                  type="submit"
+                  className="bg-red-600 hover:bg-red-700 text-white font-bold text-2xl md:text-3xl px-16 py-5 rounded-full transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,38,38,0.5)] hover:scale-105 active:scale-95"
+                >
+                  Confirm Request
                 </button>
               </div>
-              {otpSent && (
-                <div className="animate-fadeIn">
-                  <label className="block text-sm font-semibold mb-2 text-red-500">Enter OTP (Use 1234)</label>
-                  <input type="text" name="otp" required maxLength="4" placeholder="••••" value={formData.otp} onChange={handleChange} className="w-full sm:w-1/2 bg-black border border-red-500/50 rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 tracking-widest text-xl text-center" />
-                </div>
-              )}
-            </div>
-          </div>
+            )}
 
-          {/* Submit Button */}
-          <div className="pt-6">
-            <button 
-              type="submit" 
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-black text-xl py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_rgba(220,38,38,0.6)] hover:scale-[1.02] active:scale-95"
-            >
-              Proceed to Payment
-            </button>
+          </form>
+        </div>
+
+        {/* Right Column: Tall Tanker Image */}
+        <div className="hidden lg:block w-1/3">
+          <div className="sticky top-32 w-full h-[900px] overflow-hidden">
+             <img 
+               src="https://images.unsplash.com/photo-1616788417724-4f248bb017b8?w=800&h=1200&fit=crop" 
+               alt="Fuel Tanker on Road" 
+               className="w-full h-full object-cover" 
+             />
           </div>
-        </form>
+        </div>
+
       </div>
     </div>
   );
