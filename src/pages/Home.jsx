@@ -159,7 +159,7 @@ export default function Home() {
               name: 'Fuel Delivery',
               iconSvg: <svg className="w-full h-full" viewBox="0 0 512 512" fill="currentColor"><path d="M32 64C32 28.7 60.7 0 96 0H256c35.3 0 64 28.7 64 64V256h8.5c11.8 0 20.6 11.6 17.5 23.2l-11.3 43.1L383 318c-9.1-34.9-3-72.1 16.7-101.4C417.8 190.2 443.3 176 470 176H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H470c-9.9 0-19.4 5.3-25.1 14.1c-13.6 20.9-17.7 46.5-11.4 70.8L448.9 416H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H384c-11.6 0-22.3-6.2-28-16.4l-45.7-81.5c-5.7-10.2-5.7-22.7 0-32.9L320 336v64c0 61.9-50.1 112-112 112H96c-35.3 0-64-28.7-64-64V64zM256 128V64H96v64H256zM96 192v96H256V192H96z"/></svg>,
               img: serviceImages.fuelDelivery, link: '/fuel-terms', desc: 'Doorstep fuel delivery for emergencies or added convenience.',
-              emergencyStyle: 'bottom'
+              emergencyStyle: 'center'
             },
             { 
               name: 'Workshop Appointment',
