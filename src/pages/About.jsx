@@ -6,7 +6,7 @@ const heroImgSmall1 = "https://images.unsplash.com/photo-1493238792000-8113da705
 const heroImgSmall2 = "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&q=80&w=800";
 
 const step1Img = "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=800";
-const step2Img = "https://images.unsplash.com/photo-1503375894314-476414fd278e?auto=format&fit=crop&q=80&w=800";
+const step2Img = "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800";
 const step3Img = "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=800";
 
 export default function About() {
@@ -14,7 +14,7 @@ export default function About() {
     <div className="bg-[#050505] min-h-screen text-white font-outfit overflow-x-hidden">
       
       {/* ── 1. Hero Section (The Mission) ── */}
-      <section className="pt-40 pb-20 px-6 md:px-12 lg:px-24">
+      <section className="pt-40 pb-20 pl-8 pr-4 md:pl-16 md:pr-8 lg:pl-32 lg:pr-16">
         <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row gap-16 items-center">
           
           {/* Text Content */}
@@ -59,7 +59,7 @@ export default function About() {
 
       {/* ── 2. How It Works Section ── */}
       <section className="py-24 bg-black relative border-t border-white/5">
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24">
+        <div className="max-w-[1600px] mx-auto pl-8 pr-4 md:pl-16 md:pr-8 lg:pl-32 lg:pr-16">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-black mb-6">How Mechify <span className="text-red-500">Works</span></h2>
             <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">Three simple steps to completely resolve your automotive headaches.</p>
@@ -106,7 +106,7 @@ export default function About() {
       </section>
 
       {/* ── 3. How We Help Section (Benefits Grid) ── */}
-      <section className="py-24 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-black to-[#050505]">
+      <section className="py-24 pl-8 pr-4 md:pl-16 md:pr-8 lg:pl-32 lg:pr-16 bg-gradient-to-b from-black to-[#050505]">
         <div className="max-w-[1600px] mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-8 gap-8">
             <div className="max-w-2xl">
