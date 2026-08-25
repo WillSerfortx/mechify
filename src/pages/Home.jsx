@@ -149,9 +149,9 @@ export default function Home() {
         {/* 3 Large service cards */}
         <div className="flex flex-wrap justify-center items-center gap-6 mb-8 w-full max-w-[1800px] mx-auto">
           {[
-            { name: 'Home Service',         icon: '🔧', img: serviceImages.homeService,  link: '/workshop',  badge: null },
             { name: 'Emergency Assistance', icon: '🚨', img: serviceImages.emergency,    link: '/services',  badge: 'Emergency' },
-            { name: 'Spare Parts Store',    icon: '⚙️', img: serviceImages.spareParts,   link: '/spare-parts',  badge: null },
+            { name: 'Fuel Delivery',        icon: '⛽', img: serviceImages.fuelDelivery, link: '/fuel-terms', badge: 'Emergency' },
+            { name: 'Workshop',             icon: '🏭', img: serviceImages.workshop,     link: '/workshop',  badge: null },
           ].map((s, i) => (
             <Link
               key={i}
@@ -183,10 +183,10 @@ export default function Home() {
         {/* 4 Small service cards */}
         <div className="flex flex-wrap justify-center items-center gap-6 w-full max-w-[1800px] mx-auto">
           {[
-            { name: 'Car Rental',    icon: '🚗', img: serviceImages.carRental,    link: '/car-rental' },
-            { name: 'Workshop',      icon: '🏭', img: serviceImages.workshop,     link: '/workshop' },
-            { name: 'Fuel Delivery', icon: '⛽', img: serviceImages.fuelDelivery, link: '/fuel-terms', badge: 'Emergency' },
-            { name: 'Driver Hire',   icon: '👨‍✈️', img: serviceImages.driverHire,  link: '/idriver' },
+            { name: 'Home Service',         icon: '🔧', img: serviceImages.homeService,  link: '/workshop', badge: null },
+            { name: 'Spare Parts Store',    icon: '⚙️', img: serviceImages.spareParts,   link: '/spare-parts', badge: null },
+            { name: 'Car Rental',           icon: '🚗', img: serviceImages.carRental,    link: '/car-rental', badge: null },
+            { name: 'Driver Hire',          icon: '👨‍✈️', img: serviceImages.driverHire,  link: '/idriver', badge: null },
           ].map((s, i) => (
             <Link
               key={i}
