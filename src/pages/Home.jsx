@@ -181,7 +181,7 @@ export default function Home() {
         </div>
 
         {/* 4 Small service cards */}
-        <div className={`text-center mt-20 mb-10 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
+        <div className={`text-center mt-40 mb-10 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
           <h2 className="text-4xl md:text-6xl font-black text-white">Other Services</h2>
         </div>
         <div className="flex flex-wrap justify-center items-center gap-6 w-full max-w-[1800px] mx-auto">
