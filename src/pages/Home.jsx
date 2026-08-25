@@ -213,8 +213,8 @@ export default function Home() {
       </section>
 
       {/* GUARANTEED CLEAR GAP BETWEEN SERVICES AND CARS */}
-      <div className="w-full h-[150px] md:h-[200px] lg:h-[250px] bg-transparent flex items-center justify-center">
-        <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white text-center">Car For Rents</h2>
+      <div className="w-full h-[150px] md:h-[200px] lg:h-[250px] bg-transparent flex items-center justify-center px-4">
+        <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white text-center">Brands we are working with</h2>
       </div>
 
       {/* ══════════════════════════════════════════
