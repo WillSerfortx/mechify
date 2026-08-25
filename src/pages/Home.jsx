@@ -226,7 +226,7 @@ export default function Home() {
             className="absolute -top-20 left-1/2 -translate-x-1/2 w-[110vw] h-40 bg-black rounded-b-[50%]"
             style={{ boxShadow: '0 20px 40px rgba(0,0,0,0.8)' }}
           />
-          <div className={`relative z-10 text-center py-8 ${visible['cars-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
+          <div className={`relative z-10 text-center pt-0 pb-12 -mt-12 ${visible['cars-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
             {/* Down arrow */}
             <div className="flex justify-center mb-4 animate-float">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

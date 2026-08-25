@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-[1800px] w-full mx-auto">
         {/* Newsletter Section */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-20 gap-10 border-b border-white/10 pb-16">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl -mt-6">
             <h2 className="text-4xl md:text-5xl font-black mb-4">Signup for Newsletter</h2>
             <p className="text-gray-400 text-base md:text-lg">
               We may send you information about new cars related events, webinars, news and services which we believe
