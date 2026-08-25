@@ -25,6 +25,8 @@ import DriverList from './pages/DriverList';
 import DriverChat from './pages/DriverChat';
 import SparePartsStore from './pages/SparePartsStore';
 import DriverDashboard from './pages/DriverDashboard';
+import RoadsideLanding from './pages/RoadsideLanding';
+import RoadsideRequest from './pages/RoadsideRequest';
 
 
 function ScrollToTop() {
@@ -67,6 +69,8 @@ export default function App() {
         <Route path="/driver-chat" element={<Layout showNav={false} showFooter={false}><DriverChat /></Layout>} />
         <Route path="/fuel-terms" element={<Layout showFooter={false}><FuelTerms /></Layout>} />
         <Route path="/fuel-request" element={<Layout showNav={false} showFooter={false}><FuelRequest /></Layout>} />
+        <Route path="/roadside" element={<Layout showFooter={false}><RoadsideLanding /></Layout>} />
+        <Route path="/roadside-request" element={<Layout showNav={false} showFooter={false}><RoadsideRequest /></Layout>} />
         <Route path="/spare-parts" element={<Layout><SparePartsStore /></Layout>} />
         <Route path="/car-rental" element={<Layout showFooter={false}><CarRental /></Layout>} />
         <Route path="/car-booking" element={<Layout showNav={false} showFooter={false}><CarBooking /></Layout>} />
