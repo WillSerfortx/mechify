@@ -6,30 +6,35 @@ export default function RoadsideLanding() {
   const [mapLoaded] = useState(true);
 
   return (
-    <div className="bg-black min-h-screen text-white font-outfit">
+    <div className="bg-black min-h-screen text-white font-sora relative overflow-hidden pb-32">
 
       {/* ════════════════════════════════════════
-          HERO — Rounded card with glow + overlay image
+          HERO — Rounded card with white glow 
       ════════════════════════════════════════ */}
-      <section className="px-6 md:px-16 lg:px-28 pt-32 pb-12">
-        <div className="relative w-full rounded-[40px] md:rounded-[50px] overflow-hidden shadow-[0_4px_30px_10px_rgba(255,255,255,0.15)]" style={{ minHeight: '450px' }}>
+      <section className="pt-[133px] px-[110px] flex justify-center w-full max-w-[1920px] mx-auto">
+        <div className="relative w-full max-w-[1700px] h-[870px] rounded-[50px] shadow-[0px_4px_30px_10px_white] overflow-hidden flex flex-col items-center">
+          {/* Background Image */}
           <img 
             src="/images/roadside/hero.png" 
             alt="Vehicle Recovery" 
-            className="w-full h-full object-cover absolute inset-0 opacity-50"
+            className="absolute inset-0 w-full h-full object-cover opacity-50"
           />
-          <div className="relative z-10 flex flex-col items-center justify-end text-center px-8 py-16" style={{ minHeight: '450px' }}>
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-6 drop-shadow-lg">
+          
+          {/* Content */}
+          <div className="relative z-10 flex flex-col items-center w-full h-full pt-[394px]">
+            <h1 className="text-[64px] font-extrabold text-white text-center leading-normal mb-6">
               Vehicle Recovery Services Across Bangladesh
             </h1>
-            <p className="text-sm md:text-lg font-extrabold max-w-4xl leading-relaxed mb-8 text-white/90">
-              Get back on the road quickly and safely with MI Recovery Service – your reliable support in fast jump starts and
-              emergency vehicle recovery services. Never let breakdowns break you with our on-the-go transportation
-              solutions and emergency fuel delivery.
-            </p>
+            <div className="text-[24px] font-extrabold text-white text-center leading-[1.5] max-w-[1300px]">
+              <p className="mb-0">Get back on the road quickly and safely with MI Recovery Service – your reliable support in fast jump starts and</p>
+              <p className="mb-0">emergency vehicle recovery services. Never let breakdowns break you with our on-the-go transportation</p>
+              <p>solutions and emergency fuel delivery.</p>
+            </div>
+
+            {/* Service Button */}
             <button
               onClick={() => navigate('/roadside-request')}
-              className="bg-red-600 hover:bg-red-700 text-white font-bold text-lg px-10 py-4 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(220,38,38,0.6)]"
+              className="mt-12 bg-[#ff0202] text-white font-bold text-[32px] px-[80px] py-[20px] rounded-[50px] hover:bg-red-700 transition-colors"
             >
               Service
             </button>
@@ -40,15 +45,15 @@ export default function RoadsideLanding() {
       {/* ════════════════════════════════════════
           3 FEATURE PILLS
       ════════════════════════════════════════ */}
-      <section className="px-6 md:px-16 lg:px-28 py-8">
-        <div className="flex flex-wrap justify-center gap-6">
-          <div className="border-2 border-red-600 bg-red-600/10 text-red-500 font-bold text-base md:text-lg px-8 py-4 rounded-full">
+      <section className="mt-[80px] w-full max-w-[1920px] mx-auto px-[110px]">
+        <div className="flex justify-center gap-[40px]">
+          <div className="bg-[#ff0202] text-white font-bold text-[32px] px-[60px] py-[30px] rounded-[20px]">
             Less than 30 min arrival
           </div>
-          <div className="border-2 border-white text-white font-bold text-base md:text-lg px-8 py-4 rounded-full">
+          <div className="border-[10px] border-white text-white font-bold text-[32px] px-[60px] py-[25px] rounded-[20px]">
             Get Service
           </div>
-          <div className="border-2 border-red-600 bg-red-600/10 text-red-500 font-bold text-base md:text-lg px-8 py-4 rounded-full">
+          <div className="bg-[#ff0202] text-white font-bold text-[32px] px-[60px] py-[30px] rounded-[20px]">
             Live 24/7 trackable service
           </div>
         </div>
@@ -57,55 +62,46 @@ export default function RoadsideLanding() {
       {/* ════════════════════════════════════════
           OUR MISSION
       ════════════════════════════════════════ */}
-      <section className="px-6 md:px-16 lg:px-28 py-16 relative">
-        {/* Back button */}
+      <section className="mt-[150px] w-full max-w-[1920px] mx-auto relative flex flex-col items-center">
+        {/* Back button (Square with thick white border) */}
         <button 
           onClick={() => navigate(-1)}
-          className="absolute top-16 left-4 md:left-6 z-30 w-12 h-12 md:w-16 md:h-16 bg-black border-4 border-white flex items-center justify-center text-white text-2xl md:text-3xl font-bold hover:bg-white/10 transition-colors"
+          className="absolute left-0 top-[40px] w-[90px] h-[90px] border-[10px] border-solid border-white flex items-center justify-center bg-black hover:bg-white/10 transition-colors shadow-[inset_20px_20px_0px_0px_white]"
         >
-          &lt;
+          <svg className="w-[50px] h-[50px] text-white" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24">
+            <path strokeLinecap="square" strokeLinejoin="miter" d="M15 19l-7-7 7-7" />
+          </svg>
         </button>
 
-        <div className="text-center max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-6xl font-extrabold mb-8">Our Mission</h2>
-          <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-            At Swift Vehicle Recovery, we are dedicated to delivering reliable
-            towing services and roadside assistance throughout the UK. Our mission is to ensure that our
-            customers receive prompt vehicle
-            recovery support whenever they need it, with a strong emphasis on
-            customer satisfaction.
-          </p>
+        <h2 className="text-[72px] font-extrabold text-white text-center mb-[50px]">
+          Our Mission
+        </h2>
+        <div className="text-[28px] text-white text-center font-normal leading-[1.6] max-w-[1400px]">
+          <p>At Swift Vehicle Recovery, we are dedicated to delivering reliable</p>
+          <p>towing services and roadside assistance throughout the UK. Our mission is to ensure that our</p>
+          <p>customers receive prompt vehicle</p>
+          <p>recovery support whenever they need it, with a strong emphasis on</p>
+          <p>customer satisfaction.</p>
         </div>
       </section>
 
       {/* ════════════════════════════════════════
-          OUR JOURNEY — 3 towing images
+          OUR JOURNEY
       ════════════════════════════════════════ */}
-      <section className="px-6 md:px-16 lg:px-28 py-12">
-        <h3 className="text-2xl md:text-3xl font-extrabold mb-8 underline underline-offset-8 decoration-2">
+      <section className="mt-[180px] w-full max-w-[1920px] mx-auto px-[110px]">
+        <h3 className="text-[40px] font-extrabold text-white mb-[80px] border-b-4 border-white pb-4 inline-block">
           Our journey through the towing Bangladesh
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-2xl overflow-hidden h-[250px] md:h-[300px]">
-            <img 
-              src="https://images.unsplash.com/photo-1562096659-92ebd91f4e47?w=600&h=400&fit=crop" 
-              alt="Towing service 1" 
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-            />
+        
+        <div className="flex justify-between gap-[50px] items-center">
+          <div className="w-[550px] h-[400px] rounded-[30px] shadow-[0px_0px_30px_10px_white] overflow-hidden">
+             <img src="https://images.unsplash.com/photo-1562096659-92ebd91f4e47?w=800&h=600&fit=crop" alt="Mud towing" className="w-full h-full object-cover" />
           </div>
-          <div className="rounded-2xl overflow-hidden h-[250px] md:h-[300px]">
-            <img 
-              src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&h=400&fit=crop" 
-              alt="Towing service 2" 
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-            />
+          <div className="w-[450px] h-[300px] rounded-[20px] border-[10px] border-white overflow-hidden">
+             <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&h=600&fit=crop" alt="Car on flatbed" className="w-full h-full object-cover" />
           </div>
-          <div className="rounded-2xl overflow-hidden h-[250px] md:h-[300px]">
-            <img 
-              src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&h=400&fit=crop" 
-              alt="Towing service 3" 
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-            />
+          <div className="w-[600px] h-[500px] rounded-[30px] border-[10px] border-white overflow-hidden shadow-[0px_0px_20px_5px_white]">
+             <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&h=800&fit=crop" alt="Loading car" className="w-full h-full object-cover" />
           </div>
         </div>
       </section>
@@ -113,9 +109,8 @@ export default function RoadsideLanding() {
       {/* ════════════════════════════════════════
           MAP + SHARE LOCATION
       ════════════════════════════════════════ */}
-      <section className="px-6 md:px-16 lg:px-28 py-12 pb-24">
-        {/* Map embed */}
-        <div className="w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden border border-white/10 mb-8">
+      <section className="mt-[150px] w-full max-w-[1920px] mx-auto px-[110px] flex flex-col items-center">
+        <div className="w-full max-w-[1700px] h-[500px] rounded-[30px] shadow-[0px_0px_30px_10px_white] overflow-hidden mb-[80px]">
           {mapLoaded && (
             <iframe
               title="Location Map"
@@ -130,38 +125,14 @@ export default function RoadsideLanding() {
           )}
         </div>
 
-        {/* Get Directions button */}
-        <div className="flex justify-start mb-6">
-          <a 
-            href="https://www.google.com/maps/dir/?api=1&destination=23.7808,90.4125" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="bg-red-600 text-white font-bold px-8 py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
-          >
-            <span className="text-yellow-300">⚠</span> Get Directions
-          </a>
-        </div>
-
-        {/* Share Location button */}
-        <div className="flex justify-center">
-          <button
-            onClick={() => {
-              if (navigator.share) {
-                navigator.share({
-                  title: 'My Location',
-                  text: 'Here is my live location for vehicle recovery',
-                  url: window.location.href,
-                });
-              } else {
-                alert('Location sharing is not supported in this browser. Please share your location manually.');
-              }
-            }}
-            className="border-2 border-red-600 bg-red-600 text-white font-bold text-lg px-12 py-4 rounded-full hover:bg-red-700 transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.5)] flex items-center gap-2"
-          >
-            <span className="text-yellow-300">⚠</span> Share your Live location
-          </button>
-        </div>
+        <button
+          onClick={() => {}}
+          className="bg-[#ff0202] text-white font-bold text-[32px] px-[80px] py-[25px] rounded-[50px] hover:bg-red-700 transition-colors flex items-center justify-center gap-4"
+        >
+          <span className="text-[32px]">⚠</span> Share your Live location
+        </button>
       </section>
+
     </div>
   );
 }
