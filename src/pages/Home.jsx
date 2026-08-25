@@ -246,7 +246,7 @@ export default function Home() {
               <Link
                 to="/car-rental"
                 key={i}
-                className="flex-shrink-0 w-72 md:w-80 lg:w-96 bg-white/5 border border-white/10 backdrop-blur-2xl rounded-3xl overflow-hidden hover:-translate-y-4 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(220,38,38,0.2)] group/card hover:bg-white/10"
+                className="flex-shrink-0 w-72 md:w-80 lg:w-96 bg-white/5 border border-black backdrop-blur-2xl rounded-3xl overflow-hidden hover:-translate-y-4 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(220,38,38,0.2)] group/card hover:bg-white/10"
               >
                 {/* Car image */}
                 <div className="aspect-[16/10] overflow-hidden bg-black/50 relative">
@@ -257,19 +257,19 @@ export default function Home() {
                 <div className="p-6">
                   <h3 className="text-white font-black text-2xl mb-4 text-center group-hover/card:text-red-500 transition-colors duration-300">{car.name}</h3>
                   <div className="grid grid-cols-2 gap-3 text-sm text-gray-400 font-bold uppercase tracking-wider text-[10px] xl:text-xs">
-                    <div className="bg-black/50 border border-white/5 rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
+                    <div className="bg-black/50 border border-black rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
                       <span className="text-gray-500">Model</span>
                       <span className="text-white">{car.model}</span>
                     </div>
-                    <div className="bg-black/50 border border-white/5 rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
+                    <div className="bg-black/50 border border-black rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
                       <span className="text-gray-500">Speed</span>
                       <span className="text-white">{car.speed}</span>
                     </div>
-                    <div className="bg-black/50 border border-white/5 rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
+                    <div className="bg-black/50 border border-black rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
                       <span className="text-gray-500">Auto</span>
                       <span className="text-white">{car.auto}</span>
                     </div>
-                    <div className="bg-black/50 border border-white/5 rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
+                    <div className="bg-black/50 border border-black rounded-xl px-3 py-2.5 flex flex-col items-center gap-1">
                       <span className="text-gray-500">Engine</span>
                       <span className="text-white">{car.engine}</span>
                     </div>
