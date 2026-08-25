@@ -129,11 +129,14 @@ export default function Home() {
         </div>
       </div>
 
+      {/* GUARANTEED CLEAR GAP UNDER RED BANNER */}
+      <div className="w-full h-[100px] md:h-[150px] bg-transparent"></div>
+
       {/* ══════════════════════════════════════════
           SERVICES SECTION
           3 large + 4 small — matches Figma Desktop-16
       ══════════════════════════════════════════ */}
-      <section className="pt-20 pb-16 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center" id="services-section" data-animate>
+      <section className="pt-10 pb-16 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center" id="services-section" data-animate>
         {/* Heading */}
         <div className={`text-center mb-6 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
           <h2 className="text-5xl md:text-7xl font-black text-white">Emergency Services</h2>
