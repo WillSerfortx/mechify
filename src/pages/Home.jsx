@@ -130,17 +130,15 @@ export default function Home() {
       </div>
 
       {/* GUARANTEED CLEAR GAP UNDER RED BANNER */}
-      <div className="w-full h-[100px] md:h-[150px] bg-transparent"></div>
+      <div className="w-full h-[150px] md:h-[200px] bg-transparent flex items-center justify-center">
+        <h2 className={`text-5xl md:text-7xl font-black text-white text-center ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>Emergency Services</h2>
+      </div>
 
       {/* ══════════════════════════════════════════
           SERVICES SECTION
           3 large + 4 small — matches Figma Desktop-16
       ══════════════════════════════════════════ */}
       <section className="pt-10 pb-16 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center" id="services-section" data-animate>
-        {/* Heading */}
-        <div className={`text-center mb-6 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
-          <h2 className="text-5xl md:text-7xl font-black text-white">Emergency Services</h2>
-        </div>
 
         {/* Down arrow */}
         <div className={`flex justify-center mb-20 ${visible['services-section'] ? 'animate-float' : 'opacity-0'}`}>
