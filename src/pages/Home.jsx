@@ -149,9 +149,24 @@ export default function Home() {
 
         <div className="flex flex-wrap justify-center items-center gap-6 mb-8 w-full max-w-[1800px] mx-auto">
           {[
-            { name: 'Roadside Assistance',  icon: 'tow', img: serviceImages.emergency, link: '/services',  badge: null, desc: 'Instant emergency support with live location tracking and towing if required.' },
-            { name: 'Fuel Delivery',        icon: 'gas', img: serviceImages.fuelDelivery, link: '/fuel-terms', badge: null, desc: 'Doorstep fuel delivery for emergencies or added convenience.' },
-            { name: 'Emergency Workshops near me', icon: '🏭', img: serviceImages.workshop,     link: '/workshop',  badge: null },
+            { 
+              name: 'Roadside Assistance',
+              iconSvg: <svg className="w-full h-full" viewBox="0 0 640 512" fill="currentColor"><path d="M48 0C21.5 0 0 21.5 0 48V368c0 26.5 21.5 48 48 48H64c0 53 43 96 96 96s96-43 96-96H384c0 53 43 96 96 96s96-43 96-96h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V288 256 237.3c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7H416V48c0-26.5-21.5-48-48-48H48zM416 160h50.7L544 237.3V256H416V160zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>,
+              img: serviceImages.emergency, link: '/services', desc: 'Instant emergency support with live location tracking and towing if required.',
+              emergencyStyle: 'center'
+            },
+            { 
+              name: 'Fuel Delivery',
+              iconSvg: <svg className="w-full h-full" viewBox="0 0 512 512" fill="currentColor"><path d="M32 64C32 28.7 60.7 0 96 0H256c35.3 0 64 28.7 64 64V256h8.5c11.8 0 20.6 11.6 17.5 23.2l-11.3 43.1L383 318c-9.1-34.9-3-72.1 16.7-101.4C417.8 190.2 443.3 176 470 176H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H470c-9.9 0-19.4 5.3-25.1 14.1c-13.6 20.9-17.7 46.5-11.4 70.8L448.9 416H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H384c-11.6 0-22.3-6.2-28-16.4l-45.7-81.5c-5.7-10.2-5.7-22.7 0-32.9L320 336v64c0 61.9-50.1 112-112 112H96c-35.3 0-64-28.7-64-64V64zM256 128V64H96v64H256zM96 192v96H256V192H96z"/></svg>,
+              img: serviceImages.fuelDelivery, link: '/fuel-terms', desc: 'Doorstep fuel delivery for emergencies or added convenience.',
+              emergencyStyle: 'bottom'
+            },
+            { 
+              name: 'Workshop Appointment',
+              iconSvg: <svg className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>,
+              img: serviceImages.workshop, link: '/workshop', desc: 'Easy scheduling of verified workshops with available time slots.',
+              emergencyStyle: 'none'
+            },
           ].map((s, i) => (
             <Link
               key={i}
@@ -160,85 +175,49 @@ export default function Home() {
               className={`flex-none w-full md:w-[calc(33.333%-1.5rem)] max-w-[600px] relative rounded-[2rem] overflow-hidden group aspect-[4/3] cursor-pointer block ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
               style={{ animationDelay: `${i * 0.12}s` }}
             >
-              {s.name === 'Roadside Assistance' ? (
-                <div className="absolute inset-0 w-full h-full bg-white rounded-[2rem] overflow-hidden">
-                  {/* Image container */}
-                  <div className="absolute top-0 left-0 right-0 h-full group-hover:h-[65%] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
-                    <img src={s.img} alt={s.name} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
-                  </div>
-                  
-                  {/* Large center icon */}
+              <div className="absolute inset-0 w-full h-full bg-white rounded-[2rem] overflow-hidden">
+                {/* Image container */}
+                <div className="absolute top-0 left-0 right-0 h-full group-hover:h-[65%] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                  <img src={s.img} alt={s.name} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
+                </div>
+                
+                {/* Default State Center/Bottom Elements */}
+                {s.emergencyStyle === 'center' ? (
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300 gap-4">
-                    <svg className="w-24 h-24 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" viewBox="0 0 640 512" fill="currentColor">
-                      <path d="M48 0C21.5 0 0 21.5 0 48V368c0 26.5 21.5 48 48 48H64c0 53 43 96 96 96s96-43 96-96H384c0 53 43 96 96 96s96-43 96-96h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V288 256 237.3c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7H416V48c0-26.5-21.5-48-48-48H48zM416 160h50.7L544 237.3V256H416V160zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
-                    </svg>
+                    <div className="w-24 h-24 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]">{s.iconSvg}</div>
                     <span className="text-4xl font-black text-red-500 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]" style={{WebkitTextStroke: '1px black', WebkitTextFillColor: '#ef4444'}}>Emergency</span>
                   </div>
-                  
-                  {/* Small top-left icon */}
-                  <div className="absolute top-6 left-6 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <svg className="w-10 h-10 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" viewBox="0 0 640 512" fill="currentColor">
-                      <path d="M48 0C21.5 0 0 21.5 0 48V368c0 26.5 21.5 48 48 48H64c0 53 43 96 96 96s96-43 96-96H384c0 53 43 96 96 96s96-43 96-96h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V288 256 237.3c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7H416V48c0-26.5-21.5-48-48-48H48zM416 160h50.7L544 237.3V256H416V160zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
-                    </svg>
-                  </div>
-
-                  {/* White bottom info area */}
-                  <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-white p-8 flex flex-col justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
-                    <h3 className="text-black font-bold text-3xl md:text-4xl mb-3">{s.name}</h3>
-                    <p className="text-gray-500 text-base md:text-lg leading-snug font-light">
-                      {s.desc}
-                    </p>
-                  </div>
-                </div>
-              ) : s.name === 'Fuel Delivery' ? (
-                <div className="absolute inset-0 w-full h-full bg-white rounded-[2rem] overflow-hidden">
-                  {/* Image container */}
-                  <div className="absolute top-0 left-0 right-0 h-full group-hover:h-[65%] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
-                    <img src={s.img} alt={s.name} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
-                  </div>
-                  
-                  {/* Large bottom center text */}
-                  <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                    <span className="text-4xl font-black text-red-500 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]" style={{WebkitTextStroke: '1px black', WebkitTextFillColor: '#ef4444'}}>Emergency</span>
-                  </div>
-                  
-                  {/* Small top-left icon (persistent in both states) */}
-                  <div className="absolute top-6 left-6 pointer-events-none">
-                    <svg className="w-10 h-10 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" viewBox="0 0 512 512" fill="currentColor">
-                      <path d="M32 64C32 28.7 60.7 0 96 0H256c35.3 0 64 28.7 64 64V256h8.5c11.8 0 20.6 11.6 17.5 23.2l-11.3 43.1L383 318c-9.1-34.9-3-72.1 16.7-101.4C417.8 190.2 443.3 176 470 176H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H470c-9.9 0-19.4 5.3-25.1 14.1c-13.6 20.9-17.7 46.5-11.4 70.8L448.9 416H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H384c-11.6 0-22.3-6.2-28-16.4l-45.7-81.5c-5.7-10.2-5.7-22.7 0-32.9L320 336v64c0 61.9-50.1 112-112 112H96c-35.3 0-64-28.7-64-64V64zM256 128V64H96v64H256zM96 192v96H256V192H96z"/>
-                    </svg>
-                  </div>
-
-                  {/* White bottom info area */}
-                  <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-white p-8 flex flex-col justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
-                    <h3 className="text-black font-bold text-3xl md:text-4xl mb-3">{s.name}</h3>
-                    <p className="text-gray-500 text-base md:text-lg leading-snug font-light">
-                      {s.desc}
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <img src={s.img} alt={s.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-black/90 transition-all duration-500" />
-                  {/* Icon badge top-left */}
-                  <div className="absolute top-6 left-6 w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-3xl border border-white/30">
-                    {s.icon}
-                  </div>
-                  {/* Emergency badge */}
-                  {s.badge && (
-                    <div className="absolute top-6 right-6 bg-yellow-400 text-black text-sm font-black px-4 py-2 rounded-full uppercase tracking-wide">
-                      {s.badge}
+                ) : s.emergencyStyle === 'bottom' ? (
+                  <>
+                    <div className="absolute top-6 left-6 pointer-events-none w-10 h-10 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                      {s.iconSvg}
                     </div>
-                  )}
-                  <div className="absolute bottom-0 left-0 right-0 p-8">
-                    <h3 className="text-3xl font-black text-white mb-2">{s.name}</h3>
-                    <p className="text-red-400 text-lg font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">Learn more →</p>
+                    <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                      <span className="text-4xl font-black text-red-500 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]" style={{WebkitTextStroke: '1px black', WebkitTextFillColor: '#ef4444'}}>Emergency</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                    <div className="w-24 h-24 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]">{s.iconSvg}</div>
                   </div>
-                </>
-              )}
+                )}
+                
+                {/* Small top-left icon (for hover state, persistent if bottom style) */}
+                {s.emergencyStyle !== 'bottom' && (
+                  <div className="absolute top-6 left-6 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 w-10 h-10 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                    {s.iconSvg}
+                  </div>
+                )}
+
+                {/* White bottom info area */}
+                <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-white p-6 md:p-8 flex flex-col justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                  <h3 className="text-black font-bold text-2xl md:text-3xl mb-2">{s.name}</h3>
+                  <p className="text-gray-500 text-sm md:text-lg leading-snug font-light">
+                    {s.desc}
+                  </p>
+                </div>
+              </div>
             </Link>
           ))}
         </div>
@@ -251,10 +230,26 @@ export default function Home() {
         {/* 4 Small service cards */}
         <div className="flex flex-wrap justify-center items-center gap-6 w-full max-w-[1800px] mx-auto">
           {[
-            { name: 'Home Service',         icon: '🔧', img: serviceImages.homeService,  link: '/workshop', badge: null },
-            { name: 'Marketplace',          icon: 'cart', img: serviceImages.spareParts, link: '/spare-parts', badge: null, desc: 'An online platform to browse, compare, and order vehicle parts with doorstep delivery.' },
-            { name: 'Rent a Car',           icon: 'key', img: serviceImages.carRental,    link: '/car-rental', badge: null, desc: 'Temporary vehicle rental options with or without a driver.' },
-            { name: 'Driver Hire',          icon: '👨‍✈️', img: serviceImages.driverHire,  link: '/idriver', badge: null },
+            { 
+              name: 'Home Service',
+              iconSvg: <svg className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>,
+              img: serviceImages.homeService, link: '/workshop', desc: 'On-demand mechanic services delivered directly to the customer’s home.' 
+            },
+            { 
+              name: 'Marketplace',
+              iconSvg: <svg className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>,
+              img: serviceImages.spareParts, link: '/spare-parts', desc: 'An online platform to browse, compare, and order vehicle parts with doorstep delivery.' 
+            },
+            { 
+              name: 'Rent a Car',
+              iconSvg: <svg className="w-full h-full" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12 1.5a5.25 5.25 0 00-3.322 9.324l-6.538 6.538a.75.75 0 00-.22.53v1.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.53-.22l1.724-1.724A5.25 5.25 0 1012 1.5zm-2.25 4.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clipRule="evenodd" /></svg>,
+              img: serviceImages.carRental, link: '/car-rental', desc: 'Temporary vehicle rental options with or without a driver.' 
+            },
+            { 
+              name: 'Hire a Driver',
+              iconSvg: <svg className="w-full h-full" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" /></svg>,
+              img: serviceImages.driverHire, link: '/idriver', desc: 'Professional driver services for your convenience and safety.' 
+            },
           ].map((s, i) => (
             <Link
               key={i}
@@ -263,64 +258,35 @@ export default function Home() {
               className={`flex-none w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(25%-1.5rem)] max-w-[450px] relative rounded-[2rem] overflow-hidden group aspect-video cursor-pointer block ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
               style={{ animationDelay: `${(i + 3) * 0.1}s` }}
             >
-              {s.name === 'Marketplace' || s.name === 'Rent a Car' ? (
-                <div className="absolute inset-0 w-full h-full bg-white rounded-[2rem] overflow-hidden">
-                  {/* Image container */}
-                  <div className="absolute top-0 left-0 right-0 h-full group-hover:h-[65%] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
-                    <img src={s.img} alt={s.name} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
-                  </div>
-                  
-                  {/* Large center icon */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                    {s.name === 'Marketplace' ? (
-                      <svg className="w-20 h-20 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                      </svg>
-                    ) : (
-                      <svg className="w-20 h-20 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" fill="currentColor" viewBox="0 0 24 24">
-                        <path fillRule="evenodd" d="M12 1.5a5.25 5.25 0 00-3.322 9.324l-6.538 6.538a.75.75 0 00-.22.53v1.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.53-.22l1.724-1.724A5.25 5.25 0 1012 1.5zm-2.25 4.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                  </div>
-                  
-                  {/* Small top-left icon */}
-                  <div className="absolute top-6 left-6 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    {s.name === 'Marketplace' ? (
-                      <svg className="w-8 h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                      </svg>
-                    ) : (
-                      <svg className="w-8 h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" fill="currentColor" viewBox="0 0 24 24">
-                        <path fillRule="evenodd" d="M12 1.5a5.25 5.25 0 00-3.322 9.324l-6.538 6.538a.75.75 0 00-.22.53v1.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.75-.75v-1.5h1.5a.75.75 0 00.53-.22l1.724-1.724A5.25 5.25 0 1012 1.5zm-2.25 4.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                  </div>
-
-                  {/* White bottom info area */}
-                  <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-white p-6 flex flex-col justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
-                    <h3 className="text-black font-bold text-xl md:text-2xl mb-1">{s.name}</h3>
-                    <p className="text-gray-500 text-xs md:text-sm leading-snug font-light">
-                      {s.desc}
-                    </p>
+              <div className="absolute inset-0 w-full h-full bg-white rounded-[2rem] overflow-hidden">
+                {/* Image container */}
+                <div className="absolute top-0 left-0 right-0 h-full group-hover:h-[65%] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                  <img src={s.img} alt={s.name} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
+                </div>
+                
+                {/* Large center icon */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
+                  <div className="w-20 h-20 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]">
+                    {s.iconSvg}
                   </div>
                 </div>
-              ) : (
-                <>
-                  <img src={s.img} alt={s.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-                  {/* Emergency badge */}
-                  {s.badge && (
-                    <div className="absolute top-4 right-4 bg-yellow-400 text-black text-xs font-black px-4 py-1.5 rounded-full uppercase">
-                      {s.badge}
-                    </div>
-                  )}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 flex items-end gap-3">
-                    <span className="text-3xl">{s.icon}</span>
-                    <h3 className="text-white font-black text-xl">{s.name}</h3>
+                
+                {/* Small top-left icon */}
+                <div className="absolute top-6 left-6 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="w-8 h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                    {s.iconSvg}
                   </div>
-                </>
-              )}
+                </div>
+
+                {/* White bottom info area */}
+                <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-white p-6 flex flex-col justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+                  <h3 className="text-black font-bold text-xl md:text-2xl mb-1">{s.name}</h3>
+                  <p className="text-gray-500 text-xs md:text-sm leading-snug font-light">
+                    {s.desc}
+                  </p>
+                </div>
+              </div>
             </Link>
           ))}
         </div>
