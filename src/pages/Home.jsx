@@ -133,7 +133,7 @@ export default function Home() {
           SERVICES SECTION
           3 large + 4 small — matches Figma Desktop-16
       ══════════════════════════════════════════ */}
-      <section className="pt-20 pb-32 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center mb-40" id="services-section" data-animate>
+      <section className="pt-20 pb-32 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center mb-[250px]" id="services-section" data-animate>
         {/* Heading */}
         <div className={`text-center mb-6 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
           <h2 className="text-5xl md:text-7xl font-black text-white">Services</h2>
