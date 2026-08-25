@@ -133,7 +133,7 @@ export default function Home() {
           SERVICES SECTION
           3 large + 4 small — matches Figma Desktop-16
       ══════════════════════════════════════════ */}
-      <section className="pt-20 pb-64 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center" id="services-section" data-animate>
+      <section className="pt-20 pb-16 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center" id="services-section" data-animate>
         {/* Heading */}
         <div className={`text-center mb-6 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
           <h2 className="text-5xl md:text-7xl font-black text-white">Services</h2>
@@ -212,11 +212,14 @@ export default function Home() {
         </div>
       </section>
 
+      {/* GUARANTEED CLEAR GAP BETWEEN SERVICES AND CARS */}
+      <div className="w-full h-[150px] md:h-[200px] lg:h-[250px] bg-transparent"></div>
+
       {/* ══════════════════════════════════════════
           CAR FOR RENTS — Matches Figma
           White cards with car image + specs
       ══════════════════════════════════════════ */}
-      <section className="pt-40 pb-64 overflow-hidden" id="cars-section" data-animate>
+      <section className="overflow-hidden relative z-10" id="cars-section" data-animate>
         {/* Curved top edge (ellipse effect from Figma) */}
         <div className="relative bg-black pb-4">
           <div
@@ -263,6 +266,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* GUARANTEED CLEAR GAP BETWEEN CARS AND FOOTER */}
+      <div className="w-full h-[150px] md:h-[200px] lg:h-[250px] bg-transparent"></div>
 
       {/* Floating SOS */}
       <button
