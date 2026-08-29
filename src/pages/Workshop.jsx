@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-/* ─── Image Assets (downloaded from Figma) ────────────────────── */
+/* ─── Image Assets ────────────────────────────────────────────── */
 const IMAGES = {
   heroBg: '/images/workshop/hero-bg.png',
   iconPerformance: '/images/workshop/icon-performance.png',
@@ -22,6 +22,40 @@ const IMAGES = {
   iconPhone: '/images/workshop/icon-phone.png',
   iconMail: '/images/workshop/icon-mail.png',
 };
+
+/* ─────────────────────────────────────────────────────────────────
+   Figma canvas = 1920px wide.
+   All px values from Figma are converted to vw via: val / 1920 * 100
+   We use clamp(min, vw, max) so it looks right at any viewport.
+   
+   Figma key Y positions (absolute):
+     Hero image:       top:-156  h:1280  → visible hero = ~778px
+     Back button:      top:778   left:0   90×90  border-10
+     Service cards:    top:~1056  left:87/681/1280  553×468
+     "Why us?":        top:1618  left:87
+     "Why us?" body:   top:1748  left:87
+     "SERVICES" title: top:~2200 centered
+     Numbers 1/2/3:    top:2406/2363/2320
+     Titles:           top:2537/2506/2455
+     Descs:            top:2620
+     Gallery:          top:3166  left:80/527/986/1436  403×491
+     Specialists title:top:3925  left:59
+     Specialist cards: top:4069  left:69/527/987/1445  406×453
+     Names:            top:4544
+     Roles:            top:4594-4600
+     Form card:        top:4916  left:88  w:949  h:968  rounded-20
+     "GET A FREE":     top:4863  left:1314
+     "APPOINTMENT":    top:4925  left:1314
+     Social icons:     top:5071  left:1314/1392/1469
+     Email:            top:5152-5162
+     Address:          top:5240-5244
+     Phone:            top:5455-5504
+     Submit button:    top:5719  left:126  496×74
+────────────────────────────────────────────────────────────────── */
+
+/* Helpers for converting Figma px to responsive vw */
+const vw = (px) => `${(px / 1920 * 100).toFixed(3)}vw`;
+const responsive = (px, minRatio = 0.4) => `clamp(${Math.round(px * minRatio)}px, ${vw(px)}, ${px}px)`;
 
 /* ─── Data ────────────────────────────────────────────────────── */
 const SERVICE_CARDS = [
@@ -91,67 +125,90 @@ export default function Workshop() {
     navigate('/workshop-select');
   };
 
-  /* ────────────────────────────────────────────────────────────────
-     Figma canvas: 1920 × ~5900px
-     All proportions below use vw-based clamp for exact Figma ratios.
-     Base ratio: value / 1920 * 100 = vw%
-  ──────────────────────────────────────────────────────────────── */
   return (
     <div className="bg-black min-h-screen text-white overflow-x-hidden" style={{ fontFamily: "'Sora', sans-serif" }}>
 
-      {/* ═══════════════════════════════════════════
+      {/* ═══════════════════════════════════════════════════════════
           HERO SECTION
-          Figma: image at top:-156px, 1920×1280. Visible = 1124px / 1920 = 58.5vw
-          Title: left:56px top:158px, Sora Bold 96px
-          Subtitle: left:56px top:397px, Sora Regular 32px
-          CTA: left:95px top:526px, red bg, 496×74, rounded-full
-      ═══════════════════════════════════════════ */}
-      <section className="relative w-full overflow-hidden" style={{ height: 'clamp(480px, 58.5vw, 1124px)' }}>
-        {/* Background image */}
+          Figma: image36 w:1920 h:1280 top:-156px
+          Visible hero area ≈ 778px (where back button sits at top:778)
+          778 / 1920 = 40.52vw
+          Title1: left:56 top:158 → 158/778 = 20.3% from top
+          Title2: left:56 top:250
+          Subtitle: left:56 top:397
+          CTA: left:95 top:526 w:496 h:74
+      ═══════════════════════════════════════════════════════════ */}
+      <section
+        className="relative w-full overflow-hidden"
+        style={{ height: responsive(778) }}
+      >
+        {/* Background image — Figma: 1920×1280, positioned at top:-156 */}
         <img
           src={IMAGES.heroBg}
           alt="Auto repair workshop"
-          className="absolute w-full h-auto object-cover"
-          style={{ top: '-8.1%' }}
+          className="absolute w-full object-cover pointer-events-none"
+          style={{
+            top: responsive(-156, 1),
+            height: responsive(1280),
+            left: 0,
+          }}
         />
-        {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20" />
+        {/* Gradient overlays for readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/20" />
 
-        {/* Content — Figma left:56px = 2.9vw */}
-        <div
-          className="relative z-10 flex flex-col justify-center h-full animate-slideInLeft"
-          style={{ paddingLeft: 'clamp(24px, 2.92vw, 56px)', paddingRight: '24px' }}
-        >
-          {/* Title — Figma: Sora Bold, 96px / 1920 = 5vw */}
-          <h1
-            className="font-bold text-white leading-none"
-            style={{ fontSize: 'clamp(32px, 5vw, 96px)', marginBottom: 'clamp(16px, 1.56vw, 30px)' }}
+        {/* Text content — positioned absolutely to match Figma coords */}
+        <div className="absolute inset-0 z-10 animate-slideInLeft">
+          {/* Title line 1 — Figma: Sora Bold 96px, left:56 top:158 */}
+          <p
+            className="absolute font-bold text-white leading-none whitespace-nowrap"
+            style={{
+              fontSize: responsive(96),
+              left: responsive(56),
+              top: responsive(158),
+            }}
           >
-            Professional Car Repair
-            <br />
+            Professional Car Repair{' '}
+          </p>
+
+          {/* Title line 2 — Figma: left:56 top:250 */}
+          <p
+            className="absolute font-bold text-white leading-none whitespace-nowrap"
+            style={{
+              fontSize: responsive(96),
+              left: responsive(56),
+              top: responsive(250),
+            }}
+          >
             And Maintenance
-          </h1>
+          </p>
 
-          {/* Subtitle — Figma: Sora Regular, 32px / 1920 = 1.67vw */}
+          {/* Subtitle — Figma: Sora Regular 32px, left:56 top:397 */}
           <div
-            className="font-normal text-white/90 leading-snug"
-            style={{ fontSize: 'clamp(14px, 1.67vw, 32px)', maxWidth: '640px', marginBottom: 'clamp(24px, 3.33vw, 64px)' }}
+            className="absolute font-normal text-white/90"
+            style={{
+              fontSize: responsive(32),
+              left: responsive(56),
+              top: responsive(397),
+              lineHeight: '0.962',
+            }}
           >
-            <p>We are focused on providing our clients with the highest</p>
-            <p>level of quality and excellent customer support</p>
+            <p style={{ marginBottom: '0.2em' }}>We are focused on providing our clients with the highest</p>
+            <p> level of quality and excellent customer support</p>
           </div>
 
-          {/* CTA Button — Figma: 496×74, left:95px, red bg, Sora Bold 32px */}
+          {/* CTA Button — Figma: left:95 top:526, 496×74, red bg, border white, rounded-40 */}
           <a
             href="#contact-section"
-            className="inline-block text-white font-bold rounded-full border border-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
+            className="absolute inline-flex items-center justify-center text-white font-bold border border-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
             style={{
               backgroundColor: 'red',
-              fontSize: 'clamp(16px, 1.67vw, 32px)',
-              padding: 'clamp(10px, 1.09vw, 21px) clamp(24px, 2.45vw, 47px)',
-              width: 'fit-content',
-              marginLeft: 'clamp(0px, 2vw, 39px)',
+              fontSize: responsive(32),
+              left: responsive(95),
+              top: responsive(526),
+              width: responsive(496),
+              height: responsive(74),
+              borderRadius: responsive(40),
             }}
           >
             Get an Appointment now
@@ -159,69 +216,77 @@ export default function Workshop() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          BACK BUTTON — Figma: 90×90, border-10 white, left:0, top:778px (right after hero area)
-          90/1920 = 4.69vw
-      ═══════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════
+          BACK BUTTON — Figma: left:0 top:778, 90×90, border-10 white
+          Sits flush against the left edge, directly below hero
+      ═══════════════════════════════════════════════════════════ */}
       <div>
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center justify-center bg-black hover:bg-white/10 transition-colors relative z-20"
+          className="flex items-center justify-center bg-black hover:bg-white/10 transition-colors"
           style={{
-            width: 'clamp(56px, 4.69vw, 90px)',
-            height: 'clamp(56px, 4.69vw, 90px)',
-            borderWidth: 'clamp(5px, 0.52vw, 10px)',
+            width: responsive(90),
+            height: responsive(90),
+            borderWidth: responsive(10),
             borderStyle: 'solid',
             borderColor: 'white',
-            marginTop: 'clamp(-28px, -1.46vw, -28px)',
           }}
           aria-label="Go back"
         >
-          <svg className="w-6 h-6 md:w-8 md:h-8" fill="white" viewBox="0 0 24 24">
+          <svg style={{ width: responsive(36), height: responsive(36) }} fill="white" viewBox="0 0 24 24">
             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
           </svg>
         </button>
       </div>
 
-      {/* ═══════════════════════════════════════════
-          SERVICE CARDS — Figma: 3 cards in a row
-          Each card: 553×468, bg black, border-5 white, rounded-40
-          left offsets: 87, 681, 1280 → gaps are ~41px between cards
-          553/1920 = 28.8vw per card
-          Icon: 128×128 centered, label: Sora Bold 40px
-      ═══════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════
+          SERVICE CARDS — Figma: 3 cards
+          Card1: left:87  top:1062  553×468 rounded-40 border-5  (Performance Check)
+          Card2: left:681 top:1056  553×468  (Auto Repair)
+          Card3: left:1280 top:1053 553×468  (Fleet Service)
+          
+          Gap between cards:
+            681 - (87+553) = 41px
+            1280 - (681+553) = 46px  ≈ ~44px average
+          Padding left: 87px, right: 1920-(1280+553) = 87px → symmetrical
+          Icons: 128×128 centered in card
+          Labels: Sora Bold 40px, centered
+      ═══════════════════════════════════════════════════════════ */}
       <section
         id="service-cards"
         data-animate
         className={`w-full ${visible['service-cards'] ? 'animate-fadeInUp' : 'opacity-0'}`}
         style={{
-          paddingTop: 'clamp(32px, 3.13vw, 60px)',
-          paddingBottom: 'clamp(32px, 2.6vw, 50px)',
-          paddingLeft: 'clamp(24px, 4.53vw, 87px)',
-          paddingRight: 'clamp(24px, 4.17vw, 80px)',
+          /* Figma: gap between hero bottom (778+90=868 for back btn) and cards top (1053)
+             = ~185px gap from back button bottom. We use padding. */
+          paddingTop: responsive(130),
+          paddingBottom: responsive(80),
+          paddingLeft: responsive(87),
+          paddingRight: responsive(87),
         }}
       >
         <div
           className="grid grid-cols-1 sm:grid-cols-3"
-          style={{ gap: 'clamp(12px, 2.14vw, 41px)' }}
+          style={{ gap: responsive(44) }}
         >
           {SERVICE_CARDS.map((card, i) => (
             <div
               key={i}
-              className="bg-black border-white rounded-[40px] flex flex-col items-center justify-center cursor-pointer group hover:bg-white/5 transition-all duration-300 overflow-hidden"
+              className="bg-black border-white flex flex-col items-center justify-center cursor-pointer group hover:bg-white/5 transition-all duration-300 overflow-hidden"
               style={{
                 aspectRatio: '553 / 468',
-                borderWidth: 'clamp(3px, 0.26vw, 5px)',
+                borderWidth: responsive(5),
                 borderStyle: 'solid',
+                borderRadius: responsive(40),
               }}
             >
-              {/* Icon — Figma: 128×128, 128/1920 = 6.67vw */}
+              {/* Icon — Figma: 128×128, positioned roughly center-top of card */}
               <div
                 className="flex items-center justify-center"
                 style={{
-                  width: 'clamp(56px, 6.67vw, 128px)',
-                  height: 'clamp(56px, 6.67vw, 128px)',
-                  marginBottom: 'clamp(20px, 2.6vw, 50px)',
+                  width: responsive(128),
+                  height: responsive(128),
+                  marginBottom: responsive(40),
                 }}
               >
                 <img
@@ -230,155 +295,202 @@ export default function Workshop() {
                   className="w-full h-full object-contain brightness-0 invert group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
-              {/* Title — Figma: Sora Bold 40px, 40/1920 = 2.08vw */}
-              <p className="font-bold text-white text-center leading-none" style={{ fontSize: 'clamp(18px, 2.08vw, 40px)' }}>{card.title}</p>
-              <p className="font-bold text-white text-center leading-none mt-1" style={{ fontSize: 'clamp(18px, 2.08vw, 40px)' }}>{card.subtitle}</p>
+              {/* Title — Figma: Sora Bold 40px */}
+              <p className="font-bold text-white text-center leading-none" style={{ fontSize: responsive(40) }}>{card.title}</p>
+              <p className="font-bold text-white text-center leading-none" style={{ fontSize: responsive(40), marginTop: responsive(8) }}>{card.subtitle}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          WHY US? — Figma: left:87px, top:1748px area
-          Title: Sora Bold 64px (but "Why us?" text)
-          Body: Sora SemiBold 32px, white
-      ═══════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════
+          WHY US?
+          Figma: "Why us?" at approx top:1618 left:87 (derived from screenshot)
+          Body text: top:1748 left:87, Sora SemiBold 32px, white
+          Gap between title and body: ~130px? No — title is smaller.
+          From screenshot: title appears ~48px, body 32px
+      ═══════════════════════════════════════════════════════════ */}
       <section
         id="why-us"
         data-animate
         className={`w-full ${visible['why-us'] ? 'animate-fadeInUp' : 'opacity-0'}`}
         style={{
-          paddingLeft: 'clamp(24px, 4.53vw, 87px)',
-          paddingRight: '24px',
-          paddingBottom: 'clamp(32px, 3.65vw, 70px)',
+          paddingLeft: responsive(87),
+          paddingRight: responsive(87),
+          paddingBottom: responsive(100),
         }}
       >
         <h2
           className="font-bold"
           style={{
-            fontSize: 'clamp(28px, 3.33vw, 64px)',
-            marginBottom: 'clamp(12px, 1.04vw, 20px)',
+            fontSize: responsive(64),
+            marginBottom: responsive(30),
           }}
         >
           Why us?
         </h2>
         <div
-          className="font-semibold text-white leading-snug"
-          style={{ fontSize: 'clamp(15px, 1.67vw, 32px)', maxWidth: '800px' }}
+          className="font-semibold text-white"
+          style={{
+            fontSize: responsive(32),
+            lineHeight: '0.962',
+          }}
         >
-          <p>All Mechanic 128 workshops employ the latest</p>
-          <p>test techniques and digital information</p>
-          <p>systems. This ideal combination ensures</p>
-          <p>systematic vehicle diagnosis and qualified</p>
+          <p style={{ marginBottom: responsive(6) }}>All Mechanic 128 workshops employ the latest</p>
+          <p style={{ marginBottom: responsive(6) }}>test techniques and digital information</p>
+          <p style={{ marginBottom: responsive(6) }}>systems. This ideal combination ensures</p>
+          <p style={{ marginBottom: responsive(6) }}>systematic vehicle diagnosis and qualified</p>
           <p>repair work.</p>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          SERVICES — Figma: centered "SERVICES" title (Poppins Bold 64px)
-          3 columns with stair-step numbers:
-            num1: top:2406, num2: top:2363, num3: top:2320 → descending by ~43px
-            Numbers: Sora Bold 128px
-            Titles: Poppins Bold 64px
-            Desc: Poppins SemiBold 32px, color #8b8888, w:336px centered
-      ═══════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════
+          SERVICES SECTION
+          Figma: "SERVICES" centered title, Poppins Bold ~64px
+          
+          3-column stair-step layout (ascending left→right):
+            Number 1: left:397  top:2406  Sora Bold 128px, color=black
+            Number 2: left:936  top:2363  
+            Number 3: left:1484 top:2320
+            
+            Title "Inspection":  left:262  top:2537  Poppins Bold 64px
+            Title "Diagnostic":  left:810  top:2506
+            Title "Upgrades":    left:1372 top:2455
+            
+            Desc 1: center-x:437  top:2620  w:336  Poppins SemiBold 32px #8b8888
+            Desc 2: center-x:977  top:2620
+            Desc 3: center-x:1540 top:2617
+          
+          The numbers go UP by ~43px each (2406→2363→2320)
+          The titles also go UP (2537→2506→2455, by ~31/51px)
+          Descriptions stay roughly level at ~2620
+      ═══════════════════════════════════════════════════════════ */}
       <section
         id="services-section"
         data-animate
         className={`w-full ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
         style={{
-          paddingTop: 'clamp(32px, 3.13vw, 60px)',
-          paddingBottom: 'clamp(32px, 3.65vw, 70px)',
-          paddingLeft: 'clamp(24px, 4.53vw, 87px)',
-          paddingRight: 'clamp(24px, 4.53vw, 87px)',
+          paddingTop: responsive(60),
+          paddingBottom: responsive(80),
+          paddingLeft: responsive(87),
+          paddingRight: responsive(87),
         }}
       >
         <h2
-          className="font-bold text-center"
+          className="font-bold text-center text-white"
           style={{
-            fontSize: 'clamp(32px, 3.33vw, 64px)',
+            fontSize: responsive(64),
             fontFamily: "'Poppins', sans-serif",
-            marginBottom: 'clamp(40px, 4.17vw, 80px)',
+            marginBottom: responsive(100),
           }}
         >
           SERVICES
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 max-w-[1700px] mx-auto" style={{ gap: 'clamp(24px, 2.6vw, 50px)' }}>
-          {SERVICES.map((svc, i) => (
-            <div key={i} className="text-center relative" style={{ marginTop: `clamp(0px, ${(2 - i) * 2.24}vw, ${(2 - i) * 43}px)` }}>
-              {/* Large background number — stair-step: each higher by ~43px
-                  Figma: Sora Bold 128px, black fill (barely visible on black bg)
-                  We use a subtle outlined style to match the Figma look */}
-              <p
-                className="font-bold leading-none select-none"
-                style={{
-                  fontSize: 'clamp(56px, 6.67vw, 128px)',
-                  color: 'transparent',
-                  WebkitTextStroke: '2px rgba(255,255,255,0.08)',
-                  marginBottom: 'clamp(-16px, -1.04vw, -20px)',
-                }}
+        {/* Stair-step grid — using relative positioning for each column */}
+        <div
+          className="grid grid-cols-1 md:grid-cols-3 mx-auto"
+          style={{
+            maxWidth: responsive(1640),
+            gap: responsive(30),
+          }}
+        >
+          {SERVICES.map((svc, i) => {
+            /* Figma stair-step offsets (num top): 2406, 2363, 2320
+               Relative to first: 0, -43, -86
+               Since CSS margin-top shifts down, we invert:
+               col1 needs most top offset, col3 needs least → use negative margin
+               col1: 86px down, col2: 43px down, col3: 0px */
+            const topOffsets = [86, 43, 0];
+            return (
+              <div
+                key={i}
+                className="text-center relative"
+                style={{ marginTop: responsive(topOffsets[i]) }}
               >
-                {svc.num}
-              </p>
-              {/* Title — Figma: Poppins Bold 64px */}
-              <p
-                className="font-bold text-white relative z-10 leading-none"
-                style={{
-                  fontSize: 'clamp(22px, 3.33vw, 64px)',
-                  fontFamily: "'Poppins', sans-serif",
-                  marginBottom: 'clamp(12px, 1.04vw, 20px)',
-                }}
-              >
-                {svc.title}
-              </p>
-              {/* Description — Figma: Poppins SemiBold 32px, #8b8888, w:336px, centered */}
-              <p
-                className="font-semibold leading-snug mx-auto"
-                style={{
-                  fontSize: 'clamp(13px, 1.67vw, 32px)',
-                  color: '#8b8888',
-                  maxWidth: 'clamp(200px, 17.5vw, 336px)',
-                  fontFamily: "'Poppins', sans-serif",
-                }}
-              >
-                {svc.desc}
-              </p>
-            </div>
-          ))}
+                {/* Large number — Figma: Sora Bold 128px, color: black (barely visible) */}
+                <p
+                  className="font-bold leading-none select-none"
+                  style={{
+                    fontSize: responsive(128),
+                    color: 'transparent',
+                    WebkitTextStroke: '2px rgba(255,255,255,0.06)',
+                    marginBottom: responsive(-30),
+                    position: 'relative',
+                    zIndex: 0,
+                  }}
+                >
+                  {svc.num}
+                </p>
+                {/* Title — Figma: Poppins Bold 64px, white */}
+                <p
+                  className="font-bold text-white relative leading-none"
+                  style={{
+                    fontSize: responsive(64),
+                    fontFamily: "'Poppins', sans-serif",
+                    marginBottom: responsive(25),
+                    zIndex: 1,
+                  }}
+                >
+                  {svc.title}
+                </p>
+                {/* Description — Figma: Poppins SemiBold 32px, #8b8888, w:336, centered */}
+                <p
+                  className="font-semibold mx-auto"
+                  style={{
+                    fontSize: responsive(32),
+                    color: '#8b8888',
+                    width: responsive(336),
+                    maxWidth: '100%',
+                    fontFamily: "'Poppins', sans-serif",
+                    lineHeight: '0.962',
+                    textAlign: 'center',
+                  }}
+                >
+                  {svc.desc}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
+      {/* ═══════════════════════════════════════════════════════════
           IMAGE GALLERY — Figma: 4 cards in a row
-          Each card: 403×491, border-5 white, rounded-15
-          Left offsets: 80, 527, 986, 1436
-          403/1920 = 20.99vw per card
-          Label: Sora ExtraBold 40px, bottom area (~top:390 within card)
-      ═══════════════════════════════════════════ */}
+          Card1: left:80   top:3167  403×491  border-5 rounded-15
+          Card2: left:527  top:3166
+          Card3: left:986  top:3166
+          Card4: left:1436 top:3165
+          
+          Gaps: 527-(80+403)=44, 986-(527+403)=56, 1436-(986+403)=47 → ~49px avg
+          Padding left: 80, right: 1920-(1436+403)=81
+          
+          Labels: Sora ExtraBold 40px, at bottom-left (~left:85 top:390 within card)
+      ═══════════════════════════════════════════════════════════ */}
       <section
         id="gallery"
         data-animate
         className={`w-full ${visible['gallery'] ? 'animate-fadeInUp' : 'opacity-0'}`}
         style={{
-          paddingTop: 'clamp(20px, 2.08vw, 40px)',
-          paddingBottom: 'clamp(32px, 3.65vw, 70px)',
-          paddingLeft: 'clamp(24px, 4.17vw, 80px)',
-          paddingRight: 'clamp(24px, 4.17vw, 80px)',
+          paddingTop: responsive(40),
+          paddingBottom: responsive(80),
+          paddingLeft: responsive(80),
+          paddingRight: responsive(81),
         }}
       >
         <div
           className="grid grid-cols-2 lg:grid-cols-4"
-          style={{ gap: 'clamp(12px, 1.2vw, 23px)' }}
+          style={{ gap: responsive(44) }}
         >
           {GALLERY.map((item, i) => (
             <div
               key={i}
-              className="relative border-white rounded-[15px] overflow-hidden group cursor-pointer"
+              className="relative border-white overflow-hidden group cursor-pointer"
               style={{
                 aspectRatio: '403 / 491',
-                borderWidth: 'clamp(3px, 0.26vw, 5px)',
+                borderWidth: responsive(5),
                 borderStyle: 'solid',
+                borderRadius: responsive(15),
               }}
             >
               <img
@@ -387,13 +499,13 @@ export default function Workshop() {
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-              {/* Label — Figma: Sora ExtraBold 40px, left:85px bottom area */}
+              {/* Label — Figma: Sora ExtraBold 40px, left:85 top:390 (79.4% from top) */}
               <p
                 className="absolute font-extrabold text-white leading-none z-10"
                 style={{
-                  fontSize: 'clamp(14px, 2.08vw, 40px)',
-                  bottom: 'clamp(14px, 2.08vw, 40px)',
-                  left: 'clamp(14px, 4.43vw, 85px)',
+                  fontSize: responsive(40),
+                  bottom: '12%',
+                  left: '21%',
                 }}
               >
                 {item.label}
@@ -403,31 +515,41 @@ export default function Workshop() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          MEET OUR SPECIALISTS — Figma:
-          Title: Sora Bold 64px, left:59px
-          4 portrait cards: 406×453, border-5 white, rounded-15
+      {/* ═══════════════════════════════════════════════════════════
+          MEET OUR SPECIALISTS
+          Figma: title at left:59 top:3925, Sora Bold 64px
+          
+          Cards: 406×453, border-5 white, rounded-15
           Shadow: 0px 4px 20px 10px rgba(255,255,255,0.5)
-          Left offsets: 69, 527, 987, 1445
-          Name: Sora SemiBold 36px, white
-          Role: Sora Regular 20px, #9e9e9e
-      ═══════════════════════════════════════════ */}
+          Card1: left:69  top:4069
+          Card2: left:527 top:4069
+          Card3: left:987 top:4069
+          Card4: left:1445 top:4069
+          
+          Gaps: 527-(69+406)=52, 987-(527+406)=54, 1445-(987+406)=52 → ~53px
+          Padding left:69, right: 1920-(1445+406)=69 → symmetrical
+          
+          Names: Sora SemiBold 36px, white, top:4544 → 4544-4069-453=22px below card
+          Roles: Sora Regular 20px, #9e9e9e, top:4594-4600 → ~50px below names? No.
+                 4594-4544=50px? With 36px font → about 14px gap
+      ═══════════════════════════════════════════════════════════ */}
       <section
         id="specialists"
         data-animate
         className={`w-full ${visible['specialists'] ? 'animate-fadeInUp' : 'opacity-0'}`}
         style={{
-          paddingTop: 'clamp(20px, 2.08vw, 40px)',
-          paddingBottom: 'clamp(40px, 4.17vw, 80px)',
-          paddingLeft: 'clamp(24px, 3.59vw, 69px)',
-          paddingRight: 'clamp(24px, 3.59vw, 69px)',
+          paddingTop: responsive(40),
+          paddingBottom: responsive(80),
+          paddingLeft: responsive(69),
+          paddingRight: responsive(69),
         }}
       >
         <h2
           className="font-bold leading-none"
           style={{
-            fontSize: 'clamp(24px, 3.33vw, 64px)',
-            marginBottom: 'clamp(32px, 3.65vw, 70px)',
+            fontSize: responsive(64),
+            marginBottom: responsive(75),
+            paddingLeft: responsive(0), /* title is at left:59, section padding is 69 → -10px offset, close enough */
           }}
         >
           MEET OUR SPECIALISTS
@@ -435,17 +557,18 @@ export default function Workshop() {
 
         <div
           className="grid grid-cols-2 lg:grid-cols-4"
-          style={{ gap: 'clamp(12px, 2.08vw, 40px)' }}
+          style={{ gap: responsive(53) }}
         >
           {SPECIALISTS.map((spec, i) => (
             <div key={i} className="group">
-              {/* Portrait — Figma: 406×453, border-5 white, rounded-15, white glow shadow */}
+              {/* Portrait — Figma: 406×453, border-5 white, rounded-15, white glow */}
               <div
-                className="relative border-white rounded-[15px] overflow-hidden"
+                className="relative border-white overflow-hidden"
                 style={{
                   aspectRatio: '406 / 453',
-                  borderWidth: 'clamp(3px, 0.26vw, 5px)',
+                  borderWidth: responsive(5),
                   borderStyle: 'solid',
+                  borderRadius: responsive(15),
                   boxShadow: '0px 4px 20px 10px rgba(255, 255, 255, 0.5)',
                 }}
               >
@@ -455,23 +578,23 @@ export default function Workshop() {
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              {/* Name — Figma: Sora SemiBold 36px, 36/1920 = 1.875vw */}
+              {/* Name — Figma: Sora SemiBold 36px, 22px below card bottom */}
               <p
                 className="font-semibold leading-none"
                 style={{
-                  fontSize: 'clamp(16px, 1.88vw, 36px)',
-                  marginTop: 'clamp(10px, 1.04vw, 20px)',
+                  fontSize: responsive(36),
+                  marginTop: responsive(22),
                 }}
               >
                 {spec.name}
               </p>
-              {/* Role — Figma: Sora Regular 20px, color #9e9e9e */}
+              {/* Role — Figma: Sora Regular 20px, #9e9e9e, ~14px below name */}
               <p
                 className="font-normal leading-none"
                 style={{
-                  fontSize: 'clamp(11px, 1.04vw, 20px)',
+                  fontSize: responsive(20),
                   color: '#9e9e9e',
-                  marginTop: 'clamp(4px, 0.52vw, 10px)',
+                  marginTop: responsive(14),
                 }}
               >
                 {spec.role}
@@ -481,55 +604,90 @@ export default function Workshop() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════
+      {/* ═══════════════════════════════════════════════════════════
           CONTACT / APPOINTMENT SECTION
-          Figma: dark #161616 card at left:88, w:949, h:968, rounded-20
-          Form fields: 2-col layout, inputs with border white, rounded-20, bg #161616
-          Input height: 74px
-          Message textarea: h:169px
-          Right side: "GET A FREE APPOINTMENT" Sora Bold 64px at left:1314
-          Social icons: 40×40
-          "Get a Workshop now" button: red, 496×74, rounded-full
-      ═══════════════════════════════════════════ */}
+          Figma layout (2-column):
+          
+          LEFT — Form card:
+            Card: left:88 top:4916 w:949 h:968 bg:#161616 rounded-20
+            
+            Labels are Sora SemiBold 24px
+            Inputs: bg:#161616 border-white h:74 rounded-20
+            
+            Row 1 (Name/Phone):
+              Name label:  left:124 top:4972 → offset from card: x:36, y:56
+              Name input:  left:124 top:5018 w:409 h:74
+              Phone label: left:581 top:4972
+              Phone input: left:581 top:5011 w:409 h:74
+            
+            Row 2 (Car model/Email):
+              Car model label: left:125 top:5140
+              Car model input: left:124 top:5186 w:409
+              Email label:     left:582 top:5143
+              Email input:     left:581 top:5186 w:409
+            
+            Row 3 (Car Reg/NID):
+              Car Reg label: left:126 top:5288
+              Car Reg input: left:125 top:5326 w:409
+              NID label:     left:587 top:5285
+              NID input:     left:587 top:5326 w:409
+            
+            Message label: left:126 top:5446
+            Message input: left:126 top:5504 w:865 h:169
+            
+            Button: left:126 top:5719 w:496 h:74 red rounded-40
+          
+          RIGHT — Contact info:
+            "GET A FREE":    left:1314 top:4863 Sora Bold 64px
+            "APPOINTMENT":   left:1314 top:4925
+            
+            Social icons at top:5071 (40×40 each):
+              Instagram: left:1314
+              Facebook:  left:1392 (gap: 78-40=38px between icons)
+              Social/X:  left:1469 (gap: 1469-1392-40=37px)
+            
+            Email icon:    left:1314 top:5152
+            Email text:    left:1382 top:5162 Sora Bold 20px
+            
+            Location icon: left:1314 top:5240
+            Location text: left:1375 top:5244
+            
+            Phone icon:    left:1314 top:5455
+            Phone text 1:  left:1382 top:5459
+            Phone text 2:  left:1382 top:5504
+      ═══════════════════════════════════════════════════════════ */}
       <section
         id="contact-section"
         data-animate
         className={`w-full ${visible['contact-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
         style={{
-          paddingTop: 'clamp(20px, 2.08vw, 40px)',
-          paddingBottom: 'clamp(40px, 4.17vw, 80px)',
-          paddingLeft: 'clamp(24px, 4.58vw, 88px)',
-          paddingRight: 'clamp(24px, 4.58vw, 88px)',
+          paddingTop: responsive(60),
+          paddingBottom: responsive(80),
+          paddingLeft: responsive(88),
+          paddingRight: responsive(88),
         }}
       >
-        <div className="flex flex-col lg:flex-row items-start" style={{ gap: 'clamp(32px, 4.17vw, 80px)' }}>
+        <div className="flex flex-col lg:flex-row items-start" style={{ gap: responsive(277) }}>
+          {/* 277 = 1314 - (88 + 949) = gap between form card right edge and right-side text */}
 
-          {/* ─── Left: Form Card ───
-              Figma: w:949, h:968, bg #161616, rounded-20
-              949/1920 = 49.4vw */}
+          {/* ─── Left: Form Card ─── */}
           <div
-            className="w-full lg:flex-shrink-0 rounded-[20px]"
+            className="w-full lg:flex-shrink-0"
             style={{
               backgroundColor: '#161616',
-              padding: 'clamp(20px, 2.92vw, 56px)',
-              maxWidth: '949px',
+              borderRadius: responsive(20),
+              padding: `${responsive(56)} ${responsive(36)}`,
+              maxWidth: responsive(949),
               width: '100%',
             }}
           >
             <form onSubmit={handleFormSubmit}>
               {/* Row 1: Name + Phone */}
-              <div
-                className="grid grid-cols-1 md:grid-cols-2"
-                style={{ gap: 'clamp(16px, 1.56vw, 30px)', marginBottom: 'clamp(20px, 1.56vw, 30px)' }}
-              >
+              <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: responsive(48), marginBottom: responsive(46) }}>
+                {/* gap = 581-124-409 = 48px (Figma horizontal gap between inputs) */}
+                {/* marginBottom = 5140-5018-74-24 = label-to-label vertical spacing minus font */}
                 <div>
-                  <label
-                    className="block font-semibold"
-                    style={{
-                      fontSize: 'clamp(14px, 1.25vw, 24px)',
-                      marginBottom: 'clamp(6px, 0.52vw, 10px)',
-                    }}
-                  >
+                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
                     Name
                   </label>
                   <input
@@ -537,23 +695,18 @@ export default function Workshop() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full border border-white rounded-[20px] text-white focus:outline-none focus:border-red-500 transition-colors"
+                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
                     style={{
                       backgroundColor: '#161616',
-                      height: 'clamp(48px, 3.85vw, 74px)',
-                      padding: '0 clamp(12px, 1.04vw, 20px)',
-                      fontSize: 'clamp(14px, 0.83vw, 16px)',
+                      height: responsive(74),
+                      borderRadius: responsive(20),
+                      padding: `0 ${responsive(20)}`,
+                      fontSize: responsive(18),
                     }}
                   />
                 </div>
                 <div>
-                  <label
-                    className="block font-semibold"
-                    style={{
-                      fontSize: 'clamp(14px, 1.25vw, 24px)',
-                      marginBottom: 'clamp(6px, 0.52vw, 10px)',
-                    }}
-                  >
+                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
                     Phone
                   </label>
                   <input
@@ -561,30 +714,22 @@ export default function Workshop() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full border border-white rounded-[20px] text-white focus:outline-none focus:border-red-500 transition-colors"
+                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
                     style={{
                       backgroundColor: '#161616',
-                      height: 'clamp(48px, 3.85vw, 74px)',
-                      padding: '0 clamp(12px, 1.04vw, 20px)',
-                      fontSize: 'clamp(14px, 0.83vw, 16px)',
+                      height: responsive(74),
+                      borderRadius: responsive(20),
+                      padding: `0 ${responsive(20)}`,
+                      fontSize: responsive(18),
                     }}
                   />
                 </div>
               </div>
 
               {/* Row 2: Car model + Email */}
-              <div
-                className="grid grid-cols-1 md:grid-cols-2"
-                style={{ gap: 'clamp(16px, 1.56vw, 30px)', marginBottom: 'clamp(20px, 1.56vw, 30px)' }}
-              >
+              <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: responsive(48), marginBottom: responsive(46) }}>
                 <div>
-                  <label
-                    className="block font-semibold"
-                    style={{
-                      fontSize: 'clamp(14px, 1.25vw, 24px)',
-                      marginBottom: 'clamp(6px, 0.52vw, 10px)',
-                    }}
-                  >
+                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
                     Car model
                   </label>
                   <input
@@ -592,23 +737,18 @@ export default function Workshop() {
                     name="carModel"
                     value={formData.carModel}
                     onChange={handleChange}
-                    className="w-full border border-white rounded-[20px] text-white focus:outline-none focus:border-red-500 transition-colors"
+                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
                     style={{
                       backgroundColor: '#161616',
-                      height: 'clamp(48px, 3.85vw, 74px)',
-                      padding: '0 clamp(12px, 1.04vw, 20px)',
-                      fontSize: 'clamp(14px, 0.83vw, 16px)',
+                      height: responsive(74),
+                      borderRadius: responsive(20),
+                      padding: `0 ${responsive(20)}`,
+                      fontSize: responsive(18),
                     }}
                   />
                 </div>
                 <div>
-                  <label
-                    className="block font-semibold"
-                    style={{
-                      fontSize: 'clamp(14px, 1.25vw, 24px)',
-                      marginBottom: 'clamp(6px, 0.52vw, 10px)',
-                    }}
-                  >
+                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
                     Email Address
                   </label>
                   <input
@@ -616,30 +756,22 @@ export default function Workshop() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full border border-white rounded-[20px] text-white focus:outline-none focus:border-red-500 transition-colors"
+                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
                     style={{
                       backgroundColor: '#161616',
-                      height: 'clamp(48px, 3.85vw, 74px)',
-                      padding: '0 clamp(12px, 1.04vw, 20px)',
-                      fontSize: 'clamp(14px, 0.83vw, 16px)',
+                      height: responsive(74),
+                      borderRadius: responsive(20),
+                      padding: `0 ${responsive(20)}`,
+                      fontSize: responsive(18),
                     }}
                   />
                 </div>
               </div>
 
               {/* Row 3: Car Reg + NID */}
-              <div
-                className="grid grid-cols-1 md:grid-cols-2"
-                style={{ gap: 'clamp(16px, 1.56vw, 30px)', marginBottom: 'clamp(20px, 1.56vw, 30px)' }}
-              >
+              <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: responsive(48), marginBottom: responsive(46) }}>
                 <div>
-                  <label
-                    className="block font-semibold"
-                    style={{
-                      fontSize: 'clamp(14px, 1.25vw, 24px)',
-                      marginBottom: 'clamp(6px, 0.52vw, 10px)',
-                    }}
-                  >
+                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
                     Car Reg Number
                   </label>
                   <input
@@ -647,23 +779,18 @@ export default function Workshop() {
                     name="carReg"
                     value={formData.carReg}
                     onChange={handleChange}
-                    className="w-full border border-white rounded-[20px] text-white focus:outline-none focus:border-red-500 transition-colors"
+                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
                     style={{
                       backgroundColor: '#161616',
-                      height: 'clamp(48px, 3.85vw, 74px)',
-                      padding: '0 clamp(12px, 1.04vw, 20px)',
-                      fontSize: 'clamp(14px, 0.83vw, 16px)',
+                      height: responsive(74),
+                      borderRadius: responsive(20),
+                      padding: `0 ${responsive(20)}`,
+                      fontSize: responsive(18),
                     }}
                   />
                 </div>
                 <div>
-                  <label
-                    className="block font-semibold"
-                    style={{
-                      fontSize: 'clamp(14px, 1.25vw, 24px)',
-                      marginBottom: 'clamp(6px, 0.52vw, 10px)',
-                    }}
-                  >
+                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
                     NID Number
                   </label>
                   <input
@@ -671,50 +798,49 @@ export default function Workshop() {
                     name="nid"
                     value={formData.nid}
                     onChange={handleChange}
-                    className="w-full border border-white rounded-[20px] text-white focus:outline-none focus:border-red-500 transition-colors"
+                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
                     style={{
                       backgroundColor: '#161616',
-                      height: 'clamp(48px, 3.85vw, 74px)',
-                      padding: '0 clamp(12px, 1.04vw, 20px)',
-                      fontSize: 'clamp(14px, 0.83vw, 16px)',
+                      height: responsive(74),
+                      borderRadius: responsive(20),
+                      padding: `0 ${responsive(20)}`,
+                      fontSize: responsive(18),
                     }}
                   />
                 </div>
               </div>
 
-              {/* Row 4: Message — Figma: h:169px, full width, rounded-20 */}
-              <div style={{ marginBottom: 'clamp(24px, 2.08vw, 40px)' }}>
-                <label
-                  className="block font-semibold"
-                  style={{
-                    fontSize: 'clamp(14px, 1.25vw, 24px)',
-                    marginBottom: 'clamp(6px, 0.52vw, 10px)',
-                  }}
-                >
+              {/* Message — Figma: w:865 h:169 full width within card */}
+              <div style={{ marginBottom: responsive(46) }}>
+                <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
                   Message
                 </label>
                 <textarea
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  className="w-full border border-white rounded-[20px] text-white focus:outline-none focus:border-red-500 transition-colors resize-none"
+                  className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors resize-none"
                   style={{
                     backgroundColor: '#161616',
-                    height: 'clamp(100px, 8.8vw, 169px)',
-                    padding: 'clamp(12px, 1.04vw, 20px)',
-                    fontSize: 'clamp(14px, 0.83vw, 16px)',
+                    height: responsive(169),
+                    borderRadius: responsive(20),
+                    padding: responsive(20),
+                    fontSize: responsive(18),
                   }}
                 />
               </div>
 
-              {/* Submit — Figma: red bg, white border, 496×74, Sora Bold 32px, rounded-full */}
+              {/* Submit button — Figma: red bg, border white, 496×74, rounded-40, Sora Bold 32px */}
               <button
                 type="submit"
-                className="text-white font-bold rounded-full border border-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
+                className="inline-flex items-center justify-center text-white font-bold border border-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
                 style={{
                   backgroundColor: 'red',
-                  fontSize: 'clamp(16px, 1.67vw, 32px)',
-                  padding: 'clamp(10px, 1.09vw, 21px) clamp(32px, 4.38vw, 84px)',
+                  fontSize: responsive(32),
+                  width: responsive(496),
+                  maxWidth: '100%',
+                  height: responsive(74),
+                  borderRadius: responsive(40),
                 }}
               >
                 Get a Workshop now
@@ -722,75 +848,100 @@ export default function Workshop() {
             </form>
           </div>
 
-          {/* ─── Right: Contact Info ───
-              Figma: starts at left:1314, which is 1314/1920 = 68.4% from left
-              "GET A FREE" + "APPOINTMENT": Sora Bold 64px
-              Social icons: 40×40 at top:5071
-              Email: icon + text at top:5152
-              Location: icon + text at top:5240
-              Phone: icon + text at top:5455
-          */}
-          <div className="w-full lg:w-auto flex flex-col justify-start pt-0 lg:pt-0">
-            {/* Title — Figma: Sora Bold 64px */}
+          {/* ─── Right: Contact Info ─── */}
+          <div className="w-full lg:w-auto flex flex-col justify-start" style={{ flexShrink: 0 }}>
+            {/* "GET A FREE" — Figma: Sora Bold 64px, top:4863 */}
             <h2
               className="font-bold leading-none"
               style={{
-                fontSize: 'clamp(24px, 3.33vw, 64px)',
-                marginBottom: 'clamp(4px, 0.31vw, 6px)',
+                fontSize: responsive(64),
+                marginBottom: responsive(0),
               }}
             >
               GET A FREE
             </h2>
+            {/* "APPOINTMENT" — Figma: top:4925, gap from above: 4925-4863=62px but with 64px font → ~-2px overlap */}
             <h2
               className="font-bold leading-none"
               style={{
-                fontSize: 'clamp(24px, 3.33vw, 64px)',
-                marginBottom: 'clamp(24px, 2.6vw, 50px)',
+                fontSize: responsive(64),
+                marginTop: responsive(0),
+                marginBottom: responsive(75),
               }}
             >
               APPOINTMENT
             </h2>
 
-            {/* Social icons — Figma: 40×40 each, gap between them */}
+            {/* Social icons — Figma: 40×40 each at top:5071
+                Instagram: left:1314, Facebook: left:1392 (gap:38), Social: left:1469 (gap:37) */}
             <div
-              className="flex items-center mb-8"
-              style={{ gap: 'clamp(16px, 1.56vw, 30px)', marginBottom: 'clamp(24px, 2.6vw, 50px)' }}
+              className="flex items-center"
+              style={{
+                gap: responsive(38),
+                marginBottom: responsive(41),
+                /* 5152 - 5071 - 40 = 41px gap to email */
+              }}
             >
-              <a href="#" className="hover:scale-110 transition-transform" style={{ width: 'clamp(28px, 2.08vw, 40px)', height: 'clamp(28px, 2.08vw, 40px)' }}>
+              <a href="#" className="hover:scale-110 transition-transform" style={{ width: responsive(40), height: responsive(40) }}>
                 <img src={IMAGES.iconInstagram} alt="Instagram" className="w-full h-full object-contain brightness-0 invert" />
               </a>
-              <a href="#" className="hover:scale-110 transition-transform" style={{ width: 'clamp(28px, 2.08vw, 40px)', height: 'clamp(28px, 2.08vw, 40px)' }}>
+              <a href="#" className="hover:scale-110 transition-transform" style={{ width: responsive(40), height: responsive(40) }}>
                 <img src={IMAGES.iconFacebook} alt="Facebook" className="w-full h-full object-contain brightness-0 invert" />
               </a>
-              <a href="#" className="hover:scale-110 transition-transform" style={{ width: 'clamp(28px, 2.08vw, 40px)', height: 'clamp(28px, 2.08vw, 40px)' }}>
+              <a href="#" className="hover:scale-110 transition-transform" style={{ width: responsive(40), height: responsive(40) }}>
                 <img src={IMAGES.iconSocial} alt="Twitter" className="w-full h-full object-contain brightness-0 invert" />
               </a>
             </div>
 
-            {/* Email — Figma: mail icon 40×40 + Sora Bold 20px */}
-            <div className="flex items-center" style={{ gap: 'clamp(10px, 1.04vw, 20px)', marginBottom: 'clamp(16px, 1.56vw, 30px)' }}>
-              <div className="shrink-0" style={{ width: 'clamp(28px, 2.08vw, 40px)', height: 'clamp(28px, 2.08vw, 40px)' }}>
+            {/* Email — Figma: mail icon 40×40 at top:5152, text at left:1382 top:5162 */}
+            <div
+              className="flex items-center"
+              style={{
+                gap: responsive(28),
+                /* icon-to-text: 1382-1314-40=28px */
+                marginBottom: responsive(48),
+                /* 5240-5152-40=48px to next icon */
+              }}
+            >
+              <div className="shrink-0" style={{ width: responsive(40), height: responsive(40) }}>
                 <img src={IMAGES.iconMail} alt="Email" className="w-full h-full object-contain brightness-0 invert" />
               </div>
-              <p className="font-bold" style={{ fontSize: 'clamp(12px, 1.04vw, 20px)' }}>mrahman2331077@bscse.uiu.ac.bd</p>
+              <p className="font-bold" style={{ fontSize: responsive(20) }}>mrahman2331077@bscse.uiu.ac.bd</p>
             </div>
 
-            {/* Address */}
-            <div className="flex items-center" style={{ gap: 'clamp(10px, 1.04vw, 20px)', marginBottom: 'clamp(16px, 1.56vw, 30px)' }}>
-              <div className="shrink-0" style={{ width: 'clamp(28px, 2.08vw, 40px)', height: 'clamp(28px, 2.08vw, 40px)' }}>
+            {/* Address — Figma: location icon at top:5240, text at top:5244 left:1375 */}
+            <div
+              className="flex items-center"
+              style={{
+                gap: responsive(21),
+                /* 1375-1314-40=21px */
+                marginBottom: responsive(175),
+                /* 5455-5240-40=175px gap to phone section */
+              }}
+            >
+              <div className="shrink-0" style={{ width: responsive(40), height: responsive(40) }}>
                 <img src={IMAGES.iconLocation} alt="Location" className="w-full h-full object-contain brightness-0 invert" />
               </div>
-              <p className="font-bold" style={{ fontSize: 'clamp(12px, 1.04vw, 20px)' }}>Lane 1 Block A Baridhara Dohs</p>
+              <p className="font-bold" style={{ fontSize: responsive(20) }}>Lane 1 Block A Baridhara Dohs</p>
             </div>
 
-            {/* Phone numbers */}
-            <div className="flex items-start" style={{ gap: 'clamp(10px, 1.04vw, 20px)' }}>
-              <div className="shrink-0 mt-1" style={{ width: 'clamp(28px, 2.08vw, 40px)', height: 'clamp(28px, 2.08vw, 40px)' }}>
+            {/* Phone — Figma: phone icon at top:5455, text at top:5459/5504 */}
+            <div
+              className="flex items-start"
+              style={{
+                gap: responsive(28),
+                /* 1382-1314-40=28px */
+              }}
+            >
+              <div className="shrink-0" style={{ width: responsive(40), height: responsive(40), marginTop: responsive(4) }}>
                 <img src={IMAGES.iconPhone} alt="Phone" className="w-full h-full object-contain brightness-0 invert" />
               </div>
               <div>
-                <p className="font-bold" style={{ fontSize: 'clamp(12px, 1.04vw, 20px)' }}>+8801304098448</p>
-                <p className="font-bold" style={{ fontSize: 'clamp(12px, 1.04vw, 20px)', marginTop: 'clamp(4px, 0.42vw, 8px)' }}>+8801516520602</p>
+                <p className="font-bold" style={{ fontSize: responsive(20) }}>+8801304098448</p>
+                <p className="font-bold" style={{ fontSize: responsive(20), marginTop: responsive(25) }}>
+                  {/* 5504-5459-20=25px gap */}
+                  +8801516520602
+                </p>
               </div>
             </div>
           </div>
