@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import GalleryCard from '../components/GalleryCard';
 
 /* ─── Image Assets ────────────────────────────────────────────── */
 const IMAGES = {
@@ -83,10 +84,30 @@ const SERVICES = [
 ];
 
 const GALLERY = [
-  { img: IMAGES.gallerySchedule, label: 'SCHEDULE' },
-  { img: IMAGES.galleryEngine, label: 'ENGINE' },
-  { img: IMAGES.galleryPainting, label: 'PAINTING' },
-  { img: IMAGES.galleryDetailing, label: 'DETAILING' },
+  {
+    img: IMAGES.gallerySchedule,
+    label: 'SCHEDULE',
+    descLine1: 'Book your service easily at a time',
+    descLine2: 'that fits your schedule.',
+  },
+  {
+    img: IMAGES.galleryEngine,
+    label: 'ENGINE',
+    descLine1: 'Expert engine diagnostics and',
+    descLine2: 'repairs for smooth performance.',
+  },
+  {
+    img: IMAGES.galleryPainting,
+    label: 'PAINTING',
+    descLine1: 'Premium paintwork to restore your',
+    descLine2: 'car’s original shine.',
+  },
+  {
+    img: IMAGES.galleryDetailing,
+    label: 'DETAILING',
+    descLine1: 'Complete interior and exterior',
+    descLine2: 'detailing for a fresh look.',
+  },
 ];
 
 const SPECIALISTS = [
@@ -512,34 +533,15 @@ export default function Workshop() {
           style={{ gap: responsive(44) }}
         >
           {GALLERY.map((item, i) => (
-            <div
+            <GalleryCard
               key={i}
-              className="relative border-white overflow-hidden group cursor-pointer"
-              style={{
-                aspectRatio: '403 / 491',
-                borderWidth: responsive(5),
-                borderStyle: 'solid',
-                borderRadius: responsive(15),
-              }}
-            >
-              <img
-                src={item.img}
-                alt={item.label}
-                className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-              {/* Label — Figma: Sora ExtraBold 40px, left:85 top:390 (79.4% from top) */}
-              <p
-                className="absolute font-extrabold text-white leading-none z-10"
-                style={{
-                  fontSize: responsive(40),
-                  bottom: '12%',
-                  left: '21%',
-                }}
-              >
-                {item.label}
-              </p>
-            </div>
+              img={item.img}
+              label={item.label}
+              descLine1={item.descLine1}
+              descLine2={item.descLine2}
+              responsiveHelper={responsive}
+              onClick={() => navigate('/workshop-select')}
+            />
           ))}
         </div>
       </section>
