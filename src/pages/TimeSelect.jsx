@@ -25,15 +25,7 @@ export default function TimeSelect() {
   return (
     <div className="bg-black min-h-screen text-white font-outfit pt-32 pb-24 px-6 md:px-12 lg:px-20 relative">
       
-      {/* Back Button */}
-      <div className="absolute top-12 left-6 md:left-12 lg:left-20 z-50">
-        <button 
-          onClick={() => navigate(-1)}
-          className="w-12 h-12 bg-white/5 backdrop-blur-md rounded-xl flex items-center justify-center text-2xl hover:bg-white/20 transition-colors border border-white/20"
-        >
-          &lt;
-        </button>
-      </div>
+
 
       <div className="max-w-4xl mx-auto mt-8">
         <div className="text-center mb-12">

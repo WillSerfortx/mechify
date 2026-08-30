@@ -311,15 +311,8 @@ export default function WorkshopSelect() {
       <div className="sticky top-0 z-40 bg-black/90 backdrop-blur-xl border-b border-neutral-800 px-4 sm:px-8 py-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           
-          {/* Back & Title */}
+          {/* Title & Badge */}
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate('/workshop')}
-              className="w-10 h-10 rounded-xl bg-neutral-900 border border-neutral-700 flex items-center justify-center text-white hover:bg-neutral-800 transition-colors cursor-pointer"
-              aria-label="Back to Workshop"
-            >
-              ←
-            </button>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl sm:text-2xl font-bold font-sora tracking-tight">
