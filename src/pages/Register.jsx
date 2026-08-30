@@ -1,247 +1,328 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
+/**
+ * Exact 1:1 Figma implementation for Sign Up Pages:
+ * - Node 1:2018: Standard Customer Sign Up
+ * - Node 1:3814: Sign Up as a Driver
+ *
+ * Smooth interactive toggle between regular customer and driver sign-up modes.
+ */
 export default function Register() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [isDriverMode, setIsDriverMode] = useState(searchParams.get('role') === 'driver');
+
+  // Customer Form State (Node 1:2018)
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+
+  // Driver Form State (Node 1:3814)
+  const [drivingLicense, setDrivingLicense] = useState('');
+  const [nidNumber, setNidNumber] = useState('');
+  const [experience, setExperience] = useState('');
+  const [carOwnership, setCarOwnership] = useState('have_car'); // 'have_car' | 'need_car'
+
+  // Shared Password State
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    firstName: '', lastName: '', email: '', phone: '',
-    password: '', confirmPassword: '', dob: '', gender: '',
-    address: '', city: '', country: 'Bangladesh',
-    vehicleType: '', vehicleMake: '', vehiclePlate: '',
-    agree: false,
-  });
-  const [step, setStep] = useState(1); // 1 = personal, 2 = vehicle
 
-  const update = (field) => (e) => setForm(f => ({ ...f, [field]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
-
-  const handleStep1 = (e) => {
+  const handleSignUp = (e) => {
     e.preventDefault();
-    if (!form.firstName || !form.lastName || !form.email || !form.password || !form.phone) {
-      alert('Please fill in all required fields.'); return;
+    if (!password) {
+      alert('Please input your password.');
+      return;
     }
-    if (form.password !== form.confirmPassword) {
-      alert('Passwords do not match.'); return;
+    if (password !== confirmPassword) {
+      alert('Passwords do not match.');
+      return;
     }
-    setStep(2);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!form.agree) { alert('Please accept the Terms and Conditions.'); return; }
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
+      if (isDriverMode) {
+        localStorage.setItem('userRole', 'driver');
+      } else {
+        localStorage.setItem('userRole', 'user');
+      }
       navigate('/home');
-    }, 2000);
+    }, 600);
   };
 
-  const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-red-500 focus:bg-white/8 transition-all text-base";
-  const labelClass = "text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block";
+  const handleGoogleSignUp = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      localStorage.setItem('userRole', isDriverMode ? 'driver' : 'user');
+      navigate('/home');
+    }, 600);
+  };
 
   return (
-    <div className="min-h-screen bg-black text-white font-outfit flex flex-col items-center justify-center px-6 py-20 overflow-x-hidden relative">
-      {/* Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-red-900/15 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-red-800/10 rounded-full blur-[100px]" />
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-      </div>
+    <div className="relative w-full min-h-screen bg-black text-white font-sora flex items-center justify-center p-4 sm:p-8 lg:p-12 overflow-x-hidden">
+      
+      {/* ─── Hero Background Image ─── */}
+      <img
+        src="/images/workshop/hero-bg.png"
+        alt="Mechify Background"
+        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none opacity-65"
+      />
 
-      <div className="relative z-10 w-full max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <Link to="/auth" className="inline-flex items-center gap-3 mb-8 group justify-center">
-            <svg width="48" height="40" viewBox="0 0 56 48" fill="none">
-              <rect width="56" height="48" rx="4" fill="#CC0000"/>
-              <text x="4" y="34" fontFamily="Arial Black, Arial" fontWeight="900" fontSize="32" fill="white">M</text>
-              <g transform="translate(32,30) scale(0.55)">
-                <rect x="0" y="4" width="28" height="14" rx="2" fill="white"/>
-                <rect x="22" y="0" width="10" height="18" rx="2" fill="white"/>
-                <circle cx="6" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
-                <circle cx="24" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
-              </g>
-            </svg>
-            <div className="text-left">
-              <div className="font-black text-xl tracking-widest group-hover:text-red-400 transition-colors">MECHIFY</div>
-              <div className="text-gray-400 text-[9px] tracking-[0.2em] uppercase">Vehicle Support</div>
+      {/* Dark overlay for contrast */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/80 pointer-events-none" />
+
+      {/* ─── Main Content Container (Figma 1920x1080 proportion) ─── */}
+      <div className="relative z-10 max-w-[1720px] w-full mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 py-8">
+        
+        {/* ─── Left Side: Hollow Stroke Typography (Node 1:2021 / 1:3842) ─── */}
+        <div className="w-full lg:w-1/2 flex flex-col items-start justify-center select-none pl-2 sm:pl-8 lg:pl-16 animate-slideInLeft">
+          <div
+            className="font-bold leading-[1.05] tracking-tight"
+            style={{
+              fontFamily: "'Poppins', 'Sora', sans-serif",
+              fontSize: 'clamp(46px, 6vw, 115px)',
+              color: 'transparent',
+              WebkitTextStroke: '2.5px #ffffff',
+            }}
+          >
+            <p className="mb-1">Start  Your</p>
+            <p className="mb-1">Journey</p>
+            <p className="mb-1">with</p>
+            <p className="text-white" style={{ WebkitTextStroke: '0px' }}>Mechify</p>
+          </div>
+        </div>
+
+        {/* ─── Right Side: White Card (Node 1:2022 / 1:3817) ─── */}
+        <div className="w-full lg:w-auto flex-shrink-0 flex justify-center animate-fadeIn">
+          <div className="bg-white text-black rounded-[24px] sm:rounded-[32px] p-8 sm:p-12 w-full max-w-[640px] shadow-[0_20px_60px_rgba(0,0,0,0.8)] border border-gray-100 relative">
+            
+            {/* Header: Sign Up OR Sign Up as a driver */}
+            <div className="text-center mb-8">
+              <h1 className="font-semibold text-3xl sm:text-4xl lg:text-5xl text-black tracking-tight font-sora mb-2">
+                {isDriverMode ? 'Sign Up as a driver' : 'Sign Up'}
+              </h1>
+              <p className="text-xs sm:text-sm text-gray-500 font-medium">
+                {isDriverMode ? 'Join Mechify professional driver network' : 'Create your personal Mechify account'}
+              </p>
             </div>
-          </Link>
-          <h1 className="text-5xl font-black mb-3">Create Your Account</h1>
-          <p className="text-gray-400 text-lg">Join thousands of drivers on Mechify today.</p>
-        </div>
 
-        {/* Step Progress */}
-        <div className="flex items-center gap-4 mb-12">
-          <div className={`flex-1 h-2 rounded-full transition-all duration-500 ${step >= 1 ? 'bg-red-600' : 'bg-white/10'}`} />
-          <div className={`flex-1 h-2 rounded-full transition-all duration-500 ${step >= 2 ? 'bg-red-600' : 'bg-white/10'}`} />
-          <div className="text-gray-400 text-xs font-bold uppercase tracking-widest whitespace-nowrap">Step {step} of 2</div>
-        </div>
+            <form onSubmit={handleSignUp} className="space-y-4 sm:space-y-5">
+              
+              {/* ─── CUSTOMER MODE FIELDS (Node 1:2018) ─── */}
+              {!isDriverMode ? (
+                <>
+                  {/* First name */}
+                  <div>
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="First name"
+                      className="w-full bg-white border border-black rounded-[13px] h-[58px] sm:h-[64px] px-5 text-base sm:text-lg text-black placeholder-[#b6b6b6] focus:outline-none focus:border-red-600 transition-colors"
+                    />
+                  </div>
 
-        <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl">
+                  {/* Last name */}
+                  <div>
+                    <input
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      placeholder="Last name"
+                      className="w-full bg-white border border-black rounded-[13px] h-[58px] sm:h-[64px] px-5 text-base sm:text-lg text-black placeholder-[#b6b6b6] focus:outline-none focus:border-red-600 transition-colors"
+                    />
+                  </div>
 
-          {/* ── STEP 1: Personal Info ── */}
-          {step === 1 && (
-            <form onSubmit={handleStep1} className="space-y-6 animate-fadeIn">
-              <h2 className="text-2xl font-black mb-6 text-red-400">👤 Personal Information</h2>
+                  {/* Email address */}
+                  <div>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Email address"
+                      className="w-full bg-white border border-black rounded-[13px] h-[58px] sm:h-[64px] px-5 text-base sm:text-lg text-black placeholder-[#bbb] focus:outline-none focus:border-red-600 transition-colors"
+                    />
+                  </div>
+                </>
+              ) : (
+                /* ─── DRIVER MODE FIELDS (Node 1:3814) ─── */
+                <>
+                  {/* Driving License */}
+                  <div>
+                    <input
+                      type="text"
+                      value={drivingLicense}
+                      onChange={(e) => setDrivingLicense(e.target.value)}
+                      placeholder="Driving License"
+                      className="w-full bg-white border border-black rounded-[13px] h-[58px] sm:h-[64px] px-5 text-base sm:text-lg text-black placeholder-[#b6b6b6] focus:outline-none focus:border-red-600 transition-colors"
+                    />
+                  </div>
 
-              <div className="grid md:grid-cols-2 gap-5">
-                <div>
-                  <label className={labelClass}>First Name <span className="text-red-500">*</span></label>
-                  <input className={inputClass} placeholder="John" value={form.firstName} onChange={update('firstName')} />
-                </div>
-                <div>
-                  <label className={labelClass}>Last Name <span className="text-red-500">*</span></label>
-                  <input className={inputClass} placeholder="Doe" value={form.lastName} onChange={update('lastName')} />
-                </div>
-              </div>
+                  {/* NID Number */}
+                  <div>
+                    <input
+                      type="text"
+                      value={nidNumber}
+                      onChange={(e) => setNidNumber(e.target.value)}
+                      placeholder="NID Number"
+                      className="w-full bg-white border border-black rounded-[13px] h-[58px] sm:h-[64px] px-5 text-base sm:text-lg text-black placeholder-[#b6b6b6] focus:outline-none focus:border-red-600 transition-colors"
+                    />
+                  </div>
 
-              <div>
-                <label className={labelClass}>Email Address <span className="text-red-500">*</span></label>
-                <input type="email" className={inputClass} placeholder="you@example.com" value={form.email} onChange={update('email')} />
-              </div>
+                  {/* Driving experience */}
+                  <div>
+                    <input
+                      type="text"
+                      value={experience}
+                      onChange={(e) => setExperience(e.target.value)}
+                      placeholder="Driving experience"
+                      className="w-full bg-white border border-black rounded-[13px] h-[58px] sm:h-[64px] px-5 text-base sm:text-lg text-black placeholder-[#bbb] focus:outline-none focus:border-red-600 transition-colors"
+                    />
+                  </div>
+                </>
+              )}
 
-              <div>
-                <label className={labelClass}>Phone Number <span className="text-red-500">*</span></label>
-                <input type="tel" className={inputClass} placeholder="+880 1XXXXXXXXX" value={form.phone} onChange={update('phone')} />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-5">
-                <div>
-                  <label className={labelClass}>Date of Birth</label>
-                  <input type="date" className={inputClass} value={form.dob} onChange={update('dob')} style={{ colorScheme: 'dark' }} />
-                </div>
-                <div>
-                  <label className={labelClass}>Gender</label>
-                  <select className={inputClass} value={form.gender} onChange={update('gender')} style={{ colorScheme: 'dark' }}>
-                    <option value="" className="bg-black">Select gender</option>
-                    <option value="male" className="bg-black">Male</option>
-                    <option value="female" className="bg-black">Female</option>
-                    <option value="other" className="bg-black">Prefer not to say</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className={labelClass}>Address</label>
-                <input className={inputClass} placeholder="House, Road, Area" value={form.address} onChange={update('address')} />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-5">
-                <div>
-                  <label className={labelClass}>City</label>
-                  <input className={inputClass} placeholder="Dhaka" value={form.city} onChange={update('city')} />
-                </div>
-                <div>
-                  <label className={labelClass}>Country</label>
-                  <select className={inputClass} value={form.country} onChange={update('country')} style={{ colorScheme: 'dark' }}>
-                    <option className="bg-black">Bangladesh</option>
-                    <option className="bg-black">India</option>
-                    <option className="bg-black">United Kingdom</option>
-                    <option className="bg-black">United States</option>
-                    <option className="bg-black">Canada</option>
-                    <option className="bg-black">Australia</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className={labelClass}>Password <span className="text-red-500">*</span></label>
-                <input type="password" className={inputClass} placeholder="Min. 8 characters" value={form.password} onChange={update('password')} />
-              </div>
-              <div>
-                <label className={labelClass}>Confirm Password <span className="text-red-500">*</span></label>
-                <input type="password" className={inputClass} placeholder="Repeat your password" value={form.confirmPassword} onChange={update('confirmPassword')} />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-red-600 hover:bg-red-500 text-white font-black text-lg py-5 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-[0_0_25px_rgba(220,38,38,0.4)] mt-4"
-              >
-                Continue to Vehicle Details →
-              </button>
-            </form>
-          )}
-
-          {/* ── STEP 2: Vehicle Info ── */}
-          {step === 2 && (
-            <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-black text-red-400">🚗 Vehicle Information</h2>
-                <button type="button" onClick={() => setStep(1)} className="text-gray-400 hover:text-white text-sm font-semibold transition-colors">
-                  ← Back
+              {/* Shared: Input your Password.. (with eye toggle) */}
+              <div className="relative flex items-center">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Input your Password.."
+                  className="w-full bg-white border border-black rounded-[13px] h-[58px] sm:h-[64px] px-5 pr-14 text-base sm:text-lg text-black placeholder-[#bbb] focus:outline-none focus:border-red-600 transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 text-gray-500 hover:text-black p-1 transition-colors cursor-pointer"
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                    </svg>
+                  ) : (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
                 </button>
               </div>
 
-              <p className="text-gray-400 text-sm -mt-4 mb-6">Optional — helps us give you better service recommendations.</p>
-
+              {/* Shared: Confirm your Password.. */}
               <div>
-                <label className={labelClass}>Vehicle Type</label>
-                <select className={inputClass} value={form.vehicleType} onChange={update('vehicleType')} style={{ colorScheme: 'dark' }}>
-                  <option value="" className="bg-black">Select type</option>
-                  <option className="bg-black">Sedan</option>
-                  <option className="bg-black">SUV</option>
-                  <option className="bg-black">Pickup Truck</option>
-                  <option className="bg-black">Sports Car</option>
-                  <option className="bg-black">Motorcycle</option>
-                  <option className="bg-black">Microbus</option>
-                  <option className="bg-black">Other</option>
-                </select>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm your Password.."
+                  className="w-full bg-white border border-black rounded-[13px] h-[58px] sm:h-[64px] px-5 text-base sm:text-lg text-black placeholder-[#bbb] focus:outline-none focus:border-red-600 transition-colors"
+                />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-5">
-                <div>
-                  <label className={labelClass}>Vehicle Make / Brand</label>
-                  <input className={inputClass} placeholder="e.g. Toyota, BMW" value={form.vehicleMake} onChange={update('vehicleMake')} />
-                </div>
-                <div>
-                  <label className={labelClass}>License Plate</label>
-                  <input className={`${inputClass} font-mono tracking-widest`} placeholder="DHK-0000" value={form.vehiclePlate} onChange={update('vehiclePlate')} />
-                </div>
-              </div>
-
-              <div className="mt-6 p-6 bg-white/5 rounded-2xl border border-white/10">
-                <label className="flex items-start gap-4 cursor-pointer group">
-                  <div className="relative mt-0.5 flex-shrink-0">
+              {/* ─── Role Checkboxes / Radio Buttons ─── */}
+              {!isDriverMode ? (
+                /* Customer Mode: Want to join as a driver ? (Node 1:2033) */
+                <div className="pt-1 pb-1">
+                  <label className="flex items-center gap-3 cursor-pointer select-none">
                     <input
                       type="checkbox"
-                      className="sr-only"
-                      checked={form.agree}
-                      onChange={update('agree')}
+                      checked={isDriverMode}
+                      onChange={(e) => setIsDriverMode(e.target.checked)}
+                      className="w-5 h-5 rounded-full border border-black accent-black cursor-pointer"
                     />
-                    <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${form.agree ? 'bg-red-600 border-red-600' : 'border-white/30 group-hover:border-white/60'}`}>
-                      {form.agree && <span className="text-white text-sm font-bold">✓</span>}
-                    </div>
-                  </div>
-                  <p className="text-gray-400 text-sm leading-relaxed">
-                    I agree to Mechify's{' '}
-                    <span className="text-red-400 hover:underline cursor-pointer">Terms of Service</span> and{' '}
-                    <span className="text-red-400 hover:underline cursor-pointer">Privacy Policy</span>. I confirm that all information provided is accurate.
-                  </p>
-                </label>
-              </div>
+                    <span className="text-[#888] hover:text-black text-sm sm:text-base font-normal transition-colors">
+                      Want to join as a driver ?
+                    </span>
+                  </label>
+                </div>
+              ) : (
+                /* Driver Mode: I have a car / I need a car (Node 1:3828, 1:3829) */
+                <div className="flex flex-wrap items-center justify-between gap-4 pt-1 pb-1">
+                  <div className="flex items-center gap-6">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="radio"
+                        name="carOwnership"
+                        value="have_car"
+                        checked={carOwnership === 'have_car'}
+                        onChange={() => setCarOwnership('have_car')}
+                        className="w-5 h-5 accent-black cursor-pointer"
+                      />
+                      <span className="text-[#888] text-sm sm:text-base">I have a car</span>
+                    </label>
 
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="radio"
+                        name="carOwnership"
+                        value="need_car"
+                        checked={carOwnership === 'need_car'}
+                        onChange={() => setCarOwnership('need_car')}
+                        className="w-5 h-5 accent-black cursor-pointer"
+                      />
+                      <span className="text-[#888] text-sm sm:text-base">I need a car</span>
+                    </label>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsDriverMode(false)}
+                    className="text-xs text-red-600 hover:underline font-semibold"
+                  >
+                    Switch to User Sign-up
+                  </button>
+                </div>
+              )}
+
+              {/* Submit Button (Node 1:2035 / 1:3831) */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-red-600 hover:bg-red-500 disabled:bg-red-900 text-white font-black text-xl py-6 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-[0_0_30px_rgba(220,38,38,0.5)] hover:shadow-[0_0_50px_rgba(220,38,38,0.7)] mt-2 relative overflow-hidden group"
+                className="w-full bg-black hover:bg-neutral-800 text-white font-normal text-xl sm:text-2xl h-[60px] sm:h-[65px] rounded-[30px] transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-lg flex items-center justify-center cursor-pointer mt-3"
               >
-                {loading ? (
-                  <span className="flex items-center justify-center gap-3">
-                    <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z"/>
-                    </svg>
-                    Creating Account...
-                  </span>
-                ) : '🚗 Complete Registration & Enter Mechify'}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                {loading ? 'Creating Account...' : 'Sign up'}
               </button>
 
-              <p className="text-center text-gray-600 text-xs">Already have an account? <Link to="/auth" className="text-red-400 hover:text-red-300">Sign In</Link></p>
+              {/* Divider (Node 1:2034 / 1:3830) */}
+              <div className="flex items-center justify-center gap-3 my-3">
+                <div className="flex-1 h-[1px] bg-gray-300" />
+                <span className="text-[#888] text-sm sm:text-base font-normal px-2">
+                  Or sign up with:
+                </span>
+                <div className="flex-1 h-[1px] bg-gray-300" />
+              </div>
+
+              {/* Sign up with Google (Node 1:2036 / 1:3832) */}
+              <button
+                type="button"
+                onClick={handleGoogleSignUp}
+                className="w-full bg-white hover:bg-gray-50 text-black border border-black font-normal text-lg sm:text-xl h-[60px] sm:h-[65px] rounded-[30px] transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer shadow-sm active:scale-95"
+              >
+                {/* Google Multicolor Logo */}
+                <svg className="w-6 h-6" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                </svg>
+                <span>Sign up with Google</span>
+              </button>
+
+              {/* Footer Switch Link */}
+              <div className="text-center pt-2 text-sm sm:text-base">
+                <span className="text-[#807e7e]">Already Have An Account? </span>
+                <Link to="/auth" className="font-bold text-black hover:underline ml-1">
+                  Login Here
+                </Link>
+              </div>
             </form>
-          )}
+          </div>
         </div>
       </div>
     </div>
