@@ -1,240 +1,274 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import FigmaScreenWrapper from '../components/FigmaScreenWrapper';
 
+const imgVision = "/images/auth/vision.png";
+const imgGoogle = "/images/auth/google.png";
+const imgLine3 = "/images/auth/line3.svg";
+const imgLine4 = "/images/auth/line4.svg";
+
+/**
+ * Exact Figma Implementation for Login (Node 1:1104)
+ */
 export default function Auth() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState('signin'); // 'signin' | 'forgot'
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('123');
   const [showPassword, setShowPassword] = useState(false);
-  const [resetEmail, setResetEmail] = useState('');
-  const [resetSent, setResetSent] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState('');
 
-  const VALID_EMAIL = 'mahi@gmail.com';
-  const VALID_DRIVER_EMAIL = 'driver@gmail.com';
-  const VALID_PASSWORD = '123';
+  const demoProfiles = [
+    { role: 'user', label: 'Regular User (mahi@gmail.com)', email: 'mahi@gmail.com' },
+    { role: 'driver', label: 'Verified Driver (driver@gmail.com)', email: 'driver@gmail.com' },
+  ];
 
-  const handleSignIn = (e) => {
-    e.preventDefault();
-    if (!email || !password) { alert('Please fill in all fields.'); return; }
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      if (email === VALID_DRIVER_EMAIL && password === VALID_PASSWORD) {
-        localStorage.setItem('userRole', 'driver');
-        navigate('/home');
-      } else if (email === VALID_EMAIL && password === VALID_PASSWORD) {
-        localStorage.setItem('userRole', 'user');
-        navigate('/home');
-      } else {
-        alert('Invalid email or password. Please try again.');
-      }
-    }, 1200);
+  const handleSelectProfile = (p) => {
+    setSelectedProfile(p.label);
+    setEmail(p.email);
+    setShowProfileDropdown(false);
   };
 
-  const handleForgotPassword = (e) => {
-    e.preventDefault();
-    if (!resetEmail) { alert('Please enter your email.'); return; }
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setResetSent(true);
-    }, 1200);
+  const handleLogin = (e) => {
+    e?.preventDefault?.();
+    const finalEmail = email.trim() || (selectedProfile.includes('driver') ? 'driver@gmail.com' : 'mahi@gmail.com');
+    if (finalEmail === 'driver@gmail.com') {
+      localStorage.setItem('userRole', 'driver');
+    } else {
+      localStorage.setItem('userRole', 'user');
+    }
+    navigate('/home');
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-outfit flex flex-col lg:flex-row overflow-hidden relative">
-      
-      {/* ── Simple Animated Background ── */}
-      <div className="absolute inset-0 z-0 bg-[#050505] overflow-hidden pointer-events-none">
-        {/* Animated glowing orbs */}
-        <div className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] bg-red-900/40 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '7s' }} />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-orange-900/20 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '10s', animationDelay: '1s' }} />
+    <FigmaScreenWrapper bgImage="/images/auth/bg.png">
+      <div className="relative w-[1920px] h-[1080px] select-none font-sora" data-node-id="1:1104">
         
-        {/* Subtle grid/texture overlay */}
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-      </div>
+        {/* ─── Left Typography: Start Your Journey with Mechify (Node 1:1107) ─── */}
+        <div 
+          className="[word-break:break-word] absolute font-['Poppins'] font-bold h-[683px] leading-[0] left-[156px] not-italic text-[128px] text-white top-[266px] w-[820px] whitespace-pre-wrap select-none" 
+          data-node-id="1:1107"
+          style={{
+            color: 'transparent',
+            WebkitTextStroke: '2.5px #ffffff',
+            textStroke: '2.5px #ffffff'
+          }}
+        >
+          <p className="leading-[22px] mb-0">{`Start  Your`}</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">{` `}</p>
+          <p className="leading-[22px] mb-0">Journey</p>
+          <p className="leading-[22px] mb-0">{` `}</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">with</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px]">Mechify</p>
+        </div>
 
-      {/* ── Left Panel: Branding ── */}
-      <div className="lg:w-1/2 relative z-10 flex flex-col justify-center items-center p-12 min-h-[35vh] lg:min-h-screen overflow-hidden">
-        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-900/20 rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDuration: '5s' }} />
+        {/* ─── White Card (Node 1:1108) ─── */}
+        <div 
+          className="absolute bg-white h-[908px] left-[1081px] rounded-[20px] top-[86px] w-[745px] shadow-[0px_25px_70px_rgba(0,0,0,0.85)]" 
+          data-node-id="1:1108" 
+        />
 
-        <div className="relative z-10 text-center max-w-md">
-          {/* Logo */}
-          <Link to="/landing" className="inline-flex items-center gap-3 mb-10 group">
-            <div>
-              <svg width="56" height="48" viewBox="0 0 56 48" fill="none">
-                <rect width="56" height="48" rx="4" fill="#CC0000"/>
-                <text x="4" y="34" fontFamily="Arial Black, Arial" fontWeight="900" fontSize="32" fill="white">M</text>
-                <g transform="translate(32,30) scale(0.55)">
-                  <rect x="0" y="4" width="28" height="14" rx="2" fill="white"/>
-                  <rect x="22" y="0" width="10" height="18" rx="2" fill="white"/>
-                  <circle cx="6" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
-                  <circle cx="24" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
-                </g>
-              </svg>
-            </div>
-            <div className="text-left leading-tight">
-              <div className="text-white font-black text-2xl tracking-widest group-hover:text-red-400 transition-colors">MECHIFY</div>
-              <div className="text-gray-400 text-[10px] tracking-[0.2em] uppercase">Vehicle Support</div>
-            </div>
-          </Link>
+        {/* ─── Title: Welcome Back! (Node 1:1118) ─── */}
+        <p 
+          className="[word-break:break-word] absolute font-['Sora'] font-semibold leading-[22px] right-[679px] text-[48px] text-black top-[143px] translate-x-full whitespace-nowrap z-10" 
+          data-node-id="1:1118"
+        >
+          Welcome Back!
+        </p>
 
-          <h2 className="text-4xl md:text-5xl font-black mb-4 leading-tight">
-            Your Car.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Our Priority.</span>
-          </h2>
-          <p className="text-gray-400 text-lg leading-relaxed mb-8">
-            Join Mechify for instant access to premium car rentals, certified mechanics, emergency fuel, and more — all in one place.
-          </p>
+        {/* ─── Email Label (Node 1:1119) ─── */}
+        <p 
+          className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1155px] text-[20px] text-black top-[228px] whitespace-nowrap z-10" 
+          data-node-id="1:1119"
+        >
+          Email
+        </p>
 
-          <div className="space-y-4 text-left">
-            {['Luxury car rentals & chauffeur hiring', 'Emergency roadside assistance 24/7', 'Certified workshop bookings', '450+ genuine spare parts'].map(f => (
-              <div key={f} className="flex items-center gap-3 text-sm text-gray-300">
-                <div className="w-6 h-6 rounded-full bg-red-600/30 border border-red-500/50 flex items-center justify-center flex-shrink-0 text-red-400">✓</div>
-                {f}
+        {/* ─── Choose your Profile Button / Dropdown (Node 1:3024) ─── */}
+        <div className="absolute left-[1156px] top-[264px] w-[563px] h-[71px] z-20">
+          <button 
+            type="button"
+            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+            className="w-full h-full bg-white border border-black border-solid cursor-pointer rounded-[10px] overflow-clip relative flex items-center px-6 justify-between hover:bg-gray-50 transition-colors"
+            data-node-id="1:3024"
+          >
+            <p className="[word-break:break-word] font-['Sora'] font-normal leading-[normal] text-black text-left whitespace-nowrap truncate text-[32px]">
+              {selectedProfile || email || 'Choose your Profile'}
+            </p>
+            <span className="text-black text-lg ml-2">▼</span>
+          </button>
+
+          {/* Profile Dropdown */}
+          {showProfileDropdown && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-black rounded-xl shadow-2xl z-50 overflow-hidden">
+              {demoProfiles.map((p, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => handleSelectProfile(p)}
+                  className="px-6 py-4 hover:bg-gray-100 cursor-pointer text-xl text-black border-b border-gray-100 last:border-0 font-['Sora'] font-medium"
+                >
+                  {p.label}
+                </div>
+              ))}
+              <div className="p-4 bg-gray-50 border-t border-gray-200">
+                <input
+                  type="email"
+                  placeholder="Or type custom email..."
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setSelectedProfile('');
+                  }}
+                  className="w-full bg-white border border-gray-400 rounded-lg px-4 py-2.5 text-lg text-black focus:outline-none focus:border-black font-['Sora']"
+                  onClick={(e) => e.stopPropagation()}
+                />
               </div>
-            ))}
+            </div>
+          )}
+        </div>
+
+        {/* ─── Password Label (Node 1:1120) ─── */}
+        <p 
+          className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1155px] text-[20px] text-black top-[355px] whitespace-nowrap z-10" 
+          data-node-id="1:1120"
+        >
+          Password
+        </p>
+
+        {/* ─── Password Input Box (Node 1:1109) ─── */}
+        <div 
+          className="absolute bg-white border border-black border-solid h-[71px] left-[1155px] rounded-[13px] top-[390px] w-[563px] flex items-center z-10" 
+          data-node-id="1:1109"
+        >
+          <input 
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Input your Password.."
+            className="w-full h-full bg-transparent px-6 pr-16 font-['Sora'] font-normal text-[24px] text-black placeholder-[#bbbbbb] focus:outline-none"
+          />
+        </div>
+
+        {/* ─── Vision Eye Icon (Node 1:1121) ─── */}
+        <div 
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute left-[1659px] size-[30px] top-[409px] cursor-pointer z-20 flex items-center justify-center" 
+          data-node-id="1:1121" 
+          data-name="Vision"
+        >
+          <img 
+            alt="Vision" 
+            className={`w-[30px] h-[30px] object-contain transition-opacity ${showPassword ? 'opacity-40' : 'opacity-100'}`} 
+            src={imgVision} 
+          />
+        </div>
+
+        {/* ─── Checkbox Box (Node 1:1122) ─── */}
+        <div 
+          onClick={() => setRememberMe(!rememberMe)}
+          className="absolute bg-white border border-[#0d0c0c] border-solid left-[1165px] rounded-[10px] size-[25px] top-[500px] cursor-pointer z-10 flex items-center justify-center" 
+          data-node-id="1:1122" 
+        >
+          {rememberMe && <span className="text-black font-bold text-base leading-none">✓</span>}
+        </div>
+
+        {/* ─── Remember Me Text (Node 1:1111) ─── */}
+        <p 
+          onClick={() => setRememberMe(!rememberMe)}
+          className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1194px] text-[#bbbbbb] text-[24px] top-[502px] whitespace-nowrap cursor-pointer z-10 select-none" 
+          data-node-id="1:1111"
+        >
+          Remember Me
+        </p>
+
+        {/* ─── Forget password? (Node 1:1115) ─── */}
+        <p 
+          onClick={() => alert('Password reset instructions sent to your email.')}
+          className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1500px] text-[#bbbbbb] text-[24px] top-[501px] whitespace-nowrap cursor-pointer hover:text-black transition-colors z-10 select-none" 
+          data-node-id="1:1115"
+        >
+          Forget password?
+        </p>
+
+        {/* ─── Login Button (Node 1:1116, 1:1123) ─── */}
+        <button 
+          onClick={handleLogin}
+          className="absolute bg-black border border-[#030303] border-solid h-[65px] left-[1162px] rounded-[30px] top-[553px] w-[557px] cursor-pointer hover:bg-neutral-800 transition-all active:scale-95 flex items-center justify-center z-10" 
+          data-node-id="1:1116"
+        >
+          <p className="[word-break:break-word] font-['Sora'] font-normal leading-[22px] text-[#fffafa] text-[24px] whitespace-nowrap" data-node-id="1:1123">
+            Login
+          </p>
+        </button>
+
+        {/* ─── Divider Left Line (Node 1:1126) ─── */}
+        <div className="absolute flex h-[1.037px] items-center justify-center left-[1134px] top-[694px] w-[197px]" data-node-id="1:1126">
+          <div className="flex-none rotate-[-0.3deg]">
+            <div className="h-0 relative w-[197.003px]">
+              <div className="absolute inset-[-1px_0_0_0]">
+                <img alt="" className="block max-w-none size-full" src={imgLine4} />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* ── Right Panel: Form ── */}
-      <div className="lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-black/50 backdrop-blur-xl border-l border-white/10 relative z-10 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
-        <div className="w-full max-w-lg">
+        {/* ─── Divider Text: Or continue with: (Node 1:1112) ─── */}
+        <p 
+          className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1336px] text-[#bbbbbb] text-[24px] top-[681px] whitespace-nowrap z-10" 
+          data-node-id="1:1112"
+        >
+          Or continue with:
+        </p>
 
-          {/* ── SIGN IN FORM ── */}
-          {mode === 'signin' && (
-            <div className="animate-fadeIn">
-              <h1 className="text-4xl font-black mb-2">Welcome back</h1>
-              <p className="text-gray-400 mb-10">Sign in to your Mechify account</p>
-
-              <form onSubmit={handleSignIn} className="space-y-5">
-                <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block">Email Address</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-red-500 focus:bg-white/8 transition-all text-base"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block">Password</label>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-red-500 focus:bg-white/8 transition-all text-base pr-14"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-sm font-bold uppercase transition-colors"
-                    >
-                      {showPassword ? 'Hide' : 'Show'}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setMode('forgot')}
-                    className="text-red-400 hover:text-red-300 text-sm font-semibold transition-colors"
-                  >
-                    Forgot Password?
-                  </button>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-red-600 hover:bg-red-500 disabled:bg-red-900 text-white font-black text-lg py-5 rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-[0_0_25px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_rgba(220,38,38,0.6)] relative overflow-hidden group"
-                >
-                  {loading ? (
-                    <span className="flex items-center justify-center gap-3">
-                      <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z"/>
-                      </svg>
-                      Signing In...
-                    </span>
-                  ) : 'Sign In →'}
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                </button>
-              </form>
-
-              <div className="my-8 flex items-center gap-4">
-                <div className="flex-1 h-px bg-white/10" />
-                <span className="text-gray-500 text-sm font-semibold">or</span>
-                <div className="flex-1 h-px bg-white/10" />
+        {/* ─── Divider Right Line (Node 1:1125) ─── */}
+        <div className="absolute flex h-[1.037px] items-center justify-center left-[1555.5px] top-[692.54px] w-[197px]" data-node-id="1:1125">
+          <div className="flex-none rotate-[-0.3deg]">
+            <div className="h-0 relative w-[197.003px]">
+              <div className="absolute inset-[-0.5px_0]">
+                <img alt="" className="block max-w-none size-full" src={imgLine3} />
               </div>
-
-              <Link
-                to="/register"
-                className="group block w-full text-center border-2 border-white/20 hover:border-red-500 text-white font-black text-lg py-5 rounded-xl transition-all duration-300 hover:bg-red-600/10 hover:shadow-[0_0_25px_rgba(220,38,38,0.2)]"
-              >
-                Create / Join Today 🚗
-              </Link>
-
-              <p className="text-center text-gray-600 text-xs mt-6">
-                By continuing, you agree to Mechify's{' '}
-                <span className="text-red-500 cursor-pointer">Terms of Service</span> and{' '}
-                <span className="text-red-500 cursor-pointer">Privacy Policy</span>.
-              </p>
             </div>
-          )}
-
-          {/* ── FORGOT PASSWORD FORM ── */}
-          {mode === 'forgot' && (
-            <div className="animate-fadeIn">
-              <button onClick={() => { setMode('signin'); setResetSent(false); setResetEmail(''); }} className="flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors font-semibold">
-                ← Back to Sign In
-              </button>
-
-              <h1 className="text-4xl font-black mb-2">Reset Password</h1>
-              <p className="text-gray-400 mb-10">Enter your email and we'll send you a reset link.</p>
-
-              {resetSent ? (
-                <div className="text-center py-12 animate-fadeIn">
-                  <div className="text-7xl mb-6">✉️</div>
-                  <h2 className="text-2xl font-black mb-3">Check Your Inbox</h2>
-                  <p className="text-gray-400 mb-8">We've sent a password reset link to<br /><span className="text-white font-bold">{resetEmail}</span></p>
-                  <button onClick={() => { setMode('signin'); setResetSent(false); setResetEmail(''); }} className="bg-red-600 hover:bg-red-500 text-white font-bold px-8 py-3 rounded-xl transition-colors">
-                    Back to Sign In
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleForgotPassword} className="space-y-5">
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block">Email Address</label>
-                    <input
-                      type="email"
-                      value={resetEmail}
-                      onChange={e => setResetEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-red-500 transition-all text-base"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-red-600 hover:bg-red-500 disabled:bg-red-900 text-white font-black text-lg py-5 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-[0_0_25px_rgba(220,38,38,0.4)]"
-                  >
-                    {loading ? 'Sending...' : 'Send Reset Link'}
-                  </button>
-                </form>
-              )}
-            </div>
-          )}
+          </div>
         </div>
+
+        {/* ─── Continue with Google Button (Node 1:1117, 1:1127, 1:1124) ─── */}
+        <button 
+          onClick={handleLogin}
+          className="absolute bg-white border border-black border-solid h-[65px] left-[1175px] rounded-[30px] top-[756px] w-[557px] cursor-pointer hover:bg-gray-50 transition-all active:scale-95 flex items-center justify-center z-10 gap-4" 
+          data-node-id="1:1117"
+        >
+          <img alt="Google" className="size-[35px] object-contain" src={imgGoogle} data-node-id="1:1127" />
+          <p className="[word-break:break-word] font-['Sora'] font-normal leading-[22px] text-[#080808] text-[24px] whitespace-nowrap" data-node-id="1:1124">
+            Continue with Google
+          </p>
+        </button>
+
+        {/* ─── Footer Text (Node 1:1113, 1:1114) ─── */}
+        <p 
+          className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1222px] text-[#807e7e] text-[24px] top-[852px] whitespace-nowrap z-10" 
+          data-node-id="1:1113"
+        >
+          Don’t Have An Account?
+        </p>
+        <Link 
+          to="/register"
+          className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1528px] text-[#0e0d0d] text-[24px] top-[852px] whitespace-nowrap hover:underline font-bold z-10" 
+          data-node-id="1:1114"
+        >
+          Sign Up Here
+        </Link>
       </div>
-    </div>
+    </FigmaScreenWrapper>
   );
 }

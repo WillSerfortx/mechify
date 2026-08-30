@@ -1,249 +1,354 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import FigmaScreenWrapper from '../components/FigmaScreenWrapper';
 
+const imgVision = "/images/auth/vision.png";
+const imgGoogle = "/images/auth/google.png";
+const imgLine3 = "/images/auth/line3.svg";
+const imgLine4 = "/images/auth/line4.svg";
+
+/**
+ * Exact Figma Implementation for Sign Up (Node 1:2018) & Driver Sign Up (Node 1:3814)
+ */
 export default function Register() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    firstName: '', lastName: '', email: '', phone: '',
-    password: '', confirmPassword: '', dob: '', gender: '',
-    address: '', city: '', country: 'Bangladesh',
-    vehicleType: '', vehicleMake: '', vehiclePlate: '',
-    agree: false,
-  });
-  const [step, setStep] = useState(1); // 1 = personal, 2 = vehicle
+  const [searchParams] = useSearchParams();
+  const [isDriverMode, setIsDriverMode] = useState(searchParams.get('role') === 'driver');
 
-  const update = (field) => (e) => setForm(f => ({ ...f, [field]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
+  // Customer State (Node 1:2018)
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
 
-  const handleStep1 = (e) => {
-    e.preventDefault();
-    if (!form.firstName || !form.lastName || !form.email || !form.password || !form.phone) {
-      alert('Please fill in all required fields.'); return;
+  // Driver State (Node 1:3814)
+  const [drivingLicense, setDrivingLicense] = useState('');
+  const [nidNumber, setNidNumber] = useState('');
+  const [experience, setExperience] = useState('');
+  const [carOwnership, setCarOwnership] = useState('have_car'); // 'have_car' | 'need_car'
+
+  // Shared
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleSignUp = (e) => {
+    e?.preventDefault?.();
+    if (!password) {
+      alert('Please enter your password.');
+      return;
     }
-    if (form.password !== form.confirmPassword) {
-      alert('Passwords do not match.'); return;
+    if (password !== confirmPassword) {
+      alert('Passwords do not match.');
+      return;
     }
-    setStep(2);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (isDriverMode) {
+      localStorage.setItem('userRole', 'driver');
+    } else {
+      localStorage.setItem('userRole', 'user');
+    }
+    navigate('/home');
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!form.agree) { alert('Please accept the Terms and Conditions.'); return; }
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      navigate('/home');
-    }, 2000);
-  };
-
-  const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-red-500 focus:bg-white/8 transition-all text-base";
-  const labelClass = "text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block";
 
   return (
-    <div className="min-h-screen bg-black text-white font-outfit flex flex-col items-center justify-center px-6 py-20 overflow-x-hidden relative">
-      {/* Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-red-900/15 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-red-800/10 rounded-full blur-[100px]" />
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
-      </div>
+    <FigmaScreenWrapper bgImage="/images/auth/bg.png">
+      <div className="relative w-[1920px] h-[1080px] select-none font-sora" data-node-id={isDriverMode ? "1:3814" : "1:2018"}>
+        
+        {/* ─── Left Typography (Node 1:2021 / 1:3842) ─── */}
+        <div 
+          className="[word-break:break-word] absolute font-['Poppins'] font-bold h-[683px] leading-[0] left-[156px] not-italic text-[128px] text-white top-[266px] w-[820px] whitespace-pre-wrap select-none" 
+          data-node-id="1:2021"
+          style={{
+            color: 'transparent',
+            WebkitTextStroke: '2.5px #ffffff',
+            textStroke: '2.5px #ffffff'
+          }}
+        >
+          <p className="leading-[22px] mb-0">{`Start  Your`}</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">{` `}</p>
+          <p className="leading-[22px] mb-0">Journey</p>
+          <p className="leading-[22px] mb-0">{` `}</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">with</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px] mb-0">​</p>
+          <p className="leading-[22px]">Mechify</p>
+        </div>
 
-      <div className="relative z-10 w-full max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <Link to="/auth" className="inline-flex items-center gap-3 mb-8 group justify-center">
-            <svg width="48" height="40" viewBox="0 0 56 48" fill="none">
-              <rect width="56" height="48" rx="4" fill="#CC0000"/>
-              <text x="4" y="34" fontFamily="Arial Black, Arial" fontWeight="900" fontSize="32" fill="white">M</text>
-              <g transform="translate(32,30) scale(0.55)">
-                <rect x="0" y="4" width="28" height="14" rx="2" fill="white"/>
-                <rect x="22" y="0" width="10" height="18" rx="2" fill="white"/>
-                <circle cx="6" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
-                <circle cx="24" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
-              </g>
-            </svg>
-            <div className="text-left">
-              <div className="font-black text-xl tracking-widest group-hover:text-red-400 transition-colors">MECHIFY</div>
-              <div className="text-gray-400 text-[9px] tracking-[0.2em] uppercase">Vehicle Support</div>
+        {/* ─── White Card (Node 1:2022 / 1:3817) ─── */}
+        <div 
+          className="absolute bg-white h-[908px] left-[1081px] rounded-[20px] top-[86px] w-[745px] shadow-[0px_25px_70px_rgba(0,0,0,0.85)]" 
+          data-node-id="1:2022" 
+        />
+
+        {/* ─── CUSTOMER MODE (Node 1:2018) ─── */}
+        {!isDriverMode ? (
+          <>
+            {/* First Name Input (Node 1:2023) */}
+            <div className="absolute bg-white border border-black border-solid h-[71px] left-[1155px] rounded-[13px] top-[227px] w-[563px] flex items-center z-10" data-node-id="1:2023">
+              <input 
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First name"
+                className="w-full h-full bg-transparent px-6 font-['Sora'] font-normal text-[24px] text-black placeholder-[#b6b6b6] focus:outline-none"
+              />
             </div>
-          </Link>
-          <h1 className="text-5xl font-black mb-3">Create Your Account</h1>
-          <p className="text-gray-400 text-lg">Join thousands of drivers on Mechify today.</p>
-        </div>
 
-        {/* Step Progress */}
-        <div className="flex items-center gap-4 mb-12">
-          <div className={`flex-1 h-2 rounded-full transition-all duration-500 ${step >= 1 ? 'bg-red-600' : 'bg-white/10'}`} />
-          <div className={`flex-1 h-2 rounded-full transition-all duration-500 ${step >= 2 ? 'bg-red-600' : 'bg-white/10'}`} />
-          <div className="text-gray-400 text-xs font-bold uppercase tracking-widest whitespace-nowrap">Step {step} of 2</div>
-        </div>
+            {/* Last Name Input (Node 1:2024) */}
+            <div className="absolute bg-white border border-black border-solid h-[71px] left-[1156px] rounded-[13px] top-[309px] w-[563px] flex items-center z-10" data-node-id="1:2024">
+              <input 
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Last name"
+                className="w-full h-full bg-transparent px-6 font-['Sora'] font-normal text-[24px] text-black placeholder-[#b6b6b6] focus:outline-none"
+              />
+            </div>
 
-        <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl">
+            {/* Email Address Input (Node 1:2027) */}
+            <div className="absolute bg-white border border-black border-solid h-[71px] left-[1155px] rounded-[13px] top-[390px] w-[563px] flex items-center z-10" data-node-id="1:2027">
+              <input 
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email address"
+                className="w-full h-full bg-transparent px-6 font-['Sora'] font-normal text-[24px] text-black placeholder-[#bbb] focus:outline-none"
+              />
+            </div>
 
-          {/* ── STEP 1: Personal Info ── */}
-          {step === 1 && (
-            <form onSubmit={handleStep1} className="space-y-6 animate-fadeIn">
-              <h2 className="text-2xl font-black mb-6 text-red-400">👤 Personal Information</h2>
-
-              <div className="grid md:grid-cols-2 gap-5">
-                <div>
-                  <label className={labelClass}>First Name <span className="text-red-500">*</span></label>
-                  <input className={inputClass} placeholder="John" value={form.firstName} onChange={update('firstName')} />
-                </div>
-                <div>
-                  <label className={labelClass}>Last Name <span className="text-red-500">*</span></label>
-                  <input className={inputClass} placeholder="Doe" value={form.lastName} onChange={update('lastName')} />
-                </div>
-              </div>
-
-              <div>
-                <label className={labelClass}>Email Address <span className="text-red-500">*</span></label>
-                <input type="email" className={inputClass} placeholder="you@example.com" value={form.email} onChange={update('email')} />
-              </div>
-
-              <div>
-                <label className={labelClass}>Phone Number <span className="text-red-500">*</span></label>
-                <input type="tel" className={inputClass} placeholder="+880 1XXXXXXXXX" value={form.phone} onChange={update('phone')} />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-5">
-                <div>
-                  <label className={labelClass}>Date of Birth</label>
-                  <input type="date" className={inputClass} value={form.dob} onChange={update('dob')} style={{ colorScheme: 'dark' }} />
-                </div>
-                <div>
-                  <label className={labelClass}>Gender</label>
-                  <select className={inputClass} value={form.gender} onChange={update('gender')} style={{ colorScheme: 'dark' }}>
-                    <option value="" className="bg-black">Select gender</option>
-                    <option value="male" className="bg-black">Male</option>
-                    <option value="female" className="bg-black">Female</option>
-                    <option value="other" className="bg-black">Prefer not to say</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className={labelClass}>Address</label>
-                <input className={inputClass} placeholder="House, Road, Area" value={form.address} onChange={update('address')} />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-5">
-                <div>
-                  <label className={labelClass}>City</label>
-                  <input className={inputClass} placeholder="Dhaka" value={form.city} onChange={update('city')} />
-                </div>
-                <div>
-                  <label className={labelClass}>Country</label>
-                  <select className={inputClass} value={form.country} onChange={update('country')} style={{ colorScheme: 'dark' }}>
-                    <option className="bg-black">Bangladesh</option>
-                    <option className="bg-black">India</option>
-                    <option className="bg-black">United Kingdom</option>
-                    <option className="bg-black">United States</option>
-                    <option className="bg-black">Canada</option>
-                    <option className="bg-black">Australia</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className={labelClass}>Password <span className="text-red-500">*</span></label>
-                <input type="password" className={inputClass} placeholder="Min. 8 characters" value={form.password} onChange={update('password')} />
-              </div>
-              <div>
-                <label className={labelClass}>Confirm Password <span className="text-red-500">*</span></label>
-                <input type="password" className={inputClass} placeholder="Repeat your password" value={form.confirmPassword} onChange={update('confirmPassword')} />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-red-600 hover:bg-red-500 text-white font-black text-lg py-5 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-[0_0_25px_rgba(220,38,38,0.4)] mt-4"
+            {/* Password Input (Node 1:2028) */}
+            <div className="absolute bg-white border border-black border-solid h-[71px] left-[1155px] rounded-[13px] top-[474px] w-[563px] flex items-center z-10" data-node-id="1:2028">
+              <input 
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Input your Password.."
+                className="w-full h-full bg-transparent px-6 pr-14 font-['Sora'] font-normal text-[24px] text-black placeholder-[#bbb] focus:outline-none"
+              />
+              <div 
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 size-[30px] cursor-pointer" 
+                data-name="Vision"
               >
-                Continue to Vehicle Details →
-              </button>
-            </form>
-          )}
-
-          {/* ── STEP 2: Vehicle Info ── */}
-          {step === 2 && (
-            <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-black text-red-400">🚗 Vehicle Information</h2>
-                <button type="button" onClick={() => setStep(1)} className="text-gray-400 hover:text-white text-sm font-semibold transition-colors">
-                  ← Back
-                </button>
+                <img alt="Vision" className={`w-full h-full object-contain pointer-events-none ${showPassword ? 'opacity-40' : 'opacity-100'}`} src={imgVision} />
               </div>
+            </div>
 
-              <p className="text-gray-400 text-sm -mt-4 mb-6">Optional — helps us give you better service recommendations.</p>
+            {/* Confirm Password Input (Node 1:2029) */}
+            <div className="absolute bg-white border border-black border-solid h-[71px] left-[1155px] rounded-[13px] top-[564px] w-[563px] flex items-center z-10" data-node-id="1:2029">
+              <input 
+                type={showPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm your Password.."
+                className="w-full h-full bg-transparent px-6 font-['Sora'] font-normal text-[24px] text-black placeholder-[#bbb] focus:outline-none"
+              />
+            </div>
 
-              <div>
-                <label className={labelClass}>Vehicle Type</label>
-                <select className={inputClass} value={form.vehicleType} onChange={update('vehicleType')} style={{ colorScheme: 'dark' }}>
-                  <option value="" className="bg-black">Select type</option>
-                  <option className="bg-black">Sedan</option>
-                  <option className="bg-black">SUV</option>
-                  <option className="bg-black">Pickup Truck</option>
-                  <option className="bg-black">Sports Car</option>
-                  <option className="bg-black">Motorcycle</option>
-                  <option className="bg-black">Microbus</option>
-                  <option className="bg-black">Other</option>
-                </select>
-              </div>
+            {/* Checkbox Box (Node 1:2039) */}
+            <div 
+              onClick={() => setIsDriverMode(true)}
+              className="absolute bg-white border border-[#0d0c0c] border-solid left-[1192px] rounded-[10px] size-[25px] top-[680px] cursor-pointer z-10 flex items-center justify-center" 
+              data-node-id="1:2039"
+            >
+              {isDriverMode && <span className="text-black font-bold text-base leading-none">✓</span>}
+            </div>
 
-              <div className="grid md:grid-cols-2 gap-5">
-                <div>
-                  <label className={labelClass}>Vehicle Make / Brand</label>
-                  <input className={inputClass} placeholder="e.g. Toyota, BMW" value={form.vehicleMake} onChange={update('vehicleMake')} />
-                </div>
-                <div>
-                  <label className={labelClass}>License Plate</label>
-                  <input className={`${inputClass} font-mono tracking-widest`} placeholder="DHK-0000" value={form.vehiclePlate} onChange={update('vehiclePlate')} />
-                </div>
-              </div>
+            {/* Want to join as a driver ? (Node 1:2033) */}
+            <p 
+              onClick={() => setIsDriverMode(true)}
+              className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1230px] text-[#bbb] text-[24px] top-[680px] whitespace-pre cursor-pointer hover:text-black transition-colors z-10 select-none" 
+              data-node-id="1:2033"
+            >
+              {`Want to join as a driver  ?`}
+            </p>
 
-              <div className="mt-6 p-6 bg-white/5 rounded-2xl border border-white/10">
-                <label className="flex items-start gap-4 cursor-pointer group">
-                  <div className="relative mt-0.5 flex-shrink-0">
-                    <input
-                      type="checkbox"
-                      className="sr-only"
-                      checked={form.agree}
-                      onChange={update('agree')}
-                    />
-                    <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${form.agree ? 'bg-red-600 border-red-600' : 'border-white/30 group-hover:border-white/60'}`}>
-                      {form.agree && <span className="text-white text-sm font-bold">✓</span>}
-                    </div>
-                  </div>
-                  <p className="text-gray-400 text-sm leading-relaxed">
-                    I agree to Mechify's{' '}
-                    <span className="text-red-400 hover:underline cursor-pointer">Terms of Service</span> and{' '}
-                    <span className="text-red-400 hover:underline cursor-pointer">Privacy Policy</span>. I confirm that all information provided is accurate.
-                  </p>
-                </label>
-              </div>
+            {/* Heading: Sign Up (Node 1:2037) */}
+            <p className="[word-break:break-word] absolute font-['Sora'] font-semibold leading-[22px] right-[557px] text-[48px] text-black top-[153px] translate-x-full whitespace-nowrap z-10" data-node-id="1:2037">
+              Sign Up
+            </p>
+          </>
+        ) : (
+          /* ─── DRIVER MODE (Node 1:3814) ─── */
+          <>
+            {/* Driving License (Node 1:3818) */}
+            <div className="absolute bg-white border border-black border-solid h-[71px] left-[1155px] rounded-[13px] top-[227px] w-[563px] flex items-center z-10" data-node-id="1:3818">
+              <input 
+                type="text"
+                value={drivingLicense}
+                onChange={(e) => setDrivingLicense(e.target.value)}
+                placeholder="Driving License"
+                className="w-full h-full bg-transparent px-6 font-['Sora'] font-normal text-[24px] text-black placeholder-[#b6b6b6] focus:outline-none"
+              />
+            </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-red-600 hover:bg-red-500 disabled:bg-red-900 text-white font-black text-xl py-6 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-[0_0_30px_rgba(220,38,38,0.5)] hover:shadow-[0_0_50px_rgba(220,38,38,0.7)] mt-2 relative overflow-hidden group"
+            {/* NID Number (Node 1:3819) */}
+            <div className="absolute bg-white border border-black border-solid h-[71px] left-[1156px] rounded-[13px] top-[309px] w-[563px] flex items-center z-10" data-node-id="1:3819">
+              <input 
+                type="text"
+                value={nidNumber}
+                onChange={(e) => setNidNumber(e.target.value)}
+                placeholder="NID Number"
+                className="w-full h-full bg-transparent px-6 font-['Sora'] font-normal text-[24px] text-black placeholder-[#b6b6b6] focus:outline-none"
+              />
+            </div>
+
+            {/* Driving experience (Node 1:3822) */}
+            <div className="absolute bg-white border border-black border-solid h-[71px] left-[1155px] rounded-[13px] top-[390px] w-[563px] flex items-center z-10" data-node-id="1:3822">
+              <input 
+                type="text"
+                value={experience}
+                onChange={(e) => setExperience(e.target.value)}
+                placeholder="Driving experience"
+                className="w-full h-full bg-transparent px-6 font-['Sora'] font-normal text-[24px] text-black placeholder-[#bbb] focus:outline-none"
+              />
+            </div>
+
+            {/* Password Input (Node 1:3823) */}
+            <div className="absolute bg-white border border-black border-solid h-[71px] left-[1155px] rounded-[13px] top-[474px] w-[563px] flex items-center z-10" data-node-id="1:3823">
+              <input 
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Input your Password.."
+                className="w-full h-full bg-transparent px-6 pr-14 font-['Sora'] font-normal text-[24px] text-black placeholder-[#bbb] focus:outline-none"
+              />
+              <div 
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 size-[30px] cursor-pointer" 
+                data-name="Vision"
               >
-                {loading ? (
-                  <span className="flex items-center justify-center gap-3">
-                    <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z"/>
-                    </svg>
-                    Creating Account...
-                  </span>
-                ) : '🚗 Complete Registration & Enter Mechify'}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              </button>
+                <img alt="Vision" className={`w-full h-full object-contain pointer-events-none ${showPassword ? 'opacity-40' : 'opacity-100'}`} src={imgVision} />
+              </div>
+            </div>
 
-              <p className="text-center text-gray-600 text-xs">Already have an account? <Link to="/auth" className="text-red-400 hover:text-red-300">Sign In</Link></p>
-            </form>
-          )}
+            {/* Confirm Password Input (Node 1:3824) */}
+            <div className="absolute bg-white border border-black border-solid h-[71px] left-[1155px] rounded-[13px] top-[564px] w-[563px] flex items-center z-10" data-node-id="1:3824">
+              <input 
+                type={showPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm your Password.."
+                className="w-full h-full bg-transparent px-6 font-['Sora'] font-normal text-[24px] text-black placeholder-[#bbb] focus:outline-none"
+              />
+            </div>
+
+            {/* Checkbox 1: I have a car (Node 1:3835, 1:3828) */}
+            <div 
+              onClick={() => setCarOwnership('have_car')}
+              className="absolute bg-white border border-[#0d0c0c] border-solid left-[1192px] rounded-[10px] size-[25px] top-[680px] cursor-pointer z-10 flex items-center justify-center" 
+              data-node-id="1:3835"
+            >
+              {carOwnership === 'have_car' && <span className="text-black font-bold text-base leading-none">✓</span>}
+            </div>
+            <p 
+              onClick={() => setCarOwnership('have_car')}
+              className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1230px] text-[#bbb] text-[24px] top-[680px] whitespace-nowrap cursor-pointer z-10 select-none" 
+              data-node-id="1:3828"
+            >
+              I have a car
+            </p>
+
+            {/* Checkbox 2: I need a car (Node 1:3836, 1:3829) */}
+            <div 
+              onClick={() => setCarOwnership('need_car')}
+              className="absolute bg-white border border-[#0d0c0c] border-solid left-[1424px] rounded-[10px] size-[25px] top-[680px] cursor-pointer z-10 flex items-center justify-center" 
+              data-node-id="1:3836"
+            >
+              {carOwnership === 'need_car' && <span className="text-black font-bold text-base leading-none">✓</span>}
+            </div>
+            <p 
+              onClick={() => setCarOwnership('need_car')}
+              className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1472px] text-[#bbb] text-[24px] top-[682px] whitespace-nowrap cursor-pointer z-10 select-none" 
+              data-node-id="1:3829"
+            >
+              I need a car
+            </p>
+
+            {/* User mode switch link */}
+            <button
+              type="button"
+              onClick={() => setIsDriverMode(false)}
+              className="absolute left-[1620px] top-[682px] text-xs text-red-600 hover:underline font-semibold cursor-pointer z-20"
+            >
+              (User mode)
+            </button>
+
+            {/* Heading: Sign Up as a driver (Node 1:3833) */}
+            <p className="[word-break:break-word] absolute font-['Sora'] font-semibold leading-[22px] right-[709px] text-[48px] text-black top-[151px] translate-x-full whitespace-nowrap z-10" data-node-id="1:3833">
+              Sign Up as a driver
+            </p>
+          </>
+        )}
+
+        {/* ─── Sign up Button (Node 1:2035 / 1:3831) ─── */}
+        <button 
+          onClick={handleSignUp}
+          className="absolute bg-black border border-[#030303] border-solid h-[65px] left-[1175px] rounded-[30px] top-[729px] w-[557px] cursor-pointer hover:bg-neutral-800 transition-all active:scale-95 flex items-center justify-center z-10" 
+          data-node-id="1:2035"
+        >
+          <p className="[word-break:break-word] font-['Sora'] font-normal leading-[22px] text-[#fffafa] text-[24px] whitespace-nowrap" data-node-id="1:2040">
+            Sign up
+          </p>
+        </button>
+
+        {/* ─── Divider Text (Node 1:2034 / 1:3830) ─── */}
+        <p className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1346px] text-[#bbb] text-[24px] top-[821px] whitespace-nowrap z-10" data-node-id="1:2034">
+          Or sign up with:
+        </p>
+
+        {/* ─── Divider Left Line (Node 1:2043 / 1:3840) ─── */}
+        <div className="absolute flex h-[1.037px] items-center justify-center left-[1134px] top-[831.5px] w-[197px]" data-node-id="1:2043">
+          <div className="flex-none rotate-[-0.3deg]">
+            <div className="h-0 relative w-[197.003px]">
+              <div className="absolute inset-[-0.5px_0]">
+                <img alt="" className="block max-w-none size-full" src={imgLine4} />
+              </div>
+            </div>
+          </div>
         </div>
+
+        {/* ─── Divider Right Line (Node 1:2042 / 1:3839) ─── */}
+        <div className="absolute flex h-[1.037px] items-center justify-center left-[1571px] top-[832px] w-[197px]" data-node-id="1:2042">
+          <div className="flex-none rotate-[-0.3deg]">
+            <div className="h-0 relative w-[197.003px]">
+              <div className="absolute inset-[-0.5px_0]">
+                <img alt="" className="block max-w-none size-full" src={imgLine3} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ─── Sign up with Google Button (Node 1:2036 / 1:3832) ─── */}
+        <button 
+          onClick={handleSignUp}
+          className="absolute bg-white border border-black border-solid h-[65px] left-[1175px] rounded-[30px] top-[883px] w-[557px] cursor-pointer hover:bg-gray-50 transition-all active:scale-95 flex items-center justify-center z-10 gap-4" 
+          data-node-id="1:2036"
+        >
+          <img alt="Google" className="size-[35px] object-contain" src={imgGoogle} data-node-id="1:2044" />
+          <p className="[word-break:break-word] font-['Sora'] font-normal leading-[22px] text-[#080808] text-[24px] whitespace-nowrap" data-node-id="1:2041">
+            Sign up with Google
+          </p>
+        </button>
+
+        {/* ─── Footer Login Link ─── */}
+        <p className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1222px] text-[#807e7e] text-[24px] top-[960px] whitespace-nowrap z-10">
+          Already Have An Account?
+        </p>
+        <Link 
+          to="/auth"
+          className="[word-break:break-word] absolute font-['Sora'] font-normal leading-[22px] left-[1538px] text-[#0e0d0d] text-[24px] top-[960px] whitespace-nowrap hover:underline font-semibold z-10"
+        >
+          Login Here
+        </Link>
       </div>
-    </div>
+    </FigmaScreenWrapper>
   );
 }
