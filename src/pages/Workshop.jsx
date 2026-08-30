@@ -322,28 +322,7 @@ export default function Workshop() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════
-          BACK BUTTON — Figma: left:0 top:778, 90×90, border-10 white
-          Sits flush against the left edge, directly below hero
-      ═══════════════════════════════════════════════════════════ */}
-      <div>
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center justify-center bg-black hover:bg-white/10 transition-colors"
-          style={{
-            width: responsive(90),
-            height: responsive(90),
-            borderWidth: responsive(10),
-            borderStyle: 'solid',
-            borderColor: 'white',
-          }}
-          aria-label="Go back"
-        >
-          <svg style={{ width: responsive(36), height: responsive(36) }} fill="white" viewBox="0 0 24 24">
-            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-          </svg>
-        </button>
-      </div>
+
 
       {/* ═══════════════════════════════════════════════════════════
           SERVICE CARDS — Figma: 3 cards
