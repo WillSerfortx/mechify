@@ -1,26 +1,35 @@
 import React, { useState } from 'react';
 
 /**
- * GalleryCard component matching Figma Component 83 (SCHEDULE, node 1:1849)
- * and sibling components (ENGINE, PAINTING, DETAILING).
+ * GalleryCard component matching exact Figma specifications:
+ * - Component 83 (SCHEDULE, node 1:1849)
+ * - Component 84 (ENGINE, node 1:1857)
+ * - Component 85 (PAINTING, node 1:1865)
+ * - Component 86 (DETAILING, node 1:1873)
  *
- * Implements the interactive 2-state card:
- * - Default state: Full photo background with bold title at the bottom.
- * - Hover / Active state: Image slides up to top half, solid black bottom,
- *   title moves up, and 2-line description fades in centered below.
+ * Visual spec:
+ * - Width / Height aspect-ratio: 403 / 491
+ * - Border: 5px solid #FFFFFF
+ * - Border radius: 15px
+ * - Background: #000000
+ * - Default state: Image fills full height, title at bottom (top: ~79.4%), subtle bottom shadow.
+ * - Active/Hover state: Image takes top ~72% height, bottom ~28% is solid black, title moves to top of black split (~62%), 2-line centered description appears in black area (~80%).
  */
 export default function GalleryCard({
   img,
   label,
   descLine1,
   descLine2,
+  titleTopHoverPercent = 62,
+  descTopHoverPercent = 80,
   onClick,
   responsiveHelper,
   className = '',
+  active = false,
 }) {
   const [isHovered, setIsHovered] = useState(false);
+  const isExpanded = active || isHovered;
 
-  // Fallback if responsive helper is not provided
   const r = responsiveHelper || ((px) => `${px}px`);
 
   return (
@@ -28,7 +37,7 @@ export default function GalleryCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
-      className={`relative bg-black overflow-hidden cursor-pointer group transition-colors duration-500 select-none ${className}`}
+      className={`relative bg-black overflow-hidden cursor-pointer select-none group transition-all duration-300 ease-out ${className}`}
       style={{
         aspectRatio: '403 / 491',
         borderWidth: r(5),
@@ -37,89 +46,87 @@ export default function GalleryCard({
         borderRadius: r(15),
       }}
     >
-      {/* ─── Top/Background Image ─── */}
+      {/* ─── Upper Image Area ─── */}
       <div
-        className="absolute top-0 left-0 right-0 overflow-hidden transition-all duration-500 ease-out pointer-events-none"
+        className="absolute top-0 left-0 right-0 overflow-hidden transition-all duration-300 ease-out pointer-events-none"
         style={{
-          height: isHovered ? '58%' : '100%',
+          height: isExpanded ? '72%' : '100%',
         }}
       >
         <img
           src={img}
           alt={label}
           className={`w-full h-full object-cover transition-transform duration-500 ease-out ${
-            isHovered ? 'scale-105' : 'group-hover:scale-105'
+            isExpanded ? 'scale-100' : 'group-hover:scale-105'
           }`}
           style={{
             objectPosition: 'center 20%',
           }}
         />
-        {/* Subtle dark gradient overlay in default state for title legibility */}
+        {/* Default state subtle shadow to enhance text contrast */}
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent transition-opacity duration-500 ${
-            isHovered ? 'opacity-0' : 'opacity-100'
+          className={`absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent transition-opacity duration-300 ${
+            isExpanded ? 'opacity-0' : 'opacity-100'
           }`}
         />
       </div>
 
-      {/* ─── Black base plate for hover state ─── */}
+      {/* ─── Lower Black Box Area for Hover State ─── */}
       <div
-        className={`absolute bottom-0 left-0 right-0 bg-black transition-opacity duration-500 pointer-events-none ${
-          isHovered ? 'opacity-100' : 'opacity-0'
+        className={`absolute bottom-0 left-0 right-0 bg-black transition-all duration-300 ease-out pointer-events-none ${
+          isExpanded ? 'opacity-100' : 'opacity-0'
         }`}
-        style={{ height: '44%' }}
+        style={{
+          height: '28%',
+        }}
       />
 
-      {/* ─── Card Text & Transitions ─── */}
-      <div className="absolute inset-0 flex flex-col justify-end pointer-events-none z-10">
-        {/* Title Container (moves up on hover) */}
-        <div
-          className="w-full text-center transition-all duration-500 ease-out"
+      {/* ─── Title Text: "SCHEDULE", "ENGINE", etc. ─── */}
+      <div
+        className="absolute left-0 right-0 text-center transition-all duration-300 ease-out pointer-events-none z-20"
+        style={{
+          top: isExpanded ? `${titleTopHoverPercent}%` : '79.4%',
+          transform: 'translateY(-50%)',
+        }}
+      >
+        <p
+          className="font-extrabold text-white leading-none tracking-normal uppercase text-center"
           style={{
-            transform: isHovered
-              ? `translateY(-${r(102)})`
-              : `translateY(-${r(32)})`,
+            fontFamily: "'Sora', sans-serif",
+            fontSize: r(40),
           }}
         >
-          <p
-            className="font-extrabold text-white leading-none tracking-wide text-center uppercase"
-            style={{
-              fontFamily: "'Sora', sans-serif",
-              fontSize: r(40),
-            }}
-          >
-            {label}
-          </p>
-        </div>
+          {label}
+        </p>
+      </div>
 
-        {/* Description Container (fades and translates in on hover) */}
-        <div
-          className={`w-full px-4 text-center transition-all duration-500 ease-out absolute bottom-0 left-0 right-0 ${
-            isHovered
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-3 pointer-events-none'
-          }`}
+      {/* ─── Description in Bottom Black Box ─── */}
+      <div
+        className={`absolute left-0 right-0 px-2 text-center transition-all duration-300 ease-out pointer-events-none z-20 ${
+          isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+        }`}
+        style={{
+          top: `${descTopHoverPercent}%`,
+        }}
+      >
+        <p
+          className="font-normal text-white text-center whitespace-pre-line mx-auto"
           style={{
-            paddingBottom: r(28),
+            fontFamily: "'Sora', sans-serif",
+            fontSize: r(20),
+            lineHeight: '1.15',
+            letterSpacing: '-0.01em',
+            maxWidth: '92%',
           }}
         >
-          <p
-            className="font-normal text-white text-center leading-tight mx-auto"
-            style={{
-              fontFamily: "'Sora', sans-serif",
-              fontSize: r(20),
-              maxWidth: '90%',
-            }}
-          >
-            {descLine1}
-            {descLine2 && (
-              <>
-                <br />
-                {descLine2}
-              </>
-            )}
-          </p>
-        </div>
+          {descLine1}
+          {descLine2 && (
+            <>
+              <br />
+              {descLine2}
+            </>
+          )}
+        </p>
       </div>
     </div>
   );

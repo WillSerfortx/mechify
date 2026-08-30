@@ -89,24 +89,32 @@ const GALLERY = [
     label: 'SCHEDULE',
     descLine1: 'Book your service easily at a time',
     descLine2: 'that fits your schedule.',
+    titleTopHoverPercent: 60.7,
+    descTopHoverPercent: 79.6,
   },
   {
     img: IMAGES.galleryEngine,
     label: 'ENGINE',
     descLine1: 'Expert engine diagnostics and',
     descLine2: 'repairs for smooth performance.',
+    titleTopHoverPercent: 61.9,
+    descTopHoverPercent: 81.0,
   },
   {
     img: IMAGES.galleryPainting,
     label: 'PAINTING',
     descLine1: 'Premium paintwork to restore your',
     descLine2: 'car’s original shine.',
+    titleTopHoverPercent: 64.7,
+    descTopHoverPercent: 83.1,
   },
   {
     img: IMAGES.galleryDetailing,
     label: 'DETAILING',
     descLine1: 'Complete interior and exterior',
     descLine2: 'detailing for a fresh look.',
+    titleTopHoverPercent: 66.1,
+    descTopHoverPercent: 84.9,
   },
 ];
 
@@ -539,6 +547,8 @@ export default function Workshop() {
               label={item.label}
               descLine1={item.descLine1}
               descLine2={item.descLine2}
+              titleTopHoverPercent={item.titleTopHoverPercent}
+              descTopHoverPercent={item.descTopHoverPercent}
               responsiveHelper={responsive}
               onClick={() => navigate('/workshop-select')}
             />
