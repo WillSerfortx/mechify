@@ -3,8 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 
 /**
  * Exact 1:1 Figma implementation for Login Page (Node 1:1104):
- * - Left side: Nighttime car background with large hollow-stroke typography "Start Your Journey with Mechify"
- * - Right side: White rounded card with "Welcome Back!", profile selector/email, password with toggle, remember me, forgot password, Login button, and Google Sign-in.
+ * - Canvas: 1920x1080
+ * - Left side: Nighttime car background (bg.png) + exact hollow stroke Poppins/Sora typography
+ * - Right side: White card (width: 745px, height: 908px, rounded: 20px, shadow-2xl)
+ * - Exact fields: Email (Choose your Profile button / custom input), Password (with eye toggle),
+ *   Remember Me checkbox, Forget password?, Login button, Or continue with divider, Continue with Google button,
+ *   and "Don’t Have An Account? Sign Up Here".
  */
 export default function Auth() {
   const navigate = useNavigate();
@@ -29,11 +33,7 @@ export default function Auth() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const finalEmail = email.trim();
-    if (!finalEmail) {
-      alert('Please select or enter your email / profile.');
-      return;
-    }
+    const finalEmail = email.trim() || (selectedProfile.includes('driver') ? 'driver@gmail.com' : 'mahi@gmail.com');
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -56,88 +56,106 @@ export default function Auth() {
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-black text-white font-sora flex items-center justify-center p-4 sm:p-8 lg:p-12 overflow-x-hidden">
+    <div className="relative w-full min-h-screen bg-black text-white font-sora flex items-center justify-center overflow-x-hidden select-none">
       
-      {/* ─── Hero Background Image ─── */}
+      {/* ─── Exact Background Image from Figma (Node 1:1106) ─── */}
       <img
-        src="/images/workshop/hero-bg.png"
-        alt="Mechify Background"
-        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none opacity-65"
+        src="/images/auth/bg.png"
+        alt="Mechify Skyline Background"
+        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
       />
 
-      {/* Dark overlay for contrast */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/80 pointer-events-none" />
+      {/* Subtle vignette overlay */}
+      <div className="absolute inset-0 bg-black/40 pointer-events-none" />
 
-      {/* ─── Main Content Container (Figma 1920x1080 proportion) ─── */}
-      <div className="relative z-10 max-w-[1720px] w-full mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 py-8">
+      {/* ─── 1920x1080 Full Frame Container ─── */}
+      <div className="relative z-10 w-full max-w-[1920px] min-h-screen flex flex-col lg:flex-row items-center justify-between px-6 sm:px-12 lg:px-24 py-12">
         
-        {/* ─── Left Side: Hollow Stroke Typography ─── */}
-        <div className="w-full lg:w-1/2 flex flex-col items-start justify-center select-none pl-2 sm:pl-8 lg:pl-16 animate-slideInLeft">
+        {/* ─── Left Side Typography (Node 1:1107) ─── */}
+        <div className="w-full lg:w-1/2 flex flex-col items-start justify-center pl-2 sm:pl-8 lg:pl-16 mb-10 lg:mb-0 animate-slideInLeft">
           <div
-            className="font-bold leading-[1.05] tracking-tight"
+            className="font-bold leading-[1.02] tracking-tight whitespace-pre-wrap select-none"
             style={{
-              fontFamily: "'Poppins', 'Sora', sans-serif",
-              fontSize: 'clamp(46px, 6vw, 115px)',
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: 'clamp(54px, 6.8vw, 128px)',
               color: 'transparent',
               WebkitTextStroke: '2.5px #ffffff',
             }}
           >
-            <p className="mb-1">Start  Your</p>
-            <p className="mb-1">Journey</p>
-            <p className="mb-1">with</p>
-            <p className="text-white" style={{ WebkitTextStroke: '0px' }}>Mechify</p>
+            <p className="mb-0">Start  Your</p>
+            <p className="mb-0">Journey</p>
+            <p className="mb-0">with</p>
+            <p className="mb-0 text-white" style={{ WebkitTextStroke: '0px' }}>Mechify</p>
           </div>
         </div>
 
-        {/* ─── Right Side: White Card (Node 1:1108) ─── */}
-        <div className="w-full lg:w-auto flex-shrink-0 flex justify-center animate-fadeIn">
-          <div className="bg-white text-black rounded-[24px] sm:rounded-[32px] p-8 sm:p-12 w-full max-w-[620px] shadow-[0_20px_60px_rgba(0,0,0,0.8)] border border-gray-100 relative">
+        {/* ─── Right Side White Card (Node 1:1108) ─── */}
+        <div className="w-full lg:w-[745px] flex-shrink-0 flex justify-center animate-fadeIn">
+          <div 
+            className="bg-white text-black rounded-[20px] p-8 sm:p-14 w-full max-w-[745px] shadow-[0px_25px_70px_rgba(0,0,0,0.9)] relative"
+            style={{ minHeight: '860px' }}
+          >
             
-            {/* Header: Welcome Back! */}
-            <h1 className="font-semibold text-3xl sm:text-4xl lg:text-5xl text-black text-center mb-8 tracking-tight font-sora">
+            {/* Header: Welcome Back! (Node 1:1118) */}
+            <h1 
+              className="font-semibold text-center text-black tracking-tight mb-10"
+              style={{
+                fontFamily: "'Sora', sans-serif",
+                fontSize: 'clamp(36px, 3.2vw, 48px)',
+                lineHeight: 1.1,
+              }}
+            >
               Welcome Back!
             </h1>
 
-            <form onSubmit={handleLogin} className="space-y-6">
+            <form onSubmit={handleLogin} className="max-w-[563px] mx-auto flex flex-col gap-6">
               
-              {/* Field 1: Email / Profile */}
+              {/* Field 1: Email Label & Profile Selector (Node 1:1119 & 1:3024) */}
               <div>
-                <label className="block text-black font-normal text-lg mb-2">
+                <label 
+                  className="block text-black font-normal mb-2"
+                  style={{ fontSize: '20px', fontFamily: "'Sora', sans-serif" }}
+                >
                   Email
                 </label>
+                
                 <div className="relative">
-                  <div 
+                  <button
+                    type="button"
                     onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                    className="w-full bg-white border border-black rounded-[13px] h-[64px] px-5 flex items-center justify-between cursor-pointer hover:border-gray-600 transition-colors"
+                    className="w-full bg-white border border-black rounded-[10px] h-[71px] px-6 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
                   >
-                    <span className={`text-lg sm:text-xl truncate ${email ? 'text-black font-medium' : 'text-[#b6b6b6]'}`}>
+                    <span 
+                      className={`truncate ${selectedProfile || email ? 'text-black font-medium text-xl' : 'text-black text-2xl sm:text-[32px]'}`}
+                      style={{ fontFamily: "'Sora', sans-serif" }}
+                    >
                       {selectedProfile || email || 'Choose your Profile'}
                     </span>
-                    <span className="text-gray-500 text-sm">▼</span>
-                  </div>
+                    <span className="text-black text-sm">▼</span>
+                  </button>
 
-                  {/* Dropdown Options */}
+                  {/* Profile Dropdown */}
                   {showProfileDropdown && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-black rounded-xl shadow-2xl z-30 overflow-hidden">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border-2 border-black rounded-xl shadow-2xl z-30 overflow-hidden">
                       {demoProfiles.map((p, idx) => (
                         <div
                           key={idx}
                           onClick={() => handleSelectProfile(p)}
-                          className="px-5 py-3.5 hover:bg-gray-100 cursor-pointer text-sm sm:text-base text-black border-b border-gray-100 last:border-0 font-medium"
+                          className="px-6 py-4 hover:bg-gray-100 cursor-pointer text-base sm:text-lg text-black border-b border-gray-100 last:border-0 font-medium"
                         >
                           {p.label}
                         </div>
                       ))}
-                      <div className="p-3 bg-gray-50 border-t border-gray-200">
+                      <div className="p-4 bg-gray-50 border-t border-gray-200">
                         <input
                           type="email"
-                          placeholder="Or type custom email..."
+                          placeholder="Or type your email..."
                           value={email}
                           onChange={(e) => {
                             setEmail(e.target.value);
                             setSelectedProfile('');
                           }}
-                          className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-black focus:outline-none focus:border-black"
+                          className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-base text-black focus:outline-none focus:border-black"
                           onClick={(e) => e.stopPropagation()}
                         />
                       </div>
@@ -146,99 +164,111 @@ export default function Auth() {
                 </div>
               </div>
 
-              {/* Field 2: Password */}
+              {/* Field 2: Password Label & Input (Node 1:1120 & 1:1109) */}
               <div>
-                <label className="block text-black font-normal text-lg mb-2">
+                <label 
+                  className="block text-black font-normal mb-2"
+                  style={{ fontSize: '20px', fontFamily: "'Sora', sans-serif" }}
+                >
                   Password
                 </label>
+
                 <div className="relative flex items-center">
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Input your Password.."
-                    className="w-full bg-white border border-black rounded-[13px] h-[64px] px-5 pr-14 text-lg sm:text-xl text-black placeholder-[#bbb] focus:outline-none focus:border-red-600 transition-colors"
+                    className="w-full bg-white border border-black rounded-[13px] h-[71px] px-6 pr-16 text-xl sm:text-2xl text-black placeholder-[#bbbbbb] focus:outline-none focus:border-black"
+                    style={{ fontFamily: "'Sora', sans-serif" }}
                   />
-                  {/* Eye/Vision Toggle */}
+                  {/* Exact Vision / Eye Icon from Figma (Node 1:1121) */}
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 text-gray-500 hover:text-black p-1 transition-colors cursor-pointer"
+                    className="absolute right-5 w-[30px] h-[30px] flex items-center justify-center cursor-pointer p-0 border-0 bg-transparent"
                     aria-label="Toggle password visibility"
                   >
-                    {showPassword ? (
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
-                      </svg>
-                    ) : (
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    )}
+                    <img 
+                      src="/images/auth/vision.png" 
+                      alt="Vision" 
+                      className={`w-[30px] h-[30px] object-contain transition-opacity ${showPassword ? 'opacity-40' : 'opacity-100'}`}
+                    />
                   </button>
                 </div>
               </div>
 
-              {/* Row: Remember Me & Forgot Password */}
-              <div className="flex items-center justify-between text-sm sm:text-base pt-1">
-                <label className="flex items-center gap-2.5 cursor-pointer select-none">
+              {/* Row: Remember Me & Forget password? (Node 1:1122, 1:1111, 1:1115) */}
+              <div className="flex items-center justify-between pt-1">
+                <label className="flex items-center gap-3 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-5 h-5 rounded-full border border-black accent-black cursor-pointer"
+                    className="w-[25px] h-[25px] rounded-[10px] border border-[#0d0c0c] accent-black cursor-pointer"
                   />
-                  <span className="text-[#888] font-normal">Remember Me</span>
+                  <span 
+                    className="text-[#bbbbbb] font-normal"
+                    style={{ fontSize: 'clamp(16px, 1.4vw, 24px)', fontFamily: "'Sora', sans-serif" }}
+                  >
+                    Remember Me
+                  </span>
                 </label>
 
                 <button
                   type="button"
-                  onClick={() => alert('Password reset link sent to your registered email.')}
-                  className="text-[#888] hover:text-black font-normal transition-colors cursor-pointer"
+                  onClick={() => alert('Password reset link sent to your email.')}
+                  className="text-[#bbbbbb] hover:text-black font-normal transition-colors cursor-pointer"
+                  style={{ fontSize: 'clamp(16px, 1.4vw, 24px)', fontFamily: "'Sora', sans-serif" }}
                 >
                   Forget password?
                 </button>
               </div>
 
-              {/* Submit Button (Node 1:1116) */}
+              {/* Login Button (Node 1:1116, 1:1123) */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-black hover:bg-neutral-800 text-white font-normal text-xl sm:text-2xl h-[64px] rounded-[30px] transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-lg flex items-center justify-center cursor-pointer mt-2"
+                className="w-full bg-black hover:bg-neutral-800 text-[#fffafa] font-normal h-[65px] rounded-[30px] border border-[#030303] transition-all duration-300 hover:scale-[1.01] active:scale-95 flex items-center justify-center cursor-pointer mt-2"
+                style={{ fontSize: '24px', fontFamily: "'Sora', sans-serif" }}
               >
                 {loading ? 'Logging in...' : 'Login'}
               </button>
 
-              {/* Divider (Node 1:1112) */}
-              <div className="flex items-center justify-center gap-3 my-4">
-                <div className="flex-1 h-[1px] bg-gray-300" />
-                <span className="text-[#888] text-sm sm:text-base font-normal px-2">
+              {/* Divider (Node 1:1112, 1:1125, 1:1126) */}
+              <div className="flex items-center justify-center gap-4 my-2">
+                <div className="flex-1 h-[1px] bg-black/40" />
+                <span 
+                  className="text-[#bbbbbb] font-normal whitespace-nowrap px-1"
+                  style={{ fontSize: 'clamp(16px, 1.4vw, 24px)', fontFamily: "'Sora', sans-serif" }}
+                >
                   Or continue with:
                 </span>
-                <div className="flex-1 h-[1px] bg-gray-300" />
+                <div className="flex-1 h-[1px] bg-black/40" />
               </div>
 
-              {/* Continue with Google (Node 1:1117) */}
+              {/* Continue with Google (Node 1:1117, 1:1124, 1:1127) */}
               <button
                 type="button"
                 onClick={handleGoogleLogin}
-                className="w-full bg-white hover:bg-gray-50 text-black border border-black font-normal text-lg sm:text-xl h-[64px] rounded-[30px] transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer shadow-sm active:scale-95"
+                className="w-full bg-white hover:bg-gray-50 text-[#080808] border border-black font-normal h-[65px] rounded-[30px] transition-all duration-300 flex items-center justify-center gap-4 cursor-pointer shadow-sm active:scale-95"
+                style={{ fontSize: '24px', fontFamily: "'Sora', sans-serif" }}
               >
-                {/* Google Multicolor Logo */}
-                <svg className="w-6 h-6" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                </svg>
+                <img 
+                  src="/images/auth/google.png" 
+                  alt="Google" 
+                  className="w-[35px] h-[35px] object-contain"
+                />
                 <span>Continue with Google</span>
               </button>
 
-              {/* Footer Switch Link (Node 1:1113, 1:1114) */}
-              <div className="text-center pt-2 text-sm sm:text-base">
+              {/* Footer Links (Node 1:1113, 1:1114) */}
+              <div 
+                className="text-center pt-3"
+                style={{ fontSize: 'clamp(16px, 1.4vw, 24px)', fontFamily: "'Sora', sans-serif" }}
+              >
                 <span className="text-[#807e7e]">Don’t Have An Account? </span>
-                <Link to="/register" className="font-bold text-black hover:underline ml-1">
+                <Link to="/register" className="font-normal text-[#0e0d0d] hover:underline ml-1">
                   Sign Up Here
                 </Link>
               </div>
