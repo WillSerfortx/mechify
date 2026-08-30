@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import GalleryCard from '../components/GalleryCard';
+import ServiceFeatureCard from '../components/ServiceFeatureCard';
 
 /* ─── Image Assets ────────────────────────────────────────────── */
 const IMAGES = {
@@ -60,9 +61,48 @@ const responsive = (px, minRatio = 0.4) => `clamp(${Math.round(px * minRatio)}px
 
 /* ─── Data ────────────────────────────────────────────────────── */
 const SERVICE_CARDS = [
-  { icon: IMAGES.iconPerformance, title: 'Performance', subtitle: 'Check' },
-  { icon: IMAGES.iconRepair, title: 'Auto', subtitle: 'Repair' },
-  { icon: IMAGES.iconFleet, title: 'Fleet', subtitle: 'Service' },
+  {
+    icon: IMAGES.iconPerformance,
+    titleLine1: 'Performance',
+    titleLine2: 'Check',
+    descLines: [
+      'Comprehensive checks to ensure',
+      'peak vehicle performance.',
+      'Identify issues early and drive',
+      'with confidence.',
+    ],
+    defaultIconTop: 129,
+    defaultTitleTop: 296,
+    hoverDescTop: 245,
+  },
+  {
+    icon: IMAGES.iconRepair,
+    titleLine1: 'Auto',
+    titleLine2: 'Repair',
+    descLines: [
+      'Reliable auto services to keep your',
+      'car road-ready.',
+      'From routine maintenance to major',
+      'repairs,we handle it all.',
+    ],
+    defaultIconTop: 119,
+    defaultTitleTop: 282,
+    hoverDescTop: 255,
+  },
+  {
+    icon: IMAGES.iconFleet,
+    titleLine1: 'Fleet',
+    titleLine2: 'Service',
+    descLines: [
+      'Efficient maintenance solutions for',
+      'commercial fleets.',
+      'Keep your vehicles running smoothly ',
+      'with minimal downtime.',
+    ],
+    defaultIconTop: 140,
+    defaultTitleTop: 286,
+    hoverDescTop: 273,
+  },
 ];
 
 const SERVICES = [
@@ -336,35 +376,18 @@ export default function Workshop() {
           style={{ gap: responsive(44) }}
         >
           {SERVICE_CARDS.map((card, i) => (
-            <div
+            <ServiceFeatureCard
               key={i}
-              className="bg-black border-white flex flex-col items-center justify-center cursor-pointer group hover:bg-white/5 transition-all duration-300 overflow-hidden"
-              style={{
-                aspectRatio: '553 / 468',
-                borderWidth: responsive(5),
-                borderStyle: 'solid',
-                borderRadius: responsive(40),
-              }}
-            >
-              {/* Icon — Figma: 128×128, positioned roughly center-top of card */}
-              <div
-                className="flex items-center justify-center"
-                style={{
-                  width: responsive(128),
-                  height: responsive(128),
-                  marginBottom: responsive(40),
-                }}
-              >
-                <img
-                  src={card.icon}
-                  alt={card.title}
-                  className="w-full h-full object-contain brightness-0 invert group-hover:scale-110 transition-transform duration-300"
-                />
-              </div>
-              {/* Title — Figma: Sora Bold 40px */}
-              <p className="font-bold text-white text-center leading-none" style={{ fontSize: responsive(40) }}>{card.title}</p>
-              <p className="font-bold text-white text-center leading-none" style={{ fontSize: responsive(40), marginTop: responsive(8) }}>{card.subtitle}</p>
-            </div>
+              icon={card.icon}
+              titleLine1={card.titleLine1}
+              titleLine2={card.titleLine2}
+              descLines={card.descLines}
+              defaultIconTop={card.defaultIconTop}
+              defaultTitleTop={card.defaultTitleTop}
+              hoverDescTop={card.hoverDescTop}
+              responsiveHelper={responsive}
+              onClick={() => navigate('/workshop-select')}
+            />
           ))}
         </div>
       </section>
