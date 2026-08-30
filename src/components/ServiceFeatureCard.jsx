@@ -1,121 +1,150 @@
 import React, { useState } from 'react';
 
 /**
- * ServiceFeatureCard component matching exact Figma specifications with responsive scaling:
- * - Component 87 (Performance Check, node 1:1881)
- * - Component 88 (Auto Repair, node 1:1888)
- * - Component 89 (Fleet Service, node 1:1895)
+ * Exact Figma Component 87 (1:1881), Component 88 (1:1888), Component 89 (1:1895)
  */
 export default function ServiceFeatureCard({
-  icon,
-  titleLine1,
-  titleLine2,
-  descLines = [],
-  defaultIconTop = 129,
-  defaultTitleTop = 296,
-  hoverDescTop = 245,
-  responsiveHelper,
+  variant = 'performance', // 'performance' | 'repair' | 'fleet'
   onClick,
   className = '',
+  style = {},
 }) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const r = responsiveHelper || ((px) => `${px}px`);
+  const configs = {
+    performance: {
+      nodeId: '1:1881',
+      defaultId: '1:1882',
+      hoverId: '1:1885',
+      icon: '/images/workshop/icon-performance.png',
+      defaultIconTop: 129,
+      defaultTitleTop: 296,
+      defaultTitleLeft: 274.5,
+      titleLines: ['Performance', 'Check'],
+      hoverIconTop: 179,
+      hoverTextTop: 245,
+      hoverTextLeft: 271.5,
+      hoverLines: [
+        'Comprehensive checks to ensure',
+        'peak vehicle performance.',
+        'Identify issues early and drive',
+        'with confidence.',
+      ],
+    },
+    repair: {
+      nodeId: '1:1888',
+      defaultId: '1:1889',
+      hoverId: '1:1892',
+      icon: '/images/workshop/icon-repair.png',
+      defaultIconTop: 119,
+      defaultTitleTop: 282,
+      defaultTitleLeft: 268,
+      titleLines: ['Auto', 'Repair'],
+      hoverIconTop: 179,
+      hoverTextTop: 255,
+      hoverTextLeft: 271.5,
+      hoverLines: [
+        'Reliable auto services to keep your',
+        'car road-ready.',
+        'From routine maintenance to major',
+        'repairs,we handle it all.',
+      ],
+    },
+    fleet: {
+      nodeId: '1:1895',
+      defaultId: '1:1896',
+      hoverId: '1:1899',
+      icon: '/images/workshop/icon-fleet.png',
+      defaultIconTop: 140,
+      defaultTitleTop: 286,
+      defaultTitleLeft: 272,
+      titleLines: ['Fleet', 'Service'],
+      hoverIconTop: 179,
+      hoverTextTop: 273,
+      hoverTextLeft: 272,
+      hoverLines: [
+        'Efficient maintenance solutions for',
+        'commercial fleets.',
+        'Keep your vehicles running smoothly ',
+        'with minimal downtime.',
+      ],
+    },
+  };
 
-  // Calculate percentage tops from 468px base height for flawless scaling
-  const defIconTopPct = `${(defaultIconTop / 468) * 100}%`;
-  const defTitleTopPct = `${(defaultTitleTop / 468) * 100}%`;
-  const hoverDescTopPct = `${(hoverDescTop / 468) * 100}%`;
+  const c = configs[variant] || configs.performance;
 
   return (
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
-      className={`relative bg-black overflow-hidden cursor-pointer select-none group transition-all duration-300 ease-out flex flex-col items-center justify-center border-4 sm:border-[5px] border-white rounded-[28px] sm:rounded-[36px] lg:rounded-[44px] hover:shadow-[0_0_35px_rgba(255,255,255,0.2)] ${className}`}
-      style={{
-        aspectRatio: '553 / 468',
-        width: '100%',
-      }}
+      className={`bg-black border-5 border-solid border-white h-[468px] overflow-clip relative rounded-[40px] w-[553px] cursor-pointer select-none transition-all duration-300 hover:border-red-500 hover:shadow-[0_0_35px_rgba(255,255,255,0.25)] ${className}`}
+      style={style}
+      data-node-id={isHovered ? c.hoverId : c.defaultId}
     >
-      {/* ─── Icon (scales between 128px default and 50px hover) ─── */}
-      <div
-        className="absolute left-1/2 -translate-x-1/2 transition-all duration-300 ease-out pointer-events-none flex items-center justify-center"
-        style={{
-          top: isHovered ? '36%' : defIconTopPct,
-          width: isHovered ? 'clamp(36px, 3.8vw, 56px)' : 'clamp(72px, 8.2vw, 132px)',
-          height: isHovered ? 'clamp(36px, 3.8vw, 56px)' : 'clamp(72px, 8.2vw, 132px)',
-        }}
-      >
-        <img
-          src={icon}
-          alt={`${titleLine1} ${titleLine2}`}
-          className="w-full h-full object-contain brightness-0 invert"
-        />
-      </div>
+      {/* ─── DEFAULT STATE (Frame 427319227 / 427319228 / 427319229) ─── */}
+      {!isHovered ? (
+        <>
+          {/* Default 128px Icon */}
+          <div
+            className="absolute left-[208px] pointer-events-none size-[128px]"
+            style={{ top: `${c.defaultIconTop}px` }}
+          >
+            <img
+              alt=""
+              className="absolute inset-0 max-w-none object-cover size-full"
+              src={c.icon}
+            />
+            <div className="absolute inset-0 rounded-[inherit] shadow-[inset_200px_200px_4px_0px_white]" />
+          </div>
 
-      {/* ─── Default State: Title (Sora Bold 40px base) ─── */}
-      <div
-        className={`absolute left-0 right-0 w-full text-center px-4 transition-all duration-300 ease-out pointer-events-none ${
-          isHovered ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
-        }`}
-        style={{
-          top: defTitleTopPct,
-        }}
-      >
-        <p
-          className="font-bold text-white text-center leading-tight tracking-tight"
-          style={{
-            fontFamily: "'Sora', sans-serif",
-            fontWeight: 700,
-            fontSize: 'clamp(20px, 2.3vw, 42px)',
-            margin: 0,
-          }}
-        >
-          {titleLine1}
-        </p>
-        <p
-          className="font-bold text-white text-center leading-tight tracking-tight"
-          style={{
-            fontFamily: "'Sora', sans-serif",
-            fontWeight: 700,
-            fontSize: 'clamp(20px, 2.3vw, 42px)',
-            marginTop: '2px',
-            margin: 0,
-          }}
-        >
-          {titleLine2}
-        </p>
-      </div>
+          {/* Default 40px Title */}
+          <div
+            className="-translate-x-1/2 [word-break:break-word] absolute font-['Sora'] font-bold leading-[0.962] text-[40px] text-center text-white whitespace-nowrap"
+            style={{
+              left: `${c.defaultTitleLeft}px`,
+              top: `${c.defaultTitleTop}px`,
+            }}
+          >
+            {c.titleLines.map((line, idx) => (
+              <p key={idx} className="mb-0">
+                {line}
+              </p>
+            ))}
+          </div>
+        </>
+      ) : (
+        /* ─── HOVER STATE (Frame 427319230 / 427319231 / 427319232) ─── */
+        <>
+          {/* Hover 50px Icon */}
+          <div
+            className="absolute left-[247px] pointer-events-none size-[50px] animate-fadeIn"
+            style={{ top: `${c.hoverIconTop}px` }}
+          >
+            <img
+              alt=""
+              className="absolute inset-0 max-w-none object-cover size-full"
+              src={c.icon}
+            />
+            <div className="absolute inset-0 rounded-[inherit] shadow-[inset_200px_200px_4px_0px_white]" />
+          </div>
 
-      {/* ─── Hover State: Description (Sora Bold 24px base, exact 4 lines) ─── */}
-      <div
-        className={`absolute left-0 right-0 w-full px-4 sm:px-6 text-center transition-all duration-300 ease-out pointer-events-none ${
-          isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
-        }`}
-        style={{
-          top: hoverDescTopPct,
-        }}
-      >
-        <div className="mx-auto text-center">
-          {descLines.map((line, idx) => (
-            <p
-              key={idx}
-              className="text-center whitespace-nowrap"
-              style={{
-                fontFamily: "'Sora', sans-serif",
-                fontWeight: 700,
-                fontSize: 'clamp(12px, 1.45vw, 24px)',
-                lineHeight: 1.25,
-                margin: 0,
-                color: '#ffffff',
-              }}
-            >
-              {line}
-            </p>
-          ))}
-        </div>
-      </div>
+          {/* Hover 24px Description */}
+          <div
+            className="-translate-x-1/2 [word-break:break-word] absolute font-['Sora'] font-bold leading-[1.05] text-[24px] text-center text-white whitespace-nowrap animate-fadeIn"
+            style={{
+              left: `${c.hoverTextLeft}px`,
+              top: `${c.hoverTextTop}px`,
+            }}
+          >
+            {c.hoverLines.map((line, idx) => (
+              <p key={idx} className="mb-0 whitespace-pre">
+                {line}
+              </p>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ScaleWrapper from '../components/ScaleWrapper';
+import ServiceFeatureCard from '../components/ServiceFeatureCard';
 
 const IMAGES = {
   heroBg: '/images/workshop/hero-bg.png',
-  iconPerformance: '/images/workshop/icon-performance.png',
-  iconRepair: '/images/workshop/icon-repair.png',
-  iconFleet: '/images/workshop/icon-fleet.png',
   gallerySchedule: '/images/workshop/gallery-schedule.png',
   galleryEngine: '/images/workshop/gallery-engine.png',
   galleryPainting: '/images/workshop/gallery-painting.png',
@@ -18,13 +16,13 @@ const IMAGES = {
 };
 
 /**
- * Exact Figma Node 1:692 Implementation
- * Proportions, pixel-perfect coordinates, fonts, and interactive elements.
- * Bottom contact form and bottom button omitted per instruction.
+ * Exact Figma Node 1:692 Implementation with exact components:
+ * - 1:1881 (Performance Check)
+ * - 1:1888 (Auto Repair)
+ * - 1:1895 (Fleet Service)
  */
 export default function Workshop() {
   const navigate = useNavigate();
-  const [hoveredCard, setHoveredCard] = useState(null);
   const [hoveredGallery, setHoveredGallery] = useState(null);
 
   return (
@@ -66,122 +64,26 @@ export default function Workshop() {
           </p>
         </div>
 
-        {/* ─── SERVICE FEATURE CARD 1: PERFORMANCE CHECK (Node 1:1882) ─── */}
-        <div 
-          onMouseEnter={() => setHoveredCard(1)}
-          onMouseLeave={() => setHoveredCard(null)}
+        {/* ─── EXACT FIGMA COMPONENT 87: PERFORMANCE CHECK (Node 1:1881) ─── */}
+        <ServiceFeatureCard
+          variant="performance"
           onClick={() => navigate('/workshop-search')}
-          className="absolute bg-black border-5 border-solid border-white h-[468px] left-[87px] overflow-clip rounded-[40px] top-[1062px] w-[553px] cursor-pointer transition-all duration-300 hover:border-red-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]" 
-          data-node-id="1:1882"
-        >
-          <div 
-            className="absolute transition-all duration-300 pointer-events-none"
-            style={{
-              left: hoveredCard === 1 ? '246px' : '208px',
-              top: hoveredCard === 1 ? '40px' : '129px',
-              width: hoveredCard === 1 ? '60px' : '128px',
-              height: hoveredCard === 1 ? '60px' : '128px',
-            }}
-            data-name="Responsibility"
-          >
-            <img alt="" className="absolute inset-0 max-w-none object-cover size-full" src={IMAGES.iconPerformance} />
-            <div className="absolute inset-0 rounded-[inherit] shadow-[inset_200px_200px_4px_0px_white]" />
-          </div>
-          <div 
-            className="-translate-x-1/2 [word-break:break-word] absolute font-['Sora'] font-bold leading-[0] left-[274.5px] text-[40px] text-center text-white transition-all duration-300 whitespace-nowrap"
-            style={{ top: hoveredCard === 1 ? '120px' : '296px' }}
-            data-node-id="1:1884"
-          >
-            <p className="leading-[0.962] mb-0">Performance</p>
-            <p className="leading-[0.962]">Check</p>
-          </div>
-          {hoveredCard === 1 && (
-            <div className="absolute left-[40px] right-[40px] top-[245px] text-center font-['Sora'] font-bold text-[24px] text-white leading-relaxed animate-fadeIn">
-              <p className="mb-0">Comprehensive checks to ensure</p>
-              <p className="mb-0">peak vehicle performance.</p>
-              <p className="mb-0">Identify issues early and drive</p>
-              <p className="mb-0">with confidence.</p>
-            </div>
-          )}
-        </div>
+          className="absolute left-[87px] top-[1062px]"
+        />
 
-        {/* ─── SERVICE FEATURE CARD 2: AUTO REPAIR (Node 1:1889) ─── */}
-        <div 
-          onMouseEnter={() => setHoveredCard(2)}
-          onMouseLeave={() => setHoveredCard(null)}
+        {/* ─── EXACT FIGMA COMPONENT 88: AUTO REPAIR (Node 1:1888) ─── */}
+        <ServiceFeatureCard
+          variant="repair"
           onClick={() => navigate('/workshop-search')}
-          className="absolute bg-black border-5 border-solid border-white h-[468px] left-[681px] overflow-clip rounded-[40px] top-[1056px] w-[553px] cursor-pointer transition-all duration-300 hover:border-red-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]" 
-          data-node-id="1:1889"
-        >
-          <div 
-            className="absolute transition-all duration-300 pointer-events-none"
-            style={{
-              left: hoveredCard === 2 ? '246px' : '208px',
-              top: hoveredCard === 2 ? '40px' : '119px',
-              width: hoveredCard === 2 ? '60px' : '128px',
-              height: hoveredCard === 2 ? '60px' : '128px',
-            }}
-            data-name="Car repair"
-          >
-            <img alt="" className="absolute inset-0 max-w-none object-cover size-full" src={IMAGES.iconRepair} />
-            <div className="absolute inset-0 rounded-[inherit] shadow-[inset_200px_200px_4px_0px_white]" />
-          </div>
-          <div 
-            className="-translate-x-1/2 [word-break:break-word] absolute font-['Sora'] font-bold leading-[0] left-[268px] text-[40px] text-center text-white transition-all duration-300 whitespace-nowrap"
-            style={{ top: hoveredCard === 2 ? '120px' : '282px' }}
-            data-node-id="1:1891"
-          >
-            <p className="leading-[0.962] mb-0">Auto</p>
-            <p className="leading-[0.962]">Repair</p>
-          </div>
-          {hoveredCard === 2 && (
-            <div className="absolute left-[40px] right-[40px] top-[245px] text-center font-['Sora'] font-bold text-[24px] text-white leading-relaxed animate-fadeIn">
-              <p className="mb-0">Reliable auto services to keep your</p>
-              <p className="mb-0">car road-ready.</p>
-              <p className="mb-0">From routine maintenance to major</p>
-              <p className="mb-0">repairs, we handle it all.</p>
-            </div>
-          )}
-        </div>
+          className="absolute left-[681px] top-[1056px]"
+        />
 
-        {/* ─── SERVICE FEATURE CARD 3: FLEET SERVICE (Node 1:1896) ─── */}
-        <div 
-          onMouseEnter={() => setHoveredCard(3)}
-          onMouseLeave={() => setHoveredCard(null)}
+        {/* ─── EXACT FIGMA COMPONENT 89: FLEET SERVICE (Node 1:1895) ─── */}
+        <ServiceFeatureCard
+          variant="fleet"
           onClick={() => navigate('/workshop-search')}
-          className="absolute bg-black border-5 border-solid border-white h-[468px] left-[1280px] overflow-clip rounded-[40px] top-[1053px] w-[553px] cursor-pointer transition-all duration-300 hover:border-red-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]" 
-          data-node-id="1:1896"
-        >
-          <div 
-            className="absolute transition-all duration-300 pointer-events-none"
-            style={{
-              left: hoveredCard === 3 ? '246px' : '208px',
-              top: hoveredCard === 3 ? '40px' : '140px',
-              width: hoveredCard === 3 ? '60px' : '128px',
-              height: hoveredCard === 3 ? '60px' : '128px',
-            }}
-            data-name="Car"
-          >
-            <img alt="" className="absolute inset-0 max-w-none object-cover size-full" src={IMAGES.iconFleet} />
-            <div className="absolute inset-0 rounded-[inherit] shadow-[inset_200px_200px_4px_0px_white]" />
-          </div>
-          <div 
-            className="-translate-x-1/2 [word-break:break-word] absolute font-['Sora'] font-bold leading-[0] left-[272px] text-[40px] text-center text-white transition-all duration-300 whitespace-nowrap"
-            style={{ top: hoveredCard === 3 ? '120px' : '286px' }}
-            data-node-id="1:1898"
-          >
-            <p className="leading-[0.962] mb-0">Fleet</p>
-            <p className="leading-[0.962]">Service</p>
-          </div>
-          {hoveredCard === 3 && (
-            <div className="absolute left-[40px] right-[40px] top-[245px] text-center font-['Sora'] font-bold text-[24px] text-white leading-relaxed animate-fadeIn">
-              <p className="mb-0">Efficient maintenance solutions for</p>
-              <p className="mb-0">commercial fleets.</p>
-              <p className="mb-0">Keep your vehicles running smoothly</p>
-              <p className="mb-0">with minimal downtime.</p>
-            </div>
-          )}
-        </div>
+          className="absolute left-[1280px] top-[1053px]"
+        />
 
         {/* ─── WHY US? (Node 1:697) ─── */}
         <p className="[word-break:break-word] absolute font-['Sora'] font-bold leading-[0.962] left-[87px] text-[64px] text-white top-[1650px] whitespace-nowrap">
