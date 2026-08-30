@@ -58,6 +58,7 @@ export default function Navbar() {
         <nav className="hidden md:flex items-center gap-8 lg:gap-12">
           {[
             { path: '/home', label: 'Home' },
+            { path: '/car-parts', label: 'Car Parts' },
             { path: '/about', label: 'About' },
             { path: '/contact', label: 'Contact' },
           ].map(({ path, label }) => (
@@ -114,6 +115,7 @@ export default function Navbar() {
         <div className="md:hidden bg-black/98 backdrop-blur-xl absolute top-full left-0 w-full border-t border-white/10 flex flex-col p-6 gap-5 shadow-2xl animate-slideDown">
           {[
             { path: '/home', label: 'Home' },
+            { path: '/car-parts', label: 'Car Parts' },
             { path: '/about', label: 'About' },
             { path: '/contact', label: 'Contact' },
           ].map(({ path, label }) => (

@@ -75,7 +75,9 @@ export default function App() {
         <Route path="/fuel-request" element={<Layout showNav={false} showFooter={false}><FuelRequest /></Layout>} />
         <Route path="/roadside" element={<Layout showFooter={false}><RoadsideLanding /></Layout>} />
         <Route path="/roadside-request" element={<Layout showNav={false} showFooter={false}><RoadsideRequest /></Layout>} />
-        <Route path="/spare-parts" element={<Layout><SparePartsStore /></Layout>} />
+        <Route path="/spare-parts" element={<Layout showFooter={false}><SparePartsStore /></Layout>} />
+        <Route path="/car-parts" element={<Layout showFooter={false}><SparePartsStore /></Layout>} />
+        <Route path="/parts" element={<Layout showFooter={false}><SparePartsStore /></Layout>} />
         <Route path="/car-rental" element={<Layout showFooter={false}><CarRental /></Layout>} />
         <Route path="/car-booking" element={<Layout showNav={false} showFooter={false}><CarBooking /></Layout>} />
         <Route path="/payment-select" element={<Layout showNav={false} showFooter={false}><PaymentSelect /></Layout>} />
