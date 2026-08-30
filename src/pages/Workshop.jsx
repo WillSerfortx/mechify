@@ -205,10 +205,6 @@ const SPECIALISTS = [
 export default function Workshop() {
   const navigate = useNavigate();
   const [visible, setVisible] = useState({});
-  const [formData, setFormData] = useState({
-    name: '', phone: '', carModel: '', email: '',
-    carReg: '', nid: '', message: '',
-  });
 
   /* ─── Intersection Observer for scroll-reveal ─── */
   useEffect(() => {
@@ -221,15 +217,6 @@ export default function Workshop() {
     document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    navigate('/workshop-select');
-  };
 
   return (
     <div className="bg-black min-h-screen text-white overflow-x-hidden" style={{ fontFamily: "'Sora', sans-serif" }}>
@@ -304,21 +291,24 @@ export default function Workshop() {
           </div>
 
           {/* CTA Button — Figma: left:95 top:526, 496×74, red bg, border white, rounded-40 */}
-          <a
-            href="#contact-section"
-            className="absolute inline-flex items-center justify-center text-white font-bold border border-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
+          {/* CTA Button — Glowing Emergency Appointment Button */}
+          <button
+            onClick={() => navigate('/workshop-search')}
+            className="absolute inline-flex items-center justify-center text-white font-bold border border-white transition-all duration-300 hover:scale-105 active:scale-95 animate-sosPulse cursor-pointer select-none"
             style={{
-              backgroundColor: 'red',
-              fontSize: responsive(32),
+              backgroundColor: '#dc2626',
+              fontSize: responsive(28),
               left: responsive(95),
               top: responsive(526),
-              width: responsive(496),
-              height: responsive(74),
+              width: responsive(620),
+              maxWidth: '90%',
+              height: responsive(76),
               borderRadius: responsive(40),
+              boxShadow: '0 0 35px rgba(220, 38, 38, 0.8), 0 0 70px rgba(220, 38, 38, 0.4)',
             }}
           >
-            Get an Appointment now
-          </a>
+            Get an Emergency appointment now
+          </button>
         </div>
       </section>
 
@@ -664,350 +654,6 @@ export default function Workshop() {
               </p>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════
-          CONTACT / APPOINTMENT SECTION
-          Figma layout (2-column):
-          
-          LEFT — Form card:
-            Card: left:88 top:4916 w:949 h:968 bg:#161616 rounded-20
-            
-            Labels are Sora SemiBold 24px
-            Inputs: bg:#161616 border-white h:74 rounded-20
-            
-            Row 1 (Name/Phone):
-              Name label:  left:124 top:4972 → offset from card: x:36, y:56
-              Name input:  left:124 top:5018 w:409 h:74
-              Phone label: left:581 top:4972
-              Phone input: left:581 top:5011 w:409 h:74
-            
-            Row 2 (Car model/Email):
-              Car model label: left:125 top:5140
-              Car model input: left:124 top:5186 w:409
-              Email label:     left:582 top:5143
-              Email input:     left:581 top:5186 w:409
-            
-            Row 3 (Car Reg/NID):
-              Car Reg label: left:126 top:5288
-              Car Reg input: left:125 top:5326 w:409
-              NID label:     left:587 top:5285
-              NID input:     left:587 top:5326 w:409
-            
-            Message label: left:126 top:5446
-            Message input: left:126 top:5504 w:865 h:169
-            
-            Button: left:126 top:5719 w:496 h:74 red rounded-40
-          
-          RIGHT — Contact info:
-            "GET A FREE":    left:1314 top:4863 Sora Bold 64px
-            "APPOINTMENT":   left:1314 top:4925
-            
-            Social icons at top:5071 (40×40 each):
-              Instagram: left:1314
-              Facebook:  left:1392 (gap: 78-40=38px between icons)
-              Social/X:  left:1469 (gap: 1469-1392-40=37px)
-            
-            Email icon:    left:1314 top:5152
-            Email text:    left:1382 top:5162 Sora Bold 20px
-            
-            Location icon: left:1314 top:5240
-            Location text: left:1375 top:5244
-            
-            Phone icon:    left:1314 top:5455
-            Phone text 1:  left:1382 top:5459
-            Phone text 2:  left:1382 top:5504
-      ═══════════════════════════════════════════════════════════ */}
-      <section
-        id="contact-section"
-        data-animate
-        className={`w-full ${visible['contact-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
-        style={{
-          paddingTop: responsive(60),
-          paddingBottom: responsive(80),
-          paddingLeft: responsive(88),
-          paddingRight: responsive(88),
-        }}
-      >
-        <div className="flex flex-col lg:flex-row items-start" style={{ gap: responsive(277) }}>
-          {/* 277 = 1314 - (88 + 949) = gap between form card right edge and right-side text */}
-
-          {/* ─── Left: Form Card ─── */}
-          <div
-            className="w-full lg:flex-shrink-0"
-            style={{
-              backgroundColor: '#161616',
-              borderRadius: responsive(20),
-              padding: `${responsive(56)} ${responsive(36)}`,
-              maxWidth: responsive(949),
-              width: '100%',
-            }}
-          >
-            <form onSubmit={handleFormSubmit}>
-              {/* Row 1: Name + Phone */}
-              <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: responsive(48), marginBottom: responsive(46) }}>
-                {/* gap = 581-124-409 = 48px (Figma horizontal gap between inputs) */}
-                {/* marginBottom = 5140-5018-74-24 = label-to-label vertical spacing minus font */}
-                <div>
-                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
-                    style={{
-                      backgroundColor: '#161616',
-                      height: responsive(74),
-                      borderRadius: responsive(20),
-                      padding: `0 ${responsive(20)}`,
-                      fontSize: responsive(18),
-                    }}
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
-                    style={{
-                      backgroundColor: '#161616',
-                      height: responsive(74),
-                      borderRadius: responsive(20),
-                      padding: `0 ${responsive(20)}`,
-                      fontSize: responsive(18),
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Row 2: Car model + Email */}
-              <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: responsive(48), marginBottom: responsive(46) }}>
-                <div>
-                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
-                    Car model
-                  </label>
-                  <input
-                    type="text"
-                    name="carModel"
-                    value={formData.carModel}
-                    onChange={handleChange}
-                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
-                    style={{
-                      backgroundColor: '#161616',
-                      height: responsive(74),
-                      borderRadius: responsive(20),
-                      padding: `0 ${responsive(20)}`,
-                      fontSize: responsive(18),
-                    }}
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
-                    style={{
-                      backgroundColor: '#161616',
-                      height: responsive(74),
-                      borderRadius: responsive(20),
-                      padding: `0 ${responsive(20)}`,
-                      fontSize: responsive(18),
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Row 3: Car Reg + NID */}
-              <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: responsive(48), marginBottom: responsive(46) }}>
-                <div>
-                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
-                    Car Reg Number
-                  </label>
-                  <input
-                    type="text"
-                    name="carReg"
-                    value={formData.carReg}
-                    onChange={handleChange}
-                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
-                    style={{
-                      backgroundColor: '#161616',
-                      height: responsive(74),
-                      borderRadius: responsive(20),
-                      padding: `0 ${responsive(20)}`,
-                      fontSize: responsive(18),
-                    }}
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
-                    NID Number
-                  </label>
-                  <input
-                    type="text"
-                    name="nid"
-                    value={formData.nid}
-                    onChange={handleChange}
-                    className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors"
-                    style={{
-                      backgroundColor: '#161616',
-                      height: responsive(74),
-                      borderRadius: responsive(20),
-                      padding: `0 ${responsive(20)}`,
-                      fontSize: responsive(18),
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Message — Figma: w:865 h:169 full width within card */}
-              <div style={{ marginBottom: responsive(46) }}>
-                <label className="block font-semibold" style={{ fontSize: responsive(24), marginBottom: responsive(22) }}>
-                  Message
-                </label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full border border-white text-white focus:outline-none focus:border-red-500 transition-colors resize-none"
-                  style={{
-                    backgroundColor: '#161616',
-                    height: responsive(169),
-                    borderRadius: responsive(20),
-                    padding: responsive(20),
-                    fontSize: responsive(18),
-                  }}
-                />
-              </div>
-
-              {/* Submit button — Figma: red bg, border white, 496×74, rounded-40, Sora Bold 32px */}
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center text-white font-bold border border-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
-                style={{
-                  backgroundColor: 'red',
-                  fontSize: responsive(32),
-                  width: responsive(496),
-                  maxWidth: '100%',
-                  height: responsive(74),
-                  borderRadius: responsive(40),
-                }}
-              >
-                Get a Workshop now
-              </button>
-            </form>
-          </div>
-
-          {/* ─── Right: Contact Info ─── */}
-          <div className="w-full lg:w-auto flex flex-col justify-start" style={{ flexShrink: 0 }}>
-            {/* "GET A FREE" — Figma: Sora Bold 64px, top:4863 */}
-            <h2
-              className="font-bold leading-none"
-              style={{
-                fontSize: responsive(64),
-                marginBottom: responsive(0),
-              }}
-            >
-              GET A FREE
-            </h2>
-            {/* "APPOINTMENT" — Figma: top:4925, gap from above: 4925-4863=62px but with 64px font → ~-2px overlap */}
-            <h2
-              className="font-bold leading-none"
-              style={{
-                fontSize: responsive(64),
-                marginTop: responsive(0),
-                marginBottom: responsive(75),
-              }}
-            >
-              APPOINTMENT
-            </h2>
-
-            {/* Social icons — Figma: 40×40 each at top:5071
-                Instagram: left:1314, Facebook: left:1392 (gap:38), Social: left:1469 (gap:37) */}
-            <div
-              className="flex items-center"
-              style={{
-                gap: responsive(38),
-                marginBottom: responsive(41),
-                /* 5152 - 5071 - 40 = 41px gap to email */
-              }}
-            >
-              <a href="#" className="hover:scale-110 transition-transform" style={{ width: responsive(40), height: responsive(40) }}>
-                <img src={IMAGES.iconInstagram} alt="Instagram" className="w-full h-full object-contain brightness-0 invert" />
-              </a>
-              <a href="#" className="hover:scale-110 transition-transform" style={{ width: responsive(40), height: responsive(40) }}>
-                <img src={IMAGES.iconFacebook} alt="Facebook" className="w-full h-full object-contain brightness-0 invert" />
-              </a>
-              <a href="#" className="hover:scale-110 transition-transform" style={{ width: responsive(40), height: responsive(40) }}>
-                <img src={IMAGES.iconSocial} alt="Twitter" className="w-full h-full object-contain brightness-0 invert" />
-              </a>
-            </div>
-
-            {/* Email — Figma: mail icon 40×40 at top:5152, text at left:1382 top:5162 */}
-            <div
-              className="flex items-center"
-              style={{
-                gap: responsive(28),
-                /* icon-to-text: 1382-1314-40=28px */
-                marginBottom: responsive(48),
-                /* 5240-5152-40=48px to next icon */
-              }}
-            >
-              <div className="shrink-0" style={{ width: responsive(40), height: responsive(40) }}>
-                <img src={IMAGES.iconMail} alt="Email" className="w-full h-full object-contain brightness-0 invert" />
-              </div>
-              <p className="font-bold" style={{ fontSize: responsive(20) }}>mrahman2331077@bscse.uiu.ac.bd</p>
-            </div>
-
-            {/* Address — Figma: location icon at top:5240, text at top:5244 left:1375 */}
-            <div
-              className="flex items-center"
-              style={{
-                gap: responsive(21),
-                /* 1375-1314-40=21px */
-                marginBottom: responsive(175),
-                /* 5455-5240-40=175px gap to phone section */
-              }}
-            >
-              <div className="shrink-0" style={{ width: responsive(40), height: responsive(40) }}>
-                <img src={IMAGES.iconLocation} alt="Location" className="w-full h-full object-contain brightness-0 invert" />
-              </div>
-              <p className="font-bold" style={{ fontSize: responsive(20) }}>Lane 1 Block A Baridhara Dohs</p>
-            </div>
-
-            {/* Phone — Figma: phone icon at top:5455, text at top:5459/5504 */}
-            <div
-              className="flex items-start"
-              style={{
-                gap: responsive(28),
-                /* 1382-1314-40=28px */
-              }}
-            >
-              <div className="shrink-0" style={{ width: responsive(40), height: responsive(40), marginTop: responsive(4) }}>
-                <img src={IMAGES.iconPhone} alt="Phone" className="w-full h-full object-contain brightness-0 invert" />
-              </div>
-              <div>
-                <p className="font-bold" style={{ fontSize: responsive(20) }}>+8801304098448</p>
-                <p className="font-bold" style={{ fontSize: responsive(20), marginTop: responsive(25) }}>
-                  {/* 5504-5459-20=25px gap */}
-                  +8801516520602
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
     </div>
