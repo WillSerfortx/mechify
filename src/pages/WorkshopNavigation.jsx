@@ -260,6 +260,10 @@ export default function WorkshopNavigation() {
             <img
               src={selectedWorkshop.img}
               alt={selectedWorkshop.name}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = '/images/workshop/gallery-engine.png';
+              }}
               className="w-16 h-16 rounded-2xl object-cover border border-neutral-700 flex-shrink-0"
             />
             <div className="flex-1 min-w-0">

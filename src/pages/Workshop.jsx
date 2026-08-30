@@ -382,6 +382,10 @@ export default function Workshop() {
                 <img
                   src={spec.img}
                   alt={spec.name}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/images/workshop/gallery-schedule.png';
+                  }}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>

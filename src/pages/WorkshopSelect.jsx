@@ -269,16 +269,16 @@ export const DHAKA_WORKSHOPS = [
     ];
 
     const stockImages = [
+      '/images/workshop/gallery-engine.png',
       'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=800&auto=format&fit=crop&q=80',
+      '/images/workshop/gallery-schedule.png',
       'https://images.unsplash.com/photo-1486262715619-670810a0740f?w=800&auto=format&fit=crop&q=80',
+      '/images/workshop/gallery-painting.png',
       'https://images.unsplash.com/photo-1599304918731-cd8e7b1c4e97?w=800&auto=format&fit=crop&q=80',
+      '/images/workshop/gallery-detailing.png',
       'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800&auto=format&fit=crop&q=80'
+      '/images/workshop/hero-bg.png',
+      'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&auto=format&fit=crop&q=80'
     ];
 
     return {
@@ -442,6 +442,10 @@ export default function WorkshopSelect() {
                     <img
                       src={ws.img}
                       alt={ws.name}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/images/workshop/gallery-engine.png';
+                      }}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     {/* Distance Badge */}
