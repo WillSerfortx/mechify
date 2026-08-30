@@ -1,34 +1,28 @@
 import React, { useState } from 'react';
 
 /**
- * GalleryCard component matching exact Figma specifications:
- * - Component 83 (SCHEDULE, node 1:1849)
- * - Component 84 (ENGINE, node 1:1857)
- * - Component 85 (PAINTING, node 1:1865)
- * - Component 86 (DETAILING, node 1:1873)
+ * Exact 1:1 Figma implementation for Component 83 (SCHEDULE), Component 84 (ENGINE),
+ * Component 85 (PAINTING), and Component 86 (DETAILING).
  *
- * Visual spec:
- * - Width / Height aspect-ratio: 403 / 491
- * - Border: 5px solid #FFFFFF
- * - Border radius: 15px
- * - Background: #000000
- * - Default state: Image fills full height, title at bottom (top: ~79.4%), subtle bottom shadow.
- * - Active/Hover state: Image takes top ~72% height, bottom ~28% is solid black, title moves to top of black split (~62%), 2-line centered description appears in black area (~80%).
+ * Exact Figma Specs:
+ * - Card: 403px × 491px, border: 5px solid #ffffff, border-radius: 15px, background: #000000, overflow: clip
+ * - Default State: Image covers entire card, Title at top: 390px (79.43%), font: Sora ExtraBold 40px, leading: 0.962, white
+ * - Hover State: Image shifts up with black bottom, Title at top: 298px-325px, Description at top: 391px-417px (Sora Regular 20px, leading: 0.962, center, white)
  */
 export default function GalleryCard({
   img,
   label,
-  descLine1,
-  descLine2,
-  titleTopHoverPercent = 62,
-  descTopHoverPercent = 80,
-  onClick,
+  line1,
+  line2,
+  titleDefaultTop = '79.43%',
+  titleHoverTop = '60.69%',
+  descHoverTop = '79.63%',
+  imageHoverShift = '-25%',
   responsiveHelper,
+  onClick,
   className = '',
-  active = false,
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const isExpanded = active || isHovered;
 
   const r = responsiveHelper || ((px) => `${px}px`);
 
@@ -46,87 +40,107 @@ export default function GalleryCard({
         borderRadius: r(15),
       }}
     >
-      {/* ─── Upper Image Area ─── */}
+      {/* ─── Image Container with Exact Figma Crop & Shift ─── */}
       <div
-        className="absolute top-0 left-0 right-0 overflow-hidden transition-all duration-300 ease-out pointer-events-none"
+        className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none transition-all duration-300 ease-out"
         style={{
-          height: isExpanded ? '72%' : '100%',
+          height: isHovered ? '72%' : '100%',
         }}
       >
         <img
           src={img}
           alt={label}
-          className={`w-full h-full object-cover transition-transform duration-500 ease-out ${
-            isExpanded ? 'scale-100' : 'group-hover:scale-105'
-          }`}
+          className="w-full h-full object-cover transition-all duration-300 ease-out"
           style={{
-            objectPosition: 'center 20%',
+            objectPosition: 'center 15%',
+            transform: isHovered ? `translateY(${imageHoverShift})` : 'translateY(0%)',
           }}
         />
-        {/* Default state subtle shadow to enhance text contrast */}
+        {/* Subtle shadow overlay in default state */}
         <div
-          className={`absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent transition-opacity duration-300 ${
-            isExpanded ? 'opacity-0' : 'opacity-100'
+          className={`absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent transition-opacity duration-300 ${
+            isHovered ? 'opacity-0' : 'opacity-100'
           }`}
         />
       </div>
 
-      {/* ─── Lower Black Box Area for Hover State ─── */}
+      {/* ─── Black Bottom Plate for Hover State ─── */}
       <div
-        className={`absolute bottom-0 left-0 right-0 bg-black transition-all duration-300 ease-out pointer-events-none ${
-          isExpanded ? 'opacity-100' : 'opacity-0'
+        className={`absolute bottom-0 left-0 right-0 bg-black transition-opacity duration-300 ease-out pointer-events-none ${
+          isHovered ? 'opacity-100' : 'opacity-0'
         }`}
         style={{
           height: '28%',
         }}
       />
 
-      {/* ─── Title Text: "SCHEDULE", "ENGINE", etc. ─── */}
+      {/* ─── Title ("SCHEDULE", "ENGINE", "PAINTING", "DETAILING") ─── */}
       <div
-        className="absolute left-0 right-0 text-center transition-all duration-300 ease-out pointer-events-none z-20"
+        className="absolute left-0 right-0 w-full text-center transition-all duration-300 ease-out pointer-events-none z-20"
         style={{
-          top: isExpanded ? `${titleTopHoverPercent}%` : '79.4%',
-          transform: 'translateY(-50%)',
+          top: isHovered ? titleHoverTop : titleDefaultTop,
         }}
       >
         <p
-          className="font-extrabold text-white leading-none tracking-normal uppercase text-center"
+          className="font-extrabold text-white text-center whitespace-nowrap select-none"
           style={{
             fontFamily: "'Sora', sans-serif",
+            fontWeight: 800,
             fontSize: r(40),
+            lineHeight: 0.962,
+            letterSpacing: '0px',
+            margin: 0,
+            padding: 0,
           }}
         >
           {label}
         </p>
       </div>
 
-      {/* ─── Description in Bottom Black Box ─── */}
+      {/* ─── Description: 2-line exact sentences in bottom black area ─── */}
       <div
-        className={`absolute left-0 right-0 px-2 text-center transition-all duration-300 ease-out pointer-events-none z-20 ${
-          isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+        className={`absolute left-0 right-0 w-full text-center transition-all duration-300 ease-out pointer-events-none z-20 ${
+          isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
         }`}
         style={{
-          top: `${descTopHoverPercent}%`,
+          top: descHoverTop,
         }}
       >
-        <p
-          className="font-normal text-white text-center whitespace-pre-line mx-auto"
+        <div
+          className="text-center mx-auto"
           style={{
             fontFamily: "'Sora', sans-serif",
+            fontWeight: 400,
             fontSize: r(20),
-            lineHeight: '1.15',
-            letterSpacing: '-0.01em',
-            maxWidth: '92%',
+            color: '#ffffff',
+            lineHeight: 0.962,
           }}
         >
-          {descLine1}
-          {descLine2 && (
-            <>
-              <br />
-              {descLine2}
-            </>
-          )}
-        </p>
+          <p
+            className="whitespace-pre text-center mb-0"
+            style={{
+              fontFamily: "'Sora', sans-serif",
+              fontWeight: 400,
+              fontSize: r(20),
+              lineHeight: 1.15,
+              margin: 0,
+            }}
+          >
+            {line1}
+          </p>
+          <p
+            className="whitespace-pre text-center"
+            style={{
+              fontFamily: "'Sora', sans-serif",
+              fontWeight: 400,
+              fontSize: r(20),
+              lineHeight: 1.15,
+              margin: 0,
+            }}
+          >
+            {line2}
+          </p>
+        </div>
       </div>
     </div>
   );

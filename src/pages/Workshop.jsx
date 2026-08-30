@@ -87,34 +87,42 @@ const GALLERY = [
   {
     img: IMAGES.gallerySchedule,
     label: 'SCHEDULE',
-    descLine1: 'Book your service easily at a time',
-    descLine2: 'that fits your schedule.',
-    titleTopHoverPercent: 60.7,
-    descTopHoverPercent: 79.6,
+    line1: 'Book your service easily at a time ',
+    line2: 'that fits your schedule.',
+    titleDefaultTop: '79.43%',
+    titleHoverTop: '60.69%',
+    descHoverTop: '79.63%',
+    imageHoverShift: '-15%',
   },
   {
     img: IMAGES.galleryEngine,
     label: 'ENGINE',
-    descLine1: 'Expert engine diagnostics and',
-    descLine2: 'repairs for smooth performance.',
-    titleTopHoverPercent: 61.9,
-    descTopHoverPercent: 81.0,
+    line1: 'Expert engine diagnostics and',
+    line2: 'repairs for smooth performance.',
+    titleDefaultTop: '79.43%',
+    titleHoverTop: '61.91%',
+    descHoverTop: '81.05%',
+    imageHoverShift: '-15%',
   },
   {
     img: IMAGES.galleryPainting,
     label: 'PAINTING',
-    descLine1: 'Premium paintwork to restore your',
-    descLine2: 'car’s original shine.',
-    titleTopHoverPercent: 64.7,
-    descTopHoverPercent: 83.1,
+    line1: 'Premium paintwork to restore your',
+    line2: 'car’s original shine.',
+    titleDefaultTop: '79.43%',
+    titleHoverTop: '64.76%',
+    descHoverTop: '83.09%',
+    imageHoverShift: '-15%',
   },
   {
     img: IMAGES.galleryDetailing,
     label: 'DETAILING',
-    descLine1: 'Complete interior and exterior',
-    descLine2: 'detailing for a fresh look.',
-    titleTopHoverPercent: 66.1,
-    descTopHoverPercent: 84.9,
+    line1: 'Complete interior and exterior ',
+    line2: 'detailing for a fresh look.',
+    titleDefaultTop: '79.43%',
+    titleHoverTop: '66.19%',
+    descHoverTop: '84.92%',
+    imageHoverShift: '-15%',
   },
 ];
 
@@ -545,10 +553,12 @@ export default function Workshop() {
               key={i}
               img={item.img}
               label={item.label}
-              descLine1={item.descLine1}
-              descLine2={item.descLine2}
-              titleTopHoverPercent={item.titleTopHoverPercent}
-              descTopHoverPercent={item.descTopHoverPercent}
+              line1={item.line1}
+              line2={item.line2}
+              titleDefaultTop={item.titleDefaultTop}
+              titleHoverTop={item.titleHoverTop}
+              descHoverTop={item.descHoverTop}
+              imageHoverShift={item.imageHoverShift}
               responsiveHelper={responsive}
               onClick={() => navigate('/workshop-select')}
             />
