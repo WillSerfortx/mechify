@@ -18,7 +18,9 @@ export const DHAKA_WORKSHOPS = [
     towPhone: '+880 1516-520602',
     status: 'Open 24/7',
     isEmergency: true,
-    tags: ['Engine Diagnostics', 'Brake Overhaul', 'AC Repair', 'Express Bay'],
+    mechanicsOnDuty: '6 Specialists',
+    priceLevel: '৳৳ Standard Rates',
+    tags: ['Engine Diagnostics', 'Brake Overhaul', 'AC Repair', 'Express Bay', 'Computerized Scan'],
     img: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=800&auto=format&fit=crop&q=80',
     lat: 23.7925,
     lng: 90.4150,
@@ -38,7 +40,9 @@ export const DHAKA_WORKSHOPS = [
     towPhone: '+880 1516-520602',
     status: 'Open 24/7',
     isEmergency: true,
-    tags: ['Computerized Scan', 'Transmission Repair', 'Laser Wheel Alignment'],
+    mechanicsOnDuty: '5 Specialists',
+    priceLevel: '৳৳ Standard Rates',
+    tags: ['Transmission Repair', 'Laser Wheel Alignment', 'Hybrid Diagnostics', 'ECU Tuning'],
     img: 'https://images.unsplash.com/photo-1486262715619-670810a0740f?w=800&auto=format&fit=crop&q=80',
     lat: 23.7937,
     lng: 90.4066,
@@ -58,7 +62,9 @@ export const DHAKA_WORKSHOPS = [
     towPhone: '+880 1304-098448',
     status: 'Open 24/7',
     isEmergency: true,
-    tags: ['Hybrid System Repair', 'Suspension Tune', 'Emergency Battery Jump'],
+    mechanicsOnDuty: '4 Specialists',
+    priceLevel: '৳৳ Standard Rates',
+    tags: ['Hybrid System Repair', 'Suspension Tune', 'Emergency Battery Jump', 'Paint Chamber'],
     img: 'https://images.unsplash.com/photo-1599304918731-cd8e7b1c4e97?w=800&auto=format&fit=crop&q=80',
     lat: 23.8050,
     lng: 90.4180,
@@ -78,7 +84,9 @@ export const DHAKA_WORKSHOPS = [
     towPhone: '+880 1516-520602',
     status: 'Open 24/7',
     isEmergency: true,
-    tags: ['Heavy Mechanical Work', 'Engine Rebuild', 'Custom Paint Chamber'],
+    mechanicsOnDuty: '8 Specialists',
+    priceLevel: '৳ Affordable',
+    tags: ['Heavy Mechanical Work', 'Engine Rebuild', 'Custom Paint Chamber', 'Hydraulic Lift'],
     img: 'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=800&auto=format&fit=crop&q=80',
     lat: 23.7680,
     lng: 90.3990,
@@ -98,7 +106,9 @@ export const DHAKA_WORKSHOPS = [
     towPhone: '+880 1516-520602',
     status: 'Open 24/7',
     isEmergency: true,
-    tags: ['Electrical Wiring Fix', 'Radiator Flush', 'Quick Lube Service'],
+    mechanicsOnDuty: '4 Specialists',
+    priceLevel: '৳৳ Standard Rates',
+    tags: ['Electrical Wiring Fix', 'Radiator Flush', 'Quick Lube Service', 'AC Overhaul'],
     img: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&auto=format&fit=crop&q=80',
     lat: 23.7780,
     lng: 90.3950,
@@ -118,7 +128,9 @@ export const DHAKA_WORKSHOPS = [
     towPhone: '+880 1516-520602',
     status: 'Open 24/7',
     isEmergency: true,
-    tags: ['ECU Remapping', 'Turbo Tuning', 'Brembo Brake Upgrades'],
+    mechanicsOnDuty: '6 Specialists',
+    priceLevel: '৳৳ Standard Rates',
+    tags: ['ECU Remapping', 'Turbo Tuning', 'Brembo Brake Upgrades', 'Dyno Test'],
     img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&auto=format&fit=crop&q=80',
     lat: 23.8160,
     lng: 90.4320,
@@ -138,7 +150,9 @@ export const DHAKA_WORKSHOPS = [
     towPhone: '+880 1516-520602',
     status: 'Open 24/7',
     isEmergency: true,
-    tags: ['Multi-Point Inspection', 'Clutch Replacement', 'Premium Detailing'],
+    mechanicsOnDuty: '5 Specialists',
+    priceLevel: '৳৳ Standard Rates',
+    tags: ['Multi-Point Inspection', 'Clutch Replacement', 'Premium Detailing', 'Brake Pads'],
     img: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&auto=format&fit=crop&q=80',
     lat: 23.7500,
     lng: 90.3750,
@@ -158,7 +172,9 @@ export const DHAKA_WORKSHOPS = [
     towPhone: '+880 1516-520602',
     status: 'Open 24/7',
     isEmergency: true,
-    tags: ['Japanese Car Specialists', 'Hybrid Battery Cell Balancer', 'Quick Bay'],
+    mechanicsOnDuty: '6 Specialists',
+    priceLevel: '৳৳ Standard Rates',
+    tags: ['Japanese Car Specialists', 'Hybrid Battery Cell Balancer', 'Quick Bay', 'AC Gas'],
     img: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800&auto=format&fit=crop&q=80',
     lat: 23.8650,
     lng: 90.3980,
@@ -178,7 +194,9 @@ export const DHAKA_WORKSHOPS = [
     towPhone: '+880 1516-520602',
     status: 'Open 24/7',
     isEmergency: true,
-    tags: ['Affordable Maintenance', 'Brake Pad Change', 'Radiator Repair'],
+    mechanicsOnDuty: '7 Specialists',
+    priceLevel: '৳ Affordable',
+    tags: ['Affordable Maintenance', 'Brake Pad Change', 'Radiator Repair', 'Suspension'],
     img: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&auto=format&fit=crop&q=80',
     lat: 23.8060,
     lng: 90.3680,
@@ -198,7 +216,9 @@ export const DHAKA_WORKSHOPS = [
     towPhone: '+880 1516-520602',
     status: 'Open 24/7',
     isEmergency: true,
-    tags: ['Roadside Emergency Towing', 'Fuel Injection Tune', 'AC Gas Refill'],
+    mechanicsOnDuty: '4 Specialists',
+    priceLevel: '৳৳ Standard Rates',
+    tags: ['Roadside Emergency Towing', 'Fuel Injection Tune', 'AC Gas Refill', 'Battery Change'],
     img: 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800&auto=format&fit=crop&q=80',
     lat: 23.7820,
     lng: 90.4260,
@@ -241,11 +261,11 @@ export const DHAKA_WORKSHOPS = [
     ];
 
     const specialities = [
-      ['German Auto Scan', 'Brake Booster Fix', 'Synthetic Oil Change'],
-      ['Engine Overhaul', 'Exhaust Tuning', 'Wheel Balancing'],
-      ['Electronic Sensor Diagnostics', 'ABS Repair', 'Radiator Core Change'],
-      ['AC Condenser Cleaning', 'Auto Gearbox Fluid Exchange', 'Dyno Testing'],
-      ['Hybrid Inverter Check', 'Suspension Bushing', 'Headlight Restoration']
+      ['German Auto Scan', 'Brake Booster Fix', 'Synthetic Oil Change', 'Wheel Alignment'],
+      ['Engine Overhaul', 'Exhaust Tuning', 'Wheel Balancing', 'AC Repair'],
+      ['Electronic Sensor Diagnostics', 'ABS Repair', 'Radiator Core Change', 'Battery Health'],
+      ['AC Condenser Cleaning', 'Auto Gearbox Fluid Exchange', 'Dyno Testing', 'Brake Pads'],
+      ['Hybrid Inverter Check', 'Suspension Bushing', 'Headlight Restoration', 'Fuel Injector']
     ];
 
     const stockImages = [
@@ -276,6 +296,8 @@ export const DHAKA_WORKSHOPS = [
       towPhone: '+880 1516-520602',
       status: idx % 3 === 0 ? 'Open 24/7' : 'Open till 11:00 PM',
       isEmergency: idx % 2 === 0,
+      mechanicsOnDuty: `${3 + (idx % 4)} Specialists`,
+      priceLevel: idx % 2 === 0 ? '৳ Affordable' : '৳৳ Standard Rates',
       tags: specialities[idx % specialities.length],
       img: stockImages[idx % stockImages.length],
       lat: area.lat + (Math.random() * 0.006 - 0.003),
@@ -293,9 +315,11 @@ export default function WorkshopSelect() {
 
   // Filter workshops
   const filteredWorkshops = DHAKA_WORKSHOPS.filter((ws) => {
-    const matchesSearch = ws.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          ws.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          ws.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
+    const term = searchTerm.toLowerCase().trim();
+    const matchesSearch = !term ||
+                          ws.name.toLowerCase().includes(term) ||
+                          ws.address.toLowerCase().includes(term) ||
+                          ws.tags.some(t => t.toLowerCase().includes(term));
     const matchesZone = selectedZone === 'All' || ws.zone === selectedZone;
     return matchesSearch && matchesZone;
   });
@@ -305,57 +329,74 @@ export default function WorkshopSelect() {
   };
 
   return (
-    <div className="bg-[#0a0a0a] min-h-screen text-white font-outfit pb-24 relative overflow-x-hidden">
+    <div className="bg-black min-h-screen text-white font-outfit pb-24 relative overflow-x-hidden">
       
-      {/* Top Header Bar */}
-      <div className="sticky top-0 z-40 bg-black/90 backdrop-blur-xl border-b border-neutral-800 px-4 sm:px-8 py-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      {/* ─── Top Header & Search Hero Bar ─── */}
+      <div className="sticky top-0 z-40 bg-neutral-950/95 backdrop-blur-2xl border-b border-neutral-800 px-4 sm:px-8 lg:px-12 py-5 shadow-2xl">
+        <div className="max-w-[1720px] mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
           
-          {/* Title & Badge */}
-          <div className="flex items-center gap-4">
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold font-sora tracking-tight">
-                  Nearest Verified Workshops
-                </h1>
-                <span className="bg-red-600/20 text-red-400 text-xs font-mono px-2.5 py-0.5 rounded-full border border-red-500/30">
-                  50 Total in Dhaka
-                </span>
-              </div>
-              <p className="text-xs text-gray-400">
-                Sorted by distance from your current location • Showing {filteredWorkshops.length} workshops
-              </p>
+          {/* Title & Live Status */}
+          <div>
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-sora tracking-tight text-white">
+                Nearest Verified Workshops
+              </h1>
+              <span className="bg-red-600/20 text-red-400 text-xs font-mono font-bold px-3 py-1 rounded-full border border-red-500/30 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                50 Certified in Dhaka
+              </span>
             </div>
+            <p className="text-sm text-gray-400 mt-1">
+              Sorted by distance from your current location • Showing <span className="text-white font-bold">{filteredWorkshops.length}</span> workshops
+            </p>
           </div>
 
-          {/* Search Bar */}
-          <div className="relative w-full md:w-80">
-            <input
-              type="text"
-              placeholder="Search by area, workshop, or service..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-neutral-900/90 border border-neutral-700 rounded-xl px-4 py-2.5 pl-10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-500 transition-colors"
-            />
-            <span className="absolute left-3.5 top-3 text-gray-400 text-sm">🔍</span>
-            {searchTerm && (
-              <button 
-                onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-2.5 text-gray-400 hover:text-white text-sm"
-              >
-                ✕
-              </button>
-            )}
+          {/* ─── Clear, High-Contrast Search Bar ─── */}
+          <div className="relative w-full lg:w-[580px] flex-shrink-0">
+            <div className="relative flex items-center bg-neutral-900 border-2 border-neutral-700 focus-within:border-red-500 focus-within:shadow-[0_0_20px_rgba(220,38,38,0.35)] rounded-2xl transition-all duration-300">
+              
+              {/* Distinct High-Visibility Search Icon */}
+              <div className="pl-4 pr-2 flex items-center justify-center text-red-500 pointer-events-none">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+
+              {/* Input Text */}
+              <input
+                type="text"
+                placeholder="Search workshop name, area (e.g. Gulshan, Uttara), or service..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-transparent py-3.5 pr-20 text-base text-white placeholder-gray-400 focus:outline-none font-medium"
+              />
+
+              {/* Clear button */}
+              {searchTerm && (
+                <button 
+                  onClick={() => setSearchTerm('')}
+                  className="mr-2 text-xs bg-neutral-800 hover:bg-neutral-700 text-gray-300 hover:text-white px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+                >
+                  Clear ✕
+                </button>
+              )}
+
+              {/* Search Badge */}
+              <div className="mr-3 bg-red-600/30 text-red-400 text-xs font-bold font-mono px-2.5 py-1 rounded-md border border-red-500/30 hidden sm:block">
+                SEARCH
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Filter Tabs */}
-        <div className="max-w-7xl mx-auto mt-4 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+        <div className="max-w-[1720px] mx-auto mt-4 flex items-center gap-2.5 overflow-x-auto no-scrollbar pt-1">
+          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mr-1 hidden sm:inline">Filter Area:</span>
           {zones.map((zone) => (
             <button
               key={zone}
               onClick={() => setSelectedZone(zone)}
-              className={`text-xs px-4 py-2 rounded-full font-medium transition-all whitespace-nowrap cursor-pointer ${
+              className={`text-xs sm:text-sm px-4 py-2 rounded-xl font-semibold transition-all whitespace-nowrap cursor-pointer ${
                 selectedZone === zone
                   ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.5)] font-bold'
                   : 'bg-neutral-900 text-gray-400 hover:text-white border border-neutral-800 hover:border-neutral-700'
@@ -367,115 +408,139 @@ export default function WorkshopSelect() {
         </div>
       </div>
 
-      {/* Main List Container — STRICTLY ROW FORMATION ONLY */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 mt-6">
+      {/* ─── Main List Container — Full Width Row Cards ─── */}
+      <div className="max-w-[1720px] w-full mx-auto px-4 sm:px-8 lg:px-12 mt-8">
         
         {filteredWorkshops.length === 0 ? (
-          <div className="bg-neutral-900/50 border border-neutral-800 rounded-3xl p-12 text-center my-12">
-            <span className="text-4xl mb-4 block">🔍</span>
-            <h3 className="text-xl font-bold mb-2">No workshops found</h3>
-            <p className="text-gray-400 text-sm mb-6">Try searching with a different area name or reset filters.</p>
+          <div className="bg-neutral-900/50 border border-neutral-800 rounded-3xl p-16 text-center my-12">
+            <span className="text-5xl mb-4 block">🔍</span>
+            <h3 className="text-2xl font-bold mb-2">No workshops found matching "{searchTerm}"</h3>
+            <p className="text-gray-400 text-base mb-6">Try searching with a different Dhaka area name or reset the filters.</p>
             <button
               onClick={() => { setSearchTerm(''); setSelectedZone('All'); }}
-              className="bg-red-600 hover:bg-red-700 text-white text-sm font-bold px-6 py-2.5 rounded-xl transition-colors"
+              className="bg-red-600 hover:bg-red-700 text-white text-base font-bold px-8 py-3 rounded-xl transition-colors cursor-pointer"
             >
-              Reset Filters
+              Reset Search & Filters
             </button>
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-5">
             {filteredWorkshops.map((ws, index) => (
               <div
                 key={ws.id}
-                className="bg-neutral-950 border border-neutral-800/80 hover:border-red-500/60 rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,38,38,0.15)] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-5 group"
+                className="bg-neutral-950 border-2 border-neutral-800/90 hover:border-red-500 rounded-3xl p-5 sm:p-6 transition-all duration-300 hover:shadow-[0_0_35px_rgba(220,38,38,0.2)] flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 group"
               >
-                {/* Left: Index + Photo */}
-                <div className="flex items-center gap-4 flex-shrink-0">
+                {/* ─── Left: Index + Photo with Distance Badge ─── */}
+                <div className="flex items-center gap-5 flex-shrink-0">
                   {/* Sequence Number */}
-                  <span className="hidden sm:flex w-7 text-gray-600 font-mono text-sm font-bold">
+                  <span className="hidden xl:flex w-8 text-gray-500 font-mono text-base font-bold">
                     #{index + 1}
                   </span>
 
                   {/* Image container */}
-                  <div className="relative w-28 h-28 sm:w-36 sm:h-28 rounded-xl overflow-hidden flex-shrink-0 border border-neutral-800">
+                  <div className="relative w-full sm:w-64 h-48 sm:h-36 rounded-2xl overflow-hidden flex-shrink-0 border border-neutral-700 shadow-md">
                     <img
                       src={ws.img}
                       alt={ws.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     {/* Distance Badge */}
-                    <div className="absolute top-1.5 left-1.5 bg-black/85 backdrop-blur-md px-2 py-0.5 rounded-md border border-white/20 text-[11px] font-bold text-white flex items-center gap-1">
+                    <div className="absolute top-2 left-2 bg-black/90 backdrop-blur-md px-3 py-1 rounded-lg border border-white/20 text-xs font-bold text-white flex items-center gap-1.5 shadow-lg">
                       <span>📍</span>
                       <span>{ws.distance}</span>
+                    </div>
+
+                    {/* Verified partner badge */}
+                    <div className="absolute bottom-2 left-2 bg-green-950/90 backdrop-blur-md px-2.5 py-0.5 rounded-md border border-green-500/40 text-[11px] font-bold text-green-300">
+                      ✔ Verified Hub
                     </div>
                   </div>
                 </div>
 
-                {/* Center: Details, Address, Ratings, Tags */}
-                <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+                {/* ─── Center: Comprehensive Details ─── */}
+                <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
                   <div>
-                    <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <h3 className="text-lg sm:text-xl font-bold font-sora text-white truncate group-hover:text-red-400 transition-colors">
+                    <div className="flex flex-wrap items-center gap-3 mb-1.5">
+                      <h3 className="text-xl sm:text-2xl font-bold font-sora text-white truncate group-hover:text-red-400 transition-colors">
                         {ws.name}
                       </h3>
                       {ws.isEmergency && (
-                        <span className="bg-red-500/10 text-red-400 text-[11px] font-bold px-2 py-0.5 rounded border border-red-500/20 whitespace-nowrap">
+                        <span className="bg-red-600/20 text-red-400 text-xs font-bold px-2.5 py-0.5 rounded-md border border-red-500/30 whitespace-nowrap">
                           🚨 Emergency Ready
                         </span>
                       )}
                     </div>
 
-                    <p className="text-gray-400 text-xs sm:text-sm flex items-center gap-1.5 mb-2.5 truncate">
-                      <span>📍</span>
-                      <span>{ws.address}</span>
+                    <p className="text-gray-300 text-sm sm:text-base flex items-center gap-2 mb-3">
+                      <span className="text-red-500 text-base">📍</span>
+                      <span className="truncate">{ws.address}</span>
                     </p>
                   </div>
 
-                  {/* Ratings & Tags Row */}
-                  <div className="flex flex-wrap items-center gap-3">
+                  {/* Ratings, Status, Mechanics On Duty & Tags */}
+                  <div className="flex flex-wrap items-center gap-3 mt-1">
                     {/* Star Rating */}
-                    <div className="flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30 text-amber-300 text-xs font-bold">
+                    <div className="flex items-center gap-1.5 bg-amber-500/15 px-3 py-1 rounded-lg border border-amber-500/30 text-amber-300 text-sm font-bold">
                       <span>★</span>
                       <span>{ws.rating}</span>
-                      <span className="text-gray-400 font-normal">({ws.reviews})</span>
+                      <span className="text-gray-400 font-normal">({ws.reviews} reviews)</span>
                     </div>
 
                     {/* Status badge */}
-                    <span className="text-green-400 bg-green-500/10 border border-green-500/20 text-[11px] font-semibold px-2 py-0.5 rounded flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                    <span className="text-green-400 bg-green-500/10 border border-green-500/30 text-xs font-semibold px-3 py-1 rounded-lg flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                       {ws.status}
                     </span>
 
-                    {/* Speciality Tags */}
-                    <div className="hidden lg:flex items-center gap-1.5">
-                      {ws.tags.slice(0, 3).map((tag, tIdx) => (
-                        <span
-                          key={tIdx}
-                          className="bg-neutral-900 text-gray-300 text-[11px] px-2 py-0.5 rounded border border-neutral-800"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                    {/* Technicians On Duty */}
+                    <span className="text-blue-300 bg-blue-500/10 border border-blue-500/20 text-xs font-medium px-3 py-1 rounded-lg hidden sm:inline-flex">
+                      👨‍🔧 {ws.mechanicsOnDuty}
+                    </span>
+
+                    {/* Price Range */}
+                    <span className="text-gray-400 bg-neutral-900 border border-neutral-800 text-xs px-2.5 py-1 rounded-lg hidden md:inline-flex">
+                      {ws.priceLevel}
+                    </span>
+                  </div>
+
+                  {/* Speciality Service Badges */}
+                  <div className="flex flex-wrap items-center gap-2 mt-3">
+                    {ws.tags.map((tag, tIdx) => (
+                      <span
+                        key={tIdx}
+                        className="bg-neutral-900 text-gray-300 text-xs px-2.5 py-1 rounded-md border border-neutral-800 font-medium"
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 </div>
 
-                {/* Right: ETA, Hotline & Action Button */}
-                <div className="flex sm:flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-3 flex-shrink-0 border-t md:border-t-0 md:border-l border-neutral-800/80 pt-3 md:pt-0 md:pl-6">
-                  <div className="text-left md:text-right">
-                    <p className="text-xs text-gray-400 font-medium">Estimated Drive</p>
-                    <p className="text-base font-bold text-white font-mono flex items-center gap-1">
+                {/* ─── Right: Drive Time, Hotline & Primary Action ─── */}
+                <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-4 flex-shrink-0 border-t lg:border-t-0 lg:border-l border-neutral-800 pt-4 lg:pt-0 lg:pl-8">
+                  
+                  {/* ETA Block */}
+                  <div className="text-left lg:text-right">
+                    <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">Estimated Drive</p>
+                    <p className="text-lg sm:text-xl font-bold text-white font-mono flex items-center gap-1.5 text-green-400">
                       <span>🚗</span>
                       <span>{ws.driveTime}</span>
                     </p>
                   </div>
 
+                  {/* Emergency Hotline Button */}
+                  <div className="hidden sm:block text-left lg:text-right">
+                    <p className="text-[11px] text-gray-500 font-mono">Emergency Hotline</p>
+                    <p className="text-xs font-mono font-bold text-gray-300">{ws.phone}</p>
+                  </div>
+
+                  {/* Main Action Button */}
                   <button
                     onClick={() => handleSelect(ws)}
-                    className="bg-red-600 hover:bg-red-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.6)] hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer"
+                    className="bg-red-600 hover:bg-red-700 text-white font-bold text-base px-7 py-3.5 rounded-2xl transition-all duration-300 hover:shadow-[0_0_25px_rgba(220,38,38,0.7)] hover:scale-105 active:scale-95 flex items-center gap-2.5 cursor-pointer whitespace-nowrap"
                   >
                     <span>Select & Navigate</span>
-                    <span>→</span>
+                    <span className="text-lg">→</span>
                   </button>
                 </div>
               </div>
