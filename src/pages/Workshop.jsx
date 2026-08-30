@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import GalleryCard from '../components/GalleryCard';
-import ServiceFeatureCard from '../components/ServiceFeatureCard';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ScaleWrapper from '../components/ScaleWrapper';
 
 /* ─── Image Assets ────────────────────────────────────────────── */
 const IMAGES = {
@@ -17,390 +16,335 @@ const IMAGES = {
   specialistBruce: '/images/workshop/specialist-bruce.png',
   specialistClark: '/images/workshop/specialist-clark.png',
   specialistWalter: '/images/workshop/specialist-walter.png',
+  backIcon: 'http://localhost:3845/assets/5db0687702c36b358fbe28945225f47e373f5a09.png'
 };
-
-/* ─── Data ────────────────────────────────────────────────────── */
-const SERVICE_CARDS = [
-  {
-    icon: IMAGES.iconPerformance,
-    titleLine1: 'Performance',
-    titleLine2: 'Check',
-    descLines: [
-      'Comprehensive checks to ensure',
-      'peak vehicle performance.',
-      'Identify issues early and drive',
-      'with confidence.',
-    ],
-    defaultIconTop: 129,
-    defaultTitleTop: 296,
-    hoverDescTop: 245,
-  },
-  {
-    icon: IMAGES.iconRepair,
-    titleLine1: 'Auto',
-    titleLine2: 'Repair',
-    descLines: [
-      'Reliable auto services to keep your',
-      'car road-ready.',
-      'From routine maintenance to major',
-      'repairs,we handle it all.',
-    ],
-    defaultIconTop: 119,
-    defaultTitleTop: 282,
-    hoverDescTop: 255,
-  },
-  {
-    icon: IMAGES.iconFleet,
-    titleLine1: 'Fleet',
-    titleLine2: 'Service',
-    descLines: [
-      'Efficient maintenance solutions for',
-      'commercial fleets.',
-      'Keep your vehicles running smoothly ',
-      'with minimal downtime.',
-    ],
-    defaultIconTop: 140,
-    defaultTitleTop: 286,
-    hoverDescTop: 273,
-  },
-];
-
-const SERVICES = [
-  {
-    num: '1',
-    title: 'Inspection',
-    lines: [
-      'We can provide',
-      'professional',
-      'servicing and',
-      'maintenance work',
-      'with no loss of',
-      'manufacturer',
-      'warranty coverage.',
-    ],
-    stairOffset: 70,
-    descMargin: 24,
-  },
-  {
-    num: '2',
-    title: 'Diagnostic',
-    lines: [
-      'A computerized car',
-      'diagnostic check',
-      'from Mechanic 128',
-      'will give you a true',
-      'picture of how your',
-      'vehicle is running.',
-    ],
-    stairOffset: 35,
-    descMargin: 59,
-  },
-  {
-    num: '3',
-    title: 'Upgrades',
-    lines: [
-      'Rather than sending',
-      'your car for a basic',
-      'service, ask',
-      'Mechanic 128 for a',
-      'thorough multi-',
-      'point check and',
-      'upgrade your car.',
-    ],
-    stairOffset: 0,
-    descMargin: 104,
-  },
-];
-
-const GALLERY = [
-  {
-    img: IMAGES.gallerySchedule,
-    label: 'SCHEDULE',
-    line1: 'Easy online booking to get your',
-    line2: 'car serviced at your convenience.',
-    titleDefaultTop: '79.43%',
-    titleHoverTop: '60.69%',
-    descHoverTop: '79.63%',
-    imageHoverShift: '-22%',
-  },
-  {
-    img: IMAGES.galleryEngine,
-    label: 'ENGINE',
-    line1: 'Expert engine diagnostics and',
-    line2: 'repairs for smooth performance.',
-    titleDefaultTop: '79.43%',
-    titleHoverTop: '61.91%',
-    descHoverTop: '81.05%',
-    imageHoverShift: '-22%',
-  },
-  {
-    img: IMAGES.galleryPainting,
-    label: 'PAINTING',
-    line1: 'Premium paintwork to restore your',
-    line2: 'car’s original shine.',
-    titleDefaultTop: '79.43%',
-    titleHoverTop: '64.76%',
-    descHoverTop: '83.09%',
-    imageHoverShift: '-22%',
-  },
-  {
-    img: IMAGES.galleryDetailing,
-    label: 'DETAILING',
-    line1: 'Complete interior and exterior ',
-    line2: 'detailing for a fresh look.',
-    titleDefaultTop: '79.43%',
-    titleHoverTop: '66.19%',
-    descHoverTop: '84.92%',
-    imageHoverShift: '-22%',
-  },
-];
-
-const SPECIALISTS = [
-  { img: IMAGES.specialistTony, name: 'Tony Stark', role: 'Founder of Mechify' },
-  { img: IMAGES.specialistBruce, name: 'Bruce Wayne', role: 'Main Mechanic' },
-  { img: IMAGES.specialistClark, name: 'Clark Kent', role: 'Senior Technician' },
-  { img: IMAGES.specialistWalter, name: 'Walter White', role: 'Diagnostic Specialist' },
-];
 
 export default function Workshop() {
   const navigate = useNavigate();
-  const [visible, setVisible] = useState({});
 
-  /* ─── Intersection Observer for scroll-reveal ─── */
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => {
-        if (e.isIntersecting) setVisible((p) => ({ ...p, [e.target.id]: true }));
-      }),
-      { threshold: 0.05 },
-    );
-    document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  // For the service feature cards hover state
+  const [hoveredCard, setHoveredCard] = useState(null);
 
   return (
-    <div className="bg-black min-h-screen text-white overflow-x-hidden font-sora">
+    <ScaleWrapper height={4800}>
+      <div className="bg-black relative size-full font-sora">
+        {/* ─── HERO SECTION ─── */}
+        <div className="absolute left-0 top-[0px] w-[1920px] h-[1124px]">
+          <img alt="" className="absolute inset-0 object-cover pointer-events-none size-full opacity-60" src={IMAGES.heroBg} />
+          {/* Gradients to blend with black background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
+        </div>
+        
+        <p className="absolute font-bold leading-[0.962] left-[56px] text-[96px] text-white top-[158px] whitespace-nowrap">
+          Professional Car Repair 
+        </p>
+        <p className="absolute font-bold leading-[0.962] left-[56px] text-[96px] text-white top-[250px] whitespace-nowrap">
+          And Maintenance
+        </p>
+        
+        <div className="absolute font-normal leading-[1.3] left-[56px] text-[32px] text-white top-[397px]">
+          <p className="m-0">We are focused on providing our clients with the highest</p>
+          <p className="m-0">level of quality and excellent customer support</p>
+        </div>
 
-      {/* ═══════════════════════════════════════════════════════════
-          HERO SECTION — Balanced, Centered & Larger Text
-      ═══════════════════════════════════════════════════════════ */}
-      <section className="relative w-full overflow-hidden min-h-[580px] lg:min-h-[720px] flex items-center justify-center bg-black">
-        {/* Background image */}
-        <img
-          src={IMAGES.heroBg}
-          alt="Auto repair workshop"
-          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none opacity-55"
-        />
-        {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
-
-        {/* Hero Content — Centered container */}
-        <div className="relative z-10 max-w-[1720px] w-full mx-auto px-6 sm:px-12 lg:px-20 py-20 flex flex-col items-start justify-center animate-slideInLeft">
-          <h1 className="font-extrabold text-white text-4xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.08] tracking-tight mb-5">
-            Professional Car Repair <br />
-            <span className="text-red-500">And Maintenance</span>
-          </h1>
-
-          <p className="font-normal text-gray-200 text-lg sm:text-2xl md:text-3xl max-w-3xl leading-snug mb-10">
-            We are focused on providing our clients with the highest level of quality and excellent customer support across Dhaka.
+        {/* Hero CTA Button */}
+        <div 
+          onClick={() => navigate('/workshop-search')}
+          className="absolute cursor-pointer h-[74px] left-[95px] top-[526px] w-[496px] group"
+        >
+          <div className="absolute bg-[red] border border-solid border-white inset-0 rounded-[40px] transition-transform duration-300 group-hover:scale-105" />
+          <p className="absolute font-bold inset-[28.38%_6.65%_29.73%_9.48%] leading-[0.962] text-[32px] text-white whitespace-nowrap text-center transition-transform duration-300 group-hover:scale-105 pointer-events-none">
+            Get an Appointment now
           </p>
+        </div>
 
-          {/* Glowing Red Emergency Appointment CTA Button */}
-          <button
-            onClick={() => navigate('/workshop-search')}
-            className="inline-flex items-center justify-center text-white font-bold border-2 border-white px-8 sm:px-12 py-4 sm:py-5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 animate-sosPulse cursor-pointer select-none text-lg sm:text-2xl shadow-[0_0_35px_rgba(220,38,38,0.8),0_0_70px_rgba(220,38,38,0.4)]"
-            style={{ backgroundColor: '#dc2626' }}
+        {/* Back Button */}
+        <div 
+          onClick={() => navigate(-1)}
+          className="absolute border-10 border-solid border-white left-0 size-[90px] top-[778px] cursor-pointer hover:scale-105 transition-transform bg-black z-10 rounded-[10px]"
+        >
+          <img alt="back" className="absolute inset-0 object-contain size-full p-2" src={IMAGES.backIcon} />
+        </div>
+
+        {/* ─── FEATURE CARDS ─── */}
+        {/* Performance Check */}
+        <div 
+          onMouseEnter={() => setHoveredCard('perf')}
+          onMouseLeave={() => setHoveredCard(null)}
+          className="absolute bg-black border-[5px] border-solid border-white h-[468px] left-[87px] overflow-hidden rounded-[40px] top-[1062px] w-[553px] transition-shadow hover:shadow-[0_0_35px_rgba(255,255,255,0.2)]"
+        >
+          <div 
+            className="absolute left-[208px] top-[129px] transition-all duration-300 pointer-events-none"
+            style={{
+              top: hoveredCard === 'perf' ? '36%' : '129px',
+              left: hoveredCard === 'perf' ? '50%' : '208px',
+              transform: hoveredCard === 'perf' ? 'translateX(-50%)' : 'none',
+              width: hoveredCard === 'perf' ? '50px' : '128px',
+              height: hoveredCard === 'perf' ? '50px' : '128px'
+            }}
           >
-            🚨 Get an Emergency appointment now
-          </button>
+            <img alt="" className="absolute inset-0 object-cover size-full brightness-0 invert" src={IMAGES.iconPerformance} />
+          </div>
+          <div 
+            className="absolute left-[274.5px] top-[296px] -translate-x-1/2 font-bold text-[40px] text-center text-white whitespace-nowrap transition-all duration-300 pointer-events-none"
+            style={{ opacity: hoveredCard === 'perf' ? 0 : 1 }}
+          >
+            <p className="leading-[0.962] m-0">Performance</p>
+            <p className="leading-[0.962] m-0">Check</p>
+          </div>
+          <div 
+            className="absolute left-0 right-0 w-full px-4 text-center transition-all duration-300 pointer-events-none"
+            style={{
+              top: '245px',
+              opacity: hoveredCard === 'perf' ? 1 : 0,
+              transform: hoveredCard === 'perf' ? 'translateY(0)' : 'translateY(10px)'
+            }}
+          >
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">Comprehensive checks to ensure</p>
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">peak vehicle performance.</p>
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">Identify issues early and drive</p>
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">with confidence.</p>
+          </div>
         </div>
-      </section>
 
-      {/* ═══════════════════════════════════════════════════════════
-          SERVICE CARDS — 3 interactive cards, perfectly centered
-      ═══════════════════════════════════════════════════════════ */}
-      <section
-        id="service-cards"
-        data-animate
-        className={`w-full py-16 sm:py-24 max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-20 ${
-          visible['service-cards'] ? 'animate-fadeInUp' : 'opacity-0'
-        }`}
-      >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 items-center justify-center">
-          {SERVICE_CARDS.map((card, i) => (
-            <ServiceFeatureCard
-              key={i}
-              icon={card.icon}
-              titleLine1={card.titleLine1}
-              titleLine2={card.titleLine2}
-              descLines={card.descLines}
-              defaultIconTop={card.defaultIconTop}
-              defaultTitleTop={card.defaultTitleTop}
-              hoverDescTop={card.hoverDescTop}
-              onClick={() => navigate('/workshop-search')}
-            />
-          ))}
+        {/* Auto Repair */}
+        <div 
+          onMouseEnter={() => setHoveredCard('auto')}
+          onMouseLeave={() => setHoveredCard(null)}
+          className="absolute bg-black border-[5px] border-solid border-white h-[468px] left-[681px] overflow-hidden rounded-[40px] top-[1056px] w-[553px] transition-shadow hover:shadow-[0_0_35px_rgba(255,255,255,0.2)]"
+        >
+          <div 
+            className="absolute left-[208px] top-[119px] transition-all duration-300 pointer-events-none"
+            style={{
+              top: hoveredCard === 'auto' ? '36%' : '119px',
+              left: hoveredCard === 'auto' ? '50%' : '208px',
+              transform: hoveredCard === 'auto' ? 'translateX(-50%)' : 'none',
+              width: hoveredCard === 'auto' ? '50px' : '128px',
+              height: hoveredCard === 'auto' ? '50px' : '128px'
+            }}
+          >
+            <img alt="" className="absolute inset-0 object-cover size-full brightness-0 invert" src={IMAGES.iconRepair} />
+          </div>
+          <div 
+            className="absolute left-[276.5px] top-[282px] -translate-x-1/2 font-bold text-[40px] text-center text-white whitespace-nowrap transition-all duration-300 pointer-events-none"
+            style={{ opacity: hoveredCard === 'auto' ? 0 : 1 }}
+          >
+            <p className="leading-[0.962] m-0">Auto</p>
+            <p className="leading-[0.962] m-0">Repair</p>
+          </div>
+          <div 
+            className="absolute left-0 right-0 w-full px-4 text-center transition-all duration-300 pointer-events-none"
+            style={{
+              top: '255px',
+              opacity: hoveredCard === 'auto' ? 1 : 0,
+              transform: hoveredCard === 'auto' ? 'translateY(0)' : 'translateY(10px)'
+            }}
+          >
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">Reliable auto services to keep your</p>
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">car road-ready.</p>
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">From routine maintenance to major</p>
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">repairs,we handle it all.</p>
+          </div>
         </div>
-      </section>
 
-      {/* ═══════════════════════════════════════════════════════════
-          WHY US? — Centered container with prominent typography
-      ═══════════════════════════════════════════════════════════ */}
-      <section
-        id="why-us"
-        data-animate
-        className={`w-full py-12 sm:py-16 max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-20 ${
-          visible['why-us'] ? 'animate-fadeInUp' : 'opacity-0'
-        }`}
-      >
-        <h2 className="font-bold text-4xl sm:text-6xl md:text-7xl mb-6 tracking-tight">
-          Why us?
-        </h2>
-        <div className="font-semibold text-gray-200 text-xl sm:text-3xl md:text-4xl leading-relaxed max-w-5xl">
-          <p className="mb-2">All Mechanic 128 workshops employ the latest</p>
-          <p className="mb-2">test techniques and digital information</p>
-          <p className="mb-2">systems. This ideal combination ensures</p>
-          <p className="mb-2">systematic vehicle diagnosis and qualified</p>
-          <p>repair work.</p>
+        {/* Fleet Service */}
+        <div 
+          onMouseEnter={() => setHoveredCard('fleet')}
+          onMouseLeave={() => setHoveredCard(null)}
+          className="absolute bg-black border-[5px] border-solid border-white h-[468px] left-[1280px] overflow-hidden rounded-[40px] top-[1053px] w-[553px] transition-shadow hover:shadow-[0_0_35px_rgba(255,255,255,0.2)]"
+        >
+          <div 
+            className="absolute left-[208px] top-[140px] transition-all duration-300 pointer-events-none"
+            style={{
+              top: hoveredCard === 'fleet' ? '36%' : '140px',
+              left: hoveredCard === 'fleet' ? '50%' : '208px',
+              transform: hoveredCard === 'fleet' ? 'translateX(-50%)' : 'none',
+              width: hoveredCard === 'fleet' ? '50px' : '128px',
+              height: hoveredCard === 'fleet' ? '50px' : '128px'
+            }}
+          >
+            <img alt="" className="absolute inset-0 object-cover size-full brightness-0 invert" src={IMAGES.iconFleet} />
+          </div>
+          <div 
+            className="absolute left-[276.5px] top-[286px] -translate-x-1/2 font-bold text-[40px] text-center text-white whitespace-nowrap transition-all duration-300 pointer-events-none"
+            style={{ opacity: hoveredCard === 'fleet' ? 0 : 1 }}
+          >
+            <p className="leading-[0.962] m-0">Fleet</p>
+            <p className="leading-[0.962] m-0">Service</p>
+          </div>
+          <div 
+            className="absolute left-0 right-0 w-full px-4 text-center transition-all duration-300 pointer-events-none"
+            style={{
+              top: '273px',
+              opacity: hoveredCard === 'fleet' ? 1 : 0,
+              transform: hoveredCard === 'fleet' ? 'translateY(0)' : 'translateY(10px)'
+            }}
+          >
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">Efficient maintenance solutions for</p>
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">commercial fleets.</p>
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">Keep your vehicles running smoothly </p>
+            <p className="font-bold text-[24px] text-white m-0 leading-tight">with minimal downtime.</p>
+          </div>
         </div>
-      </section>
 
-      {/* ═══════════════════════════════════════════════════════════
-          SERVICES SECTION — Stair-Step 3 Columns
-      ═══════════════════════════════════════════════════════════ */}
-      <section
-        id="services-section"
-        data-animate
-        className={`w-full py-16 sm:py-24 max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-20 ${
-          visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'
-        }`}
-      >
-        <h2 className="font-bold text-center text-white text-4xl sm:text-6xl md:text-7xl font-poppins mb-16 tracking-tight">
-          SERVICES
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-14 mx-auto items-start">
-          {SERVICES.map((svc, i) => (
-            <div
-              key={i}
-              className="flex flex-col items-center text-center"
-            >
-              {/* Stair-step spacer */}
-              <div style={{ height: `${svc.stairOffset}px` }} className="hidden md:block flex-shrink-0" />
-
-              {/* Number & Title Group */}
-              <div className="flex flex-col items-center text-center w-full">
-                {/* Hollow Outlined White Number */}
-                <p
-                  className="select-none text-center leading-none text-7xl sm:text-8xl md:text-9xl font-black mb-4"
-                  style={{
-                    fontFamily: "'Sora', sans-serif",
-                    color: 'transparent',
-                    WebkitTextStroke: '2.5px #ffffff',
-                  }}
-                >
-                  {svc.num}
-                </p>
-
-                {/* Title */}
-                <h3 className="font-bold text-white text-center leading-tight text-3xl sm:text-4xl md:text-5xl font-poppins tracking-tight">
-                  {svc.title}
-                </h3>
-              </div>
-
-              {/* Description Text — baseline aligned */}
-              <div
-                className="text-center w-full"
-                style={{
-                  marginTop: `${svc.descMargin}px`,
-                }}
-              >
-                <div className="mx-auto text-center text-gray-400 font-poppins font-normal text-base sm:text-lg md:text-xl leading-relaxed max-w-xs">
-                  {svc.lines.map((line, lineIdx) => (
-                    <p key={lineIdx} className="m-0 leading-snug">
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
+        {/* ─── WHY US ─── */}
+        <div className="absolute font-semibold leading-[1.3] left-[87px] top-[1748px] text-[32px] text-white">
+          <p className="m-0">All Mechanic 128 workshops employ the latest</p>
+          <p className="m-0">test techniques and digital information</p>
+          <p className="m-0">systems. This ideal combination ensures</p>
+          <p className="m-0">systematic vehicle diagnosis and qualified</p>
+          <p className="m-0">repair work.</p>
         </div>
-      </section>
 
-      {/* ═══════════════════════════════════════════════════════════
-          IMAGE GALLERY — 4 Cards
-      ═══════════════════════════════════════════════════════════ */}
-      <section
-        id="gallery"
-        data-animate
-        className={`w-full py-16 sm:py-20 max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-20 ${
-          visible['gallery'] ? 'animate-fadeInUp' : 'opacity-0'
-        }`}
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {GALLERY.map((item, i) => (
-            <GalleryCard
-              key={i}
-              img={item.img}
-              label={item.label}
-              line1={item.line1}
-              line2={item.line2}
-              titleDefaultTop={item.titleDefaultTop}
-              titleHoverTop={item.titleHoverTop}
-              descHoverTop={item.descHoverTop}
-              imageHoverShift={item.imageHoverShift}
-              onClick={() => navigate('/workshop-search')}
-            />
-          ))}
+        {/* ─── STAIR-STEP SERVICES ─── */}
+        {/* Inspection - 1 */}
+        <p className="absolute font-bold leading-[0.962] left-[397px] text-[128px] text-transparent top-[2406px] whitespace-nowrap"
+           style={{ WebkitTextStroke: '2px #000', filter: 'drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff)' }}
+        >
+          1
+        </p>
+        <p className="absolute font-bold font-poppins leading-[0.962] left-[262px] text-[64px] text-white top-[2537px] whitespace-nowrap">
+          Inspection
+        </p>
+        <div className="absolute font-semibold font-poppins text-[#8b8888] text-[32px] text-center leading-[1.3] top-[2620px] left-[269px] w-[336px]">
+          <p className="m-0">We can provide professional</p>
+          <p className="m-0">servicing and maintenance work</p>
+          <p className="m-0">with no loss of manufacturer</p>
+          <p className="m-0">warranty coverage.</p>
         </div>
-      </section>
 
-      {/* ═══════════════════════════════════════════════════════════
-          MEET OUR SPECIALISTS — 4 Specialist Cards
-      ═══════════════════════════════════════════════════════════ */}
-      <section
-        id="specialists"
-        data-animate
-        className={`w-full py-16 sm:py-24 max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-20 ${
-          visible['specialists'] ? 'animate-fadeInUp' : 'opacity-0'
-        }`}
-      >
-        <h2 className="font-bold text-4xl sm:text-6xl md:text-7xl mb-12 tracking-tight">
+        {/* Diagnostic - 2 */}
+        <p className="absolute font-bold leading-[0.962] left-[936px] text-[128px] text-transparent top-[2363px] whitespace-nowrap"
+           style={{ WebkitTextStroke: '2px #000', filter: 'drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff)' }}
+        >
+          2
+        </p>
+        <p className="absolute font-bold font-poppins leading-[0.962] left-[810px] text-[64px] text-white top-[2506px] whitespace-nowrap">
+          Diagnostic
+        </p>
+        <div className="absolute font-semibold font-poppins text-[#8b8888] text-[32px] text-center leading-[1.3] top-[2620px] left-[809px] w-[336px]">
+          <p className="m-0">A computerized car diagnostic check from Mechanic 128 will give you a true picture of how your vehicle is running.</p>
+        </div>
+
+        {/* Upgrades - 3 */}
+        <p className="absolute font-bold leading-[0.962] left-[1484px] text-[128px] text-transparent top-[2320px] whitespace-nowrap"
+           style={{ WebkitTextStroke: '2px #000', filter: 'drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff)' }}
+        >
+          3
+        </p>
+        <p className="absolute font-bold font-poppins leading-[0.962] left-[1372px] text-[64px] text-white top-[2455px] whitespace-nowrap">
+          Upgrades
+        </p>
+        <div className="absolute font-semibold font-poppins text-[#8b8888] text-[32px] text-center leading-[1.3] top-[2617px] left-[1372px] w-[336px]">
+          <p className="m-0">Rather than sending your car for a basic service, ask Mechanic 128 for a thorough multi-point check and upgrade your car.</p>
+        </div>
+
+
+        {/* ─── GALLERY CARDS ─── */}
+        {/* SCHEDULE */}
+        <div className="absolute border-[5px] border-solid border-white h-[491px] left-[80px] overflow-hidden rounded-[15px] top-[3167px] w-[403px] group">
+          <div className="absolute h-full w-full left-0 top-0 transition-transform duration-500 group-hover:scale-110">
+            <img alt="" className="absolute inset-0 object-cover size-full" src={IMAGES.gallerySchedule} />
+          </div>
+          <p className="absolute font-extrabold leading-[0.962] left-[85px] text-[40px] text-white top-[390px] whitespace-nowrap transition-transform duration-500 group-hover:-translate-y-[80px]">
+            SCHEDULE
+          </p>
+          <div className="absolute left-0 right-0 px-6 top-[400px] text-white font-bold text-[18px] text-center opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:-translate-y-[20px]">
+            Easy online booking to get your car serviced at your convenience.
+          </div>
+        </div>
+
+        {/* ENGINE */}
+        <div className="absolute border-[5px] border-solid border-white h-[491px] left-[527px] overflow-hidden rounded-[15px] top-[3166px] w-[403px] group">
+          <div className="absolute h-full w-full left-0 top-0 transition-transform duration-500 group-hover:scale-110">
+            <img alt="" className="absolute inset-0 object-cover size-full" src={IMAGES.galleryEngine} />
+          </div>
+          <p className="absolute font-extrabold leading-[0.962] left-[114px] text-[40px] text-white top-[390px] whitespace-nowrap transition-transform duration-500 group-hover:-translate-y-[80px]">
+            ENGINE
+          </p>
+          <div className="absolute left-0 right-0 px-6 top-[400px] text-white font-bold text-[18px] text-center opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:-translate-y-[20px]">
+            Expert engine diagnostics and repairs for smooth performance.
+          </div>
+        </div>
+
+        {/* PAINTING */}
+        <div className="absolute border-[5px] border-solid border-white h-[491px] left-[986px] overflow-hidden rounded-[15px] top-[3166px] w-[403px] group">
+          <div className="absolute h-full w-full left-0 top-0 transition-transform duration-500 group-hover:scale-110">
+            <img alt="" className="absolute inset-0 object-cover size-full" src={IMAGES.galleryPainting} />
+          </div>
+          <p className="absolute font-extrabold leading-[0.962] left-[85px] text-[40px] text-white top-[390px] whitespace-nowrap transition-transform duration-500 group-hover:-translate-y-[80px]">
+            PAINTING
+          </p>
+          <div className="absolute left-0 right-0 px-6 top-[400px] text-white font-bold text-[18px] text-center opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:-translate-y-[20px]">
+            Premium paintwork to restore your car's original shine.
+          </div>
+        </div>
+
+        {/* DETAILING */}
+        <div className="absolute border-[5px] border-solid border-white h-[491px] left-[1436px] overflow-hidden rounded-[15px] top-[3165px] w-[403px] group">
+          <div className="absolute h-full w-full left-0 top-0 transition-transform duration-500 group-hover:scale-110">
+            <img alt="" className="absolute inset-0 object-cover size-full" src={IMAGES.galleryDetailing} />
+          </div>
+          <p className="absolute font-extrabold leading-[0.962] left-[85px] text-[40px] text-white top-[390px] whitespace-nowrap transition-transform duration-500 group-hover:-translate-y-[80px]">
+            DETAILING
+          </p>
+          <div className="absolute left-0 right-0 px-6 top-[400px] text-white font-bold text-[18px] text-center opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:-translate-y-[20px]">
+            Complete interior and exterior detailing for a fresh look.
+          </div>
+        </div>
+
+
+        {/* ─── MEET OUR SPECIALISTS ─── */}
+        <p className="absolute font-bold leading-[0.962] left-[59px] text-[64px] text-white top-[3925px] whitespace-nowrap">
           MEET OUR SPECIALISTS
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
-          {SPECIALISTS.map((spec, i) => (
-            <div key={i} className="group flex flex-col">
-              {/* Portrait */}
-              <div
-                className="relative border-4 sm:border-[5px] border-white rounded-[20px] overflow-hidden shadow-[0px_4px_25px_10px_rgba(255,255,255,0.4)]"
-                style={{ aspectRatio: '406 / 453' }}
-              >
-                <img
-                  src={spec.img}
-                  alt={spec.name}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = '/images/workshop/gallery-schedule.png';
-                  }}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              {/* Name */}
-              <p className="font-semibold text-2xl sm:text-3xl text-white mt-5 leading-tight">
-                {spec.name}
-              </p>
-              {/* Role */}
-              <p className="font-normal text-base sm:text-lg text-gray-400 mt-2 leading-tight">
-                {spec.role}
-              </p>
-            </div>
-          ))}
+        </p>
+        
+        {/* Tony Stark */}
+        <div className="absolute border-[5px] border-solid border-white h-[453px] left-[69px] rounded-[15px] shadow-[0px_4px_20px_10px_rgba(255,255,255,0.5)] top-[4069px] w-[406px] overflow-hidden group">
+          <img alt="Tony Stark" className="absolute inset-0 object-cover size-full transition-transform duration-500 group-hover:scale-105" src={IMAGES.specialistTony} />
         </div>
-      </section>
-    </div>
+        <p className="absolute font-semibold leading-[0.962] left-[69px] text-[36px] text-white top-[4544px] whitespace-nowrap">
+          Tony Stark
+        </p>
+        <p className="absolute font-normal leading-[0.962] left-[69px] text-[#9e9e9e] text-[20px] top-[4594px] whitespace-nowrap">
+          Founder of Mechify
+        </p>
+
+        {/* Bruce Wayne */}
+        <div className="absolute border-[5px] border-solid border-white h-[453px] left-[527px] rounded-[15px] shadow-[0px_4px_20px_10px_rgba(255,255,255,0.5)] top-[4069px] w-[406px] overflow-hidden group">
+          <img alt="Bruce Wayne" className="absolute inset-0 object-cover size-full transition-transform duration-500 group-hover:scale-105" src={IMAGES.specialistBruce} />
+        </div>
+        <p className="absolute font-semibold leading-[0.962] left-[527px] text-[36px] text-white top-[4544px] whitespace-nowrap">
+          Bruce Wayne
+        </p>
+        <p className="absolute font-normal leading-[0.962] left-[527px] text-[#9e9e9e] text-[20px] top-[4600px] whitespace-nowrap">
+          Main Mechanic
+        </p>
+
+        {/* Clark Kent */}
+        <div className="absolute border-[5px] border-solid border-white h-[453px] left-[987px] rounded-[15px] shadow-[0px_4px_20px_10px_rgba(255,255,255,0.5)] top-[4069px] w-[406px] overflow-hidden group">
+          <img alt="Clark Kent" className="absolute inset-0 object-cover size-full transition-transform duration-500 group-hover:scale-105" src={IMAGES.specialistClark} />
+        </div>
+        <p className="absolute font-semibold leading-[0.962] left-[987px] text-[36px] text-white top-[4544px] whitespace-nowrap">
+          Clark Kent
+        </p>
+        <p className="absolute font-normal leading-[0.962] left-[987px] text-[#9e9e9e] text-[20px] top-[4597px] whitespace-nowrap">
+          Mechanic
+        </p>
+
+        {/* Walter White */}
+        <div className="absolute border-[5px] border-solid border-white h-[453px] left-[1445px] rounded-[15px] shadow-[0px_4px_20px_10px_rgba(255,255,255,0.5)] top-[4069px] w-[406px] overflow-hidden group">
+          <img alt="Walter White" className="absolute inset-0 object-cover size-full transition-transform duration-500 group-hover:scale-105" src={IMAGES.specialistWalter} />
+        </div>
+        <p className="absolute font-semibold leading-[0.962] left-[1445px] text-[36px] text-white top-[4549px] whitespace-nowrap">
+          Walter White
+        </p>
+        <p className="absolute font-normal leading-[0.962] left-[1458px] text-[#9e9e9e] text-[20px] top-[4600px] whitespace-nowrap">
+          Mechanic
+        </p>
+
+      </div>
+    </ScaleWrapper>
   );
 }
