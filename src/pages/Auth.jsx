@@ -1,249 +1,238 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const imgVision = "/images/auth/vision.png";
-const imgGoogle = "/images/auth/google.png";
-
-/**
- * Login Page (Figma Node 1:1104):
- * - Full-bleed background covering 100% of the screen (fills up all gaps on right and bottom)
- * - Left side: Poppins bold hollow outline typography "Start Your Journey with Mechify"
- * - Right side: White card (Node 1:1108) with exact Figma layout, inputs, buttons, and divider
- */
 export default function Auth() {
   const navigate = useNavigate();
+  const [mode, setMode] = useState('signin'); // 'signin' | 'forgot'
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('123');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState('');
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetSent, setResetSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const demoProfiles = [
-    { role: 'user', label: 'Regular User (mahi@gmail.com)', email: 'mahi@gmail.com' },
-    { role: 'driver', label: 'Verified Driver (driver@gmail.com)', email: 'driver@gmail.com' },
-  ];
+  const VALID_EMAIL = 'mahi@gmail.com';
+  const VALID_DRIVER_EMAIL = 'driver@gmail.com';
+  const VALID_PASSWORD = '123';
 
-  const handleSelectProfile = (p) => {
-    setSelectedProfile(p.label);
-    setEmail(p.email);
-    setShowProfileDropdown(false);
-  };
-
-  const handleLogin = (e) => {
-    e?.preventDefault?.();
-    const finalEmail = email.trim() || (selectedProfile.includes('driver') ? 'driver@gmail.com' : 'mahi@gmail.com');
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    if (!email || !password) { alert('Please fill in all fields.'); return; }
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      if (finalEmail === 'driver@gmail.com') {
+      if (email === VALID_DRIVER_EMAIL && password === VALID_PASSWORD) {
         localStorage.setItem('userRole', 'driver');
-      } else {
+        navigate('/home');
+      } else if (email === VALID_EMAIL && password === VALID_PASSWORD) {
         localStorage.setItem('userRole', 'user');
+        navigate('/home');
+      } else {
+        alert('Invalid email or password. Please try again.');
       }
-      navigate('/home');
-    }, 600);
+    }, 1200);
   };
 
-  const handleGoogleLogin = () => {
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    if (!resetEmail) { alert('Please enter your email.'); return; }
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      localStorage.setItem('userRole', 'user');
-      navigate('/home');
-    }, 600);
+      setResetSent(true);
+    }, 1200);
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-[#050505] text-white font-sora flex items-center justify-center p-4 sm:p-8 lg:p-12 overflow-x-hidden select-none">
+    <div className="min-h-screen bg-black text-white font-outfit flex flex-col lg:flex-row overflow-hidden relative">
       
-      {/* ─── FULL-BLEED BACKGROUND IMAGE (Fills 100% of screen, zero black gaps) ─── */}
-      <img
-        src="/images/auth/bg.png"
-        alt="Mechify Background"
-        className="fixed inset-0 w-full h-full object-cover object-center pointer-events-none z-0"
-      />
-
-      {/* Subtle dark overlay for readability */}
-      <div className="fixed inset-0 bg-black/40 pointer-events-none z-0" />
-
-      {/* ─── MAIN CONTENT CONTAINER (Balanced width, middle of page, no right/bottom gaps) ─── */}
-      <div className="relative z-10 w-full max-w-[1780px] min-h-[90vh] mx-auto flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16 px-4 sm:px-8 lg:px-16 py-6">
+      {/* ── Simple Animated Background ── */}
+      <div className="absolute inset-0 z-0 bg-[#050505] overflow-hidden pointer-events-none">
+        {/* Animated glowing orbs */}
+        <div className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] bg-red-900/40 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '7s' }} />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-orange-900/20 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '10s', animationDelay: '1s' }} />
         
-        {/* ─── Left Side: Hollow Stroke Poppins Typography (Node 1:1107) ─── */}
-        <div className="w-full lg:w-1/2 flex flex-col items-start justify-center pl-2 sm:pl-6 lg:pl-10 select-none animate-slideInLeft">
-          <div
-            className="font-bold tracking-tight whitespace-pre-wrap leading-[1.06]"
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: 'clamp(48px, 6.2vw, 115px)',
-              color: 'transparent',
-              WebkitTextStroke: '2.5px #ffffff',
-              textStroke: '2.5px #ffffff',
-            }}
-          >
-            <p className="mb-0">Start  Your</p>
-            <p className="mb-0">Journey</p>
-            <p className="mb-0">with</p>
-            <p className="mb-0 text-white" style={{ WebkitTextStroke: '0px' }}>Mechify</p>
+        {/* Subtle grid/texture overlay */}
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+      </div>
+
+      {/* ── Left Panel: Branding ── */}
+      <div className="lg:w-1/2 relative z-10 flex flex-col justify-center items-center p-12 min-h-[35vh] lg:min-h-screen overflow-hidden">
+        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-900/20 rounded-full blur-[100px] pointer-events-none animate-pulse" style={{ animationDuration: '5s' }} />
+
+        <div className="relative z-10 text-center max-w-md">
+          {/* Logo */}
+          <Link to="/landing" className="inline-flex items-center gap-3 mb-10 group">
+            <div>
+              <svg width="56" height="48" viewBox="0 0 56 48" fill="none">
+                <rect width="56" height="48" rx="4" fill="#CC0000"/>
+                <text x="4" y="34" fontFamily="Arial Black, Arial" fontWeight="900" fontSize="32" fill="white">M</text>
+                <g transform="translate(32,30) scale(0.55)">
+                  <rect x="0" y="4" width="28" height="14" rx="2" fill="white"/>
+                  <rect x="22" y="0" width="10" height="18" rx="2" fill="white"/>
+                  <circle cx="6" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
+                  <circle cx="24" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
+                </g>
+              </svg>
+            </div>
+            <div className="text-left leading-tight">
+              <div className="text-white font-black text-2xl tracking-widest group-hover:text-red-400 transition-colors">MECHIFY</div>
+              <div className="text-gray-400 text-[10px] tracking-[0.2em] uppercase">Vehicle Support</div>
+            </div>
+          </Link>
+
+          <h2 className="text-4xl md:text-5xl font-black mb-4 leading-tight">
+            Your Car.<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Our Priority.</span>
+          </h2>
+          <p className="text-gray-400 text-lg leading-relaxed mb-8">
+            Join Mechify for instant access to premium car rentals, certified mechanics, emergency fuel, and more — all in one place.
+          </p>
+
+          <div className="space-y-4 text-left">
+            {['Luxury car rentals & chauffeur hiring', 'Emergency roadside assistance 24/7', 'Certified workshop bookings', '450+ genuine spare parts'].map(f => (
+              <div key={f} className="flex items-center gap-3 text-sm text-gray-300">
+                <div className="w-6 h-6 rounded-full bg-red-600/30 border border-red-500/50 flex items-center justify-center flex-shrink-0 text-red-400">✓</div>
+                {f}
+              </div>
+            ))}
           </div>
         </div>
+      </div>
 
-        {/* ─── Right Side: Exact Figma White Card (Node 1:1108) ─── */}
-        <div className="w-full lg:w-auto flex-shrink-0 flex justify-center animate-fadeIn">
-          <div className="bg-white text-black rounded-[20px] p-8 sm:p-12 lg:p-14 w-full max-w-[680px] shadow-[0_25px_80px_rgba(0,0,0,0.9)] relative border border-neutral-100">
-            
-            {/* Header: Welcome Back! (Node 1:1118) */}
-            <h1 className="font-semibold text-3xl sm:text-4xl lg:text-[46px] text-black text-center mb-8 tracking-tight font-sora">
-              Welcome Back!
-            </h1>
+      {/* ── Right Panel: Form ── */}
+      <div className="lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-black/50 backdrop-blur-xl border-l border-white/10 relative z-10 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
+        <div className="w-full max-w-lg">
 
-            <form onSubmit={handleLogin} className="space-y-5">
-              
-              {/* Field 1: Email (Node 1:1119 & 1:3024) */}
-              <div>
-                <label className="block text-black font-normal text-lg sm:text-xl mb-2 font-sora">
-                  Email
-                </label>
-                
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                    className="w-full bg-white border border-black rounded-[10px] h-[68px] sm:h-[71px] px-6 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
-                    data-node-id="1:3024"
-                  >
-                    <span className={`truncate text-left font-sora ${selectedProfile || email ? 'text-black font-semibold text-xl sm:text-2xl' : 'text-black text-2xl sm:text-[32px]'}`}>
-                      {selectedProfile || email || 'Choose your Profile'}
-                    </span>
-                    <span className="text-black text-base ml-2">▼</span>
-                  </button>
+          {/* ── SIGN IN FORM ── */}
+          {mode === 'signin' && (
+            <div className="animate-fadeIn">
+              <h1 className="text-4xl font-black mb-2">Welcome back</h1>
+              <p className="text-gray-400 mb-10">Sign in to your Mechify account</p>
 
-                  {/* Profile Dropdown */}
-                  {showProfileDropdown && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-black rounded-xl shadow-2xl z-50 overflow-hidden">
-                      {demoProfiles.map((p, idx) => (
-                        <div
-                          key={idx}
-                          onClick={() => handleSelectProfile(p)}
-                          className="px-6 py-4 hover:bg-gray-100 cursor-pointer text-lg sm:text-xl text-black border-b border-gray-100 last:border-0 font-medium font-sora"
-                        >
-                          {p.label}
-                        </div>
-                      ))}
-                      <div className="p-4 bg-gray-50 border-t border-gray-200">
-                        <input
-                          type="email"
-                          placeholder="Or type custom email..."
-                          value={email}
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                            setSelectedProfile('');
-                          }}
-                          className="w-full bg-white border border-gray-400 rounded-lg px-4 py-2.5 text-base text-black focus:outline-none focus:border-black font-sora"
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Field 2: Password (Node 1:1120 & 1:1109) */}
-              <div>
-                <label className="block text-black font-normal text-lg sm:text-xl mb-2 font-sora">
-                  Password
-                </label>
-
-                <div className="relative flex items-center bg-white border border-black rounded-[13px] h-[68px] sm:h-[71px] px-6">
+              <form onSubmit={handleSignIn} className="space-y-5">
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block">Email Address</label>
                   <input
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Input your Password.."
-                    className="w-full h-full bg-transparent pr-12 text-xl sm:text-2xl text-black placeholder-[#bbb] focus:outline-none font-sora"
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-red-500 focus:bg-white/8 transition-all text-base"
                   />
-                  {/* Eye Vision Icon (Node 1:1121) */}
+                </div>
+
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block">Password</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-red-500 focus:bg-white/8 transition-all text-base pr-14"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-sm font-bold uppercase transition-colors"
+                    >
+                      {showPassword ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-5 size-[30px] flex items-center justify-center cursor-pointer bg-transparent border-0"
-                    aria-label="Toggle password visibility"
+                    onClick={() => setMode('forgot')}
+                    className="text-red-400 hover:text-red-300 text-sm font-semibold transition-colors"
                   >
-                    <img 
-                      src={imgVision} 
-                      alt="Vision" 
-                      className={`size-[30px] object-contain transition-opacity ${showPassword ? 'opacity-40' : 'opacity-100'}`}
-                    />
+                    Forgot Password?
                   </button>
                 </div>
-              </div>
-
-              {/* Row: Remember Me & Forget password? (Node 1:1122, 1:1111, 1:1115) */}
-              <div className="flex items-center justify-between pt-1">
-                <label className="flex items-center gap-3 cursor-pointer select-none">
-                  <div 
-                    onClick={() => setRememberMe(!rememberMe)}
-                    className="w-[25px] h-[25px] rounded-[10px] border border-[#0d0c0c] flex items-center justify-center transition-colors bg-white cursor-pointer"
-                  >
-                    {rememberMe && <span className="text-black font-bold text-base leading-none">✓</span>}
-                  </div>
-                  <span className="text-[#bbb] font-normal text-lg sm:text-2xl font-sora">
-                    Remember Me
-                  </span>
-                </label>
 
                 <button
-                  type="button"
-                  onClick={() => alert('Password reset instructions sent to your email.')}
-                  className="text-[#bbb] hover:text-black font-normal text-lg sm:text-2xl font-sora transition-colors cursor-pointer"
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-red-600 hover:bg-red-500 disabled:bg-red-900 text-white font-black text-lg py-5 rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-[0_0_25px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_rgba(220,38,38,0.6)] relative overflow-hidden group"
                 >
-                  Forget password?
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-3">
+                      <svg className="animate-spin w-5 h-5" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.4 0 0 5.4 0 12h4z"/>
+                      </svg>
+                      Signing In...
+                    </span>
+                  ) : 'Sign In →'}
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                 </button>
+              </form>
+
+              <div className="my-8 flex items-center gap-4">
+                <div className="flex-1 h-px bg-white/10" />
+                <span className="text-gray-500 text-sm font-semibold">or</span>
+                <div className="flex-1 h-px bg-white/10" />
               </div>
 
-              {/* Login Button (Node 1:1116, 1:1123) */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-black hover:bg-neutral-800 text-[#fffafa] font-normal text-2xl h-[65px] rounded-[30px] border border-[#030303] transition-all duration-300 hover:scale-[1.01] active:scale-95 shadow-lg flex items-center justify-center cursor-pointer font-sora mt-2"
+              <Link
+                to="/register"
+                className="group block w-full text-center border-2 border-white/20 hover:border-red-500 text-white font-black text-lg py-5 rounded-xl transition-all duration-300 hover:bg-red-600/10 hover:shadow-[0_0_25px_rgba(220,38,38,0.2)]"
               >
-                {loading ? 'Logging in...' : 'Login'}
+                Create / Join Today 🚗
+              </Link>
+
+              <p className="text-center text-gray-600 text-xs mt-6">
+                By continuing, you agree to Mechify's{' '}
+                <span className="text-red-500 cursor-pointer">Terms of Service</span> and{' '}
+                <span className="text-red-500 cursor-pointer">Privacy Policy</span>.
+              </p>
+            </div>
+          )}
+
+          {/* ── FORGOT PASSWORD FORM ── */}
+          {mode === 'forgot' && (
+            <div className="animate-fadeIn">
+              <button onClick={() => { setMode('signin'); setResetSent(false); setResetEmail(''); }} className="flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors font-semibold">
+                ← Back to Sign In
               </button>
 
-              {/* Divider (Node 1:1112) */}
-              <div className="flex items-center justify-center gap-3 my-3">
-                <div className="flex-1 h-[1px] bg-black/30" />
-                <span className="text-[#bbb] text-base sm:text-2xl font-normal px-2 font-sora whitespace-nowrap">
-                  Or continue with:
-                </span>
-                <div className="flex-1 h-[1px] bg-black/30" />
-              </div>
+              <h1 className="text-4xl font-black mb-2">Reset Password</h1>
+              <p className="text-gray-400 mb-10">Enter your email and we'll send you a reset link.</p>
 
-              {/* Continue with Google Button (Node 1:1117, 1:1124) */}
-              <button
-                type="button"
-                onClick={handleGoogleLogin}
-                className="w-full bg-white hover:bg-gray-50 text-[#080808] border border-black font-normal text-xl sm:text-2xl h-[65px] rounded-[30px] transition-all duration-300 flex items-center justify-center gap-4 cursor-pointer shadow-sm active:scale-95 font-sora"
-              >
-                <img 
-                  src={imgGoogle} 
-                  alt="Google" 
-                  className="size-[35px] object-contain"
-                />
-                <span>Continue with Google</span>
-              </button>
-
-              {/* Footer Switch Link (Node 1:1113, 1:1114) */}
-              <div className="text-center pt-3 text-lg sm:text-2xl font-sora">
-                <span className="text-[#807e7e]">Don’t Have An Account? </span>
-                <Link to="/register" className="font-semibold text-[#0e0d0d] hover:underline ml-1">
-                  Sign Up Here
-                </Link>
-              </div>
-            </form>
-          </div>
+              {resetSent ? (
+                <div className="text-center py-12 animate-fadeIn">
+                  <div className="text-7xl mb-6">✉️</div>
+                  <h2 className="text-2xl font-black mb-3">Check Your Inbox</h2>
+                  <p className="text-gray-400 mb-8">We've sent a password reset link to<br /><span className="text-white font-bold">{resetEmail}</span></p>
+                  <button onClick={() => { setMode('signin'); setResetSent(false); setResetEmail(''); }} className="bg-red-600 hover:bg-red-500 text-white font-bold px-8 py-3 rounded-xl transition-colors">
+                    Back to Sign In
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleForgotPassword} className="space-y-5">
+                  <div>
+                    <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block">Email Address</label>
+                    <input
+                      type="email"
+                      value={resetEmail}
+                      onChange={e => setResetEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-red-500 transition-all text-base"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-red-600 hover:bg-red-500 disabled:bg-red-900 text-white font-black text-lg py-5 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-[0_0_25px_rgba(220,38,38,0.4)]"
+                  >
+                    {loading ? 'Sending...' : 'Send Reset Link'}
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
