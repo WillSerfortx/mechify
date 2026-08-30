@@ -69,17 +69,46 @@ const SERVICES = [
   {
     num: '1',
     title: 'Inspection',
-    desc: 'We can provide professional servicing and maintenance work with no loss of manufacturer warranty coverage.',
+    lines: [
+      'We can provide',
+      'professional',
+      'servicing and',
+      'maintenance work',
+      'with no loss of',
+      'manufacturer',
+      'warranty coverage.',
+    ],
+    stairOffset: 86,
+    descMargin: 21,
   },
   {
     num: '2',
     title: 'Diagnostic',
-    desc: 'A computerized car diagnostic check from Mechanic 128 will give you a true picture of how your vehicle is running.',
+    lines: [
+      'A computerized car',
+      'diagnostic check',
+      'from Mechanic 128',
+      'will give you a true',
+      'picture of how your',
+      'vehicle is running.',
+    ],
+    stairOffset: 43,
+    descMargin: 52,
   },
   {
     num: '3',
     title: 'Upgrades',
-    desc: 'Rather than sending your car for a basic service, ask Mechanic 128 for a thorough multi-point check and upgrade your car.',
+    lines: [
+      'Rather than sending',
+      'your car for a basic',
+      'service, ask',
+      'Mechanic 128 for a',
+      'thorough multi-',
+      'point check and',
+      'upgrade your car.',
+    ],
+    stairOffset: 0,
+    descMargin: 100,
   },
 ];
 
@@ -434,74 +463,71 @@ export default function Workshop() {
             gap: responsive(40),
           }}
         >
-          {SERVICES.map((svc, i) => {
-            /* Stair-step: Col 1 lowest (+90px), Col 2 middle (+45px), Col 3 highest (0px) */
-            const stairPad = [90, 45, 0];
-            const descSpacing = [20, 65, 110];
-            return (
-              <div
-                key={i}
-                className="flex flex-col items-center text-center"
-              >
-                {/* Stair-step spacer to position the number & title */}
-                <div style={{ height: responsive(stairPad[i]), flexShrink: 0 }} />
+          {SERVICES.map((svc, i) => (
+            <div
+              key={i}
+              className="flex flex-col items-center text-center"
+            >
+              {/* Stair-step spacer to position the number & title */}
+              <div style={{ height: responsive(svc.stairOffset), flexShrink: 0 }} />
 
-                {/* Number & Title Group */}
-                <div className="flex flex-col items-center text-center w-full">
-                  {/* Hollow Outlined White Number */}
-                  <p
-                    className="select-none text-center leading-none"
-                    style={{
-                      fontFamily: "'Sora', sans-serif",
-                      fontSize: responsive(110),
-                      fontWeight: 800,
-                      color: 'transparent',
-                      WebkitTextStroke: `${responsive(2.5)} #ffffff`,
-                      marginBottom: responsive(18),
-                    }}
-                  >
-                    {svc.num}
-                  </p>
-
-                  {/* Title (Inspection, Diagnostic, Upgrades) */}
-                  <h3
-                    className="font-bold text-white text-center leading-none"
-                    style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      fontSize: responsive(54),
-                      fontWeight: 700,
-                      letterSpacing: '-0.02em',
-                    }}
-                  >
-                    {svc.title}
-                  </h3>
-                </div>
-
-                {/* Description Text — baseline aligned across all columns */}
-                <div
-                  className="text-center w-full"
+              {/* Number & Title Group */}
+              <div className="flex flex-col items-center text-center w-full">
+                {/* Hollow Outlined White Number */}
+                <p
+                  className="select-none text-center leading-none"
                   style={{
-                    marginTop: responsive(descSpacing[i]),
+                    fontFamily: "'Sora', sans-serif",
+                    fontSize: responsive(110),
+                    fontWeight: 800,
+                    color: 'transparent',
+                    WebkitTextStroke: `${responsive(2.5)} #ffffff`,
+                    marginBottom: responsive(18),
                   }}
                 >
-                  <p
-                    className="mx-auto text-center"
-                    style={{
-                      fontSize: responsive(22),
-                      color: '#9e9e9e',
-                      width: responsive(340),
-                      maxWidth: '100%',
-                      fontFamily: "'Poppins', sans-serif",
-                      fontWeight: 400,
-                      lineHeight: '1.38',
-                    }}
-                  >
-                    {svc.desc}
-                  </p>
+                  {svc.num}
+                </p>
+
+                {/* Title (Inspection, Diagnostic, Upgrades) */}
+                <h3
+                  className="font-bold text-white text-center leading-none"
+                  style={{
+                    fontFamily: "'Poppins', sans-serif",
+                    fontSize: responsive(54),
+                    fontWeight: 700,
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {svc.title}
+                </h3>
+              </div>
+
+              {/* Description Text — baseline aligned across all columns */}
+              <div
+                className="text-center w-full"
+                style={{
+                  marginTop: responsive(svc.descMargin),
+                }}
+              >
+                <div
+                  className="mx-auto text-center"
+                  style={{
+                    fontSize: responsive(22),
+                    color: '#8b8888',
+                    fontFamily: "'Poppins', sans-serif",
+                    fontWeight: 400,
+                    lineHeight: '1.35',
+                  }}
+                >
+                  {svc.lines.map((line, lineIdx) => (
+                    <p key={lineIdx} className="m-0 leading-tight">
+                      {line}
+                    </p>
+                  ))}
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </section>
 
