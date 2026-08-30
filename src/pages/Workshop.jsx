@@ -431,85 +431,69 @@ export default function Workshop() {
           className="grid grid-cols-1 md:grid-cols-3 mx-auto"
           style={{
             maxWidth: responsive(1640),
-            gap: responsive(30),
+            gap: responsive(40),
           }}
         >
           {SERVICES.map((svc, i) => {
-            /* Figma stair-step: num tops are 2406, 2363, 2320
-               Col1 is lowest (most padding), Col3 is highest (no padding)
-               Offsets relative to Col3: col1=+86, col2=+43, col3=0 */
-            const stairPad = [86, 43, 0];
+            /* Stair-step: Col 1 lowest (+90px), Col 2 middle (+45px), Col 3 highest (0px) */
+            const stairPad = [90, 45, 0];
+            const descSpacing = [20, 65, 110];
             return (
               <div
                 key={i}
-                className="flex flex-col items-center"
+                className="flex flex-col items-center text-center"
               >
-                {/* Stair-step spacer — only pushes number+title down */}
+                {/* Stair-step spacer to position the number & title */}
                 <div style={{ height: responsive(stairPad[i]), flexShrink: 0 }} />
 
-                {/* Number + Title wrapper (positioned together) */}
-                <div className="relative text-center w-full">
-                  {/* Large background number — Figma: Sora Bold 128px
-                      In Figma: color is black on black (text-black).
-                      Visually appears as a subtle dark embossed number.
-                      We render it as a faint outlined number behind the title. */}
+                {/* Number & Title Group */}
+                <div className="flex flex-col items-center text-center w-full">
+                  {/* Hollow Outlined White Number */}
                   <p
-                    className="font-bold leading-none select-none text-center"
+                    className="select-none text-center leading-none"
                     style={{
-                      fontSize: responsive(128),
-                      color: '#111111',
-                      WebkitTextStroke: `${responsive(1)} rgba(255,255,255,0.04)`,
-                      position: 'relative',
-                      zIndex: 0,
+                      fontFamily: "'Sora', sans-serif",
+                      fontSize: responsive(110),
+                      fontWeight: 800,
+                      color: 'transparent',
+                      WebkitTextStroke: `${responsive(2.5)} #ffffff`,
+                      marginBottom: responsive(18),
                     }}
                   >
                     {svc.num}
                   </p>
-                  {/* Title — Figma: Poppins Bold 64px, white
-                      Positioned to overlap slightly with bottom of number.
-                      In Figma, gap from number top to title top:
-                        col1: 2537-2406=131px, col2: 2506-2363=143px, col3: 2455-2320=135px
-                      With 128px font at 0.962 leading = ~123px number height,
-                      titles start ~8-20px below number bottom.
-                      We use a negative margin to pull title up slightly into number space. */}
-                  <p
-                    className="font-bold text-white leading-none text-center"
+
+                  {/* Title (Inspection, Diagnostic, Upgrades) */}
+                  <h3
+                    className="font-bold text-white text-center leading-none"
                     style={{
-                      fontSize: responsive(64),
                       fontFamily: "'Poppins', sans-serif",
-                      marginTop: responsive(-20),
-                      position: 'relative',
-                      zIndex: 1,
+                      fontSize: responsive(54),
+                      fontWeight: 700,
+                      letterSpacing: '-0.02em',
                     }}
                   >
                     {svc.title}
-                  </p>
+                  </h3>
                 </div>
 
-                {/* Description — Figma: Poppins SemiBold 32px, #8b8888, w:336
-                    All 3 descriptions sit at the SAME Y baseline (~top:2620).
-                    Gap from title to desc varies per column because of stair-step:
-                      col1: 2620-2537-62(font)=21px
-                      col2: 2620-2506-62=52px
-                      col3: 2617-2455-62=100px
-                    We achieve same baseline by giving each desc a fixed top margin 
-                    that compensates for the stair offset. */}
+                {/* Description Text — baseline aligned across all columns */}
                 <div
                   className="text-center w-full"
                   style={{
-                    marginTop: responsive([21, 52, 100][i]),
+                    marginTop: responsive(descSpacing[i]),
                   }}
                 >
                   <p
-                    className="font-semibold mx-auto"
+                    className="mx-auto text-center"
                     style={{
-                      fontSize: responsive(32),
-                      color: '#8b8888',
-                      width: responsive(336),
+                      fontSize: responsive(22),
+                      color: '#9e9e9e',
+                      width: responsive(340),
                       maxWidth: '100%',
                       fontFamily: "'Poppins', sans-serif",
-                      lineHeight: '1.2',
-                      textAlign: 'center',
+                      fontWeight: 400,
+                      lineHeight: '1.38',
                     }}
                   >
                     {svc.desc}
