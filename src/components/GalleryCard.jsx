@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 
 /**
  * Exact 1:1 Figma implementation for Component 83 (SCHEDULE), Component 84 (ENGINE),
- * Component 85 (PAINTING), and Component 86 (DETAILING).
- *
- * Exact Figma Specs:
- * - Card: 403px × 491px, border: 5px solid #ffffff, border-radius: 15px, background: #000000, overflow: clip
- * - Default State: Image covers entire card, Title at top: 390px (79.43%), font: Sora ExtraBold 40px, leading: 0.962, white
- * - Hover State: Image shifts up with black bottom, Title at top: 298px-325px, Description at top: 391px-417px (Sora Regular 20px, leading: 0.962, center, white)
+ * Component 85 (PAINTING), and Component 86 (DETAILING) with responsive scaling.
  */
 export default function GalleryCard({
   img,
@@ -31,13 +26,10 @@ export default function GalleryCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
-      className={`relative bg-black overflow-hidden cursor-pointer select-none group transition-all duration-300 ease-out ${className}`}
+      className={`relative bg-black overflow-hidden cursor-pointer select-none group transition-all duration-300 ease-out border-4 sm:border-[5px] border-white rounded-[20px] sm:rounded-[24px] hover:shadow-[0_0_35px_rgba(255,255,255,0.25)] ${className}`}
       style={{
         aspectRatio: '403 / 491',
-        borderWidth: r(5),
-        borderStyle: 'solid',
-        borderColor: '#ffffff',
-        borderRadius: r(15),
+        width: '100%',
       }}
     >
       {/* ─── Image Container with Exact Figma Crop & Shift ─── */}
@@ -76,19 +68,18 @@ export default function GalleryCard({
 
       {/* ─── Title ("SCHEDULE", "ENGINE", "PAINTING", "DETAILING") ─── */}
       <div
-        className="absolute left-0 right-0 w-full text-center transition-all duration-300 ease-out pointer-events-none z-20"
+        className="absolute left-0 right-0 w-full text-center transition-all duration-300 ease-out pointer-events-none z-20 px-2"
         style={{
           top: isHovered ? titleHoverTop : titleDefaultTop,
         }}
       >
         <p
-          className="font-extrabold text-white text-center whitespace-nowrap select-none"
+          className="font-extrabold text-white text-center whitespace-nowrap select-none tracking-tight"
           style={{
             fontFamily: "'Sora', sans-serif",
             fontWeight: 800,
-            fontSize: r(40),
+            fontSize: 'clamp(18px, 2.2vw, 38px)',
             lineHeight: 0.962,
-            letterSpacing: '0px',
             margin: 0,
             padding: 0,
           }}
@@ -99,42 +90,33 @@ export default function GalleryCard({
 
       {/* ─── Description: 2-line exact sentences in bottom black area ─── */}
       <div
-        className={`absolute left-0 right-0 w-full text-center transition-all duration-300 ease-out pointer-events-none z-20 ${
+        className={`absolute left-0 right-0 w-full text-center transition-all duration-300 ease-out pointer-events-none z-20 px-2 sm:px-4 ${
           isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
         }`}
         style={{
           top: descHoverTop,
         }}
       >
-        <div
-          className="text-center mx-auto"
-          style={{
-            fontFamily: "'Sora', sans-serif",
-            fontWeight: 400,
-            fontSize: r(20),
-            color: '#ffffff',
-            lineHeight: 0.962,
-          }}
-        >
+        <div className="text-center mx-auto">
           <p
-            className="whitespace-pre text-center mb-0"
+            className="whitespace-pre text-center mb-0 text-white"
             style={{
               fontFamily: "'Sora', sans-serif",
               fontWeight: 400,
-              fontSize: r(20),
-              lineHeight: 1.15,
+              fontSize: 'clamp(11px, 1.2vw, 19px)',
+              lineHeight: 1.2,
               margin: 0,
             }}
           >
             {line1}
           </p>
           <p
-            className="whitespace-pre text-center"
+            className="whitespace-pre text-center text-white"
             style={{
               fontFamily: "'Sora', sans-serif",
               fontWeight: 400,
-              fontSize: r(20),
-              lineHeight: 1.15,
+              fontSize: 'clamp(11px, 1.2vw, 19px)',
+              lineHeight: 1.2,
               margin: 0,
             }}
           >

@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 
 /**
- * ServiceFeatureCard component matching exact Figma specifications:
+ * ServiceFeatureCard component matching exact Figma specifications with responsive scaling:
  * - Component 87 (Performance Check, node 1:1881)
  * - Component 88 (Auto Repair, node 1:1888)
  * - Component 89 (Fleet Service, node 1:1895)
- *
- * Exact Specs:
- * - Dimensions: 553px × 468px (aspect-ratio: 553/468)
- * - Border: 5px solid #ffffff, border-radius: 40px, background: #000000
- * - Default State: Icon 128×128 at top: ~125px, Title 40px (Sora:Bold) at top: ~290px
- * - Hover / Active State: Icon shrinks to 50×50 at top: 179px, Description 24px (Sora:Bold) at top: ~250px-273px with exact 4 lines
  */
 export default function ServiceFeatureCard({
   icon,
@@ -28,27 +22,29 @@ export default function ServiceFeatureCard({
 
   const r = responsiveHelper || ((px) => `${px}px`);
 
+  // Calculate percentage tops from 468px base height for flawless scaling
+  const defIconTopPct = `${(defaultIconTop / 468) * 100}%`;
+  const defTitleTopPct = `${(defaultTitleTop / 468) * 100}%`;
+  const hoverDescTopPct = `${(hoverDescTop / 468) * 100}%`;
+
   return (
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
-      className={`relative bg-black overflow-hidden cursor-pointer select-none group transition-all duration-300 ease-out flex flex-col items-center justify-center ${className}`}
+      className={`relative bg-black overflow-hidden cursor-pointer select-none group transition-all duration-300 ease-out flex flex-col items-center justify-center border-4 sm:border-[5px] border-white rounded-[28px] sm:rounded-[36px] lg:rounded-[44px] hover:shadow-[0_0_35px_rgba(255,255,255,0.2)] ${className}`}
       style={{
         aspectRatio: '553 / 468',
-        borderWidth: r(5),
-        borderStyle: 'solid',
-        borderColor: '#ffffff',
-        borderRadius: r(40),
+        width: '100%',
       }}
     >
-      {/* ─── Icon (128x128 on default, 50x50 on hover) ─── */}
+      {/* ─── Icon (scales between 128px default and 50px hover) ─── */}
       <div
         className="absolute left-1/2 -translate-x-1/2 transition-all duration-300 ease-out pointer-events-none flex items-center justify-center"
         style={{
-          top: isHovered ? r(179) : r(defaultIconTop),
-          width: isHovered ? r(50) : r(128),
-          height: isHovered ? r(50) : r(128),
+          top: isHovered ? '36%' : defIconTopPct,
+          width: isHovered ? 'clamp(36px, 3.8vw, 56px)' : 'clamp(72px, 8.2vw, 132px)',
+          height: isHovered ? 'clamp(36px, 3.8vw, 56px)' : 'clamp(72px, 8.2vw, 132px)',
         }}
       >
         <img
@@ -58,35 +54,33 @@ export default function ServiceFeatureCard({
         />
       </div>
 
-      {/* ─── Default State: Title (Sora Bold 40px) ─── */}
+      {/* ─── Default State: Title (Sora Bold 40px base) ─── */}
       <div
-        className={`absolute left-0 right-0 w-full text-center transition-all duration-300 ease-out pointer-events-none ${
+        className={`absolute left-0 right-0 w-full text-center px-4 transition-all duration-300 ease-out pointer-events-none ${
           isHovered ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
         }`}
         style={{
-          top: r(defaultTitleTop),
+          top: defTitleTopPct,
         }}
       >
         <p
-          className="font-bold text-white text-center leading-none"
+          className="font-bold text-white text-center leading-tight tracking-tight"
           style={{
             fontFamily: "'Sora', sans-serif",
             fontWeight: 700,
-            fontSize: r(40),
-            lineHeight: 0.962,
+            fontSize: 'clamp(20px, 2.3vw, 42px)',
             margin: 0,
           }}
         >
           {titleLine1}
         </p>
         <p
-          className="font-bold text-white text-center leading-none"
+          className="font-bold text-white text-center leading-tight tracking-tight"
           style={{
             fontFamily: "'Sora', sans-serif",
             fontWeight: 700,
-            fontSize: r(40),
-            lineHeight: 0.962,
-            marginTop: r(6),
+            fontSize: 'clamp(20px, 2.3vw, 42px)',
+            marginTop: '2px',
             margin: 0,
           }}
         >
@@ -94,25 +88,16 @@ export default function ServiceFeatureCard({
         </p>
       </div>
 
-      {/* ─── Hover State: Description (Sora Bold 24px, exact 4 lines) ─── */}
+      {/* ─── Hover State: Description (Sora Bold 24px base, exact 4 lines) ─── */}
       <div
-        className={`absolute left-0 right-0 w-full px-4 text-center transition-all duration-300 ease-out pointer-events-none ${
+        className={`absolute left-0 right-0 w-full px-4 sm:px-6 text-center transition-all duration-300 ease-out pointer-events-none ${
           isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
         }`}
         style={{
-          top: r(hoverDescTop),
+          top: hoverDescTopPct,
         }}
       >
-        <div
-          className="mx-auto text-center"
-          style={{
-            fontFamily: "'Sora', sans-serif",
-            fontWeight: 700,
-            fontSize: r(24),
-            color: '#ffffff',
-            lineHeight: 0.962,
-          }}
-        >
+        <div className="mx-auto text-center">
           {descLines.map((line, idx) => (
             <p
               key={idx}
@@ -120,9 +105,10 @@ export default function ServiceFeatureCard({
               style={{
                 fontFamily: "'Sora', sans-serif",
                 fontWeight: 700,
-                fontSize: r(24),
-                lineHeight: 1.18,
+                fontSize: 'clamp(12px, 1.45vw, 24px)',
+                lineHeight: 1.25,
                 margin: 0,
+                color: '#ffffff',
               }}
             >
               {line}

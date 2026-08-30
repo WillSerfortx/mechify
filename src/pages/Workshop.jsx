@@ -17,47 +17,7 @@ const IMAGES = {
   specialistBruce: '/images/workshop/specialist-bruce.png',
   specialistClark: '/images/workshop/specialist-clark.png',
   specialistWalter: '/images/workshop/specialist-walter.png',
-  iconInstagram: '/images/workshop/icon-instagram.png',
-  iconFacebook: '/images/workshop/icon-facebook.png',
-  iconSocial: '/images/workshop/icon-social.png',
-  iconLocation: '/images/workshop/icon-location.png',
-  iconPhone: '/images/workshop/icon-phone.png',
-  iconMail: '/images/workshop/icon-mail.png',
 };
-
-/* ─────────────────────────────────────────────────────────────────
-   Figma canvas = 1920px wide.
-   All px values from Figma are converted to vw via: val / 1920 * 100
-   We use clamp(min, vw, max) so it looks right at any viewport.
-   
-   Figma key Y positions (absolute):
-     Hero image:       top:-156  h:1280  → visible hero = ~778px
-     Back button:      top:778   left:0   90×90  border-10
-     Service cards:    top:~1056  left:87/681/1280  553×468
-     "Why us?":        top:1618  left:87
-     "Why us?" body:   top:1748  left:87
-     "SERVICES" title: top:~2200 centered
-     Numbers 1/2/3:    top:2406/2363/2320
-     Titles:           top:2537/2506/2455
-     Descs:            top:2620
-     Gallery:          top:3166  left:80/527/986/1436  403×491
-     Specialists title:top:3925  left:59
-     Specialist cards: top:4069  left:69/527/987/1445  406×453
-     Names:            top:4544
-     Roles:            top:4594-4600
-     Form card:        top:4916  left:88  w:949  h:968  rounded-20
-     "GET A FREE":     top:4863  left:1314
-     "APPOINTMENT":    top:4925  left:1314
-     Social icons:     top:5071  left:1314/1392/1469
-     Email:            top:5152-5162
-     Address:          top:5240-5244
-     Phone:            top:5455-5504
-     Submit button:    top:5719  left:126  496×74
-────────────────────────────────────────────────────────────────── */
-
-/* Helpers for converting Figma px to responsive vw */
-const vw = (px) => `${(px / 1920 * 100).toFixed(3)}vw`;
-const responsive = (px, minRatio = 0.4) => `clamp(${Math.round(px * minRatio)}px, ${vw(px)}, ${px}px)`;
 
 /* ─── Data ────────────────────────────────────────────────────── */
 const SERVICE_CARDS = [
@@ -118,8 +78,8 @@ const SERVICES = [
       'manufacturer',
       'warranty coverage.',
     ],
-    stairOffset: 86,
-    descMargin: 21,
+    stairOffset: 70,
+    descMargin: 24,
   },
   {
     num: '2',
@@ -132,8 +92,8 @@ const SERVICES = [
       'picture of how your',
       'vehicle is running.',
     ],
-    stairOffset: 43,
-    descMargin: 52,
+    stairOffset: 35,
+    descMargin: 59,
   },
   {
     num: '3',
@@ -148,7 +108,7 @@ const SERVICES = [
       'upgrade your car.',
     ],
     stairOffset: 0,
-    descMargin: 100,
+    descMargin: 104,
   },
 ];
 
@@ -156,12 +116,12 @@ const GALLERY = [
   {
     img: IMAGES.gallerySchedule,
     label: 'SCHEDULE',
-    line1: 'Book your service easily at a time ',
-    line2: 'that fits your schedule.',
+    line1: 'Easy online booking to get your',
+    line2: 'car serviced at your convenience.',
     titleDefaultTop: '79.43%',
     titleHoverTop: '60.69%',
     descHoverTop: '79.63%',
-    imageHoverShift: '-15%',
+    imageHoverShift: '-22%',
   },
   {
     img: IMAGES.galleryEngine,
@@ -171,7 +131,7 @@ const GALLERY = [
     titleDefaultTop: '79.43%',
     titleHoverTop: '61.91%',
     descHoverTop: '81.05%',
-    imageHoverShift: '-15%',
+    imageHoverShift: '-22%',
   },
   {
     img: IMAGES.galleryPainting,
@@ -181,7 +141,7 @@ const GALLERY = [
     titleDefaultTop: '79.43%',
     titleHoverTop: '64.76%',
     descHoverTop: '83.09%',
-    imageHoverShift: '-15%',
+    imageHoverShift: '-22%',
   },
   {
     img: IMAGES.galleryDetailing,
@@ -191,15 +151,15 @@ const GALLERY = [
     titleDefaultTop: '79.43%',
     titleHoverTop: '66.19%',
     descHoverTop: '84.92%',
-    imageHoverShift: '-15%',
+    imageHoverShift: '-22%',
   },
 ];
 
 const SPECIALISTS = [
   { img: IMAGES.specialistTony, name: 'Tony Stark', role: 'Founder of Mechify' },
   { img: IMAGES.specialistBruce, name: 'Bruce Wayne', role: 'Main Mechanic' },
-  { img: IMAGES.specialistClark, name: 'Clark Kent', role: 'Mechanic' },
-  { img: IMAGES.specialistWalter, name: 'Walter White', role: 'Mechanic' },
+  { img: IMAGES.specialistClark, name: 'Clark Kent', role: 'Senior Technician' },
+  { img: IMAGES.specialistWalter, name: 'Walter White', role: 'Diagnostic Specialist' },
 ];
 
 export default function Workshop() {
@@ -219,131 +179,55 @@ export default function Workshop() {
   }, []);
 
   return (
-    <div className="bg-black min-h-screen text-white overflow-x-hidden" style={{ fontFamily: "'Sora', sans-serif" }}>
+    <div className="bg-black min-h-screen text-white overflow-x-hidden font-sora">
 
       {/* ═══════════════════════════════════════════════════════════
-          HERO SECTION
-          Figma: image36 w:1920 h:1280 top:-156px
-          Visible hero area ≈ 778px (where back button sits at top:778)
-          778 / 1920 = 40.52vw
-          Title1: left:56 top:158 → 158/778 = 20.3% from top
-          Title2: left:56 top:250
-          Subtitle: left:56 top:397
-          CTA: left:95 top:526 w:496 h:74
+          HERO SECTION — Balanced, Centered & Larger Text
       ═══════════════════════════════════════════════════════════ */}
-      <section
-        className="relative w-full overflow-hidden"
-        style={{ height: responsive(778) }}
-      >
-        {/* Background image — Figma: 1920×1280, positioned at top:-156 */}
+      <section className="relative w-full overflow-hidden min-h-[580px] lg:min-h-[720px] flex items-center justify-center bg-black">
+        {/* Background image */}
         <img
           src={IMAGES.heroBg}
           alt="Auto repair workshop"
-          className="absolute w-full object-cover pointer-events-none"
-          style={{
-            top: responsive(-156, 1),
-            height: responsive(1280),
-            left: 0,
-          }}
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none opacity-55"
         />
-        {/* Gradient overlays for readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/20" />
+        {/* Gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
 
-        {/* Text content — positioned absolutely to match Figma coords */}
-        <div className="absolute inset-0 z-10 animate-slideInLeft">
-          {/* Title line 1 — Figma: Sora Bold 96px, left:56 top:158 */}
-          <p
-            className="absolute font-bold text-white leading-none whitespace-nowrap"
-            style={{
-              fontSize: responsive(96),
-              left: responsive(56),
-              top: responsive(158),
-            }}
-          >
-            Professional Car Repair{' '}
+        {/* Hero Content — Centered container */}
+        <div className="relative z-10 max-w-[1720px] w-full mx-auto px-6 sm:px-12 lg:px-20 py-20 flex flex-col items-start justify-center animate-slideInLeft">
+          <h1 className="font-extrabold text-white text-4xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.08] tracking-tight mb-5">
+            Professional Car Repair <br />
+            <span className="text-red-500">And Maintenance</span>
+          </h1>
+
+          <p className="font-normal text-gray-200 text-lg sm:text-2xl md:text-3xl max-w-3xl leading-snug mb-10">
+            We are focused on providing our clients with the highest level of quality and excellent customer support across Dhaka.
           </p>
 
-          {/* Title line 2 — Figma: left:56 top:250 */}
-          <p
-            className="absolute font-bold text-white leading-none whitespace-nowrap"
-            style={{
-              fontSize: responsive(96),
-              left: responsive(56),
-              top: responsive(250),
-            }}
-          >
-            And Maintenance
-          </p>
-
-          {/* Subtitle — Figma: Sora Regular 32px, left:56 top:397 */}
-          <div
-            className="absolute font-normal text-white/90"
-            style={{
-              fontSize: responsive(32),
-              left: responsive(56),
-              top: responsive(397),
-              lineHeight: '0.962',
-            }}
-          >
-            <p style={{ marginBottom: '0.2em' }}>We are focused on providing our clients with the highest</p>
-            <p> level of quality and excellent customer support</p>
-          </div>
-
-          {/* CTA Button — Figma: left:95 top:526, 496×74, red bg, border white, rounded-40 */}
-          {/* CTA Button — Glowing Emergency Appointment Button */}
+          {/* Glowing Red Emergency Appointment CTA Button */}
           <button
             onClick={() => navigate('/workshop-search')}
-            className="absolute inline-flex items-center justify-center text-white font-bold border border-white transition-all duration-300 hover:scale-105 active:scale-95 animate-sosPulse cursor-pointer select-none"
-            style={{
-              backgroundColor: '#dc2626',
-              fontSize: responsive(28),
-              left: responsive(95),
-              top: responsive(526),
-              width: responsive(620),
-              maxWidth: '90%',
-              height: responsive(76),
-              borderRadius: responsive(40),
-              boxShadow: '0 0 35px rgba(220, 38, 38, 0.8), 0 0 70px rgba(220, 38, 38, 0.4)',
-            }}
+            className="inline-flex items-center justify-center text-white font-bold border-2 border-white px-8 sm:px-12 py-4 sm:py-5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 animate-sosPulse cursor-pointer select-none text-lg sm:text-2xl shadow-[0_0_35px_rgba(220,38,38,0.8),0_0_70px_rgba(220,38,38,0.4)]"
+            style={{ backgroundColor: '#dc2626' }}
           >
-            Get an Emergency appointment now
+            🚨 Get an Emergency appointment now
           </button>
         </div>
       </section>
 
-
-
       {/* ═══════════════════════════════════════════════════════════
-          SERVICE CARDS — Figma: 3 cards
-          Card1: left:87  top:1062  553×468 rounded-40 border-5  (Performance Check)
-          Card2: left:681 top:1056  553×468  (Auto Repair)
-          Card3: left:1280 top:1053 553×468  (Fleet Service)
-          
-          Gap between cards:
-            681 - (87+553) = 41px
-            1280 - (681+553) = 46px  ≈ ~44px average
-          Padding left: 87px, right: 1920-(1280+553) = 87px → symmetrical
-          Icons: 128×128 centered in card
-          Labels: Sora Bold 40px, centered
+          SERVICE CARDS — 3 interactive cards, perfectly centered
       ═══════════════════════════════════════════════════════════ */}
       <section
         id="service-cards"
         data-animate
-        className={`w-full ${visible['service-cards'] ? 'animate-fadeInUp' : 'opacity-0'}`}
-        style={{
-          /* Figma: gap between hero bottom (778+90=868 for back btn) and cards top (1053)
-             = ~185px gap from back button bottom. We use padding. */
-          paddingTop: responsive(130),
-          paddingBottom: responsive(80),
-          paddingLeft: responsive(87),
-          paddingRight: responsive(87),
-        }}
+        className={`w-full py-16 sm:py-24 max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-20 ${
+          visible['service-cards'] ? 'animate-fadeInUp' : 'opacity-0'
+        }`}
       >
-        <div
-          className="grid grid-cols-1 sm:grid-cols-3"
-          style={{ gap: responsive(44) }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 items-center justify-center">
           {SERVICE_CARDS.map((card, i) => (
             <ServiceFeatureCard
               key={i}
@@ -354,165 +238,87 @@ export default function Workshop() {
               defaultIconTop={card.defaultIconTop}
               defaultTitleTop={card.defaultTitleTop}
               hoverDescTop={card.hoverDescTop}
-              responsiveHelper={responsive}
-              onClick={() => navigate('/workshop-select')}
+              onClick={() => navigate('/workshop-search')}
             />
           ))}
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          WHY US?
-          Figma: "Why us?" at approx top:1618 left:87 (derived from screenshot)
-          Body text: top:1748 left:87, Sora SemiBold 32px, white
-          Gap between title and body: ~130px? No — title is smaller.
-          From screenshot: title appears ~48px, body 32px
+          WHY US? — Centered container with prominent typography
       ═══════════════════════════════════════════════════════════ */}
       <section
         id="why-us"
         data-animate
-        className={`w-full ${visible['why-us'] ? 'animate-fadeInUp' : 'opacity-0'}`}
-        style={{
-          paddingLeft: responsive(87),
-          paddingRight: responsive(87),
-          paddingBottom: responsive(100),
-        }}
+        className={`w-full py-12 sm:py-16 max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-20 ${
+          visible['why-us'] ? 'animate-fadeInUp' : 'opacity-0'
+        }`}
       >
-        <h2
-          className="font-bold"
-          style={{
-            fontSize: responsive(64),
-            marginBottom: responsive(30),
-          }}
-        >
+        <h2 className="font-bold text-4xl sm:text-6xl md:text-7xl mb-6 tracking-tight">
           Why us?
         </h2>
-        <div
-          className="font-semibold text-white"
-          style={{
-            fontSize: responsive(32),
-            lineHeight: '0.962',
-          }}
-        >
-          <p style={{ marginBottom: responsive(6) }}>All Mechanic 128 workshops employ the latest</p>
-          <p style={{ marginBottom: responsive(6) }}>test techniques and digital information</p>
-          <p style={{ marginBottom: responsive(6) }}>systems. This ideal combination ensures</p>
-          <p style={{ marginBottom: responsive(6) }}>systematic vehicle diagnosis and qualified</p>
+        <div className="font-semibold text-gray-200 text-xl sm:text-3xl md:text-4xl leading-relaxed max-w-5xl">
+          <p className="mb-2">All Mechanic 128 workshops employ the latest</p>
+          <p className="mb-2">test techniques and digital information</p>
+          <p className="mb-2">systems. This ideal combination ensures</p>
+          <p className="mb-2">systematic vehicle diagnosis and qualified</p>
           <p>repair work.</p>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          SERVICES SECTION — Figma exact layout
-          
-          "SERVICES" centered title: Poppins Bold 64px
-          
-          3-column STAIR-STEP layout (ascending left→right):
-            Number 1: top:2406  Sora Bold 128px  (black on black = subtle)
-            Number 2: top:2363  (43px higher)
-            Number 3: top:2320  (86px higher than #1)
-            
-            Title "Inspection":  top:2537  Poppins Bold 64px
-            Title "Diagnostic":  top:2506  (31px higher)
-            Title "Upgrades":    top:2455  (82px higher than #1)
-            
-            KEY: Descriptions ALL at same baseline (~top:2620)
-            Desc text: Poppins SemiBold 32px, #8b8888, w:336, centered
-          
-          The stair-step only affects numbers+titles.
-          Descriptions stay level — they form a horizontal baseline.
+          SERVICES SECTION — Stair-Step 3 Columns
       ═══════════════════════════════════════════════════════════ */}
       <section
         id="services-section"
         data-animate
-        className={`w-full ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}
-        style={{
-          paddingTop: responsive(60),
-          paddingBottom: responsive(80),
-          paddingLeft: responsive(87),
-          paddingRight: responsive(87),
-        }}
+        className={`w-full py-16 sm:py-24 max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-20 ${
+          visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'
+        }`}
       >
-        <h2
-          className="font-bold text-center text-white"
-          style={{
-            fontSize: responsive(64),
-            fontFamily: "'Poppins', sans-serif",
-            marginBottom: responsive(100),
-          }}
-        >
+        <h2 className="font-bold text-center text-white text-4xl sm:text-6xl md:text-7xl font-poppins mb-16 tracking-tight">
           SERVICES
         </h2>
 
-        {/* 3-column stair-step grid.
-            Each column is a flex-column. The number+title section gets a 
-            padding-top for the stair-step offset, while descriptions stay
-            aligned at the bottom via margin-top:auto on description wrapper. */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-3 mx-auto"
-          style={{
-            maxWidth: responsive(1640),
-            gap: responsive(40),
-          }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-14 mx-auto items-start">
           {SERVICES.map((svc, i) => (
             <div
               key={i}
               className="flex flex-col items-center text-center"
             >
-              {/* Stair-step spacer to position the number & title */}
-              <div style={{ height: responsive(svc.stairOffset), flexShrink: 0 }} />
+              {/* Stair-step spacer */}
+              <div style={{ height: `${svc.stairOffset}px` }} className="hidden md:block flex-shrink-0" />
 
               {/* Number & Title Group */}
               <div className="flex flex-col items-center text-center w-full">
                 {/* Hollow Outlined White Number */}
                 <p
-                  className="select-none text-center leading-none"
+                  className="select-none text-center leading-none text-7xl sm:text-8xl md:text-9xl font-black mb-4"
                   style={{
                     fontFamily: "'Sora', sans-serif",
-                    fontSize: responsive(110),
-                    fontWeight: 800,
                     color: 'transparent',
-                    WebkitTextStroke: `${responsive(2.5)} #ffffff`,
-                    marginBottom: responsive(18),
+                    WebkitTextStroke: '2.5px #ffffff',
                   }}
                 >
                   {svc.num}
                 </p>
 
-                {/* Title (Inspection, Diagnostic, Upgrades) */}
-                <h3
-                  className="font-bold text-white text-center leading-none"
-                  style={{
-                    fontFamily: "'Poppins', sans-serif",
-                    fontSize: responsive(54),
-                    fontWeight: 700,
-                    letterSpacing: '-0.02em',
-                  }}
-                >
+                {/* Title */}
+                <h3 className="font-bold text-white text-center leading-tight text-3xl sm:text-4xl md:text-5xl font-poppins tracking-tight">
                   {svc.title}
                 </h3>
               </div>
 
-              {/* Description Text — baseline aligned across all columns */}
+              {/* Description Text — baseline aligned */}
               <div
                 className="text-center w-full"
                 style={{
-                  marginTop: responsive(svc.descMargin),
+                  marginTop: `${svc.descMargin}px`,
                 }}
               >
-                <div
-                  className="mx-auto text-center"
-                  style={{
-                    fontSize: responsive(22),
-                    color: '#8b8888',
-                    fontFamily: "'Poppins', sans-serif",
-                    fontWeight: 400,
-                    lineHeight: '1.35',
-                  }}
-                >
+                <div className="mx-auto text-center text-gray-400 font-poppins font-normal text-base sm:text-lg md:text-xl leading-relaxed max-w-xs">
                   {svc.lines.map((line, lineIdx) => (
-                    <p key={lineIdx} className="m-0 leading-tight">
+                    <p key={lineIdx} className="m-0 leading-snug">
                       {line}
                     </p>
                   ))}
@@ -524,32 +330,16 @@ export default function Workshop() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          IMAGE GALLERY — Figma: 4 cards in a row
-          Card1: left:80   top:3167  403×491  border-5 rounded-15
-          Card2: left:527  top:3166
-          Card3: left:986  top:3166
-          Card4: left:1436 top:3165
-          
-          Gaps: 527-(80+403)=44, 986-(527+403)=56, 1436-(986+403)=47 → ~49px avg
-          Padding left: 80, right: 1920-(1436+403)=81
-          
-          Labels: Sora ExtraBold 40px, at bottom-left (~left:85 top:390 within card)
+          IMAGE GALLERY — 4 Cards
       ═══════════════════════════════════════════════════════════ */}
       <section
         id="gallery"
         data-animate
-        className={`w-full ${visible['gallery'] ? 'animate-fadeInUp' : 'opacity-0'}`}
-        style={{
-          paddingTop: responsive(40),
-          paddingBottom: responsive(80),
-          paddingLeft: responsive(80),
-          paddingRight: responsive(81),
-        }}
+        className={`w-full py-16 sm:py-20 max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-20 ${
+          visible['gallery'] ? 'animate-fadeInUp' : 'opacity-0'
+        }`}
       >
-        <div
-          className="grid grid-cols-2 lg:grid-cols-4"
-          style={{ gap: responsive(44) }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {GALLERY.map((item, i) => (
             <GalleryCard
               key={i}
@@ -561,69 +351,33 @@ export default function Workshop() {
               titleHoverTop={item.titleHoverTop}
               descHoverTop={item.descHoverTop}
               imageHoverShift={item.imageHoverShift}
-              responsiveHelper={responsive}
-              onClick={() => navigate('/workshop-select')}
+              onClick={() => navigate('/workshop-search')}
             />
           ))}
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          MEET OUR SPECIALISTS
-          Figma: title at left:59 top:3925, Sora Bold 64px
-          
-          Cards: 406×453, border-5 white, rounded-15
-          Shadow: 0px 4px 20px 10px rgba(255,255,255,0.5)
-          Card1: left:69  top:4069
-          Card2: left:527 top:4069
-          Card3: left:987 top:4069
-          Card4: left:1445 top:4069
-          
-          Gaps: 527-(69+406)=52, 987-(527+406)=54, 1445-(987+406)=52 → ~53px
-          Padding left:69, right: 1920-(1445+406)=69 → symmetrical
-          
-          Names: Sora SemiBold 36px, white, top:4544 → 4544-4069-453=22px below card
-          Roles: Sora Regular 20px, #9e9e9e, top:4594-4600 → ~50px below names? No.
-                 4594-4544=50px? With 36px font → about 14px gap
+          MEET OUR SPECIALISTS — 4 Specialist Cards
       ═══════════════════════════════════════════════════════════ */}
       <section
         id="specialists"
         data-animate
-        className={`w-full ${visible['specialists'] ? 'animate-fadeInUp' : 'opacity-0'}`}
-        style={{
-          paddingTop: responsive(40),
-          paddingBottom: responsive(80),
-          paddingLeft: responsive(69),
-          paddingRight: responsive(69),
-        }}
+        className={`w-full py-16 sm:py-24 max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-20 ${
+          visible['specialists'] ? 'animate-fadeInUp' : 'opacity-0'
+        }`}
       >
-        <h2
-          className="font-bold leading-none"
-          style={{
-            fontSize: responsive(64),
-            marginBottom: responsive(75),
-            paddingLeft: responsive(0), /* title is at left:59, section padding is 69 → -10px offset, close enough */
-          }}
-        >
+        <h2 className="font-bold text-4xl sm:text-6xl md:text-7xl mb-12 tracking-tight">
           MEET OUR SPECIALISTS
         </h2>
 
-        <div
-          className="grid grid-cols-2 lg:grid-cols-4"
-          style={{ gap: responsive(53) }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
           {SPECIALISTS.map((spec, i) => (
-            <div key={i} className="group">
-              {/* Portrait — Figma: 406×453, border-5 white, rounded-15, white glow */}
+            <div key={i} className="group flex flex-col">
+              {/* Portrait */}
               <div
-                className="relative border-white overflow-hidden"
-                style={{
-                  aspectRatio: '406 / 453',
-                  borderWidth: responsive(5),
-                  borderStyle: 'solid',
-                  borderRadius: responsive(15),
-                  boxShadow: '0px 4px 20px 10px rgba(255, 255, 255, 0.5)',
-                }}
+                className="relative border-4 sm:border-[5px] border-white rounded-[20px] overflow-hidden shadow-[0px_4px_25px_10px_rgba(255,255,255,0.4)]"
+                style={{ aspectRatio: '406 / 453' }}
               >
                 <img
                   src={spec.img}
@@ -631,25 +385,12 @@ export default function Workshop() {
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              {/* Name — Figma: Sora SemiBold 36px, 22px below card bottom */}
-              <p
-                className="font-semibold leading-none"
-                style={{
-                  fontSize: responsive(36),
-                  marginTop: responsive(22),
-                }}
-              >
+              {/* Name */}
+              <p className="font-semibold text-2xl sm:text-3xl text-white mt-5 leading-tight">
                 {spec.name}
               </p>
-              {/* Role — Figma: Sora Regular 20px, #9e9e9e, ~14px below name */}
-              <p
-                className="font-normal leading-none"
-                style={{
-                  fontSize: responsive(20),
-                  color: '#9e9e9e',
-                  marginTop: responsive(14),
-                }}
-              >
+              {/* Role */}
+              <p className="font-normal text-base sm:text-lg text-gray-400 mt-2 leading-tight">
                 {spec.role}
               </p>
             </div>
