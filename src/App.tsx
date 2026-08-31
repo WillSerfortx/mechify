@@ -24,6 +24,9 @@ import IDriver from './pages/IDriver';
 import FuelTerms from './pages/FuelTerms';
 import FuelRequest from './pages/FuelRequest';
 import DriverList from './pages/DriverList';
+import DriverSearchLoading from './pages/DriverSearchLoading';
+import DriverWithCarList from './pages/DriverWithCarList';
+import DriverOnlyList from './pages/DriverOnlyList';
 import DriverChat from './pages/DriverChat';
 import SparePartsStore from './pages/SparePartsStore';
 import DriverDashboard from './pages/DriverDashboard';
@@ -69,7 +72,10 @@ export default function App() {
         <Route path="/workshop-navigation" element={<Layout showNav={false} showFooter={false}><WorkshopNavigation /></Layout>} />
         <Route path="/workshop-time" element={<Layout showNav={false} showFooter={false}><TimeSelect /></Layout>} />
         <Route path="/idriver" element={<Layout><IDriver /></Layout>} />
-        <Route path="/choose-driver" element={<Layout showFooter={false}><DriverList /></Layout>} />
+        <Route path="/driver-search" element={<Layout showNav={false} showFooter={false}><DriverSearchLoading /></Layout>} />
+        <Route path="/choose-driver" element={<Layout showFooter={false}><DriverWithCarList /></Layout>} />
+        <Route path="/choose-driver-with-car" element={<Layout showFooter={false}><DriverWithCarList /></Layout>} />
+        <Route path="/choose-driver-only" element={<Layout showFooter={false}><DriverOnlyList /></Layout>} />
         <Route path="/driver-chat" element={<Layout showNav={false} showFooter={false}><DriverChat /></Layout>} />
         <Route path="/fuel-terms" element={<Layout showFooter={false}><FuelTerms /></Layout>} />
         <Route path="/fuel-request" element={<Layout showNav={false} showFooter={false}><FuelRequest /></Layout>} />
