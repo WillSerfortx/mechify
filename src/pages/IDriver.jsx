@@ -102,8 +102,8 @@ export default function IDriver() {
         {/* ─── VEHICLE OPTIONS HORIZONTAL CAROUSEL (727px HEIGHT) ─── */}
         <div 
           ref={carouselRef}
-          className="absolute h-[727px] left-0 top-[1449px] w-[1920px] overflow-x-auto flex gap-10 no-scrollbar px-[61px] scroll-smooth"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          className="absolute h-[727px] left-0 top-[1449px] w-[1920px] overflow-x-auto overflow-y-hidden flex gap-10 no-scrollbar px-[61px] scroll-smooth"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-y' }}
           data-node-id="1:965"
         >
           {/* Card 1: Standard RIDE */}

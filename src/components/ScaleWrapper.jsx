@@ -20,8 +20,11 @@ export default function ScaleWrapper({ children, height = 4800 }) {
 
   return (
     <div 
-      className="bg-black w-full overflow-x-hidden" 
-      style={{ height: `${height * scale}px` }}
+      className="bg-black w-full overflow-hidden" 
+      style={{ 
+        height: `${height * scale}px`,
+        maxHeight: `${height * scale}px`
+      }}
     >
       <div 
         className="relative bg-black"

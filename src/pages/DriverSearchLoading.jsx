@@ -53,7 +53,7 @@ export default function DriverSearchLoading() {
   }, [type, isCarAndDriver, navigate]);
 
   return (
-    <div className="min-h-screen bg-[#07080c] text-white font-outfit relative flex flex-col items-center justify-center px-4 overflow-hidden selection:bg-red-600">
+    <div className="min-h-screen bg-[#07080c] text-white font-outfit relative flex flex-col items-center justify-center px-4 overflow-x-hidden selection:bg-red-600">
       
       {/* Background Ambient Glow & Grid */}
       <div className="fixed inset-0 pointer-events-none z-0">

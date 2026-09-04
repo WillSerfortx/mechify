@@ -26,7 +26,7 @@ export default function FigmaScreenWrapper({ children, bgImage = "/images/auth/b
   }, []);
 
   return (
-    <div className="relative w-full min-h-screen bg-black overflow-hidden flex items-center justify-center select-none">
+    <div className="relative w-full min-h-screen bg-black overflow-x-hidden flex items-center justify-center select-none">
       {/* ─── FULL BLEED BACKGROUND (100vw x 100vh, 0 gaps) ─── */}
       <img
         src={bgImage}

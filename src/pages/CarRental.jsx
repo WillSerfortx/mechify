@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 
 // ─── Constants & Mock Data Generation ───
 const CATEGORIES = [
@@ -51,24 +51,23 @@ const generateMockCars = () => {
 // ─── Reusable Marquee Row Component ───
 const CarMarqueeRow = ({ categoryData, isReversed }) => {
   const navigate = useNavigate();
-  const rowRef = useRef(null);
-  const [panOffset, setPanOffset] = useState(0);
+  const innerRef = useRef(null);
 
   const { name, cars } = categoryData;
   const animationClass = isReversed ? 'animate-marqueeReverse' : 'animate-marquee';
 
   const handleMouseMove = (e) => {
-    if (!rowRef.current) return;
-    const rect = rowRef.current.getBoundingClientRect();
+    if (!innerRef.current) return;
+    const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
-    // Calculate mouse position relative to center (-1 to 1)
     const percentage = ((x / rect.width) - 0.5) * 2;
-    // Move up to 300px in either direction
-    setPanOffset(percentage * -300);
+    innerRef.current.style.transform = `translateX(${percentage * -120}px)`;
   };
 
   const handleMouseLeave = () => {
-    setPanOffset(0);
+    if (innerRef.current) {
+      innerRef.current.style.transform = 'translateX(0px)';
+    }
   };
 
   return (
@@ -82,13 +81,12 @@ const CarMarqueeRow = ({ categoryData, isReversed }) => {
       {/* Endless Marquee Container */}
       <div 
         className="relative flex overflow-hidden group cursor-ew-resize w-full"
-        ref={rowRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
         <div 
-          className="flex transition-transform duration-75 ease-out w-full"
-          style={{ transform: `translateX(${panOffset}px)` }}
+          ref={innerRef}
+          className="flex transition-transform duration-300 ease-out w-full"
         >
           {/* We duplicate the inner content twice to achieve the seamless endless loop */}
           <div className={`flex shrink-0 gap-8 ${animationClass} group-hover:[animation-play-state:paused]`}>

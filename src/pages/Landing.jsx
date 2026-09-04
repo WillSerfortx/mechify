@@ -340,13 +340,13 @@ export default function Landing() {
           {/* ─── CUSTOM CONCLUSION PANEL (Scene 5) ─── */}
           {scene.isCustom && (
             <div
-              className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-auto transition-all duration-1000 overflow-y-auto overflow-x-hidden"
+              className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-auto transition-all duration-1000 overflow-hidden"
               style={{ opacity: cardVisible ? 1 : 0, transform: cardVisible ? 'translateY(0)' : 'translateY(40px)' }}
             >
-              <div className="w-full max-w-5xl px-6 md:px-12 mx-auto flex flex-col gap-12 md:gap-20 py-24">
+              <div className="w-full max-w-5xl px-6 md:px-12 mx-auto flex flex-col gap-6 md:gap-10 py-6 md:py-10">
                 
                 {/* ── STATS ── */}
-                <div className="stats-container grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div className="stats-container grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 text-center">
                   {[
                     { label: 'Happy Customers', valKey: 'customers', format: (v) => `${Math.round(v).toLocaleString()}+`, color: '#dc2626' },
                     { label: 'Services', valKey: 'services', format: (v) => Math.round(v), color: '#f97316' },
@@ -354,7 +354,7 @@ export default function Landing() {
                     { label: 'Avg. ETA', valKey: 'eta', format: (v) => `${Math.round(v)} min`, color: '#3b82f6' },
                   ].map(({ label, valKey, format, color }) => (
                     <div key={label} className="stat-item group">
-                      <div className="text-4xl md:text-6xl font-black mb-3 transition-colors" style={{ color }}>
+                      <div className="text-3xl md:text-5xl font-black mb-1 md:mb-2 transition-colors" style={{ color }}>
                         {format(statsRef.current[valKey])}
                       </div>
                       <p className="text-gray-400 text-[10px] md:text-xs uppercase tracking-[0.3em] font-black">{label}</p>
@@ -364,12 +364,12 @@ export default function Landing() {
 
                 {/* ── HOW IT WORKS ── */}
                 <div className="how-it-works-container">
-                  <div className="text-center mb-16">
-                    <p className="text-red-500 font-black uppercase tracking-[0.4em] text-xs mb-3">Simple Process</p>
-                    <h2 className="text-4xl md:text-6xl font-black text-white">How It Works</h2>
+                  <div className="text-center mb-6 md:mb-8">
+                    <p className="text-red-500 font-black uppercase tracking-[0.4em] text-xs mb-1">Simple Process</p>
+                    <h2 className="text-2xl md:text-4xl font-black text-white">How It Works</h2>
                   </div>
-                  <div className="grid md:grid-cols-4 gap-8 relative">
-                    <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-px"
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 relative">
+                    <div className="hidden md:block absolute top-8 left-[12%] right-[12%] h-px"
                       style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.4), transparent)' }} />
                     {[
                       { num: '01', title: 'Create Account', desc: 'Sign up in seconds.' },
@@ -378,11 +378,11 @@ export default function Landing() {
                       { num: '04', title: 'Track Live', desc: 'Follow on a live map.' },
                     ].map((step) => (
                       <div key={step.num} className="step-item group text-center">
-                        <div className="w-16 h-16 md:w-24 md:h-24 mx-auto mb-6 bg-gradient-to-br from-red-900/50 to-black border border-red-800/40 rounded-3xl flex items-center justify-center text-2xl md:text-4xl font-black text-red-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-500">
+                        <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-2 md:mb-3 bg-gradient-to-br from-red-900/50 to-black border border-red-800/40 rounded-2xl flex items-center justify-center text-lg md:text-2xl font-black text-red-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-500">
                           {step.num}
                         </div>
-                        <h3 className="text-lg md:text-xl font-black mb-2 text-white group-hover:text-red-400 transition-colors">{step.title}</h3>
-                        <p className="text-gray-400 text-xs md:text-sm">{step.desc}</p>
+                        <h3 className="text-sm md:text-base font-black mb-1 text-white group-hover:text-red-400 transition-colors">{step.title}</h3>
+                        <p className="text-gray-400 text-[11px] md:text-xs">{step.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -390,18 +390,18 @@ export default function Landing() {
 
                 {/* ── CTA ── */}
                 <div className="cta-container text-center relative">
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-red-900/10 rounded-full blur-[100px] pointer-events-none" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-red-900/10 rounded-full blur-[80px] pointer-events-none" />
                   <div className="relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-black mb-4 text-white">Ready to drive?</h2>
-                    <p className="text-gray-400 text-sm md:text-base mb-8">Join thousands of drivers who trust Mechify.</p>
+                    <h2 className="text-2xl md:text-3xl font-black mb-2 text-white">Ready to drive?</h2>
+                    <p className="text-gray-400 text-xs md:text-sm mb-4">Join thousands of drivers who trust Mechify.</p>
                     <Link
                       to="/auth"
-                      className="group relative inline-block bg-red-600 hover:bg-red-500 text-white font-black text-sm md:text-base px-8 md:px-10 py-4 md:py-5 rounded-2xl transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(220,38,38,0.5)] hover:shadow-[0_0_60px_rgba(220,38,38,0.7)] overflow-hidden"
+                      className="group relative inline-block bg-red-600 hover:bg-red-500 text-white font-black text-xs md:text-sm px-6 md:px-8 py-3 md:py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(220,38,38,0.5)] hover:shadow-[0_0_60px_rgba(220,38,38,0.7)] overflow-hidden"
                     >
                       <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                       Sign Up or Sign In Today →
                     </Link>
-                    <p className="text-gray-600 text-[10px] md:text-xs mt-4">Free to join · No credit card required</p>
+                    <p className="text-gray-600 text-[9px] md:text-[10px] mt-2">Free to join · No credit card required</p>
                   </div>
                 </div>
 

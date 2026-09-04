@@ -40,7 +40,7 @@ export default function WorkshopSearch() {
   }, [navigate]);
 
   return (
-    <div className="bg-black min-h-screen text-white flex flex-col items-center justify-center p-6 relative overflow-hidden font-outfit select-none">
+    <div className="bg-black min-h-screen text-white flex flex-col items-center justify-center p-6 relative overflow-x-hidden font-outfit select-none">
       
       {/* Background Cyber Grid */}
       <div 

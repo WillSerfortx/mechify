@@ -1502,8 +1502,8 @@ export default function SparePartsStore() {
               {/* Horizontally Scrollable Row Container */}
               <div
                 ref={el => (rowRefs.current[category.id] = el)}
-                className="flex overflow-x-auto gap-6 pb-6 pt-2 no-scrollbar snap-x snap-mandatory scroll-smooth px-1"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                className="flex overflow-x-auto overflow-y-hidden gap-6 pb-6 pt-2 no-scrollbar snap-x snap-mandatory scroll-smooth px-1"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-y' }}
               >
                 {category.products.map(product => {
                   const wishlisted = isWishlisted(product.id);

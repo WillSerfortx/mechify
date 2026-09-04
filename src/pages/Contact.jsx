@@ -16,7 +16,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="bg-[#050505] min-h-screen flex items-center justify-center relative overflow-hidden font-outfit text-white pt-24 pb-12">
+    <div className="bg-[#050505] min-h-screen flex items-center justify-center relative overflow-x-hidden font-outfit text-white pt-24 pb-12">
       
       {/* High Quality Background */}
       <div className="absolute inset-0 z-0">
