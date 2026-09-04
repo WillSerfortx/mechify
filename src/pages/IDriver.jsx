@@ -1,240 +1,355 @@
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import ScaleWrapper from '../components/ScaleWrapper';
 
-const occasions = [
-  { label: 'Airport journeys', img: 'https://images.unsplash.com/photo-1542296332-2e4473faf563?w=400&h=300&fit=crop' },
-  { label: 'Event service', img: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=300&fit=crop' },
-  { label: 'Hourly bookings', img: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&h=300&fit=crop' },
-];
+/* ─── High Quality Curated Automotive Images Matching Figma ─── */
+const IMAGES = {
+  heroBg: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1920&h=1390&fit=crop',
+  standardRide: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=1600&h=800&fit=crop',
+  greenRide: 'https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=1600&h=800&fit=crop',
+  businessRide: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=1600&h=800&fit=crop',
+  airportOccasion: 'https://images.unsplash.com/photo-1542296332-2e4473faf563?w=600&h=400&fit=crop',
+  eventOccasion: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&h=400&fit=crop',
+  hourlyOccasion: 'https://images.unsplash.com/photo-1563720223185-11003d516935?w=600&h=400&fit=crop'
+};
 
 export default function IDriver() {
   const navigate = useNavigate();
   const [showOptionModal, setShowOptionModal] = useState(false);
+  const carouselRef = useRef(null);
 
   const handleSelectOption = (optionType) => {
     setShowOptionModal(false);
     navigate(`/driver-search?type=${optionType}`);
   };
 
+  const scrollCarousel = (direction) => {
+    if (carouselRef.current) {
+      const scrollAmount = direction === 'left' ? -1600 : 1600;
+      carouselRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="bg-black min-h-screen text-white font-outfit pb-24 relative selection:bg-red-600">
-      
-      {/* Hero Section */}
-      <section className="relative h-[80vh] flex flex-col justify-end pb-24 overflow-hidden">
-        <div className="absolute inset-0 z-0">
+    <ScaleWrapper height={3600}>
+      <div className="bg-black relative size-full font-sora select-none text-white overflow-hidden" data-node-id="1:960">
+        
+        {/* ─── HERO BACKGROUND IMAGE ─── */}
+        <div className="absolute h-[1390px] left-0 top-0 w-[1920px] pointer-events-none" data-node-id="1:961">
           <img 
-            src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1920&h=1080&fit=crop" 
-            alt="Driving" 
-            className="w-full h-full object-cover"
+            alt="Private Driver Mechify" 
+            className="absolute inset-0 object-cover size-full opacity-70" 
+            src={IMAGES.heroBg} 
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-        </div>
-        
-        {/* Back Button */}
-        <div className="absolute top-24 left-6 md:left-12 lg:left-20 z-20">
-          <button 
-            onClick={() => navigate(-1)}
-            className="w-12 h-12 bg-black/50 backdrop-blur-md rounded-xl flex items-center justify-center text-2xl hover:bg-black/70 transition-colors border border-white/20"
-          >
-            &lt;
-          </button>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
         </div>
 
-        <div className="relative z-10 px-6 md:px-12 lg:px-20 max-w-5xl">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 font-extrabold text-xs uppercase tracking-wider mb-4">
-            <span>🛡️</span> 100% VETTED & LICENSED CHAUFFEURS
+        {/* ─── BACK BUTTON ─── */}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute border-[10px] border-solid border-white left-0 top-[323px] size-[90px] bg-black/60 backdrop-blur-md flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all z-20"
+          data-node-id="1:989"
+          title="Back"
+        >
+          <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3.5} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        {/* ─── HERO HEADING ─── */}
+        <h1 
+          className="-translate-x-1/2 absolute font-semibold leading-normal left-[50%] text-[64px] text-center text-white top-[633px] whitespace-nowrap tracking-wide drop-shadow-2xl"
+          data-node-id="1:962"
+        >
+          BOOK A PRIVATE DRIVER WITH MECHIFY
+        </h1>
+
+        {/* ─── HERO DESCRIPTION ─── */}
+        <div 
+          className="absolute font-semibold leading-relaxed left-[115px] text-[16px] text-white top-[740px] max-w-[1690px] space-y-1 drop-shadow-lg"
+          data-node-id="1:963"
+        >
+          <p className="m-0">With MECHIFY you can book a private car service in the UK as well as many other countries worldwide.</p>
+          <p className="m-0">In just a few steps, you can book a private hire car and professional driver both online and on the SIXT app.</p>
+          <p className="m-0">For rides in the city, for special events, or to get to and from the airport, you can pre-book your journey a minimum</p>
+          <p className="m-0">of an hour in advance. In many cities around the world we also offer the option for immediate pickup.</p>
+          <p className="m-0">With a range of booking classes to choose between, from economy through to first class,</p>
+          <p className="m-0">there's something for all budgets and needs.</p>
+        </div>
+
+        {/* ─── CHOOSE DRIVERS BUTTON MOVED ON TOP (AS REQUESTED) ─── */}
+        <button
+          onClick={() => setShowOptionModal(true)}
+          className="absolute bg-[#E50914] hover:bg-red-700 active:scale-95 border-4 border-solid border-white h-[108px] left-[115px] top-[950px] w-[631px] rounded-[24px] cursor-pointer shadow-[0_0_40px_rgba(229,9,20,0.6)] hover:shadow-[0_0_60px_rgba(229,9,20,0.9)] transition-all duration-300 z-20 flex items-center justify-between px-10 group"
+          title="Choose Drivers"
+        >
+          <span className="font-extrabold text-[40px] text-white tracking-wide">
+            Choose Drivers
+          </span>
+          <div className="size-[64px] bg-white rounded-full flex items-center justify-center text-black font-black text-2xl group-hover:translate-x-2 transition-transform shadow-md">
+            ➔
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-black mb-6 uppercase leading-tight font-sora">
-            BOOK A PRIVATE DRIVER WITH <span className="text-[#E50914]">MECHIFY</span>
-          </h1>
-          <p className="text-gray-300 text-xs md:text-sm max-w-2xl leading-relaxed">
-            With MECHIFY you can book a private chauffeur service across Bangladesh. 
-            Choose between hiring a complete vehicle with an executive driver, or book a verified professional driver to pilot your own car. 
-            For city commutes, corporate events, airport transfers, or highway tours, enjoy 24/7 on-demand dispatch with premium safety standards.
-          </p>
-        </div>
-      </section>
+        </button>
 
-      {/* Vehicle Options */}
-      <section className="px-6 md:px-12 lg:px-20 -mt-10 relative z-20 mb-20">
-        <h2 className="text-4xl font-black mb-8 font-sora">Vehicle Options</h2>
-        <div className="flex overflow-x-auto gap-6 no-scrollbar pb-4">
-          {/* Standard Ride */}
+        {/* ─── VEHICLE OPTIONS TITLE ─── */}
+        <h2 
+          className="absolute font-extrabold leading-normal left-[81px] text-[96px] text-white top-[1269px] whitespace-nowrap tracking-tight font-sora"
+          data-node-id="1:964"
+        >
+          Vehicle Options
+        </h2>
+
+        {/* ─── VEHICLE OPTIONS HORIZONTAL CAROUSEL (727px HEIGHT) ─── */}
+        <div 
+          ref={carouselRef}
+          className="absolute h-[727px] left-0 top-[1449px] w-[1920px] overflow-x-auto flex gap-10 no-scrollbar px-[61px] scroll-smooth"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          data-node-id="1:965"
+        >
+          {/* Card 1: Standard RIDE */}
           <div 
             onClick={() => setShowOptionModal(true)}
-            className="w-[80vw] md:w-[60vw] lg:w-[40vw] flex-shrink-0 aspect-[16/10] relative rounded-3xl overflow-hidden group cursor-pointer border border-white/10 hover:border-red-500/60 transition-all duration-500 shadow-2xl"
+            className="flex-shrink-0 relative bg-white h-[727px] w-[1554px] rounded-[35px] overflow-hidden cursor-pointer group shadow-2xl border-4 border-white/20 hover:border-red-500/80 transition-all duration-500"
+            data-node-id="1:967"
           >
-            <img src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=800&h=500&fit=crop" alt="Standard Ride" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6">
-              <span className="text-xs font-bold text-red-400 bg-red-500/20 px-3 py-1 rounded-full uppercase mb-2 inline-block">Popular Choice</span>
-              <h3 className="text-2xl md:text-3xl font-black mb-2 font-sora">Standard RIDE</h3>
-              <p className="text-sm text-gray-300 max-w-sm">Get to your destination reliably and affordably with our standard Ride BOOKING class.</p>
+            <img 
+              alt="Standard Ride" 
+              className="absolute inset-0 object-cover size-full group-hover:scale-105 transition-transform duration-700" 
+              src={IMAGES.standardRide} 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/20" />
+            
+            <p className="absolute font-extrabold leading-normal left-[115px] text-[64px] text-white top-[115px] whitespace-nowrap drop-shadow-xl" data-node-id="1:969">
+              Standard RIDE
+            </p>
+            <div className="absolute font-bold leading-normal left-[115px] text-[40px] text-white top-[220px] max-w-[1200px] drop-shadow-md" data-node-id="1:970">
+              <p className="m-0">Get to your destination reliably and affordably</p>
+              <p className="m-0">with our standard Ride BOOKING class</p>
             </div>
           </div>
-          {/* Green Ride */}
+
+          {/* Card 2: Green Ride */}
           <div 
             onClick={() => setShowOptionModal(true)}
-            className="w-[80vw] md:w-[60vw] lg:w-[40vw] flex-shrink-0 aspect-[16/10] relative rounded-3xl overflow-hidden group cursor-pointer border border-white/10 hover:border-green-500/60 transition-all duration-500 shadow-2xl"
+            className="flex-shrink-0 relative bg-white h-[727px] w-[1554px] rounded-[35px] overflow-hidden cursor-pointer group shadow-2xl border-4 border-white/20 hover:border-green-500/80 transition-all duration-500"
+            data-node-id="1:971"
           >
-            <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800&h=500&fit=crop" alt="Green Ride" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6">
-              <span className="text-xs font-bold text-green-400 bg-green-500/20 px-3 py-1 rounded-full uppercase mb-2 inline-block">Eco Friendly</span>
-              <h3 className="text-2xl md:text-3xl font-black mb-2 font-sora">Green RIDE</h3>
-              <p className="text-sm text-gray-300 max-w-sm">Do your part for the environment by featuring eco-friendly electric or hybrid vehicles.</p>
+            <img 
+              alt="Green Ride" 
+              className="absolute inset-0 object-cover size-full group-hover:scale-105 transition-transform duration-700" 
+              src={IMAGES.greenRide} 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/20" />
+            
+            <p className="absolute font-extrabold leading-normal left-[115px] text-[64px] text-white top-[115px] whitespace-nowrap drop-shadow-xl" data-node-id="1:975">
+              Green Ride
+            </p>
+            <div className="absolute font-semibold leading-normal left-[115px] text-[40px] text-white top-[220px] max-w-[1300px] drop-shadow-md" data-node-id="1:976">
+              <p className="m-0">DO your part for the environment with the green booking class,</p>
+              <p className="m-0">featuring environmentally friendly transportation options like</p>
+              <p className="m-0">electric or hybrid vehicles</p>
+            </div>
+          </div>
+
+          {/* Card 3: Business Ride */}
+          <div 
+            onClick={() => setShowOptionModal(true)}
+            className="flex-shrink-0 relative bg-white h-[727px] w-[1554px] rounded-[35px] overflow-hidden cursor-pointer group shadow-2xl border-4 border-white/20 hover:border-red-500/80 transition-all duration-500"
+            data-node-id="1:977"
+          >
+            <img 
+              alt="Business Ride" 
+              className="absolute inset-0 object-cover size-full group-hover:scale-105 transition-transform duration-700" 
+              src={IMAGES.businessRide} 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/20" />
+            
+            <p className="absolute font-extrabold leading-normal left-[115px] text-[64px] text-white top-[115px] whitespace-nowrap drop-shadow-xl" data-node-id="1:983">
+              Business Ride
+            </p>
+            <div className="absolute font-semibold leading-normal left-[115px] text-[40px] text-white top-[220px] max-w-[1300px] drop-shadow-md" data-node-id="1:984">
+              <p className="m-0">For business travelers, the Business booking class offers a</p>
+              <p className="m-0">Higher level vehicle by trained chauffeur</p>
             </div>
           </div>
         </div>
-        
-        <div className="mt-6 flex justify-start">
-          <button 
-            onClick={() => setShowOptionModal(true)}
-            className="flex items-center gap-4 border-2 border-white rounded-xl px-6 py-3 font-bold hover:bg-white hover:text-black transition-colors"
-          >
-            Vehicle Option <span className="text-xl rotate-180">▼</span>
-          </button>
-        </div>
-      </section>
 
-      {/* Driver Hire Occasions */}
-      <section className="px-6 md:px-12 lg:px-20 mb-32">
-        <h2 className="text-3xl font-black mb-8 font-sora">Driver hire service for any occasion</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          {occasions.map((occ, i) => (
-            <div key={i} className="bg-white/10 rounded-2xl overflow-hidden relative aspect-video flex flex-col justify-end p-4 border border-white/10 group">
-              <img src={occ.img} alt={occ.label} className="absolute inset-0 w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-              <span className="relative z-10 text-white font-bold text-right w-full bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-lg text-sm inline-block max-w-max ml-auto border border-white/20">
-                {occ.label}
-              </span>
-            </div>
-          ))}
-        </div>
-        
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <button 
-            onClick={() => setShowOptionModal(true)}
-            className="flex items-center gap-4 border-2 border-white rounded-xl px-6 py-3 font-bold hover:bg-white hover:text-black transition-colors"
-          >
-            Choose Occasion <span className="text-xl rotate-180">▼</span>
-          </button>
-          
-          <button 
-            onClick={() => setShowOptionModal(true)}
-            className="bg-white text-black font-extrabold px-12 py-3 rounded-full hover:bg-gray-200 transition-colors shadow-lg active:scale-95"
-          >
-            Search Drivers
-          </button>
-        </div>
-      </section>
-
-      {/* Choose Driver CTA */}
-      <section className="px-6 md:px-12 lg:px-20 flex justify-center">
+        {/* ─── VEHICLE OPTION BUTTON (FIGMA NODE 1:2273) ─── */}
         <button 
           onClick={() => setShowOptionModal(true)}
-          className="group relative bg-[#E50914] text-white font-black text-3xl md:text-4xl px-16 py-6 rounded-full overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_0_50px_rgba(229,9,20,0.8)] active:scale-95 animate-sosPulse"
+          className="absolute bg-black hover:bg-white/10 active:scale-98 border-[5px] border-solid border-white h-[108px] left-[61px] rounded-[20px] top-[2259px] w-[631px] cursor-pointer flex items-center justify-between px-10 transition-all"
+          data-node-id="1:2273"
         >
-          <span className="relative z-10 flex items-center gap-4">
-            Choose Driver
-            <svg className="w-8 h-8 transition-transform duration-300 group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
+          <span className="font-extrabold text-[40px] text-white text-center whitespace-nowrap">
+            Vehicle Option
           </span>
-          <div className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <span className="text-[40px] text-white">▲</span>
         </button>
-      </section>
 
-      {/* ─── POP-UP SELECTION MODAL: 2 OPTIONS ─── */}
-      {showOptionModal && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md animate-fadeIn"
-          onClick={() => setShowOptionModal(false)}
+        {/* ─── DRIVER HIRE OCCASIONS SECTION ─── */}
+        <h2 
+          className="absolute font-extrabold leading-normal left-[81px] text-[64px] text-white top-[2582px] whitespace-nowrap font-sora tracking-tight"
+          data-node-id="1:985"
         >
+          Driver hire service for any occasion
+        </h2>
+
+        {/* Card 1: Airport journeys */}
+        <div 
+          onClick={() => setShowOptionModal(true)}
+          className="absolute bg-white border-[10px] border-solid border-white h-[350px] left-[61px] rounded-[35px] top-[2718px] w-[567px] overflow-hidden cursor-pointer group shadow-2xl hover:scale-105 transition-all duration-300"
+          data-node-id="1:1947"
+        >
+          <div className="absolute h-[282px] inset-x-4 top-2 overflow-hidden rounded-2xl">
+            <img alt="Airport journeys" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={IMAGES.airportOccasion} />
+          </div>
+          <p className="absolute font-semibold text-[24px] text-black top-[290px] right-8">
+            Airport journeys
+          </p>
+        </div>
+
+        {/* Card 2: Event service */}
+        <div 
+          onClick={() => setShowOptionModal(true)}
+          className="absolute bg-white border-[10px] border-solid border-white h-[350px] left-[675px] rounded-[35px] top-[2718px] w-[567px] overflow-hidden cursor-pointer group shadow-2xl hover:scale-105 transition-all duration-300"
+          data-node-id="1:1953"
+        >
+          <div className="absolute h-[282px] inset-x-4 top-2 overflow-hidden rounded-2xl">
+            <img alt="Event service" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={IMAGES.eventOccasion} />
+          </div>
+          <p className="absolute font-semibold text-[24px] text-black top-[290px] right-8">
+            Event service
+          </p>
+        </div>
+
+        {/* Card 3: Hourly bookings */}
+        <div 
+          onClick={() => setShowOptionModal(true)}
+          className="absolute bg-white border-[10px] border-solid border-white h-[350px] left-[1289px] rounded-[35px] top-[2718px] w-[567px] overflow-hidden cursor-pointer group shadow-2xl hover:scale-105 transition-all duration-300"
+          data-node-id="1:1959"
+        >
+          <div className="absolute h-[282px] inset-x-4 top-2 overflow-hidden rounded-2xl">
+            <img alt="Hourly bookings" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={IMAGES.hourlyOccasion} />
+          </div>
+          <p className="absolute font-semibold text-[24px] text-black top-[290px] right-8">
+            Hourly bookings
+          </p>
+        </div>
+
+        {/* ─── CHOOSE OCCASION BUTTON (FIGMA NODE 1:2290) ─── */}
+        <button 
+          onClick={() => setShowOptionModal(true)}
+          className="absolute bg-black hover:bg-white/10 active:scale-98 border-[5px] border-solid border-white h-[108px] left-[61px] rounded-[20px] top-[3151px] w-[631px] cursor-pointer flex items-center justify-between px-10 transition-all"
+          data-node-id="1:2290"
+        >
+          <span className="font-extrabold text-[40px] text-white text-center whitespace-nowrap">
+            Choose Occasion
+          </span>
+          <span className="text-[40px] text-white">▲</span>
+        </button>
+
+        {/* ─── SEARCH DRIVERS BUTTON (FIGMA NODE 1:992) ─── */}
+        <button 
+          onClick={() => setShowOptionModal(true)}
+          className="absolute bg-white hover:bg-gray-200 active:scale-95 h-[96px] left-[1098px] rounded-[40px] top-[3400px] w-[720px] cursor-pointer flex items-center justify-center shadow-2xl transition-all duration-300 group"
+          data-node-id="1:992"
+        >
+          <p className="font-extrabold text-[40px] text-black text-center whitespace-nowrap group-hover:scale-105 transition-transform" data-node-id="1:993">
+            Search Drivers
+          </p>
+        </button>
+
+        {/* ─── POP-UP SELECTION MODAL: 2 OPTIONS ─── */}
+        {showOptionModal && (
           <div 
-            className="relative bg-gradient-to-b from-[#161826] via-[#11121C] to-[#0A0B10] border border-white/20 rounded-3xl max-w-2xl w-full p-6 sm:p-10 shadow-[0_25px_60px_rgba(0,0,0,0.9)] animate-scaleIn text-white"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-50 flex items-center justify-center p-8 bg-black/85 backdrop-blur-md animate-fadeIn"
+            onClick={() => setShowOptionModal(false)}
           >
-            {/* Close Button */}
-            <button
-              onClick={() => setShowOptionModal(false)}
-              className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-sm font-bold transition-colors"
+            <div 
+              className="relative bg-gradient-to-b from-[#181a29] via-[#12131F] to-[#0A0B10] border-2 border-white/30 rounded-[35px] max-w-3xl w-full p-10 sm:p-14 shadow-[0_25px_80px_rgba(0,0,0,0.95)] animate-scaleIn text-white"
+              onClick={(e) => e.stopPropagation()}
             >
-              ✕
-            </button>
-
-            {/* Modal Title */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 font-bold text-xs uppercase tracking-wider mb-2">
-                <span>⚡</span> CHOOSE YOUR SERVICE TYPE
-              </div>
-              <h3 className="text-2xl sm:text-4xl font-black font-sora uppercase">
-                What do you <span className="text-[#E50914]">need today?</span>
-              </h3>
-              <p className="text-gray-400 text-xs sm:text-sm mt-2 max-w-md mx-auto">
-                Select your preferred driver booking mode to find the perfect match.
-              </p>
-            </div>
-
-            {/* 2 Interactive Options Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              
-              {/* OPTION 1: A Car with a Driver */}
-              <div
-                onClick={() => handleSelectOption('car-and-driver')}
-                className="bg-gradient-to-b from-white/10 to-white/5 hover:from-red-950/40 hover:to-black border border-white/15 hover:border-red-500/80 rounded-2xl p-6 cursor-pointer group transition-all duration-300 hover:shadow-[0_0_30px_rgba(229,9,20,0.35)] hover:-translate-y-1 flex flex-col justify-between"
+              {/* Close Button */}
+              <button
+                onClick={() => setShowOptionModal(false)}
+                className="absolute top-6 right-6 size-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xl font-bold transition-colors"
               >
-                <div>
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-600/30 to-black border border-red-500/40 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">
-                    🚗
-                  </div>
-                  <h4 className="text-xl font-black text-white font-sora group-hover:text-red-400 transition-colors mb-2">
-                    A Car with a Driver
-                  </h4>
-                  <p className="text-gray-400 text-xs leading-relaxed mb-4">
-                    Book an all-inclusive package with a premium vehicle (Sedan, SUV, Luxury, Van) and an executive chauffeur. Fuel & insurance included.
-                  </p>
-                </div>
+                ✕
+              </button>
 
-                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-red-400 group-hover:text-red-300">
-                  <span>Explore Fleet & Drivers</span>
-                  <span className="text-base transition-transform group-hover:translate-x-1">→</span>
+              {/* Modal Title */}
+              <div className="text-center mb-10">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 font-extrabold text-xs uppercase tracking-wider mb-3">
+                  <span>⚡</span> CHOOSE YOUR SERVICE TYPE
                 </div>
+                <h3 className="text-3xl sm:text-4xl font-black font-sora uppercase">
+                  What do you <span className="text-[#E50914]">need today?</span>
+                </h3>
+                <p className="text-gray-400 text-sm mt-2 max-w-md mx-auto">
+                  Select your preferred driver booking mode to find the perfect match.
+                </p>
               </div>
 
-              {/* OPTION 2: Only a Driver without a Car */}
-              <div
-                onClick={() => handleSelectOption('driver-only')}
-                className="bg-gradient-to-b from-white/10 to-white/5 hover:from-red-950/40 hover:to-black border border-white/15 hover:border-red-500/80 rounded-2xl p-6 cursor-pointer group transition-all duration-300 hover:shadow-[0_0_30px_rgba(229,9,20,0.35)] hover:-translate-y-1 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-600/30 to-black border border-red-500/40 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform">
-                    👤
+              {/* 2 Interactive Options Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                
+                {/* OPTION 1: A Car with a Driver */}
+                <div
+                  onClick={() => handleSelectOption('car-and-driver')}
+                  className="bg-gradient-to-b from-white/10 to-white/5 hover:from-red-950/50 hover:to-black border-2 border-white/15 hover:border-red-500/80 rounded-[28px] p-7 cursor-pointer group transition-all duration-300 hover:shadow-[0_0_35px_rgba(229,9,20,0.4)] hover:-translate-y-1 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="size-16 rounded-2xl bg-gradient-to-br from-red-600/40 to-black border border-red-500/50 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform shadow-md">
+                      🚗
+                    </div>
+                    <h4 className="text-2xl font-black text-white font-sora group-hover:text-red-400 transition-colors mb-2">
+                      A Car with a Driver
+                    </h4>
+                    <p className="text-gray-400 text-xs leading-relaxed mb-6">
+                      Book an all-inclusive package with a vehicle (Sedan, SUV, Luxury, Van) and an executive chauffeur. Fuel & insurance included.
+                    </p>
                   </div>
-                  <h4 className="text-xl font-black text-white font-sora group-hover:text-red-400 transition-colors mb-2">
-                    Only a Driver
-                  </h4>
-                  <p className="text-gray-400 text-xs leading-relaxed mb-4">
-                    Already have your own vehicle? Hire a vetted, licensed personal chauffeur to drive your car safely for hourly, daily, or intercity travel.
-                  </p>
+
+                  <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-black text-red-400 group-hover:text-red-300">
+                    <span>Explore Fleet & Drivers</span>
+                    <span className="text-lg transition-transform group-hover:translate-x-1">→</span>
+                  </div>
                 </div>
 
-                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-red-400 group-hover:text-red-300">
-                  <span>Hire Personal Chauffeur</span>
-                  <span className="text-base transition-transform group-hover:translate-x-1">→</span>
+                {/* OPTION 2: Only a Driver without a Car */}
+                <div
+                  onClick={() => handleSelectOption('driver-only')}
+                  className="bg-gradient-to-b from-white/10 to-white/5 hover:from-red-950/50 hover:to-black border-2 border-white/15 hover:border-red-500/80 rounded-[28px] p-7 cursor-pointer group transition-all duration-300 hover:shadow-[0_0_35px_rgba(229,9,20,0.4)] hover:-translate-y-1 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="size-16 rounded-2xl bg-gradient-to-br from-red-600/40 to-black border border-red-500/50 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform shadow-md">
+                      👤
+                    </div>
+                    <h4 className="text-2xl font-black text-white font-sora group-hover:text-red-400 transition-colors mb-2">
+                      Only a Driver
+                    </h4>
+                    <p className="text-gray-400 text-xs leading-relaxed mb-6">
+                      Already have your own vehicle? Hire a vetted, licensed personal chauffeur to drive your car safely for hourly, daily, or intercity travel.
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-black text-red-400 group-hover:text-red-300">
+                    <span>Hire Personal Chauffeur</span>
+                    <span className="text-lg transition-transform group-hover:translate-x-1">→</span>
+                  </div>
                 </div>
+
               </div>
 
-            </div>
-
-            {/* Bottom Support Note */}
-            <div className="mt-8 text-center text-gray-500 text-xs">
-              🔒 24/7 Verified Chauffeurs • Real-time GPS Dispatch • Transparent Hourly Rates
+              {/* Support Note */}
+              <div className="mt-8 text-center text-gray-500 text-xs font-semibold">
+                🔒 24/7 Verified Chauffeurs • Real-time GPS Dispatch • Transparent Hourly Rates
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-    </div>
+      </div>
+    </ScaleWrapper>
   );
 }
