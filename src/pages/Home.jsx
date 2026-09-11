@@ -53,33 +53,42 @@ export default function Home() {
           HERO — Full-bleed video background, right-aligned text
           Matches Figma Desktop-16
       ══════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
-        {/* Background video */}
-        <div className="absolute inset-0 bg-black">
-          <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-60">
+      <section className="relative min-h-[75vh] md:min-h-[85vh] flex flex-col justify-center overflow-hidden">
+        {/* Background video — scaled to crop out embedded letterbox bars */}
+        <div className="absolute inset-0 bg-black overflow-hidden pointer-events-none">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-75"
+            style={{
+              transform: 'scale(1.55)',
+              transformOrigin: 'center center',
+            }}
+          >
             <source src="/hero-car.mp4" type="video/mp4" />
           </video>
-          {/* Dark gradient overlay — right heavy for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-l from-black/90 via-black/50 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
+          {/* Soft right gradient for text readability without top/bottom black bars */}
+          <div className="absolute inset-0 bg-gradient-to-l from-black/90 via-black/40 to-transparent" />
         </div>
 
         {/* Hero content */}
-        <div className="relative z-10 px-8 md:px-16 lg:px-24 pt-28 pb-16 w-full max-w-[1600px] mx-auto flex flex-col items-end text-right lg:pr-[10%]">
+        <div className="relative z-10 px-6 sm:px-8 md:px-16 lg:px-24 pt-24 md:pt-28 pb-10 w-full max-w-[1600px] mx-auto flex flex-col items-end text-right lg:pr-[10%]">
           {/* Main tagline */}
-          <h1 className="text-5xl md:text-6xl lg:text-8xl font-black leading-tight mb-6 max-w-4xl animate-slideInRight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black leading-tight mb-4 sm:mb-6 max-w-4xl animate-slideInRight">
             We are reliable<br />
             Anytime,<span className="text-red-500">Anywhere</span>
           </h1>
 
           {/* Sub-claims row */}
-          <div className="flex flex-wrap justify-end gap-6 md:gap-12 mb-10 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
+          <div className="flex flex-wrap justify-end gap-4 md:gap-12 mb-8 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
             {[
               { icon: '⚡', text: '24/7 Emergency Service' },
               { icon: '🕐', text: 'Quick response time' },
               { icon: '💰', text: 'Affordable pricing' },
             ].map((item, i) => (
-              <div key={i} className="flex items-center gap-2 text-white font-semibold text-base md:text-lg">
+              <div key={i} className="flex items-center gap-2 text-white font-semibold text-sm sm:text-base md:text-lg">
                 <span>{item.icon}</span>
                 <span>{item.text}</span>
               </div>
@@ -87,29 +96,22 @@ export default function Home() {
           </div>
 
             {/* CTA buttons — red pills matching Figma */}
-            <div className="flex flex-wrap justify-end gap-6 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
+            <div className="flex flex-wrap justify-end gap-4 sm:gap-6 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
               <Link
                 to="/roadside"
                 id="roadside-btn"
-                className="bg-red-600 hover:bg-red-700 text-white font-black text-xl px-10 py-5 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
+                className="bg-red-600 hover:bg-red-700 text-white font-black text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
               >
                 Roadside Assistance
               </Link>
               <Link
                 to="/fuel-terms"
                 id="fuel-btn"
-                className="bg-red-600 hover:bg-red-700 text-white font-black text-xl px-10 py-5 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
+                className="bg-red-600 hover:bg-red-700 text-white font-black text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
               >
                 Fuel Service
               </Link>
             </div>
-        </div>
-
-        {/* Scroll arrow */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-float">
-          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
-          </svg>
         </div>
       </section>
 
@@ -129,23 +131,14 @@ export default function Home() {
         </div>
       </div>
 
-      {/* GUARANTEED CLEAR GAP UNDER RED BANNER */}
-      <div className="w-full h-[150px] md:h-[200px] bg-transparent flex items-center justify-center">
-        <h2 className={`text-5xl md:text-7xl font-black text-white text-center ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>Emergency Services</h2>
-      </div>
-
       {/* ══════════════════════════════════════════
           SERVICES SECTION
           3 large + 4 small — matches Figma Desktop-16
       ══════════════════════════════════════════ */}
       <section className="pt-10 pb-16 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center" id="services-section" data-animate>
-
-        {/* Down arrow */}
-        <div className={`flex justify-center mb-20 ${visible['services-section'] ? 'animate-float' : 'opacity-0'}`}>
-          <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
+        <h2 className={`text-4xl md:text-6xl font-black text-white text-center mb-10 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
+          Emergency Services
+        </h2>
 
         <div className="flex flex-wrap justify-center items-center gap-6 mb-8 w-full max-w-[1800px] mx-auto">
           {[
