@@ -417,8 +417,15 @@ export default function Landing() {
               </div>
             </div>
           )}
-          {/* ─── RIGHT SIDE: Scene dots nav ─────────── */}
+          {/* ─── RIGHT SIDE: Scene progress & nav ─────────── */}
           <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-4">
+            {/* Progress track */}
+            <div className="h-48 w-0.5 bg-white/10 rounded-full relative overflow-hidden">
+              <div
+                className="absolute top-0 left-0 w-full rounded-full transition-all duration-300"
+                style={{ height: `${rawProgress * 100}%`, background: scene.accentColor }}
+              />
+            </div>
             {/* Scene dots */}
             <div className="flex flex-col gap-3">
               {SCENES.map((sc, i) => (

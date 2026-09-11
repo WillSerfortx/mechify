@@ -173,11 +173,16 @@ body {
   animation-delay: 0.75s;
 }
 
-/* ─── Scrollbar ─── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0a0a0a; }
-::-webkit-scrollbar-thumb { background: #dc2626; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #ef4444; }
+/* ─── Hide Browser Scrollbar ─── */
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+html, body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
 /* ─── Glass Card ─── */
 .glass {
