@@ -162,10 +162,10 @@ export default function Landing() {
     <div className="bg-black text-white font-outfit">
 
       {/* ═══ SCROLL CONTAINER — 5 scenes ═══════════════════ */}
-      <div ref={wrapRef} style={{ height: `${(totalScenes + 1) * 160}vh` }}>
+      <div ref={wrapRef} style={{ height: `${totalScenes * 120}vh` }}>
 
-        {/* ─── STICKY CINEMATIC VIEWPORT ─────────────────────────── */}
-        <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
+        {/* ─── FIXED CINEMATIC VIEWPORT (PERMANENTLY PINNED TO SCREEN) ─ */}
+        <div className="fixed inset-0 w-full h-screen overflow-hidden">
 
           {/* ── Background tint layer ── */}
           <div
