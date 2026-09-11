@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script>
+      (function() {
+        // Redirect SPA paths to HashRouter on GitHub Pages
+        var path = window.location.pathname;
+        var parts = path.split('/').filter(Boolean);
+        var repo = parts.length > 0 ? parts[0] : '';
+        var subRoute = parts.slice(1).join('/');
+        var search = window.location.search || '';
+        var hash = window.location.hash || '';
+
+        if (repo && window.location.hostname.endsWith('github.io')) {
+          window.location.replace(
+            window.location.origin + '/' + repo + '/#/' + subRoute + search + hash
+          );
+        } else {
+          window.location.replace(window.location.origin + '/#/' + subRoute + search + hash);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to Mechify...</p>
+  </body>
+</html>

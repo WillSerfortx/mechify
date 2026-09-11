@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -52,7 +52,7 @@ function Layout({ children, showNav = true, showFooter = true }) {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ScrollToTop />
       <Routes>
         {/* Auth / Intro flows — no navbar/footer */}
@@ -92,6 +92,6 @@ export default function App() {
         <Route path="/profile" element={<Layout><Profile /></Layout>} />
         <Route path="/driver-dashboard" element={<Layout showNav={false} showFooter={false}><DriverDashboard /></Layout>} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

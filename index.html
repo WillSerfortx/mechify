@@ -2,9 +2,50 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <title>Mechify | Automotive & Supercar Services</title>
+    <script>
+      (function() {
+        const parts = window.location.pathname.split('/').filter(Boolean);
+        if (window.location.hostname.endsWith('github.io') && parts.length > 0) {
+          const base = '/' + parts[0] + '/';
+          const rewrite = function(val) {
+            if (typeof val === 'string' && val.startsWith('/') && !val.startsWith(base)) {
+              return base + val.slice(1);
+            }
+            return val;
+          };
+
+          const patch = function(proto, prop) {
+            const desc = Object.getOwnPropertyDescriptor(proto, prop);
+            if (!desc || !desc.set) return;
+            Object.defineProperty(proto, prop, {
+              set: function(val) {
+                desc.set.call(this, rewrite(val));
+              },
+              get: function() {
+                return desc.get.call(this);
+              },
+              configurable: true,
+              enumerable: true
+            });
+          };
+
+          patch(HTMLImageElement.prototype, 'src');
+          patch(HTMLMediaElement.prototype, 'src');
+          patch(HTMLSourceElement.prototype, 'src');
+
+          const origSetAttribute = Element.prototype.setAttribute;
+          Element.prototype.setAttribute = function(name, val) {
+            if (name && name.toLowerCase() === 'src') {
+              val = rewrite(val);
+            }
+            return origSetAttribute.call(this, name, val);
+          };
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
