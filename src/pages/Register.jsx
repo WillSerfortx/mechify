@@ -422,7 +422,7 @@ export default function Register() {
 
         {/* ─── EMAIL VERIFICATION MODAL ─── */}
         {showVerificationModal && (
-          <div className="absolute inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
             <div className="bg-white rounded-3xl p-10 max-w-xl w-full mx-4 shadow-2xl border border-gray-200 text-center animate-scaleIn">
               <div className="w-20 h-20 mx-auto mb-6 bg-red-100 rounded-full flex items-center justify-center text-4xl">
                 ✉️

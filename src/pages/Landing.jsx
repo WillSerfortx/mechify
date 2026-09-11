@@ -154,6 +154,49 @@ export default function Landing() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
+  // Touch gesture support for mobile Chrome & iOS Safari (where fixed inset-0 prevents standard body touch scroll)
+  useEffect(() => {
+    let touchStartY = 0;
+    let touchStartX = 0;
+    let isTouchActive = false;
+
+    const onTouchStart = (e) => {
+      if (e.touches.length !== 1) return;
+      touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
+      isTouchActive = true;
+    };
+
+    const onTouchMove = (e) => {
+      if (!isTouchActive || e.touches.length !== 1) return;
+      const currentY = e.touches[0].clientY;
+      const currentX = e.touches[0].clientX;
+      const deltaY = touchStartY - currentY;
+      const deltaX = touchStartX - currentX;
+
+      // Handle vertical swipe gestures
+      if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        window.scrollBy(0, deltaY * 1.5);
+        touchStartY = currentY;
+        touchStartX = currentX;
+      }
+    };
+
+    const onTouchEnd = () => {
+      isTouchActive = false;
+    };
+
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+
+    return () => {
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+    };
+  }, []);
+
   /* Service card entrance — stagger */
   // Scene 5 (conclusion) is always visible once reached; scenes 0-3 fade in and out with scene progress
   const cardVisible = sceneIdx === totalScenes - 1 ? true : (sceneT > 0.15 && sceneT < 0.85);
@@ -165,7 +208,7 @@ export default function Landing() {
       <div ref={wrapRef} style={{ height: `${totalScenes * 120}vh` }}>
 
         {/* ─── FIXED CINEMATIC VIEWPORT (PERMANENTLY PINNED TO SCREEN) ─ */}
-        <div className="fixed inset-0 w-full h-screen overflow-hidden">
+        <div className="fixed inset-0 w-full h-[100dvh] overflow-hidden">
 
           {/* ── Background tint layer ── */}
           <div
@@ -230,9 +273,9 @@ export default function Landing() {
             style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%)' }} />
 
           {/* ─── NAVBAR ─────────────────────────────────── */}
-          <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-8 md:px-14 py-6">
-            <Link to="/landing" className="flex items-center gap-3 group">
-              <svg width="44" height="38" viewBox="0 0 56 48" fill="none">
+          <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 sm:px-8 md:px-14 py-4 sm:py-6">
+            <Link to="/landing" className="flex items-center gap-2 sm:gap-3 group">
+              <svg className="w-9 h-8 sm:w-11 sm:h-10" viewBox="0 0 56 48" fill="none">
                 <rect width="56" height="48" rx="4" fill="#CC0000"/>
                 <text x="4" y="34" fontFamily="Arial Black,Arial" fontWeight="900" fontSize="32" fill="white">M</text>
                 <g transform="translate(32,30) scale(0.55)">
@@ -243,13 +286,13 @@ export default function Landing() {
                 </g>
               </svg>
               <div>
-                <div className="font-black text-lg tracking-widest text-white">MECHIFY</div>
-                <div className="text-gray-500 text-[8px] tracking-[0.25em] uppercase">Vehicle Support</div>
+                <div className="font-black text-base sm:text-lg tracking-widest text-white">MECHIFY</div>
+                <div className="text-gray-400 text-[7px] sm:text-[8px] tracking-[0.2em] uppercase">Vehicle Support</div>
               </div>
             </Link>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <Link to="/auth"
-                className="font-black text-sm tracking-widest uppercase transition-all hover:scale-105"
+                className="font-black text-xs sm:text-sm tracking-widest uppercase transition-all hover:scale-105 px-3 py-1.5 rounded-full border border-white/20 bg-black/40 backdrop-blur-sm"
                 style={{ color: scene.accentColor, textShadow: `0 0 15px ${scene.glowColor}` }}
               >
                 Sign In
@@ -259,18 +302,18 @@ export default function Landing() {
 
           {/* ─── HERO TEXT (only on scene 0 before scrolling) ─────── */}
           <div
-            className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none transition-all duration-700"
+            className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none transition-all duration-700 px-4"
             style={{ opacity: rawProgress < 0.02 ? 1 : Math.max(0, 1 - rawProgress * 60) }}
           >
             <div
-              className="text-center px-6 transition-all duration-1000"
+              className="text-center px-4 sm:px-6 transition-all duration-1000 max-w-4xl"
               style={{ opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(40px)' }}
             >
-              <div className="inline-flex items-center gap-2 border border-red-500/30 text-red-400 text-[10px] font-black px-5 py-1.5 rounded-full mb-6 tracking-[0.25em] uppercase bg-red-600/10">
+              <div className="inline-flex items-center gap-2 border border-red-500/30 text-red-400 text-[9px] sm:text-[10px] font-black px-4 sm:px-5 py-1 sm:py-1.5 rounded-full mb-4 sm:mb-6 tracking-[0.25em] uppercase bg-red-600/10">
                 <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
                 Bangladesh's #1 Vehicle Platform
               </div>
-              <h1 className="text-[clamp(56px,10vw,130px)] font-black leading-[0.9] tracking-tight mb-4">
+              <h1 className="text-[clamp(36px,8vw,110px)] font-black leading-[0.95] tracking-tight mb-3 sm:mb-4">
                 <span className="block text-white">MECHIFY</span>
                 <span
                   className="block text-transparent bg-clip-text"
@@ -279,7 +322,7 @@ export default function Landing() {
                   DRIVES YOU.
                 </span>
               </h1>
-              <p className="text-gray-400 text-base md:text-lg mt-4 animate-bounce" style={{ animationDuration: '2s' }}>
+              <p className="text-gray-400 text-xs sm:text-base md:text-lg mt-3 sm:mt-4 animate-bounce" style={{ animationDuration: '2s' }}>
                 Scroll to explore ↓
               </p>
             </div>
@@ -288,7 +331,7 @@ export default function Landing() {
           {/* ─── STANDARD SERVICE PANEL (Scenes 1-4) ─── */}
           {!scene.isCustom && (
             <div
-              className="absolute inset-0 z-10 flex flex-col justify-center px-8 md:px-14 lg:px-24 pointer-events-none"
+              className="absolute inset-0 z-10 flex flex-col justify-center px-5 sm:px-8 md:px-14 lg:px-24 pr-12 sm:pr-16 md:pr-24 pointer-events-none"
               style={{ opacity: rawProgress > 0.02 ? 1 : 0, transition: 'opacity 0.5s ease' }}
             >
             <div
@@ -298,22 +341,22 @@ export default function Landing() {
             >
               {/* Service heading */}
               <div
-                className="mb-8 transition-all duration-700"
+                className="mb-4 sm:mb-8 transition-all duration-700"
                 style={{
                   opacity: cardVisible ? 1 : 0,
                   transform: cardVisible ? 'translateY(0)' : 'translateY(30px)',
                 }}
               >
                 <h2
-                  className="text-6xl md:text-8xl lg:text-[100px] font-black leading-none mb-4"
+                  className="text-3xl sm:text-5xl md:text-7xl lg:text-[90px] font-black leading-tight mb-2 sm:mb-4"
                   style={{ color: scene.accentColor, textShadow: `0 0 40px ${scene.glowColor}` }}
                 >
                   {scene.services[0].title}
                 </h2>
                 {scene.services.length > 1 && (
-                  <div className={`flex gap-4 mt-4 flex-wrap ${scene.align === 'right' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`flex gap-2 sm:gap-4 mt-2 sm:mt-4 flex-wrap ${scene.align === 'right' ? 'justify-end' : 'justify-start'}`}>
                     {scene.services.slice(1).map(s => (
-                      <span key={s.title} className="text-sm md:text-base font-black tracking-widest uppercase px-5 py-2 rounded-full border backdrop-blur-sm"
+                      <span key={s.title} className="text-[11px] sm:text-sm md:text-base font-black tracking-widest uppercase px-3 sm:px-5 py-1 sm:py-2 rounded-full border backdrop-blur-sm"
                         style={{ borderColor: scene.accentColor + '50', color: scene.accentColor, background: 'rgba(0,0,0,0.4)' }}>
                         + {s.title}
                       </span>
@@ -323,11 +366,11 @@ export default function Landing() {
               </div>
 
               {/* Service cards column */}
-              <div className={`flex gap-6 flex-col ${scene.align === 'right' ? 'items-end' : 'items-start'}`}>
+              <div className={`flex gap-3 sm:gap-6 flex-col ${scene.align === 'right' ? 'items-end' : 'items-start'}`}>
                 {scene.services.map((svc, i) => (
                   <div
                     key={svc.title}
-                    className="flex-1 min-w-[280px] max-w-lg p-2"
+                    className="flex-1 min-w-0 max-w-full md:max-w-lg p-1 sm:p-2"
                     style={{
                       opacity: cardVisible ? 1 : 0,
                       transform: cardVisible ? 'translateY(0)' : 'translateY(40px)',
@@ -335,10 +378,10 @@ export default function Landing() {
                       textShadow: '0px 4px 20px rgba(0,0,0,0.8)'
                     }}
                   >
-                    <div className={`flex items-center gap-4 mb-4 ${scene.align === 'right' ? 'justify-end flex-row-reverse' : 'justify-start'}`}>
-                      <span className="font-black text-white text-2xl md:text-4xl">{svc.title}</span>
+                    <div className={`flex items-center gap-2 sm:gap-4 mb-1 sm:mb-3 ${scene.align === 'right' ? 'justify-end flex-row-reverse' : 'justify-start'}`}>
+                      <span className="font-black text-white text-lg sm:text-2xl md:text-4xl">{svc.title}</span>
                     </div>
-                    <p className="text-gray-200 text-lg md:text-xl leading-relaxed">{svc.desc}</p>
+                    <p className="text-gray-200 text-xs sm:text-base md:text-lg leading-relaxed">{svc.desc}</p>
                   </div>
                 ))}
               </div>
@@ -349,13 +392,13 @@ export default function Landing() {
           {/* ─── CUSTOM CONCLUSION PANEL (Scene 5) ─── */}
           {scene.isCustom && (
             <div
-              className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-auto transition-all duration-700 overflow-hidden"
+              className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-auto transition-all duration-700 overflow-y-auto sm:overflow-hidden"
               style={{ opacity: cardVisible ? 1 : 0, transform: cardVisible ? 'translateY(0)' : 'translateY(30px)' }}
             >
-              <div className="w-full max-w-5xl px-6 md:px-12 mx-auto flex flex-col justify-center h-full gap-6 md:gap-10 py-6 md:py-10">
+              <div className="w-full max-w-5xl px-4 sm:px-8 md:px-12 mx-auto flex flex-col justify-center min-h-full sm:h-full gap-4 sm:gap-6 md:gap-8 py-6 sm:py-8 md:py-10">
                 
                 {/* ── STATS ── */}
-                <div className="stats-container grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 text-center">
+                <div className="stats-container grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 md:gap-8 text-center">
                   {[
                     { label: 'Happy Customers', valKey: 'customers', format: (v) => `${Math.round(v).toLocaleString()}+`, color: '#dc2626' },
                     { label: 'Services', valKey: 'services', format: (v) => Math.round(v), color: '#f97316' },
@@ -363,21 +406,21 @@ export default function Landing() {
                     { label: 'Avg. ETA', valKey: 'eta', format: (v) => `${Math.round(v)} min`, color: '#3b82f6' },
                   ].map(({ label, valKey, format, color }) => (
                     <div key={label} className="stat-item group">
-                      <div className="text-3xl md:text-5xl lg:text-6xl font-black mb-1 md:mb-2 transition-colors" style={{ color }}>
+                      <div className="text-2xl sm:text-3xl md:text-5xl font-black mb-0.5 sm:mb-1 transition-colors" style={{ color }}>
                         {format(statsRef.current[valKey] || 0)}
                       </div>
-                      <p className="text-gray-400 text-[10px] md:text-xs uppercase tracking-[0.3em] font-black">{label}</p>
+                      <p className="text-gray-400 text-[8px] sm:text-[10px] md:text-xs uppercase tracking-[0.2em] font-black">{label}</p>
                     </div>
                   ))}
                 </div>
 
                 {/* ── HOW IT WORKS ── */}
                 <div className="how-it-works-container">
-                  <div className="text-center mb-6 md:mb-8">
-                    <p className="text-red-500 font-black uppercase tracking-[0.4em] text-xs mb-1 md:mb-2">Simple Process</p>
-                    <h2 className="text-3xl md:text-5xl font-black text-white">How It Works</h2>
+                  <div className="text-center mb-3 sm:mb-6 md:mb-8">
+                    <p className="text-red-500 font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-0.5 sm:mb-1">Simple Process</p>
+                    <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-white">How It Works</h2>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 relative">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 md:gap-6 relative">
                     <div className="hidden md:block absolute top-8 left-[12%] right-[12%] h-px"
                       style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.4), transparent)' }} />
                     {[
@@ -386,12 +429,12 @@ export default function Landing() {
                       { num: '03', title: 'Book Instantly', desc: 'Confirm instantly, no wait.' },
                       { num: '04', title: 'Track Live', desc: 'Follow on a live map.' },
                     ].map((step) => (
-                      <div key={step.num} className="step-item group text-center">
-                        <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-2 md:mb-3 bg-gradient-to-br from-red-900/50 to-black border border-red-800/40 rounded-2xl flex items-center justify-center text-lg md:text-2xl font-black text-red-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-500">
+                      <div key={step.num} className="step-item group text-center p-2 rounded-xl bg-white/[0.02]">
+                        <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 mx-auto mb-1.5 sm:mb-3 bg-gradient-to-br from-red-900/50 to-black border border-red-800/40 rounded-xl sm:rounded-2xl flex items-center justify-center text-xs sm:text-base md:text-2xl font-black text-red-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-500">
                           {step.num}
                         </div>
-                        <h3 className="text-sm md:text-base font-black mb-1 text-white group-hover:text-red-400 transition-colors">{step.title}</h3>
-                        <p className="text-gray-400 text-xs md:text-sm">{step.desc}</p>
+                        <h3 className="text-xs sm:text-sm md:text-base font-black mb-0.5 text-white group-hover:text-red-400 transition-colors">{step.title}</h3>
+                        <p className="text-gray-400 text-[10px] sm:text-xs leading-tight">{step.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -399,18 +442,18 @@ export default function Landing() {
 
                 {/* ── CTA ── */}
                 <div className="cta-container text-center relative">
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-red-900/10 rounded-full blur-[80px] pointer-events-none" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[400px] h-[150px] sm:h-[200px] bg-red-900/10 rounded-full blur-[60px] pointer-events-none" />
                   <div className="relative z-10">
-                    <h2 className="text-2xl md:text-3xl font-black mb-2 text-white">Ready to drive?</h2>
-                    <p className="text-gray-400 text-xs md:text-sm mb-4">Join thousands of drivers who trust Mechify.</p>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-black mb-1 sm:mb-2 text-white">Ready to drive?</h2>
+                    <p className="text-gray-400 text-[11px] sm:text-xs md:text-sm mb-3 sm:mb-4">Join thousands of drivers who trust Mechify.</p>
                     <Link
                       to="/auth"
-                      className="group relative inline-block bg-red-600 hover:bg-red-500 text-white font-black text-xs md:text-sm px-8 md:px-10 py-3 md:py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(220,38,38,0.5)] hover:shadow-[0_0_60px_rgba(220,38,38,0.7)] overflow-hidden"
+                      className="group relative inline-block bg-red-600 hover:bg-red-500 text-white font-black text-xs sm:text-sm px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-xl transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(220,38,38,0.5)] hover:shadow-[0_0_60px_rgba(220,38,38,0.7)] overflow-hidden"
                     >
                       <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                       Sign Up or Sign In Today →
                     </Link>
-                    <p className="text-gray-600 text-[9px] md:text-[10px] mt-2">Free to join · No credit card required</p>
+                    <p className="text-gray-600 text-[8px] sm:text-[9px] mt-1.5 sm:mt-2">Free to join · No credit card required</p>
                   </div>
                 </div>
 
@@ -418,38 +461,63 @@ export default function Landing() {
             </div>
           )}
           {/* ─── RIGHT SIDE: Scene progress & nav ─────────── */}
-          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-4">
+          <div className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-3 sm:gap-4">
             {/* Progress track */}
-            <div className="h-48 w-0.5 bg-white/10 rounded-full relative overflow-hidden">
+            <div className="h-32 sm:h-48 w-0.5 bg-white/10 rounded-full relative overflow-hidden">
               <div
                 className="absolute top-0 left-0 w-full rounded-full transition-all duration-300"
                 style={{ height: `${rawProgress * 100}%`, background: scene.accentColor }}
               />
             </div>
             {/* Scene dots */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1.5 sm:gap-3">
               {SCENES.map((sc, i) => (
                 <button
                   key={sc.id}
                   onClick={() => scrollToScene(i)}
                   title={sc.label}
-                  className="w-3 h-3 rounded-full transition-all duration-400 cursor-pointer p-0 border-0 focus:outline-none"
-                  style={{
-                    background: i === sceneIdx ? sc.accentColor : 'rgba(255,255,255,0.2)',
-                    transform: i === sceneIdx ? 'scale(1.4)' : 'scale(1)',
-                    boxShadow: i === sceneIdx ? `0 0 8px ${sc.glowColor}` : 'none',
-                  }}
-                />
+                  className="p-2 -m-2 flex items-center justify-center cursor-pointer border-0 bg-transparent focus:outline-none"
+                >
+                  <span
+                    className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-400 block"
+                    style={{
+                      background: i === sceneIdx ? sc.accentColor : 'rgba(255,255,255,0.25)',
+                      transform: i === sceneIdx ? 'scale(1.4)' : 'scale(1)',
+                      boxShadow: i === sceneIdx ? `0 0 8px ${sc.glowColor}` : 'none',
+                    }}
+                  />
+                </button>
               ))}
             </div>
           </div>
 
+          {/* ─── MOBILE BOTTOM ACTION PILL ─────────────────── */}
+          <div className="sm:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2">
+            {sceneIdx < totalScenes - 1 ? (
+              <button
+                type="button"
+                onClick={() => scrollToScene(sceneIdx + 1)}
+                className="flex items-center gap-2 bg-black/80 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full text-xs font-bold text-white shadow-2xl active:scale-95 transition-all"
+              >
+                <span>Explore Scene 0{sceneIdx + 2}</span>
+                <span className="text-red-500 font-black animate-bounce text-sm">↓</span>
+              </button>
+            ) : (
+              <Link
+                to="/auth"
+                className="flex items-center gap-2 bg-red-600 px-5 py-2 rounded-full text-xs font-black text-white uppercase tracking-wider shadow-2xl active:scale-95 transition-all"
+              >
+                <span>Sign In / Join →</span>
+              </Link>
+            )}
+          </div>
+
           {/* ─── BOTTOM RIGHT: Scene counter ──────────────── */}
-          <div className="absolute right-8 md:right-14 bottom-8 md:bottom-12 z-20 text-right pointer-events-none">
-            <div className="font-black text-4xl md:text-5xl leading-none" style={{ color: scene.accentColor }}>
+          <div className="absolute right-3 sm:right-14 bottom-3 sm:bottom-12 z-20 text-right pointer-events-none">
+            <div className="font-black text-2xl sm:text-4xl md:text-5xl leading-none" style={{ color: scene.accentColor }}>
               0{sceneIdx + 1}
             </div>
-            <div className="text-gray-600 text-xs font-semibold tracking-widest">/ 05</div>
+            <div className="text-gray-600 text-[10px] sm:text-xs font-semibold tracking-widest">/ 05</div>
           </div>
 
           {/* ─── Glow highlight circle ──────────────────── */}
