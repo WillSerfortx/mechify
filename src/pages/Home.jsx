@@ -135,10 +135,20 @@ export default function Home() {
           SERVICES SECTION
           3 large + 4 small — matches Figma Desktop-16
       ══════════════════════════════════════════ */}
-      <section className="pt-10 pb-16 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center" id="services-section" data-animate>
-        <h2 className={`text-4xl md:text-6xl font-black text-white text-center mb-10 ${visible['services-section'] ? 'animate-fadeInUp' : 'opacity-0'}`}>
-          Emergency Services
-        </h2>
+      <section className="pt-10 sm:pt-14 pb-16 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center" id="services-section" data-animate>
+        {/* Small gap on top & bottom with vivid red glowing animation */}
+        <div className="mt-4 sm:mt-6 mb-8 sm:mb-12 text-center">
+          <h2
+            className="text-4xl sm:text-5xl md:text-7xl font-black text-center tracking-tight animate-redGlow cursor-default select-none"
+            style={{
+              color: '#ffffff',
+              animation: 'redGlow 2s ease-in-out infinite alternate',
+              textShadow: '0 0 18px rgba(239, 68, 68, 0.95), 0 0 35px rgba(220, 38, 38, 0.8), 0 0 60px rgba(185, 28, 28, 0.6), 0 0 90px rgba(153, 27, 27, 0.4)',
+            }}
+          >
+            Emergency Services
+          </h2>
+        </div>
 
         <div className="flex flex-wrap justify-center items-center gap-6 mb-8 w-full max-w-[1800px] mx-auto">
           {[
