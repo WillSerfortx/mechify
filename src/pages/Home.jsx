@@ -118,19 +118,23 @@ export default function Home() {
             ))}
           </div>
 
-            {/* CTA buttons — red pills matching Figma */}
-            <div className="flex flex-wrap justify-end gap-4 sm:gap-6 animate-fadeInUp" style={{ animationDelay: '0.5s' }}>
+            {/* CTA buttons — matching exact Figma Nodes 1:663 & 1:664 */}
+            <div className="flex flex-wrap justify-end gap-5 sm:gap-6 animate-fadeInUp w-full" style={{ animationDelay: '0.5s' }}>
+              {/* Node 1:663 - Roadside Assistance Component */}
               <Link
                 to="/roadside"
                 id="roadside-btn"
-                className="bg-red-600 hover:bg-red-700 text-white font-black text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
+                data-node-id="1:663"
+                className="bg-[#ff0000] border-2 border-solid border-white text-white font-['Sora'] font-bold text-xl sm:text-2xl lg:text-[32px] leading-[0.962] w-full sm:w-auto min-w-[280px] lg:w-[496px] h-[64px] lg:h-[74px] rounded-[40px] flex items-center justify-center whitespace-nowrap transition-all duration-300 hover:scale-105 hover:bg-[#e60000] hover:shadow-[0_0_40px_rgba(255,0,0,0.85)] active:scale-95 shadow-2xl"
               >
                 Roadside Assistance
               </Link>
+              {/* Node 1:664 - Fuel Service Component */}
               <Link
                 to="/fuel-terms"
                 id="fuel-btn"
-                className="bg-red-600 hover:bg-red-700 text-white font-black text-lg sm:text-xl px-8 sm:px-10 py-4 sm:py-5 rounded-full whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(220,38,38,0.7)] active:scale-95"
+                data-node-id="1:664"
+                className="bg-[#ff0000] border-2 border-solid border-white text-white font-['Sora'] font-bold text-xl sm:text-2xl lg:text-[32px] leading-[0.962] w-full sm:w-auto min-w-[280px] lg:w-[496px] h-[64px] lg:h-[74px] rounded-[40px] flex items-center justify-center whitespace-nowrap transition-all duration-300 hover:scale-105 hover:bg-[#e60000] hover:shadow-[0_0_40px_rgba(255,0,0,0.85)] active:scale-95 shadow-2xl"
               >
                 Fuel Service
               </Link>
