@@ -137,7 +137,7 @@ export default function Home() {
       ══════════════════════════════════════════ */}
       <section className="pt-10 sm:pt-14 pb-16 px-6 md:px-12 lg:px-20 bg-black flex flex-col items-center" id="services-section" data-animate>
         {/* Small gap on top & bottom with vivid red glowing animation */}
-        <div className="mt-4 sm:mt-6 mb-8 sm:mb-12 text-center">
+        <div className="mt-4 sm:mt-6 mb-14 sm:mb-18 md:mb-24 text-center">
           <h2
             className="text-4xl sm:text-5xl md:text-7xl font-black text-center tracking-tight animate-redGlow cursor-default select-none"
             style={{
@@ -150,7 +150,7 @@ export default function Home() {
           </h2>
         </div>
 
-        <div className="flex flex-wrap justify-center items-center gap-6 mb-8 w-full max-w-[1800px] mx-auto">
+        <div className="flex flex-wrap justify-center items-center gap-6 mb-8 w-full max-w-[1800px] mx-auto pt-2">
           {[
             { 
               name: 'Roadside Assistance',
