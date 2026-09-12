@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+
+// Robust BASE_URL resolution for GitHub Pages & Localhost
+const heroVideoSrc = `${(import.meta.env.BASE_URL || './').replace(/\/$/, '')}/hero-car.mp4`;
 
 // ── Hero background image (mechanic at car)
 const heroBg = 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=1920&h=1080&fit=crop&q=80';
@@ -28,6 +31,21 @@ const rentCars = [
 export default function Home() {
   const [visible, setVisible] = useState({});
   const [sosActive, setSosActive] = useState(false);
+  const videoRef = useRef(null);
+
+  // Guarantee autoplay on mobile and desktop
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Fallback if browser requires user gesture
+        });
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -57,16 +75,21 @@ export default function Home() {
         {/* Background video — scaled to crop out embedded letterbox bars */}
         <div className="absolute inset-0 bg-black overflow-hidden pointer-events-none">
           <video
+            ref={videoRef}
             autoPlay
             loop
             muted
             playsInline
-            className="w-full h-full object-cover opacity-75"
+            src={heroVideoSrc}
+            poster="/custom-mclaren.png"
+            className="w-full h-full object-cover opacity-80"
             style={{
               transform: 'scale(1.55)',
               transformOrigin: 'center center',
             }}
           >
+            <source src={heroVideoSrc} type="video/mp4" />
+            <source src="./hero-car.mp4" type="video/mp4" />
             <source src="/hero-car.mp4" type="video/mp4" />
           </video>
           {/* Soft right gradient for text readability without top/bottom black bars */}
