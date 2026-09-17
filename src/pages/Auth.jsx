@@ -59,7 +59,15 @@ export default function Auth() {
       setLoading(true);
       const user = await authService.loginWithGoogle('user');
       if (user) {
-        navigate('/home');
+        const role = localStorage.getItem('userRole');
+        const userEmail = (user.email || '').toLowerCase();
+        if (role === 'workshop_owner' || userEmail.includes('workshop')) {
+          navigate('/workshop-dashboard');
+        } else if (role === 'driver' || userEmail.includes('driver')) {
+          navigate('/driver-dashboard');
+        } else {
+          navigate('/home');
+        }
       }
     } catch (err) {
       setErrorMessage(err.message || 'Google sign in failed.');

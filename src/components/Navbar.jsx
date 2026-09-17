@@ -6,7 +6,32 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sosActive, setSosActive] = useState(false);
   const location = useLocation();
-  const userRole = localStorage.getItem('userRole');
+  const [userRole, setUserRole] = useState(() => {
+    try {
+      const r = localStorage.getItem('userRole');
+      if (r) return r;
+      const u = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      if (u.email?.toLowerCase().includes('workshop')) return 'workshop_owner';
+      if (u.email?.toLowerCase().includes('driver')) return 'driver';
+    } catch (e) {}
+    return 'user';
+  });
+
+  useEffect(() => {
+    try {
+      const r = localStorage.getItem('userRole');
+      const u = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      if (r === 'workshop_owner' || r === 'workshop' || u.email?.toLowerCase().includes('workshop')) {
+        setUserRole('workshop_owner');
+      } else if (r === 'driver' || u.email?.toLowerCase().includes('driver')) {
+        setUserRole('driver');
+      } else {
+        setUserRole(r || 'user');
+      }
+    } catch (e) {
+      setUserRole('user');
+    }
+  }, [location]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -78,12 +103,23 @@ export default function Navbar() {
 
         {/* ── Right Actions ── */}
         <div className="flex items-center gap-3">
+          {/* Workshop Owner Shortcut if logged in */}
+          {userRole === 'workshop_owner' && (
+            <Link
+              to="/workshop-dashboard"
+              className="hidden sm:flex items-center gap-2 bg-red-600/90 hover:bg-red-600 text-white font-bold text-xs uppercase tracking-wider px-3.5 py-2 rounded-xl border border-red-500 shadow-[0_0_15px_rgba(220,38,38,0.4)] transition-all active:scale-95"
+            >
+              <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+              Workshop Portal
+            </Link>
+          )}
+
           {/* Profile / Dashboard button */}
           <Link
             to={userRole === 'driver' ? '/driver-dashboard' : (userRole === 'workshop_owner' || userRole === 'workshop') ? '/workshop-dashboard' : '/profile'}
             className="flex items-center justify-center w-12 h-12 bg-white/10 border-2 border-white/20 rounded-full transition-all duration-300 hover:bg-white/30 hover:border-white hover:scale-110 active:scale-95 animate-bounce"
             style={{ animationDuration: '3s' }}
-            title="Dashboard"
+            title={userRole === 'workshop_owner' ? 'Workshop Owner Dashboard' : userRole === 'driver' ? 'Driver Dashboard' : 'User Profile'}
           >
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -126,11 +162,12 @@ export default function Navbar() {
             </Link>
           ))}
           
-          <Link to={userRole === 'driver' ? '/driver-dashboard' : '/profile'} className="bg-white/10 text-white text-center rounded-full py-4 mt-4 flex items-center justify-center transition-colors hover:bg-white/20">
-            <span className="animate-bounce" style={{ animationDuration: '3s' }}>
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
+          <Link 
+            to={userRole === 'driver' ? '/driver-dashboard' : (userRole === 'workshop_owner' || userRole === 'workshop') ? '/workshop-dashboard' : '/profile'} 
+            className="bg-white/10 text-white text-center rounded-full py-4 mt-4 flex items-center justify-center transition-colors hover:bg-white/20"
+          >
+            <span className="font-bold text-sm mr-2">
+              {userRole === 'workshop_owner' ? '🏭 Open Workshop Dashboard' : userRole === 'driver' ? '🏎️ Open Driver Dashboard' : 'Open Profile'}
             </span>
           </Link>
         </div>

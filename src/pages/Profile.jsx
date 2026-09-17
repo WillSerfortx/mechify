@@ -4,6 +4,35 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export default function Profile() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // If user is a workshop owner or driver, route them to their specialized dashboard immediately
+  useEffect(() => {
+    const role = localStorage.getItem('userRole');
+    let email = '';
+    try {
+      const u = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      email = u.email || '';
+    } catch (e) {}
+
+    if (role === 'workshop_owner' || role === 'workshop' || email.toLowerCase().includes('workshop')) {
+      navigate('/workshop-dashboard', { replace: true });
+    } else if (role === 'driver' || email.toLowerCase().includes('driver')) {
+      navigate('/driver-dashboard', { replace: true });
+    }
+  }, [navigate]);
+
+  // Read current user
+  const currentUser = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('currentUser') || '{}');
+    } catch (e) {
+      return {};
+    }
+  })();
+
+  const userName = currentUser.name || (currentUser.firstName ? `${currentUser.firstName} ${currentUser.lastName || ''}` : 'Mahi Rahman');
+  const userEmail = currentUser.email || 'mahi@gmail.com';
+
   // We'll default these to true for demonstration purposes so the user can see the whole dashboard in action.
   const hasActiveDelivery = location.state?.activeDelivery ?? true;
   const hasActiveWorkshop = location.state?.activeWorkshop ?? true;
@@ -33,18 +62,18 @@ export default function Profile() {
           <div className="bg-white/5 border border-white/10 rounded-3xl p-6 shadow-xl sticky top-32">
             <div className="flex flex-col items-center mb-6 text-center">
               <div className="w-28 h-28 bg-gray-800 rounded-full border-4 border-red-600 mb-4 overflow-hidden shadow-[0_0_20px_rgba(220,38,38,0.3)]">
-                <img src="https://ui-avatars.com/api/?name=Washiur+Rahman&background=random&color=fff&size=128" alt="Profile" className="w-full h-full object-cover" />
+                <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=random&color=fff&size=128`} alt="Profile" className="w-full h-full object-cover" />
               </div>
-              <h2 className="text-2xl font-black mb-1">Washiur Rahman</h2>
-              <p className="text-red-500 font-bold text-sm tracking-wide uppercase mb-4">Premium Member</p>
+              <h2 className="text-2xl font-black mb-1">{userName}</h2>
+              <p className="text-red-500 font-bold text-sm tracking-wide uppercase mb-4">Customer Account</p>
               
               <div className="w-full bg-black/50 rounded-xl p-4 text-left border border-white/5 mb-6">
                 <p className="text-gray-400 text-xs uppercase font-bold mb-1">Email</p>
-                <p className="text-sm font-semibold mb-3">washiurrahman@example.com</p>
+                <p className="text-sm font-semibold mb-3">{userEmail}</p>
                 <p className="text-gray-400 text-xs uppercase font-bold mb-1">Phone</p>
-                <p className="text-sm font-semibold mb-3">+880 1516 520602</p>
+                <p className="text-sm font-semibold mb-3">+880 1712-345678</p>
                 <p className="text-gray-400 text-xs uppercase font-bold mb-1">Address</p>
-                <p className="text-sm font-semibold">House 3, Lane 1 Baridhara DOHS, Dhaka 1206</p>
+                <p className="text-sm font-semibold">House 14, Road 7, Gulshan-1, Dhaka</p>
               </div>
             </div>
             

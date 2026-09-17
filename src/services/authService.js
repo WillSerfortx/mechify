@@ -143,16 +143,43 @@ export const authService = {
   login: async (email, password) => {
     const cleanEmail = (email || '').trim().toLowerCase();
     
+    // Check if this is a workshop owner account (by email or preset)
+    const isWorkshop = cleanEmail.includes('workshop') || WORKSHOP_DEMO_ACCOUNTS.some(w => w.email.toLowerCase() === cleanEmail || w.alternateEmail?.toLowerCase() === cleanEmail);
+    const isDriver = cleanEmail.includes('driver');
+
     // Check database
     const users = getStoredUsers();
-    const found = users.find(u => u.email.toLowerCase() === cleanEmail);
+    let found = users.find(u => u.email.toLowerCase() === cleanEmail);
+
+    // If it is one of the 30 workshop demo accounts, ensure it is found even if storage was cleared
+    if (!found && isWorkshop) {
+      const demoAcc = WORKSHOP_DEMO_ACCOUNTS.find(w => w.email.toLowerCase() === cleanEmail || w.alternateEmail?.toLowerCase() === cleanEmail);
+      if (demoAcc) {
+        found = {
+          id: demoAcc.id,
+          email: demoAcc.email,
+          password: '123',
+          firstName: demoAcc.ownerName.split(' ')[0],
+          lastName: demoAcc.ownerName.split(' ').slice(1).join(' ') || 'Owner',
+          role: 'workshop_owner',
+          workshopId: demoAcc.workshopId,
+          workshopName: demoAcc.workshopName,
+          phone: demoAcc.phone,
+          isVerified: true
+        };
+        users.push(found);
+        localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+      }
+    }
 
     if (found) {
       if (found.password && found.password !== password && password !== '123') {
         throw new Error('Incorrect password.');
       }
+      const finalRole = isWorkshop ? 'workshop_owner' : isDriver ? 'driver' : (found.role || 'user');
+      found.role = finalRole;
       localStorage.setItem('currentUser', JSON.stringify(found));
-      localStorage.setItem('userRole', found.role || (cleanEmail.includes('driver') ? 'driver' : cleanEmail.includes('workshop') ? 'workshop_owner' : 'user'));
+      localStorage.setItem('userRole', finalRole);
       return found;
     }
 
@@ -160,7 +187,7 @@ export const authService = {
     try {
       if (auth && !auth.config?.apiKey?.includes('DummyKey')) {
         const cred = await signInWithEmailAndPassword(auth, cleanEmail, password);
-        let role = cleanEmail.includes('driver') ? 'driver' : cleanEmail.includes('workshop') ? 'workshop_owner' : 'user';
+        let role = isWorkshop ? 'workshop_owner' : isDriver ? 'driver' : 'user';
         if (db) {
           const userDoc = await getDoc(doc(db, 'users', cred.user.uid));
           if (userDoc.exists()) {
@@ -182,7 +209,7 @@ export const authService = {
     }
 
     // Default fallback
-    const role = cleanEmail.includes('driver') ? 'driver' : cleanEmail.includes('workshop') ? 'workshop_owner' : 'user';
+    const role = isWorkshop ? 'workshop_owner' : isDriver ? 'driver' : 'user';
     const fallbackUser = { email: cleanEmail, role, isVerified: true };
     localStorage.setItem('currentUser', JSON.stringify(fallbackUser));
     localStorage.setItem('userRole', role);
@@ -229,21 +256,28 @@ export const authService = {
     }
 
     // Prompt user for their Gmail if Firebase keys aren't configured yet
-    const promptGmail = window.prompt("Enter your Google / Gmail address to sign in:", "user@gmail.com");
+    const promptGmail = window.prompt("Enter your Google / Gmail address to sign in:", "workshop1@gmail.com");
     if (!promptGmail) return null;
 
-    const role = promptGmail.toLowerCase().includes('driver') ? 'driver' : preferredRole;
+    const cleanPrompt = (promptGmail || '').trim().toLowerCase();
+    const isWorkshop = cleanPrompt.includes('workshop') || WORKSHOP_DEMO_ACCOUNTS.some(w => w.email.toLowerCase() === cleanPrompt);
+    const isDriver = cleanPrompt.includes('driver');
+    const role = isWorkshop ? 'workshop_owner' : isDriver ? 'driver' : preferredRole;
+
+    const matchedWorkshop = WORKSHOP_DEMO_ACCOUNTS.find(w => w.email.toLowerCase() === cleanPrompt);
+    const ownerName = matchedWorkshop ? matchedWorkshop.ownerName : cleanPrompt.split('@')[0];
+
     const googleUser = {
-      id: `google_${Date.now()}`,
-      email: promptGmail,
-      name: promptGmail.split('@')[0],
+      id: matchedWorkshop ? matchedWorkshop.id : `google_${Date.now()}`,
+      email: cleanPrompt,
+      name: ownerName,
       role,
       isVerified: true
     };
     
     // Save to user database
     const users = getStoredUsers();
-    if (!users.find(u => u.email.toLowerCase() === promptGmail.toLowerCase())) {
+    if (!users.find(u => u.email.toLowerCase() === cleanPrompt)) {
       users.push(googleUser);
       localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
     }
