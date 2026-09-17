@@ -67,7 +67,11 @@ erDiagram
 - **`workshops`**: Linked 1:1 to `users.id` (where role is `workshop_owner`). Stores workshop name, trade license, zone (`Gulshan/Banani`, `Dhanmondi`, `Uttara`, etc.), GPS latitude/longitude, contact phones, operating hours, 24/7 indicator, rating, and verification status.
 - **`workshop_services`**: List of services (`Engine Diagnostics`, `Brake Overhaul`, `AC Repair`, `Laser Wheel Alignment`, `Computerized Scan`), price, and estimated duration.
 - **`workshop_mechanics`**: Mechanics working under the workshop (e.g. Master Engine Technician), experience years, contact, on-duty status.
-- **`workshop_appointments`**: Links customer, workshop, vehicle, and assigned mechanic with appointment date/time, customer notes, status, and cost.
+- **`workshop_appointments`**: Complete tracking for all incoming customer service requests:
+  - **`emergency_roadside`**: Critical roadside breakdowns, tire blown, dead battery, urgent dispatch.
+  - **`emergency_home`**: Doorstep emergency mechanic home dispatches (locked brakes, no-crank at residence).
+  - **`workshop_bay`**: Standard scheduled workshop appointments with assigned bays, diagnostic bays, and maintenance.
+  - Fields: `booking_type`, `urgency_level`, `car_model`, `car_reg_number`, `dispatch_address`, `appointment_date`, `appointment_time`, `customer_notes`, `status`, `total_cost`, `payment_method`, `payment_status`.
 
 ### 4. `suppliers`, `spare_parts`, `store_orders`, `store_order_items` (Parts Supplier & Store)
 - **`suppliers`**: Supplier company entity, BIN/tax license, warehouse location, contact person, payout method.

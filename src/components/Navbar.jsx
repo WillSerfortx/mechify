@@ -80,7 +80,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           {/* Profile / Dashboard button */}
           <Link
-            to={userRole === 'driver' ? '/driver-dashboard' : '/profile'}
+            to={userRole === 'driver' ? '/driver-dashboard' : (userRole === 'workshop_owner' || userRole === 'workshop') ? '/workshop-dashboard' : '/profile'}
             className="flex items-center justify-center w-12 h-12 bg-white/10 border-2 border-white/20 rounded-full transition-all duration-300 hover:bg-white/30 hover:border-white hover:scale-110 active:scale-95 animate-bounce"
             style={{ animationDuration: '3s' }}
             title="Dashboard"

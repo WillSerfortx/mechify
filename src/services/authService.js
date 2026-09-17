@@ -11,16 +11,20 @@ import {
   getDoc 
 } from '../lib/firebase';
 
+import { WORKSHOP_DEMO_ACCOUNTS } from '../data/workshopAccounts';
+
 const USERS_STORAGE_KEY = 'mechify_database_users';
 
 // Initialize default mock users if not present
 const getStoredUsers = () => {
+  let existing = [];
   try {
     const raw = localStorage.getItem(USERS_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) existing = JSON.parse(raw);
   } catch (err) {
     console.error('Error reading users from storage:', err);
   }
+
   const defaults = [
     {
       id: 'demo_user_1',
@@ -44,8 +48,34 @@ const getStoredUsers = () => {
       createdAt: new Date().toISOString()
     }
   ];
-  localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(defaults));
-  return defaults;
+
+  // Add 30 workshop accounts to defaults
+  WORKSHOP_DEMO_ACCOUNTS.forEach(w => {
+    defaults.push({
+      id: w.id,
+      email: w.email,
+      password: '123',
+      firstName: w.ownerName.split(' ')[0],
+      lastName: w.ownerName.split(' ').slice(1).join(' ') || 'Owner',
+      role: 'workshop_owner',
+      workshopId: w.workshopId,
+      workshopName: w.workshopName,
+      phone: w.phone,
+      isVerified: true,
+      createdAt: new Date().toISOString()
+    });
+  });
+
+  // Merge so new defaults are added if not present
+  const merged = [...existing];
+  defaults.forEach(d => {
+    if (!merged.find(u => u.email.toLowerCase() === d.email.toLowerCase())) {
+      merged.push(d);
+    }
+  });
+
+  localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(merged));
+  return merged;
 };
 
 export const authService = {
@@ -122,7 +152,7 @@ export const authService = {
         throw new Error('Incorrect password.');
       }
       localStorage.setItem('currentUser', JSON.stringify(found));
-      localStorage.setItem('userRole', found.role || (cleanEmail.includes('driver') ? 'driver' : 'user'));
+      localStorage.setItem('userRole', found.role || (cleanEmail.includes('driver') ? 'driver' : cleanEmail.includes('workshop') ? 'workshop_owner' : 'user'));
       return found;
     }
 
@@ -130,7 +160,7 @@ export const authService = {
     try {
       if (auth && !auth.config?.apiKey?.includes('DummyKey')) {
         const cred = await signInWithEmailAndPassword(auth, cleanEmail, password);
-        let role = cleanEmail.includes('driver') ? 'driver' : 'user';
+        let role = cleanEmail.includes('driver') ? 'driver' : cleanEmail.includes('workshop') ? 'workshop_owner' : 'user';
         if (db) {
           const userDoc = await getDoc(doc(db, 'users', cred.user.uid));
           if (userDoc.exists()) {
@@ -152,7 +182,7 @@ export const authService = {
     }
 
     // Default fallback
-    const role = cleanEmail.includes('driver') ? 'driver' : 'user';
+    const role = cleanEmail.includes('driver') ? 'driver' : cleanEmail.includes('workshop') ? 'workshop_owner' : 'user';
     const fallbackUser = { email: cleanEmail, role, isVerified: true };
     localStorage.setItem('currentUser', JSON.stringify(fallbackUser));
     localStorage.setItem('userRole', role);

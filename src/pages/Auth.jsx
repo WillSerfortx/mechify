@@ -37,8 +37,15 @@ export default function Auth() {
 
     try {
       setLoading(true);
-      await authService.login(finalEmail, password);
-      navigate('/home');
+      const user = await authService.login(finalEmail, password);
+      const role = localStorage.getItem('userRole');
+      if (role === 'workshop_owner' || finalEmail.toLowerCase().includes('workshop')) {
+        navigate('/workshop-dashboard');
+      } else if (role === 'driver' || finalEmail.toLowerCase().includes('driver')) {
+        navigate('/driver-dashboard');
+      } else {
+        navigate('/home');
+      }
     } catch (err) {
       setErrorMessage(err.message || 'Login failed. Please check your credentials.');
     } finally {
@@ -136,32 +143,61 @@ export default function Auth() {
           />
         </div>
 
-        {/* ─── 2 Direct Quick Gmail Buttons ─── */}
-        <div className="absolute left-[1155px] top-[342px] w-[563px] flex items-center gap-3 z-10">
+        {/* ─── Direct Quick Account Buttons ─── */}
+        <div className="absolute left-[1155px] top-[338px] w-[563px] flex flex-wrap items-center gap-2 z-10">
           <button
             type="button"
             onClick={() => handleSelectQuickAccount('mahi@gmail.com', 'user')}
-            className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all cursor-pointer flex items-center gap-2 ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
               email.toLowerCase() === 'mahi@gmail.com'
                 ? 'bg-black text-white border-black shadow-lg scale-102'
                 : 'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'
             }`}
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-red-600" />
-            User: mahi@gmail.com
+            <span className="w-2 h-2 rounded-full bg-red-600" />
+            User
           </button>
           <button
             type="button"
             onClick={() => handleSelectQuickAccount('driver@gmail.com', 'driver')}
-            className={`px-4 py-2 rounded-xl text-sm font-bold border transition-all cursor-pointer flex items-center gap-2 ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
               email.toLowerCase() === 'driver@gmail.com'
                 ? 'bg-black text-white border-black shadow-lg scale-102'
                 : 'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'
             }`}
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-            Driver: driver@gmail.com
+            <span className="w-2 h-2 rounded-full bg-amber-500" />
+            Driver
           </button>
+          <button
+            type="button"
+            onClick={() => handleSelectQuickAccount('workshop1@gmail.com', 'workshop_owner')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
+              email.toLowerCase() === 'workshop1@gmail.com'
+                ? 'bg-black text-white border-black shadow-lg scale-102'
+                : 'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-blue-600" />
+            Workshop (#1)
+          </button>
+          
+          <select
+            onChange={(e) => {
+              if (e.target.value) {
+                handleSelectQuickAccount(e.target.value, 'workshop_owner');
+              }
+            }}
+            value={email.toLowerCase().includes('workshop') ? email.toLowerCase() : ''}
+            className="px-2.5 py-1.5 rounded-xl text-xs font-bold border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 cursor-pointer focus:outline-none max-w-[170px]"
+          >
+            <option value="">30 Workshop Demos...</option>
+            {Array.from({ length: 30 }).map((_, i) => (
+              <option key={i} value={`workshop${i + 1}@gmail.com`}>
+                Workshop #{i + 1} ({`workshop${i + 1}@gmail.com`})
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* ─── Password Label (Node 1:1120) ─── */}
