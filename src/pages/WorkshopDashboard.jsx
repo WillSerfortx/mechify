@@ -4,9 +4,8 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { WORKSHOP_DEMO_ACCOUNTS } from '../data/workshopAccounts';
-import { SUPPLIER_DEMO_ACCOUNTS } from '../data/supplierAccounts';
 
-// Custom Map Markers
+// Custom Leaflet Map Markers
 const workshopIcon = new L.DivIcon({
   html: '<div style="font-size: 32px; text-align: center; margin-top: -16px; margin-left: -16px; filter: drop-shadow(0 0 16px rgba(220,38,38,0.95));">🏭</div>',
   className: 'custom-icon',
@@ -19,7 +18,7 @@ const emergencyRoadsideIcon = new L.DivIcon({
   iconSize: [30, 30]
 });
 
-const technicianIcon = new L.DivIcon({
+const technicianMarkerIcon = new L.DivIcon({
   html: '<div style="font-size: 28px; text-align: center; margin-top: -14px; margin-left: -14px; filter: drop-shadow(0 0 14px rgba(16,185,129,0.9));">👨‍🔧</div>',
   className: 'custom-icon',
   iconSize: [28, 28]
@@ -28,7 +27,7 @@ const technicianIcon = new L.DivIcon({
 export default function WorkshopDashboard() {
   const navigate = useNavigate();
 
-  // ─── 1. Authenticated Workshop Owner State ───
+  // ─── 1. Authenticated Workshop Owner Profile ───
   const [selectedAccountId, setSelectedAccountId] = useState(() => {
     try {
       const stored = localStorage.getItem('currentUser');
@@ -50,27 +49,30 @@ export default function WorkshopDashboard() {
     return WORKSHOP_DEMO_ACCOUNTS.find(a => a.id === selectedAccountId) || WORKSHOP_DEMO_ACCOUNTS[0];
   }, [selectedAccountId]);
 
-  // ─── 2. Operational & Navigation State ───
+  // ─── 2. Operational Controls & Role State ───
   const [activeNav, setActiveNav] = useState('dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userRoleInWorkshop, setUserRoleInWorkshop] = useState('owner'); // 'owner' | 'manager' | 'service_advisor' | 'mechanic'
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
+  const [showNotificationsDropdown, setShowNotificationsDropdown] = useState(false);
 
-  // Workshop Live Operational Status
+  // Workshop Real-Time Operational Status (Spec Section 5)
   const [operationalStatus, setOperationalStatus] = useState('open'); // 'open' | 'busy' | 'fully_booked' | 'emergency_only'
-  const [emergencyRadarOn, setEmergencyRadarOn] = useState(true);
-
-  // Capacity Settings
+  
+  // Capacity Configuration (Spec Section 24)
   const [totalBays, setTotalBays] = useState(() => currentWorkshop.bays || 8);
   const [occupiedBays, setOccupiedBays] = useState(() => currentWorkshop.occupiedBays || 5);
   const availableBays = Math.max(0, totalBays - occupiedBays);
 
-  // ─── 3. Local Datasets for Enterprise Features ───
+  // Calendar view mode (Spec Section 7)
+  const [calendarViewMode, setCalendarViewMode] = useState('week'); // 'day' | 'week' | 'month'
+
+  // ─── 3. Comprehensive Datasets (All 40 Specification Modules) ───
   const [bookingsList, setBookingsList] = useState(() => currentWorkshop.bookings || []);
   const [mechanicsList, setMechanicsList] = useState(() => currentWorkshop.mechanics || []);
-  
-  // Job Cards / Repair Orders
+
+  // Job Cards / Repair Orders (Spec Section 10)
   const [jobCardsList, setJobCardsList] = useState([
     {
       id: 'JC-8801',
@@ -85,18 +87,15 @@ export default function WorkshopDashboard() {
       assignedBay: 'Bay #1',
       priority: 'Urgent',
       status: 'Repairing', // Inspection | Diagnosis | Waiting for Approval | Repairing | Quality Check | Ready | Completed
-      complaint: 'Car suddenly stalled in heavy traffic. Battery dead, won’t crank.',
-      diagnosis: 'Alternator voltage regulator short-circuited; 12V battery deep drained under 9.8V.',
+      complaint: 'Car suddenly stalled in heavy traffic. Hazard lights dimming fast, battery won’t crank.',
+      diagnosis: 'Alternator diode pack failed causing 0V charge; battery deeply discharged to 9.2V.',
       workPerformed: [
         { task: 'Alternator assembly replacement', laborPrice: 1500, status: 'Done' },
         { task: 'Electrical system load test & battery terminal cleaning', laborPrice: 800, status: 'In Progress' }
       ],
       partsUsed: [
         { partName: 'Denso 120A Heavy Duty Alternator', partNumber: 'DEN-ALT-120', qty: 1, price: 14500 },
-        { partName: 'Yuasa High-Performance 65Ah Sealed Battery', partNumber: 'YUA-65AH-SMF', qty: 1, price: 9200 }
-      ],
-      photos: [
-        'https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=400&h=300&fit=crop'
+        { partName: 'Yuasa 65Ah Sealed Maintenance Free Battery', partNumber: 'YUA-65AH-SMF', qty: 1, price: 9200 }
       ],
       timeline: [
         { stage: 'Booking Requested', time: 'Today 09:15 AM', done: true },
@@ -115,35 +114,32 @@ export default function WorkshopDashboard() {
       customerName: 'Arman Khan',
       customerPhone: '+880 1911-223344',
       customerEmail: 'arman.khan@gmail.com',
-      vehicle: 'Ferrari 488 Pista / 458 Italia',
+      vehicle: 'Ferrari 488 Pista',
       regNumber: 'KB 1024 KYG',
       mileage: '14,800 km',
       assignedMechanic: 'Bruce Wayne',
       assignedBay: 'Bay #4 (Supercar Lift)',
       priority: 'High',
       status: 'Waiting for Approval',
-      complaint: 'Scheduled 15,000km telemetry service; customer reports steering wheel vibration under hard braking.',
-      diagnosis: 'Front steering tie-rod ends have micro-play; front carbon-ceramic brake pads worn to 15% thickness.',
+      complaint: 'Periodic telemetry service; driver reported steering vibration under heavy braking.',
+      diagnosis: 'Front steering tie-rod end has micro-play; front carbon-ceramic brake pads worn down to 2.2mm thickness.',
       workPerformed: [
         { task: 'Telemetry diagnostic scan & ECU adaptation', laborPrice: 4500, status: 'Done' }
       ],
       partsUsed: [
         { partName: 'Motul 300V Trophy 0W-40 Synthetic Oil (10L)', partNumber: 'MOT-300V-10L', qty: 1, price: 18500 }
       ],
-      photos: [
-        'https://images.unsplash.com/photo-1600705722908-bab1e61c0b4d?w=400&h=300&fit=crop'
-      ],
       timeline: [
         { stage: 'Booking Requested', time: 'Yesterday', done: true },
         { stage: 'Vehicle Arrived in Bay #4', time: 'Today 08:30 AM', done: true },
         { stage: 'Digital Inspection Completed', time: 'Today 09:45 AM', done: true },
-        { stage: 'Additional Work Sent for Approval', time: 'Today 10:00 AM', done: true },
+        { stage: 'Additional Estimate Sent for Customer Approval', time: 'Today 10:00 AM', done: true },
         { stage: 'Customer Approved Work', time: 'Waiting for Customer', done: false }
       ]
     }
   ]);
 
-  // Customer Approvals (Additional work discovered during inspection)
+  // Customer Approvals for Additional Work Discovered (Spec Section 11)
   const [customerApprovalsList, setCustomerApprovalsList] = useState([
     {
       id: 'APP-501',
@@ -152,8 +148,8 @@ export default function WorkshopDashboard() {
       customerPhone: '+880 1911-223344',
       vehicle: 'Ferrari 488 Pista (KB 1024 KYG)',
       originalService: 'Telemetry Scheduled Maintenance (৳23,000)',
-      discoveredFault: 'Front Brembo Carbon Ceramic brake pads down to critical 2.2mm thickness. Rotor wear risk if driven further.',
-      recommendedWork: 'Replace Front Brembo Carbon-Ceramic Pads + Hydraulic Brake Bleed',
+      discoveredFault: 'Front Brembo Carbon Ceramic pads down to critical 2.2mm thickness. Rotors at risk of scoring.',
+      recommendedWork: 'Replace Front Brembo Carbon-Ceramic Pads + Complete Racing Brake Fluid Bleed',
       additionalCost: 38500,
       status: 'Pending Customer Action', // 'Pending Customer Action' | 'Approved by Customer' | 'Rejected by Customer'
       sentTime: '25 mins ago',
@@ -166,7 +162,7 @@ export default function WorkshopDashboard() {
       customerPhone: '+880 1819-223344',
       vehicle: 'Honda CR-V Turbo (DHA-GHA 22-9011)',
       originalService: 'Engine Oil & Filter Change (৳4,500)',
-      discoveredFault: 'Rear left suspension damper leaking hydraulic fluid heavily.',
+      discoveredFault: 'Rear-left suspension damper leaking hydraulic fluid heavily.',
       recommendedWork: 'Replace Rear Strut Absorbers (Pair)',
       additionalCost: 14000,
       status: 'Approved by Customer',
@@ -175,26 +171,26 @@ export default function WorkshopDashboard() {
     }
   ]);
 
-  // Digital Inspection 10-Point Checklist
+  // Digital 10-Point Vehicle Inspection (Spec Section 12)
   const [digitalInspection, setDigitalInspection] = useState({
     vehicle: 'Ferrari 488 Pista (KB 1024 KYG)',
-    inspectedBy: 'Bruce Wayne (Master Tech)',
+    inspectedBy: 'Bruce Wayne (Master Supercar Tech)',
     overallStatus: 'Needs Attention',
     items: [
-      { id: 'engine', name: 'Engine & Turbo Telemetry', status: 'Good', notes: 'Oil pressure 4.2 bar at operating temp; zero ECU fault codes.', photo: 'engine.jpg' },
-      { id: 'brakes', name: 'Brake Pads & Rotors', status: 'Critical', notes: 'Front pads 2.2mm thickness. Replace immediately to protect carbon rotors.', photo: 'brakes.jpg' },
-      { id: 'steering', name: 'Steering Rack & Alignment', status: 'Needs Attention', notes: 'Slight tie-rod play detected on front-right knuckle.', photo: 'steering.jpg' },
-      { id: 'suspension', name: 'Active Magnetic Dampers', status: 'Good', notes: 'Hydraulic seals clean, no leaks or bushing cracks.', photo: 'suspension.jpg' },
-      { id: 'battery', name: '12V Battery & Charging', status: 'Good', notes: '13.8V alternator charge rate, battery health 92%.', photo: 'battery.jpg' },
-      { id: 'fluids', name: 'Brake & Coolant Fluids', status: 'Needs Attention', notes: 'Brake fluid moisture content 2.8% (boiling point degraded). Flush needed.', photo: 'fluids.jpg' },
-      { id: 'tires', name: 'Michelin Pilot Sport Cup 2', status: 'Good', notes: 'Tread depth 5.5mm across all 4 wheels.', photo: 'tires.jpg' },
-      { id: 'electrical', name: 'OBD-II CAN Bus Telemetry', status: 'Good', notes: 'All body control modules reporting OK.', photo: 'obd.jpg' },
-      { id: 'ac', name: 'Climate Control & Cabin HVAC', status: 'Good', notes: 'AC blowing 4.5°C at center vents.', photo: 'ac.jpg' },
-      { id: 'lights', name: 'LED Matrix Headlamps', status: 'Good', notes: 'Full beam and dynamic leveling functioning correctly.', photo: 'lights.jpg' }
+      { id: 'engine', name: 'Engine & Turbo Telemetry', status: 'Good', notes: 'Oil pressure 4.2 bar at 90°C; zero ECU misfire codes.' },
+      { id: 'brakes', name: 'Brake Pads & Rotors', status: 'Critical', notes: 'Front pads 2.2mm thickness. Immediate replacement required to safeguard carbon-ceramic discs.' },
+      { id: 'steering', name: 'Steering Rack & Alignment', status: 'Needs Attention', notes: 'Slight tie-rod play detected on front knuckle.' },
+      { id: 'suspension', name: 'Active Magnetic Dampers', status: 'Good', notes: 'Hydraulic seals clean, no leaks or bushing tears.' },
+      { id: 'battery', name: '12V Battery & Charging', status: 'Good', notes: '13.8V alternator charge rate, battery health 92%.' },
+      { id: 'fluids', name: 'Brake & Coolant Fluids', status: 'Needs Attention', notes: 'Brake fluid moisture content 2.8% (degraded boiling point). Flush recommended.' },
+      { id: 'tires', name: 'Michelin Pilot Sport Cup 2', status: 'Good', notes: 'Tread depth 5.5mm across all 4 wheels.' },
+      { id: 'electrical', name: 'OBD-II CAN Bus Telemetry', status: 'Good', notes: 'All body control modules reporting operational status.' },
+      { id: 'ac', name: 'Climate Control & Cabin HVAC', status: 'Good', notes: 'AC blowing 4.5°C at center vents.' },
+      { id: 'lights', name: 'LED Matrix Headlamps', status: 'Good', notes: 'Full beam and dynamic leveling functioning correctly.' }
     ]
   });
 
-  // Workshop Local Inventory
+  // Local Garage Inventory & Shelf Tracking (Spec Section 16)
   const [workshopInventory, setWorkshopInventory] = useState([
     { id: 'INV-1', partName: 'Motul 300V Trophy 0W-40 (4L)', sku: 'MOT-300V-4L', category: 'Lubricants', stock: 24, minStock: 6, unitCost: 6500, sellingPrice: 8500, supplier: 'AeroFlow Tuning BD', location: 'Rack A-2' },
     { id: 'INV-2', partName: 'Brembo Ceramic Front Pads Set', sku: 'BRM-CP-402', category: 'Braking', stock: 8, minStock: 4, unitCost: 9500, sellingPrice: 13500, supplier: 'Brembo Official Distro', location: 'Rack B-1' },
@@ -203,17 +199,17 @@ export default function WorkshopDashboard() {
     { id: 'INV-5', partName: 'Toyota Genuine ATF WS Fluid (4L)', sku: 'TOY-ATF-WS', category: 'Transmission', stock: 18, minStock: 6, unitCost: 4200, sellingPrice: 5800, supplier: 'Navana Parts BD', location: 'Rack A-4' }
   ]);
 
-  // Workshop Configured Services Catalog
+  // Workshop Configured Services Catalog (Spec Section 14)
   const [servicesCatalog, setServicesCatalog] = useState([
-    { id: 'SRV-1', name: 'Periodic General Servicing (10,000 km)', category: 'Maintenance', startingPrice: 4500, duration: '2.5 hrs', mechanicType: 'General Tech' },
-    { id: 'SRV-2', name: 'Complete Computerized OBD-II Diagnostics', category: 'Diagnostics', startingPrice: 2500, duration: '1 hr', mechanicType: 'Diagnostic Specialist' },
-    { id: 'SRV-3', name: 'Brake Disc Resurfacing & Pad Overhaul', category: 'Braking', startingPrice: 6000, duration: '2 hrs', mechanicType: 'Brake Specialist' },
-    { id: 'SRV-4', name: 'High-Performance Supercar Telemetry Inspection', category: 'Supercars', startingPrice: 15000, duration: '3.5 hrs', mechanicType: 'Master Supercar Tech' },
-    { id: 'SRV-5', name: 'Air Conditioning Evaporator Flush & Refrigerant Gas', category: 'AC & Cooling', startingPrice: 5500, duration: '2 hrs', mechanicType: 'HVAC Specialist' },
-    { id: 'SRV-6', name: 'Full Suspension Bushing & Coilover Tuning', category: 'Suspension', startingPrice: 8000, duration: '4 hrs', mechanicType: 'Suspension Specialist' }
+    { id: 'SRV-1', name: 'Periodic General Servicing (10,000 km)', category: 'Maintenance', startingPrice: 4500, duration: '2.5 hrs', mechanicType: 'General Tech', equipment: '2-Post Lift, Oil Drainer' },
+    { id: 'SRV-2', name: 'Complete Computerized OBD-II Diagnostics', category: 'Diagnostics', startingPrice: 2500, duration: '1 hr', mechanicType: 'Diagnostic Specialist', equipment: 'Autel MaxiSys Diagnostic Tablet' },
+    { id: 'SRV-3', name: 'Brake Disc Resurfacing & Pad Overhaul', category: 'Braking', startingPrice: 6000, duration: '2 hrs', mechanicType: 'Brake Specialist', equipment: 'On-Car Brake Lathe' },
+    { id: 'SRV-4', name: 'High-Performance Supercar Telemetry Inspection', category: 'Supercars', startingPrice: 15000, duration: '3.5 hrs', mechanicType: 'Master Supercar Tech', equipment: 'Laser Alignment, Oscilloscope' },
+    { id: 'SRV-5', name: 'Air Conditioning Evaporator Flush & Refrigerant Gas', category: 'AC & Cooling', startingPrice: 5500, duration: '2 hrs', mechanicType: 'HVAC Specialist', equipment: 'R134a Recovery & Recharge Station' },
+    { id: 'SRV-6', name: 'Full Suspension Bushing & Coilover Tuning', category: 'Suspension', startingPrice: 8000, duration: '4 hrs', mechanicType: 'Suspension Specialist', equipment: 'Spring Compressor, Corner Weight Scales' }
   ]);
 
-  // Customer Directory & Digital Vehicle Passports
+  // Customer Directory & Digital Vehicle Passports (Spec Section 8 & 9)
   const [customerDirectory, setCustomerDirectory] = useState([
     {
       id: 'CUST-101',
@@ -234,7 +230,10 @@ export default function WorkshopDashboard() {
           transmission: '7-Speed Dual Clutch',
           engine: '3.9L Twin-Turbo V8',
           lastService: 'Today (Active Job)',
-          serviceHistoryCount: 5
+          serviceHistory: [
+            { date: '12 Nov 2023', mileage: '12,200 km', work: 'Transmission fluid flush and clutch calibration', cost: '৳32,000' },
+            { date: '15 Jun 2023', mileage: '9,800 km', work: 'Annual supercar inspection & Motul 300V engine oil change', cost: '৳24,500' }
+          ]
         }
       ]
     },
@@ -257,7 +256,9 @@ export default function WorkshopDashboard() {
           transmission: 'CVT Automatic',
           engine: '1.5L 1NZ-FE',
           lastService: 'Today (Roadside Emergency)',
-          serviceHistoryCount: 4
+          serviceHistory: [
+            { date: '04 Oct 2023', mileage: '41,000 km', work: 'Brake pads replacement & front suspension bushing overhaul', cost: '৳18,500' }
+          ]
         }
       ]
     },
@@ -280,20 +281,93 @@ export default function WorkshopDashboard() {
           transmission: 'CVT',
           engine: '1.5L VTEC Turbo',
           lastService: '12 Jan 2024',
-          serviceHistoryCount: 3
+          serviceHistory: [
+            { date: '12 Jan 2024', mileage: '32,400 km', work: 'Engine oil, coolant change & air filter replacement', cost: '৳7,800' }
+          ]
         }
       ]
     }
   ]);
 
-  // Modals state
+  // Quotations & Estimates Builder (Spec Section 15)
+  const [estimatesList, setEstimatesList] = useState([
+    {
+      id: 'EST-4401',
+      customerName: 'Arman Khan',
+      vehicle: 'Ferrari 488 Pista',
+      status: 'Sent', // Draft | Sent | Viewed | Approved | Rejected | Expired
+      laborItems: [{ desc: 'Brembo Caliper Overhaul Labor', amount: 6500 }],
+      partsItems: [{ desc: 'Carbon Ceramic Front Brake Pads', amount: 32000 }],
+      subtotal: 38500,
+      vatTax: 1925,
+      discount: 0,
+      total: 40425,
+      createdDate: 'Today'
+    },
+    {
+      id: 'EST-4402',
+      customerName: 'Navid Hasan',
+      vehicle: 'Mercedes-AMG GT R',
+      status: 'Approved',
+      laborItems: [{ desc: 'Coolant Flush & Thermostat Replacement', amount: 4500 }],
+      partsItems: [{ desc: 'OEM AMG Thermostat Housing', amount: 16800 }],
+      subtotal: 21300,
+      vatTax: 1065,
+      discount: 1000,
+      total: 21365,
+      createdDate: 'Yesterday'
+    }
+  ]);
+
+  // In-Platform Linked Messaging (Spec Section 26)
+  const [activeMessageThread, setActiveMessageThread] = useState('TH-1');
+  const [messageReplyInput, setMessageReplyInput] = useState('');
+  const [messagingThreads, setMessagingThreads] = useState([
+    {
+      id: 'TH-1',
+      recipientName: 'Arman Khan (Customer)',
+      vehicleTag: 'Ferrari 488 Pista (KB 1024 KYG)',
+      linkedJobCard: 'JC-8802',
+      lastMessage: 'I received the brake pad estimate. Can you confirm they are original Brembo Italy pads?',
+      time: '10 mins ago',
+      messages: [
+        { sender: 'workshop', text: 'Good morning Arman, our technician Bruce Wayne has completed the telemetry scan on your 488 Pista.', time: '09:50 AM' },
+        { sender: 'customer', text: 'Great! How do the brakes look?', time: '09:55 AM' },
+        { sender: 'workshop', text: 'The front pads have 2.2mm remaining. We sent an approval estimate for ৳38,500 so we can swap them today.', time: '10:02 AM' },
+        { sender: 'customer', text: 'I received the brake pad estimate. Can you confirm they are original Brembo Italy pads?', time: '10:05 AM' }
+      ]
+    },
+    {
+      id: 'TH-2',
+      recipientName: 'AeroFlow Spares (Supplier)',
+      vehicleTag: 'Parts Order #PO-9021',
+      linkedJobCard: 'JC-8802',
+      lastMessage: 'Courier dispatch rider is en route to Gulshan-2 hub with the Motul 300V oil.',
+      time: '1 hour ago',
+      messages: [
+        { sender: 'workshop', text: 'Need 10L of Motul 300V 0W-40 for bay #4 urgent supercar job.', time: '08:45 AM' },
+        { sender: 'supplier', text: 'Courier dispatch rider is en route to Gulshan-2 hub with the Motul 300V oil.', time: '09:10 AM' }
+      ]
+    }
+  ]);
+
+  // Notifications (Spec Section 25)
+  const [notificationsList, setNotificationsList] = useState([
+    { id: 'N-1', title: 'Customer Approved Work', desc: 'Tanvir Hossain approved rear strut replacement (৳14,000).', time: '10 mins ago', unread: true },
+    { id: 'N-2', title: 'New Emergency Roadside Alert', desc: 'Toyota Allion stalled on Kemal Ataturk Ave with dead battery.', time: '25 mins ago', unread: true },
+    { id: 'N-3', title: 'Low Inventory Alert', desc: 'Bosch AGM 70Ah Battery is down to 3 units on shelf.', time: '1 hour ago', unread: false },
+    { id: 'N-4', title: 'Payment Received', desc: 'bKash Merchant received ৳24,500 from invoice #INV-1092.', time: '3 hours ago', unread: false }
+  ]);
+
+  // Modals & Interactive States
   const [selectedBookingModal, setSelectedBookingModal] = useState(null);
   const [selectedJobCardModal, setSelectedJobCardModal] = useState(null);
+  const [selectedVehiclePassportModal, setSelectedVehiclePassportModal] = useState(null);
+  const [selectedInvoiceModal, setSelectedInvoiceModal] = useState(null);
   const [showNewJobCardModal, setShowNewJobCardModal] = useState(false);
   const [showNewBookingModal, setShowNewBookingModal] = useState(false);
-  const [showAddPartModal, setShowAddPartModal] = useState(false);
   const [showMarketplaceOrderModal, setShowMarketplaceOrderModal] = useState(false);
-  const [showInspectionReportModal, setShowInspectionReportModal] = useState(false);
+  const [showNewEstimateModal, setShowNewEstimateModal] = useState(false);
 
   // Sync state on demo workshop change
   useEffect(() => {
@@ -324,7 +398,7 @@ export default function WorkshopDashboard() {
     navigate('/auth');
   };
 
-  // KPI Calculations
+  // KPIs
   const metrics = useMemo(() => {
     const todayBookings = bookingsList.length;
     const activeJobs = jobCardsList.filter(j => j.status !== 'Completed').length;
@@ -335,7 +409,7 @@ export default function WorkshopDashboard() {
     return { todayBookings, activeJobs, completedJobs, emergencyRequests, todayRevenue, monthlyRevenue };
   }, [bookingsList, jobCardsList]);
 
-  // Real-time synchronization handler for customer approval
+  // Live Sync Customer Approval
   const handleCustomerApprovalAction = (approvalId, action) => {
     setCustomerApprovalsList(prev => prev.map(item => {
       if (item.id === approvalId) {
@@ -347,14 +421,13 @@ export default function WorkshopDashboard() {
       return item;
     }));
 
-    // Synchronize to Job Card timeline
     const approval = customerApprovalsList.find(a => a.id === approvalId);
     if (approval) {
       setJobCardsList(prev => prev.map(jc => {
         if (jc.id === approval.jobCardId) {
           const updatedTimeline = [...jc.timeline];
           updatedTimeline.push({
-            stage: action === 'approve' ? 'Customer Approved Additional Work (Live Sync)' : 'Customer Declined Extra Work',
+            stage: action === 'approve' ? 'Customer Approved Extra Work (Live Sync)' : 'Customer Declined Extra Work',
             time: 'Just now',
             done: true
           });
@@ -369,10 +442,31 @@ export default function WorkshopDashboard() {
     }
   };
 
+  // Send Message reply
+  const handleSendReply = () => {
+    if (!messageReplyInput.trim()) return;
+    setMessagingThreads(prev => prev.map(th => {
+      if (th.id === activeMessageThread) {
+        return {
+          ...th,
+          lastMessage: messageReplyInput,
+          time: 'Just now',
+          messages: [...th.messages, { sender: 'workshop', text: messageReplyInput, time: 'Just now' }]
+        };
+      }
+      return th;
+    }));
+    setMessageReplyInput('');
+  };
+
+  const activeThreadObj = useMemo(() => {
+    return messagingThreads.find(t => t.id === activeMessageThread) || messagingThreads[0];
+  }, [messagingThreads, activeMessageThread]);
+
   return (
     <div className="bg-[#07080d] min-h-screen text-white font-['Outfit',sans-serif] selection:bg-red-600 selection:text-white flex flex-col">
       
-      {/* ─── 1. TOP CONTROL BAR: BRANDING, SEARCH, LIVE STATUS & AVATAR ─── */}
+      {/* ─── A. TOP CONTROL BAR (BRAND, SMART SEARCH, LIVE STATUS & NOTIFICATIONS) ─── */}
       <header className="sticky top-0 z-40 bg-[#0d0f17]/95 backdrop-blur-2xl border-b border-white/10 px-5 sm:px-8 py-3 flex items-center justify-between gap-4 shadow-2xl">
         
         {/* Left Brand + Sidebar Toggle */}
@@ -414,7 +508,7 @@ export default function WorkshopDashboard() {
           </Link>
         </div>
 
-        {/* Center: Global Smart Search (Vehicles, Booking IDs, Customers, Parts) */}
+        {/* Center: Global Smart Search (Spec Section 34) */}
         <div className="hidden lg:flex items-center flex-1 max-w-lg mx-6">
           <div className="relative w-full">
             <input
@@ -430,10 +524,10 @@ export default function WorkshopDashboard() {
           </div>
         </div>
 
-        {/* Right: Operational Status Switcher + Account Dropdown */}
+        {/* Right: Operational Status Switcher + Role + Notifications */}
         <div className="flex items-center gap-3">
           
-          {/* Live Workshop Operational Status (Section 5 Spec) */}
+          {/* Real-Time Workshop Operational Status (Spec Section 5) */}
           <div className="flex items-center bg-[#141724] border border-white/10 rounded-full px-3 py-1">
             <span className={`w-2.5 h-2.5 rounded-full mr-2 ${
               operationalStatus === 'open' ? 'bg-emerald-500 animate-pulse' :
@@ -458,7 +552,7 @@ export default function WorkshopDashboard() {
             <select
               value={selectedAccountId}
               onChange={(e) => handleSwitchAccount(e.target.value)}
-              className="bg-transparent text-white text-xs font-bold focus:outline-none cursor-pointer pr-1 max-w-[150px]"
+              className="bg-transparent text-white text-xs font-bold focus:outline-none cursor-pointer pr-1 max-w-[140px]"
             >
               {WORKSHOP_DEMO_ACCOUNTS.map((acc, idx) => (
                 <option key={acc.id} value={acc.id} className="bg-[#12141e] text-white">
@@ -468,7 +562,7 @@ export default function WorkshopDashboard() {
             </select>
           </div>
 
-          {/* Staff Role Switcher for Demo (Owner / Manager / Service Advisor / Mechanic) */}
+          {/* Staff Role Switcher (Spec Section 30) */}
           <div className="bg-[#141724] border border-white/10 rounded-full px-3 py-1 hidden xl:flex items-center gap-2">
             <span className="text-xs text-gray-400 font-bold">Role:</span>
             <select
@@ -481,6 +575,40 @@ export default function WorkshopDashboard() {
               <option value="service_advisor" className="bg-[#12141e]">Service Advisor</option>
               <option value="mechanic" className="bg-[#12141e]">Mechanic (Job Cards)</option>
             </select>
+          </div>
+
+          {/* Notifications Bell Dropdown (Spec Section 25) */}
+          <div className="relative">
+            <button
+              onClick={() => setShowNotificationsDropdown(!showNotificationsDropdown)}
+              className="p-2 rounded-xl border border-white/10 text-gray-300 hover:text-white relative transition-colors"
+              title="Notifications"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+              <span className="w-2 h-2 rounded-full bg-red-500 absolute top-1.5 right-1.5 animate-pulse" />
+            </button>
+
+            {showNotificationsDropdown && (
+              <div className="absolute right-0 mt-3 w-80 rounded-2xl border border-white/15 bg-[#121522] shadow-2xl p-4 z-50 animate-scaleUp">
+                <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                  <h4 className="font-bold text-xs">Workshop Real-Time Alerts</h4>
+                  <span className="text-[10px] text-red-400 font-bold cursor-pointer">Mark read</span>
+                </div>
+                <div className="divide-y divide-white/5 max-h-64 overflow-y-auto mt-2">
+                  {notificationsList.map(n => (
+                    <div key={n.id} className="py-2.5 text-xs">
+                      <div className="flex items-center justify-between">
+                        <strong className="text-white text-xs">{n.title}</strong>
+                        <span className="text-[9px] text-gray-400">{n.time}</span>
+                      </div>
+                      <p className="text-[11px] text-gray-300 mt-0.5">{n.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Owner Profile Avatar */}
@@ -505,7 +633,7 @@ export default function WorkshopDashboard() {
 
       </header>
 
-      {/* ─── 2. MAIN VIEW WRAPPER (SIDEBAR + CONTENT PANES) ─── */}
+      {/* ─── B. MAIN WORKSPACE (COLLAPSIBLE SIDEBAR + DYNAMIC MODULES) ─── */}
       <div className="flex-1 flex overflow-hidden relative">
         
         {/* ── Collapsible Left Sidebar (Spec Section 38) ── */}
@@ -532,15 +660,18 @@ export default function WorkshopDashboard() {
             {[
               { id: 'dashboard', label: 'Dashboard Overview', icon: '📊' },
               { id: 'bookings', label: 'Bookings & Calendar', icon: '📅', badge: bookingsList.length },
-              { id: 'job_cards', label: 'Job Cards / Repair Orders', icon: '📋', badge: jobCardsList.length, badgeColor: 'bg-red-600' },
+              { id: 'job_cards', label: 'Job Cards & Repairs', icon: '📋', badge: jobCardsList.length, badgeColor: 'bg-red-600' },
               { id: 'customer_approvals', label: 'Customer Approvals', icon: '🤝', badge: customerApprovalsList.filter(a => a.status.includes('Pending')).length, badgeColor: 'bg-amber-500' },
               { id: 'inspections', label: 'Digital Inspections', icon: '🔍' },
               { id: 'customers_vehicles', label: 'Customers & Vehicles', icon: '🚗' },
               { id: 'mechanics_capacity', label: 'Mechanics & Bays', icon: '👨‍🔧', badge: `${availableBays} Bays Free`, badgeColor: 'bg-emerald-600' },
               { id: 'services_catalog', label: 'Services & Pricing', icon: '🛠️' },
-              { id: 'inventory_marketplace', label: 'Parts & Inventory', icon: '📦' },
+              { id: 'estimates_invoices', label: 'Estimates & Invoices', icon: '🧾' },
+              { id: 'inventory_marketplace', label: 'Parts & Marketplace', icon: '📦' },
               { id: 'emergency_radar', label: 'Emergency Roadside SOS', icon: '🚨', badge: metrics.emergencyRequests, badgeColor: 'bg-red-600 animate-pulse' },
               { id: 'billing_payouts', label: 'Billing & Payouts', icon: '💰' },
+              { id: 'messaging', label: 'In-Platform Messages', icon: '💬', badge: 1, badgeColor: 'bg-blue-600' },
+              { id: 'analytics_performance', label: 'Analytics & Scorecard', icon: '📈' },
               { id: 'reviews_reputation', label: 'Reviews & Reputation', icon: '⭐' },
               { id: 'public_profile', label: 'Public Hub Profile', icon: '🏪' },
               { id: 'onboarding', label: 'Onboarding & Verification', icon: '🚀' },
@@ -572,7 +703,7 @@ export default function WorkshopDashboard() {
             })}
           </div>
 
-          {/* Bottom Bay Capacity Gauge Widget */}
+          {/* Bottom Bay Capacity Gauge Widget (Spec Section 24) */}
           {!sidebarCollapsed && (
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 mt-4">
               <div className="flex items-center justify-between text-[11px] text-gray-400 font-bold mb-1.5">
@@ -600,7 +731,7 @@ export default function WorkshopDashboard() {
           {activeNav === 'dashboard' && (
             <div className="space-y-8 animate-fadeIn">
               
-              {/* Top Greeting & Banner */}
+              {/* Top Greeting & Banner (Spec Section 4) */}
               <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#141724] via-[#0f111a] to-[#1a111a] border border-white/10 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div>
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/10 border border-red-500/30 text-red-400 text-xs font-black uppercase tracking-wider mb-2">
@@ -816,12 +947,55 @@ export default function WorkshopDashboard() {
                   <h2 className="text-2xl font-black">Workshop Bookings & Bay Scheduling</h2>
                   <p className="text-xs text-gray-400">Scheduled vehicle maintenance, bay assignments, and mechanic allocations.</p>
                 </div>
-                <button
-                  onClick={() => setShowNewBookingModal(true)}
-                  className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-md"
-                >
-                  + Create Direct Booking
-                </button>
+                
+                <div className="flex items-center gap-3">
+                  {/* Calendar View Toggle (Spec Section 7) */}
+                  <div className="flex p-1 rounded-xl bg-white/5 border border-white/10 text-xs font-bold">
+                    {['day', 'week', 'month'].map(v => (
+                      <button
+                        key={v}
+                        onClick={() => setCalendarViewMode(v)}
+                        className={`px-3 py-1 rounded-lg uppercase ${calendarViewMode === v ? 'bg-red-600 text-white' : 'text-gray-400 hover:text-white'}`}
+                      >
+                        {v} View
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => setShowNewBookingModal(true)}
+                    className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-md whitespace-nowrap"
+                  >
+                    + Create Direct Booking
+                  </button>
+                </div>
+              </div>
+
+              {/* Visual Calendar Schedule Blocks (Spec Section 7) */}
+              <div className="p-6 rounded-3xl bg-[#10131d] border border-white/10 space-y-4">
+                <div className="flex items-center justify-between text-xs text-gray-400 font-bold pb-3 border-b border-white/10">
+                  <span>Today's Bay Timeline Schedule ({calendarViewMode.toUpperCase()} VIEW)</span>
+                  <span>Double-booking prevention active</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  {[
+                    { bay: 'Bay #1 (Standard Lift)', car: 'Toyota Allion', time: '09:00 AM - 12:00 PM', mech: 'Barry Allen', status: 'In Progress' },
+                    { bay: 'Bay #2 (Inspection Pit)', car: 'Porsche 911 GT3', time: '11:00 AM - 02:00 PM', mech: 'Clark Kent', status: 'Confirmed' },
+                    { bay: 'Bay #3 (Brake Lathe)', car: 'Honda CR-V', time: '02:00 PM - 04:30 PM', mech: 'Diana Prince', status: 'Pending' },
+                    { bay: 'Bay #4 (Supercar Lift)', car: 'Ferrari 488 Pista', time: '08:30 AM - 05:00 PM', mech: 'Bruce Wayne', status: 'Waiting Approval' }
+                  ].map((slot, i) => (
+                    <div key={i} className="p-4 rounded-2xl bg-white/5 border border-white/10 text-xs space-y-1.5 hover:border-red-500/40 transition-colors">
+                      <div className="text-[10px] text-red-400 font-bold uppercase">{slot.bay}</div>
+                      <div className="text-sm font-black text-white">{slot.car}</div>
+                      <div className="text-gray-400 font-mono">⏱️ {slot.time}</div>
+                      <div className="text-gray-300">Tech: <strong className="text-emerald-400">{slot.mech}</strong></div>
+                      <span className="inline-block mt-1 text-[9px] font-black uppercase px-2 py-0.5 rounded bg-white/10 text-white">
+                        {slot.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Bookings Table */}
@@ -1082,7 +1256,12 @@ export default function WorkshopDashboard() {
                           <div className="font-bold text-white">{v.make} {v.model} ({v.year})</div>
                           <div className="text-gray-400 font-mono">Reg: {v.regNumber}</div>
                           <div className="text-gray-400 font-mono">VIN: {v.vin}</div>
-                          <div className="text-red-400 font-semibold mt-1">Last Log: {v.lastService}</div>
+                          <button
+                            onClick={() => setSelectedVehiclePassportModal(v)}
+                            className="mt-2 w-full py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-red-400 font-bold text-xs transition-colors"
+                          >
+                            View Digital Vehicle Passport &gt;
+                          </button>
                         </div>
                       ))}
                     </div>
@@ -1092,7 +1271,465 @@ export default function WorkshopDashboard() {
             </div>
           )}
 
-          {/* ══════════════════ TAB 7: PARTS & INVENTORY + SUPPLIER MARKETPLACE (SPEC SECTION 16 & 17) ══════════════════ */}
+          {/* ══════════════════ TAB 7: ESTIMATES & INVOICES (SPEC SECTION 15 & 20) ══════════════════ */}
+          {activeNav === 'estimates_invoices' && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-2xl font-black">Estimates, Quotations & Tax Invoices</h2>
+                  <p className="text-xs text-gray-400">Itemized quotation builder with labor, spare parts, taxes, discounts, and customer consent status.</p>
+                </div>
+                <button
+                  onClick={() => setShowNewEstimateModal(true)}
+                  className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-md"
+                >
+                  + Create New Estimate
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {estimatesList.map(est => (
+                  <div key={est.id} className="p-6 rounded-3xl bg-[#10131d] border border-white/10 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs font-black text-red-500 bg-red-500/10 px-3 py-1 rounded-lg border border-red-500/20">
+                        {est.id}
+                      </span>
+                      <span className={`text-[10px] font-black uppercase px-2.5 py-1 rounded-full ${
+                        est.status === 'Approved' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400'
+                      }`}>
+                        {est.status}
+                      </span>
+                    </div>
+
+                    <h3 className="text-lg font-black text-white">{est.vehicle}</h3>
+                    <p className="text-xs text-gray-400">Customer: <strong className="text-white">{est.customerName}</strong></p>
+
+                    <div className="p-3 bg-black/40 rounded-xl border border-white/5 space-y-1.5 text-xs">
+                      {est.laborItems.map((l, idx) => (
+                        <div key={idx} className="flex justify-between text-gray-300">
+                          <span>🔧 {l.desc}</span>
+                          <span className="font-bold">৳{l.amount.toLocaleString()}</span>
+                        </div>
+                      ))}
+                      {est.partsItems.map((p, idx) => (
+                        <div key={idx} className="flex justify-between text-gray-300">
+                          <span>📦 {p.desc}</span>
+                          <span className="font-bold">৳{p.amount.toLocaleString()}</span>
+                        </div>
+                      ))}
+                      <div className="flex justify-between text-gray-400 pt-1 border-t border-white/5">
+                        <span>VAT (5%):</span>
+                        <span>৳{est.vatTax.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between text-base font-black text-emerald-400 pt-1 border-t border-white/10">
+                        <span>Total Quotation:</span>
+                        <span>৳{est.total.toLocaleString()}</span>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex justify-end gap-2">
+                      <button
+                        onClick={() => setSelectedInvoiceModal(est)}
+                        className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold transition-colors"
+                      >
+                        Print Formal Invoice
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ══════════════════ TAB 8: IN-PLATFORM MESSAGING (SPEC SECTION 26) ══════════════════ */}
+          {activeNav === 'messaging' && (
+            <div className="space-y-6 animate-fadeIn">
+              <div>
+                <h2 className="text-2xl font-black">In-Platform Service Messaging</h2>
+                <p className="text-xs text-gray-400">Linked directly to Booking IDs, customer vehicle profiles, and Job Cards.</p>
+              </div>
+
+              <div className="h-[560px] rounded-3xl border border-white/10 bg-[#10131d] flex overflow-hidden">
+                <div className="w-80 border-r border-white/10 flex flex-col shrink-0">
+                  <div className="p-4 border-b border-white/10 text-xs font-black uppercase text-gray-400">
+                    Active Service Threads
+                  </div>
+                  <div className="divide-y divide-white/5 overflow-y-auto flex-1">
+                    {messagingThreads.map(th => (
+                      <div
+                        key={th.id}
+                        onClick={() => setActiveMessageThread(th.id)}
+                        className={`p-4 cursor-pointer transition-colors ${
+                          activeMessageThread === th.id ? 'bg-red-600/10 border-l-4 border-red-600' : 'hover:bg-white/5'
+                        }`}
+                      >
+                        <div className="flex justify-between items-center mb-1">
+                          <strong className="text-xs text-white truncate">{th.recipientName}</strong>
+                          <span className="text-[9px] text-gray-500">{th.time}</span>
+                        </div>
+                        <span className="text-[10px] text-red-400 font-bold block mb-1">{th.vehicleTag}</span>
+                        <p className="text-[11px] text-gray-400 truncate">{th.lastMessage}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex-1 flex flex-col justify-between">
+                  <div className="p-4 border-b border-white/10 flex justify-between items-center bg-white/5">
+                    <div>
+                      <h4 className="font-bold text-sm text-white">{activeThreadObj.recipientName}</h4>
+                      <span className="text-xs text-red-400 font-semibold">{activeThreadObj.vehicleTag}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 p-6 overflow-y-auto space-y-3">
+                    {activeThreadObj.messages.map((m, idx) => (
+                      <div key={idx} className={`flex ${m.sender === 'workshop' ? 'justify-end' : 'justify-start'}`}>
+                        <div className={`max-w-md p-3.5 rounded-2xl text-xs leading-relaxed ${
+                          m.sender === 'workshop'
+                            ? 'bg-red-600 text-white rounded-br-none shadow-md'
+                            : 'bg-white/10 text-gray-200 rounded-bl-none'
+                        }`}>
+                          <p>{m.text}</p>
+                          <span className="text-[9px] opacity-75 block text-right mt-1">{m.time}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="p-4 border-t border-white/10 flex gap-2">
+                    <input
+                      type="text"
+                      value={messageReplyInput}
+                      onChange={(e) => setMessageReplyInput(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') handleSendReply(); }}
+                      placeholder="Type response to driver or supplier..."
+                      className="flex-1 text-xs p-3 rounded-xl bg-white/5 border border-white/10 focus:outline-none focus:border-red-500"
+                    />
+                    <button
+                      onClick={handleSendReply}
+                      className="px-5 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold"
+                    >
+                      Send
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ══════════════════ TAB 9: ANALYTICS & WORKSHOP PERFORMANCE SCORE (SPEC SECTION 27 & 28) ══════════════════ */}
+          {activeNav === 'analytics_performance' && (
+            <div className="space-y-8 animate-fadeIn">
+              <div>
+                <h2 className="text-2xl font-black">Workshop Analytics & Operational Scorecard</h2>
+                <p className="text-xs text-gray-400">Objective metric indicators evaluating customer satisfaction, turnaround time, and repair accuracy.</p>
+              </div>
+
+              {/* Performance Score Card (Spec Section 28) */}
+              <div className="p-8 rounded-3xl bg-gradient-to-r from-[#141829] to-[#0f121d] border border-white/10 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
+                <div className="flex items-center gap-6">
+                  <div className="w-24 h-24 rounded-full border-4 border-emerald-500 flex flex-col items-center justify-center bg-black/40 shadow-[0_0_25px_rgba(16,185,129,0.3)]">
+                    <span className="text-3xl font-black text-emerald-400">96</span>
+                    <span className="text-[9px] uppercase font-bold text-gray-400">Score / 100</span>
+                  </div>
+                  <div>
+                    <div className="inline-block text-[10px] font-black uppercase px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 mb-1">
+                      Tier 1 Elite Workshop
+                    </div>
+                    <h3 className="text-2xl font-black text-white">Mechify Quality Benchmark</h3>
+                    <p className="text-xs text-gray-400 max-w-md mt-0.5">
+                      Your hub is operating in the top 3% in Dhaka. On-time completions and high customer reviews qualify you for priority emergency roadside dispatches.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 text-xs shrink-0 w-full md:w-auto">
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/5">
+                    <span className="text-gray-400 block text-[10px] uppercase font-bold">Acceptance Rate</span>
+                    <strong className="text-emerald-400 text-lg">98.4%</strong>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/5">
+                    <span className="text-gray-400 block text-[10px] uppercase font-bold">Avg Response Time</span>
+                    <strong className="text-white text-lg">4.2 mins</strong>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/5">
+                    <span className="text-gray-400 block text-[10px] uppercase font-bold">On-Time Delivery</span>
+                    <strong className="text-emerald-400 text-lg">94.8%</strong>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/5">
+                    <span className="text-gray-400 block text-[10px] uppercase font-bold">Customer Return Rate</span>
+                    <strong className="text-cyan-400 text-lg">78.2%</strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service Analytics */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-6 rounded-3xl bg-[#10131d] border border-white/10 space-y-3">
+                  <h4 className="font-bold text-sm text-white">Most Requested Services</h4>
+                  <div className="space-y-2 text-xs">
+                    {[
+                      { name: 'Computerized OBD-II Diagnostics', pct: 88, rev: '৳148,000' },
+                      { name: 'Brembo Brake Overhaul & Rotors', pct: 72, rev: '৳312,000' },
+                      { name: 'Synthetic Oil & Fluid Flushes', pct: 94, rev: '৳195,000' },
+                      { name: 'Supercar Telemetry Tuning', pct: 54, rev: '৳280,000' }
+                    ].map((s, i) => (
+                      <div key={i} className="p-2.5 rounded-xl bg-white/5 flex justify-between items-center">
+                        <span>{s.name}</span>
+                        <strong className="text-emerald-400">{s.rev}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-6 rounded-3xl bg-[#10131d] border border-white/10 space-y-3">
+                  <h4 className="font-bold text-sm text-white">Top Serviced Vehicle Brands</h4>
+                  <div className="space-y-2 text-xs">
+                    {[
+                      { brand: 'Toyota & Lexus (Hybrid / GR)', share: '38%' },
+                      { brand: 'Porsche (911 / Macan / Cayenne)', share: '24%' },
+                      { brand: 'Ferrari & Lamborghini', share: '18%' },
+                      { brand: 'BMW & Mercedes-AMG', share: '20%' }
+                    ].map((b, i) => (
+                      <div key={i} className="p-2.5 rounded-xl bg-white/5 flex justify-between items-center">
+                        <span className="font-bold text-white">{b.brand}</span>
+                        <span className="text-red-400 font-black">{b.share} Volume</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ══════════════════ TAB 10: PUBLIC HUB PROFILE PREVIEW (SPEC SECTION 23) ══════════════════ */}
+          {activeNav === 'public_profile' && (
+            <div className="max-w-4xl mx-auto space-y-6 animate-fadeIn">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h2 className="text-2xl font-black">Public Hub Profile Preview</h2>
+                  <p className="text-xs text-gray-400">This is the verified customer-facing profile displayed on the Mechify consumer mobile & web app.</p>
+                </div>
+                <button
+                  onClick={() => alert("Changes saved to Public Mechify Directory!")}
+                  className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-md"
+                >
+                  Save & Publish Live
+                </button>
+              </div>
+
+              <div className="rounded-3xl border border-white/15 overflow-hidden bg-black/40 shadow-2xl relative">
+                <div className="h-52 w-full relative">
+                  <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=1200&h=400&fit=crop" alt="Cover" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                </div>
+
+                <div className="p-8 pt-0 relative -mt-16 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
+                  <div className="flex items-end gap-4">
+                    <img
+                      src={currentWorkshop.avatar}
+                      alt="Logo"
+                      className="w-24 h-24 rounded-3xl object-cover border-4 border-[#07080d] shadow-2xl"
+                    />
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-2xl font-black text-white">{currentWorkshop.workshopName}</h3>
+                        <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                          ✓ Mechify Certified
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-300 mt-1">📍 {currentWorkshop.address} • ⭐ <strong>{currentWorkshop.rating}</strong> ({currentWorkshop.reviews} reviews)</p>
+                      <div className="text-[11px] text-gray-400 mt-1">Operating Hours: 08:30 AM - 09:00 PM • 24/7 Emergency Dispatch Hub</div>
+                    </div>
+                  </div>
+
+                  {/* Public Customer CTAs (Spec Section 23) */}
+                  <div className="flex flex-wrap gap-2">
+                    <button className="px-4 py-2 rounded-xl bg-red-600 text-white font-black text-xs shadow-md">
+                      Book Service
+                    </button>
+                    <a href={`tel:${currentWorkshop.phone}`} className="px-3 py-2 rounded-xl bg-white/10 text-white font-bold text-xs">
+                      📞 Call Workshop
+                    </a>
+                  </div>
+                </div>
+
+                {/* Available Slots & Services Preview */}
+                <div className="p-8 pt-4 border-t border-white/10 space-y-4">
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">Available Services & Starting Rates</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    {servicesCatalog.map(s => (
+                      <div key={s.id} className="p-3 rounded-xl bg-white/5 border border-white/5 flex justify-between items-center">
+                        <div>
+                          <strong className="text-white block">{s.name}</strong>
+                          <span className="text-gray-400">{s.duration} • {s.mechanicType}</span>
+                        </div>
+                        <strong className="text-emerald-400">From ৳{s.startingPrice.toLocaleString()}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ══════════════════ TAB 11: REVIEWS & REPUTATION (SPEC SECTION 22) ══════════════════ */}
+          {activeNav === 'reviews_reputation' && (
+            <div className="space-y-6 animate-fadeIn">
+              <div>
+                <h2 className="text-2xl font-black">Customer Reviews & Workshop Reputation</h2>
+                <p className="text-xs text-gray-400">Verified driver feedback connected to job cards and services.</p>
+              </div>
+
+              <div className="p-6 rounded-3xl bg-[#10131d] border border-white/10 flex flex-col sm:flex-row items-center gap-8">
+                <div className="text-center sm:border-r border-white/10 sm:pr-8 shrink-0">
+                  <div className="text-5xl font-black text-amber-400">{currentWorkshop.rating}</div>
+                  <div className="text-amber-400 text-lg mt-1">★★★★★</div>
+                  <div className="text-xs text-gray-400 mt-1">Based on {currentWorkshop.reviews} verified reviews</div>
+                </div>
+                <div className="flex-1 w-full space-y-1.5 text-xs">
+                  {[{ star: 5, pct: 82 }, { star: 4, pct: 14 }, { star: 3, pct: 3 }, { star: 2, pct: 1 }, { star: 1, pct: 0 }].map(b => (
+                    <div key={b.star} className="flex items-center gap-3">
+                      <span className="w-12 font-bold">{b.star} Star</span>
+                      <div className="flex-1 h-2 rounded-full bg-white/10 overflow-hidden">
+                        <div className="bg-amber-400 h-full rounded-full" style={{ width: `${b.pct}%` }} />
+                      </div>
+                      <span className="w-8 text-right text-gray-400">{b.pct}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {[
+                  { name: 'Arman Khan', car: 'Ferrari 488 Pista', rating: 5, comment: 'Master technician Bruce Wayne calibrated the telemetry and changed the Brembo pads flawlessly. Zero track fade.', date: 'Yesterday' },
+                  { name: 'Mahi Rahman', car: 'Toyota Allion', rating: 5, comment: 'Mobile emergency unit arrived in Banani 11 intersection within 14 minutes. Jump-started and swapped alternator. Lifesaver!', date: '3 days ago' }
+                ].map((r, idx) => (
+                  <div key={idx} className="p-5 rounded-2xl bg-[#10131d] border border-white/10 space-y-2 text-xs">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <strong className="text-white text-sm block">{r.name}</strong>
+                        <span className="text-red-400 font-bold">{r.car}</span>
+                      </div>
+                      <span className="text-amber-400">{'★'.repeat(r.rating)}</span>
+                    </div>
+                    <p className="text-gray-300 leading-relaxed">{r.comment}</p>
+                    <div className="pt-2 border-t border-white/5 flex justify-end">
+                      <button onClick={() => alert("Reply dialog opened!")} className="text-xs font-bold text-red-400 hover:text-red-300">
+                        Reply as Owner
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ══════════════════ TAB 12: MECHANICS & CAPACITY MANAGEMENT (SPEC SECTION 13 & 24) ══════════════════ */}
+          {activeNav === 'mechanics_capacity' && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-2xl font-black">Specialist Mechanics & Facility Bay Allocation</h2>
+                  <p className="text-xs text-gray-400">Technician certifications, active job tracking, and service bay capacity limits.</p>
+                </div>
+                <button
+                  onClick={() => alert("Add Mechanic form modal opened!")}
+                  className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-md"
+                >
+                  + Add Certified Mechanic
+                </button>
+              </div>
+
+              {/* Bay Capacity Controller (Spec Section 24) */}
+              <div className="p-6 rounded-3xl bg-[#10131d] border border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 mb-1">Total Service Bays</label>
+                  <input
+                    type="number"
+                    value={totalBays}
+                    onChange={(e) => setTotalBays(parseInt(e.target.value) || 8)}
+                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white font-black text-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 mb-1">Occupied Lift Bays</label>
+                  <input
+                    type="number"
+                    value={occupiedBays}
+                    onChange={(e) => setOccupiedBays(parseInt(e.target.value) || 0)}
+                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-amber-400 font-black text-lg"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 mb-1">Calculated Free Capacity</label>
+                  <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-black text-lg">
+                    {availableBays} Bays Available for Dispatch
+                  </div>
+                </div>
+              </div>
+
+              {/* Mechanics Roster */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {mechanicsList.map(m => (
+                  <div key={m.id} className="p-5 rounded-2xl bg-[#10131d] border border-white/10 flex items-center justify-between text-xs">
+                    <div>
+                      <h4 className="font-bold text-sm text-white">{m.name}</h4>
+                      <p className="text-red-400 font-bold mt-0.5">{m.specialization}</p>
+                      <p className="text-gray-400 mt-1">Experience: <strong className="text-white">{m.experience}</strong> • Phone: {m.phone}</p>
+                    </div>
+                    <div className="text-right">
+                      <span className={`text-[10px] font-black px-2.5 py-1 rounded-full uppercase block mb-2 ${
+                        m.status === 'Available' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'
+                      }`}>
+                        {m.status}
+                      </span>
+                      <a href={`tel:${m.phone}`} className="inline-block px-3 py-1 rounded-lg bg-white/10 text-white font-bold">
+                        📞 Call Tech
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ══════════════════ TAB 13: SERVICES & PRICING CATALOG (SPEC SECTION 14) ══════════════════ */}
+          {activeNav === 'services_catalog' && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-2xl font-black">Workshop Service Catalog & Pricing</h2>
+                  <p className="text-xs text-gray-400">Configure services, equipment requirements, labor durations, and customer starting rates.</p>
+                </div>
+                <button
+                  onClick={() => alert("Add Service dialog opened!")}
+                  className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-md"
+                >
+                  + Add Service Offering
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {servicesCatalog.map(s => (
+                  <div key={s.id} className="p-5 rounded-2xl bg-[#10131d] border border-white/10 space-y-2 text-xs">
+                    <div className="flex justify-between items-start">
+                      <h4 className="font-bold text-sm text-white">{s.name}</h4>
+                      <span className="text-emerald-400 font-black text-sm">৳{s.startingPrice.toLocaleString()}</span>
+                    </div>
+                    <div className="text-gray-400">Duration: <strong className="text-white">{s.duration}</strong> • Category: <strong className="text-red-400">{s.category}</strong></div>
+                    <div className="text-gray-400">Required Tech: <strong className="text-white">{s.mechanicType}</strong></div>
+                    <div className="p-2 bg-white/5 rounded-lg border border-white/5 text-[11px] text-gray-300">
+                      Equipment: {s.equipment}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ══════════════════ TAB 14: PARTS & MARKETPLACE (SPEC SECTION 16 & 17) ══════════════════ */}
           {activeNav === 'inventory_marketplace' && (
             <div className="space-y-8 animate-fadeIn">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -1164,7 +1801,7 @@ export default function WorkshopDashboard() {
             </div>
           )}
 
-          {/* ══════════════════ TAB 8: EMERGENCY ROADSIDE & GPS RADAR (SPEC SECTION 18 & 19) ══════════════════ */}
+          {/* ══════════════════ TAB 15: EMERGENCY ROADSIDE & GPS RADAR (SPEC SECTION 18 & 19) ══════════════════ */}
           {activeNav === 'emergency_radar' && (
             <div className="space-y-6 animate-fadeIn">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -1213,7 +1850,7 @@ export default function WorkshopDashboard() {
             </div>
           )}
 
-          {/* ══════════════════ TAB 9: BILLING, INVOICES & PAYOUTS (SPEC SECTION 20 & 21) ══════════════════ */}
+          {/* ══════════════════ TAB 16: BILLING, INVOICES & PAYOUTS (SPEC SECTION 20 & 21) ══════════════════ */}
           {activeNav === 'billing_payouts' && (
             <div className="space-y-8 animate-fadeIn">
               <div>
@@ -1248,7 +1885,7 @@ export default function WorkshopDashboard() {
             </div>
           )}
 
-          {/* ══════════════════ TAB 10: ONBOARDING & VERIFICATION (SPEC SECTION 3) ══════════════════ */}
+          {/* ══════════════════ TAB 17: ONBOARDING & VERIFICATION (SPEC SECTION 3) ══════════════════ */}
           {activeNav === 'onboarding' && (
             <div className="max-w-4xl mx-auto space-y-6 animate-fadeIn">
               <div>
@@ -1293,7 +1930,7 @@ export default function WorkshopDashboard() {
             </div>
           )}
 
-          {/* ══════════════════ TAB 11: SETTINGS & ROLE-BASED ACCESS (SPEC SECTION 29 & 30) ══════════════════ */}
+          {/* ══════════════════ TAB 18: SETTINGS & ROLE-BASED ACCESS (SPEC SECTION 29 & 30) ══════════════════ */}
           {activeNav === 'settings' && (
             <div className="max-w-4xl mx-auto space-y-6 animate-fadeIn">
               <div>
@@ -1307,7 +1944,7 @@ export default function WorkshopDashboard() {
                 <div className="space-y-3 text-xs">
                   <div className="p-4 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center">
                     <div>
-                      <strong className="text-white block text-sm">Owner (Tony Stark)</strong>
+                      <strong className="text-white block text-sm">Owner ({currentWorkshop.ownerName})</strong>
                       <span className="text-gray-400">Full administrative control, bank payouts, staff hiring, and financial ledgers.</span>
                     </div>
                     <span className="px-3 py-1 rounded bg-red-600 text-white font-black text-xs">OWNER</span>
@@ -1394,6 +2031,119 @@ export default function WorkshopDashboard() {
                 className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black"
               >
                 Mark Ready for Pickup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL: DIGITAL VEHICLE PASSPORT (SPEC SECTION 8 & 9) ─── */}
+      {selectedVehiclePassportModal && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+          <div className="bg-[#121522] border border-white/20 rounded-3xl p-6 sm:p-8 max-w-xl w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setSelectedVehiclePassportModal(null)}
+              className="absolute top-5 right-5 text-gray-400 hover:text-white p-2 text-xl font-bold"
+            >
+              ✕
+            </button>
+            <div className="text-xs font-mono font-bold text-red-500 uppercase tracking-widest mb-1">
+              Official Digital Vehicle Passport
+            </div>
+            <h3 className="text-2xl font-black text-white">{selectedVehiclePassportModal.make} {selectedVehiclePassportModal.model} ({selectedVehiclePassportModal.year})</h3>
+            <p className="text-xs text-gray-400 font-mono">Reg: {selectedVehiclePassportModal.regNumber} • VIN: {selectedVehiclePassportModal.vin}</p>
+
+            <div className="grid grid-cols-2 gap-3 my-4 text-xs">
+              <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                <span className="text-gray-400 block text-[10px] uppercase font-bold">Engine & Powertrain</span>
+                <span className="font-bold text-white">{selectedVehiclePassportModal.engine}</span>
+              </div>
+              <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                <span className="text-gray-400 block text-[10px] uppercase font-bold">Transmission</span>
+                <span className="font-bold text-white">{selectedVehiclePassportModal.transmission}</span>
+              </div>
+              <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                <span className="text-gray-400 block text-[10px] uppercase font-bold">Current Odometer</span>
+                <span className="font-bold text-white">{selectedVehiclePassportModal.mileage}</span>
+              </div>
+              <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                <span className="text-gray-400 block text-[10px] uppercase font-bold">Service Warranty</span>
+                <span className="font-bold text-emerald-400">✓ Active Mechify Shield</span>
+              </div>
+            </div>
+
+            <h4 className="text-xs font-black uppercase text-gray-400 mb-2">Previous Permanent Service Logs</h4>
+            <div className="space-y-2 text-xs">
+              {selectedVehiclePassportModal.serviceHistory?.map((h, idx) => (
+                <div key={idx} className="p-3 bg-black/40 rounded-xl border border-white/5">
+                  <div className="flex justify-between text-gray-300 font-bold mb-0.5">
+                    <span>{h.date} (at {h.mileage})</span>
+                    <span className="text-emerald-400">{h.cost}</span>
+                  </div>
+                  <p className="text-gray-400">{h.work}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end pt-4 border-t border-white/10 mt-4">
+              <button
+                onClick={() => setSelectedVehiclePassportModal(null)}
+                className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL: PRINTABLE FORMAL INVOICE (SPEC SECTION 20) ─── */}
+      {selectedInvoiceModal && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+          <div className="bg-[#121522] border border-white/20 rounded-3xl p-8 max-w-lg w-full shadow-2xl relative">
+            <button
+              onClick={() => setSelectedInvoiceModal(null)}
+              className="absolute top-5 right-5 text-gray-400 hover:text-white p-2 text-xl font-bold"
+            >
+              ✕
+            </button>
+            <div className="text-center pb-4 border-b border-white/10">
+              <div className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center font-black text-white text-lg mx-auto mb-2">M</div>
+              <h3 className="text-xl font-black text-white">{currentWorkshop.workshopName}</h3>
+              <p className="text-xs text-gray-400">BIN: BIN-990812401 • {currentWorkshop.address}</p>
+            </div>
+
+            <div className="py-4 text-xs space-y-1 border-b border-white/10">
+              <div className="flex justify-between"><span>Invoice Reference:</span><strong className="font-mono text-white">{selectedInvoiceModal.id}</strong></div>
+              <div className="flex justify-between"><span>Bill To:</span><strong className="text-white">{selectedInvoiceModal.customerName}</strong></div>
+              <div className="flex justify-between"><span>Vehicle:</span><strong className="text-white">{selectedInvoiceModal.vehicle}</strong></div>
+              <div className="flex justify-between"><span>Payment Gateway:</span><strong className="text-emerald-400">bKash Merchant / Cards</strong></div>
+            </div>
+
+            <div className="py-4 space-y-2 text-xs">
+              <div className="flex justify-between text-gray-300"><span>Subtotal:</span><strong>৳{selectedInvoiceModal.subtotal.toLocaleString()}</strong></div>
+              <div className="flex justify-between text-gray-300"><span>VAT (5%):</span><strong>৳{selectedInvoiceModal.vatTax.toLocaleString()}</strong></div>
+              <div className="flex justify-between text-base font-black text-emerald-400 pt-2 border-t border-white/10">
+                <span>Total Amount:</span>
+                <span>৳{selectedInvoiceModal.total.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={() => setSelectedInvoiceModal(null)}
+                className="px-4 py-2 rounded-xl bg-white/10 text-xs font-bold"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  window.print();
+                  setSelectedInvoiceModal(null);
+                }}
+                className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs"
+              >
+                🖨️ Print Invoice Receipt
               </button>
             </div>
           </div>
