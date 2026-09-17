@@ -26,6 +26,8 @@ You can test all features directly in your browser (on desktop, mobile Chrome, o
 On the login screen, direct quick-access buttons are available for instant testing:
 - **Customer Account:** `mahi@gmail.com` *(Password: `123`)*
 - **Driver Account:** `driver@gmail.com` *(Password: `123`)*
+- **Workshop Owner Accounts (30 Verified Hubs):** `workshop1@gmail.com` to `workshop30@gmail.com` *(Password: `123`)*
+  - 👉 Direct Workshop Dashboard: [https://willserfortx.github.io/mechify/#/workshop-dashboard](https://willserfortx.github.io/mechify/#/workshop-dashboard)
 - **Custom Sign Up:** You can register any new email and receive simulated 6-digit verification codes.
 - **Google Sign-In:** One-tap demo Google OAuth authentication.
 
