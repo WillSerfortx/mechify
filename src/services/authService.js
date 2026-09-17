@@ -12,6 +12,7 @@ import {
 } from '../lib/firebase';
 
 import { WORKSHOP_DEMO_ACCOUNTS } from '../data/workshopAccounts';
+import { SUPPLIER_DEMO_ACCOUNTS } from '../data/supplierAccounts';
 
 const USERS_STORAGE_KEY = 'mechify_database_users';
 
@@ -61,6 +62,22 @@ const getStoredUsers = () => {
       workshopId: w.workshopId,
       workshopName: w.workshopName,
       phone: w.phone,
+      isVerified: true,
+      createdAt: new Date().toISOString()
+    });
+  });
+
+  // Add demo suppliers to defaults
+  SUPPLIER_DEMO_ACCOUNTS.forEach(s => {
+    defaults.push({
+      id: s.id,
+      email: s.email,
+      password: '123',
+      firstName: s.vendorName.split(' ')[0],
+      lastName: s.vendorName.split(' ').slice(1).join(' ') || 'Vendor',
+      role: 'supplier',
+      companyName: s.companyName,
+      phone: s.phone,
       isVerified: true,
       createdAt: new Date().toISOString()
     });
@@ -143,13 +160,34 @@ export const authService = {
   login: async (email, password) => {
     const cleanEmail = (email || '').trim().toLowerCase();
     
-    // Check if this is a workshop owner account (by email or preset)
+    // Check if this is a workshop owner or supplier account (by email or preset)
     const isWorkshop = cleanEmail.includes('workshop') || WORKSHOP_DEMO_ACCOUNTS.some(w => w.email.toLowerCase() === cleanEmail || w.alternateEmail?.toLowerCase() === cleanEmail);
+    const isSupplier = cleanEmail.includes('supplier') || SUPPLIER_DEMO_ACCOUNTS.some(s => s.email.toLowerCase() === cleanEmail || s.alternateEmail?.toLowerCase() === cleanEmail);
     const isDriver = cleanEmail.includes('driver');
 
     // Check database
     const users = getStoredUsers();
     let found = users.find(u => u.email.toLowerCase() === cleanEmail);
+
+    // If it is one of the supplier demo accounts, ensure it is found even if storage was cleared
+    if (!found && isSupplier) {
+      const demoSupp = SUPPLIER_DEMO_ACCOUNTS.find(s => s.email.toLowerCase() === cleanEmail || s.alternateEmail?.toLowerCase() === cleanEmail);
+      if (demoSupp) {
+        found = {
+          id: demoSupp.id,
+          email: demoSupp.email,
+          password: '123',
+          firstName: demoSupp.vendorName.split(' ')[0],
+          lastName: demoSupp.vendorName.split(' ').slice(1).join(' ') || 'Vendor',
+          role: 'supplier',
+          companyName: demoSupp.companyName,
+          phone: demoSupp.phone,
+          isVerified: true
+        };
+        users.push(found);
+        localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+      }
+    }
 
     // If it is one of the 30 workshop demo accounts, ensure it is found even if storage was cleared
     if (!found && isWorkshop) {
@@ -176,7 +214,7 @@ export const authService = {
       if (found.password && found.password !== password && password !== '123') {
         throw new Error('Incorrect password.');
       }
-      const finalRole = isWorkshop ? 'workshop_owner' : isDriver ? 'driver' : (found.role || 'user');
+      const finalRole = isWorkshop ? 'workshop_owner' : isSupplier ? 'supplier' : isDriver ? 'driver' : (found.role || 'user');
       found.role = finalRole;
       localStorage.setItem('currentUser', JSON.stringify(found));
       localStorage.setItem('userRole', finalRole);

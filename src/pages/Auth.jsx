@@ -41,6 +41,8 @@ export default function Auth() {
       const role = localStorage.getItem('userRole');
       if (role === 'workshop_owner' || finalEmail.toLowerCase().includes('workshop')) {
         navigate('/workshop-dashboard');
+      } else if (role === 'supplier' || finalEmail.toLowerCase().includes('supplier')) {
+        navigate('/supplier-dashboard');
       } else if (role === 'driver' || finalEmail.toLowerCase().includes('driver')) {
         navigate('/driver-dashboard');
       } else {
@@ -176,6 +178,18 @@ export default function Auth() {
           >
             <span className="w-2 h-2 rounded-full bg-amber-500" />
             Driver
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSelectQuickAccount('supplier@gmail.com', 'supplier')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
+              email.toLowerCase() === 'supplier@gmail.com'
+                ? 'bg-black text-white border-black shadow-lg scale-102'
+                : 'bg-gray-100 text-gray-800 border-gray-300 hover:bg-gray-200'
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            Supplier
           </button>
           <button
             type="button"

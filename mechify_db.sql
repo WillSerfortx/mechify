@@ -609,8 +609,9 @@ INSERT INTO `users` (`id`, `role`, `email`, `password_hash`, `first_name`, `last
 
 -- Parts Suppliers
 INSERT INTO `users` (`id`, `role`, `email`, `password_hash`, `first_name`, `last_name`, `phone`, `is_verified`, `status`) VALUES
-(5, 'parts_supplier', 'supplier.aeroflow@partsdistro.com', '$2y$10$abcdefghijklmnopqrstuvwxyz1234567890', 'Rafiqul', 'Alam', '+880 1911-558899', 1, 'active'),
-(6, 'parts_supplier', 'brembo.bangladesh@autoparts.bd', '$2y$10$abcdefghijklmnopqrstuvwxyz1234567890', 'Kamal', 'Hossain', '+880 1715-443322', 1, 'active');
+(5, 'parts_supplier', 'supplier@gmail.com', '$2y$10$abcdefghijklmnopqrstuvwxyz1234567890', 'Ronald', 'Richards', '+880 1711-224466', 1, 'active'),
+(6, 'parts_supplier', 'supplier.aeroflow@partsdistro.com', '$2y$10$abcdefghijklmnopqrstuvwxyz1234567890', 'Rafiqul', 'Alam', '+880 1911-558899', 1, 'active'),
+(105, 'parts_supplier', 'brembo.bangladesh@autoparts.bd', '$2y$10$abcdefghijklmnopqrstuvwxyz1234567890', 'Kamal', 'Hossain', '+880 1715-443322', 1, 'active');
 
 -- Drivers Without Car (Professional Chauffeurs)
 INSERT INTO `users` (`id`, `role`, `email`, `password_hash`, `first_name`, `last_name`, `phone`, `is_verified`, `status`) VALUES
@@ -869,7 +870,7 @@ INSERT INTO `workshop_appointments` (`customer_id`, `workshop_id`, `booking_type
 
 -- 9.4 Seed Parts Suppliers & Spare Parts Store
 INSERT INTO `suppliers` (`id`, `supplier_user_id`, `company_name`, `trade_license_bin`, `warehouse_address`, `contact_person`, `contact_phone`, `payout_method`, `rating`) VALUES
-(1, 5, 'AeroFlow Pro Performance Parts BD', 'BIN-00291039-2023', 'Tejgaon Industrial Area, Plot 44, Dhaka', 'Rafiqul Alam', '+880 1911-558899', 'Bank Transfer', 4.9),
+(1, 5, 'AeroFlow Pro Performance Parts BD', 'BIN-00291039-2023', 'Tejgaon Industrial Area, Plot 44, Dhaka', 'Ronald Richards', '+880 1711-224466', 'Bank Transfer', 4.9),
 (2, 6, 'Brembo Official Distributor Bangladesh', 'BIN-00184491-2024', 'Dhaka Cantonment Gate 3, Dhaka', 'Kamal Hossain', '+880 1715-443322', 'Bank Transfer', 4.9);
 
 INSERT INTO `spare_parts` (`supplier_id`, `category`, `name`, `sku`, `brand`, `oem_number`, `description`, `unit_cost_price`, `retail_selling_price`, `discount_percentage`, `stock_quantity`, `warranty`, `image_url`) VALUES

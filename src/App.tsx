@@ -33,6 +33,7 @@ import DriverDashboard from './pages/DriverDashboard';
 import RoadsideLanding from './pages/RoadsideLanding';
 import RoadsideRequest from './pages/RoadsideRequest';
 import WorkshopDashboard from './pages/WorkshopDashboard';
+import SupplierDashboard from './pages/SupplierDashboard';
 
 
 function ScrollToTop() {
@@ -93,6 +94,7 @@ export default function App() {
         <Route path="/profile" element={<Layout><Profile /></Layout>} />
         <Route path="/driver-dashboard" element={<Layout showNav={false} showFooter={false}><DriverDashboard /></Layout>} />
         <Route path="/workshop-dashboard" element={<Layout showNav={false} showFooter={false}><WorkshopDashboard /></Layout>} />
+        <Route path="/supplier-dashboard" element={<Layout showNav={false} showFooter={false}><SupplierDashboard /></Layout>} />
       </Routes>
     </HashRouter>
   );
