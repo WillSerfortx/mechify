@@ -446,7 +446,13 @@ export default function Landing() {
           />
 
           {/* ─── TOP CONCIERGE HUD NAVBAR ─────────────────────────── */}
-          <header className="absolute top-0 left-0 right-0 z-30 px-6 sm:px-10 md:px-16 lg:px-20 pr-10 sm:pr-16 md:pr-24 lg:pr-32 py-5 flex items-center justify-between pointer-events-auto">
+          <header 
+            className="absolute top-0 left-0 right-0 z-30 py-5 flex items-center justify-between pointer-events-auto"
+            style={{
+              paddingLeft: 'clamp(2rem, 6vw, 7rem)',
+              paddingRight: 'clamp(2rem, 6vw, 7rem)'
+            }}
+          >
             {/* Logo */}
             <Link to="/landing" className="flex items-center gap-3 group">
               <div className="relative">
@@ -523,10 +529,16 @@ export default function Landing() {
           {activeService && !isFinalHero && (
             <div 
               key={activeService.id}
-              className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-end md:justify-center p-6 sm:p-12 md:p-16 lg:p-24 pr-12 sm:pr-24 md:pr-36 lg:pr-56 xl:pr-72 transition-all duration-700"
+              className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-end md:justify-center transition-all duration-700"
+              style={{
+                paddingLeft: 'clamp(2rem, 6vw, 7rem)',
+                paddingRight: 'clamp(2rem, 6vw, 7rem)',
+                paddingBottom: 'clamp(6.5rem, 14vh, 9rem)',
+                paddingTop: '5rem'
+              }}
             >
               <div 
-                className="max-w-xl pointer-events-auto animate-fadeIn"
+                className="max-w-md md:max-w-lg xl:max-w-xl pointer-events-auto animate-fadeIn"
                 style={{
                   textShadow: '0 4px 24px rgba(0,0,0,0.9)'
                 }}
@@ -575,7 +587,15 @@ export default function Landing() {
 
           {/* ─── FINAL HERO TRANSITION: MECHIFY ────────────────────── */}
           {isFinalHero && (
-            <div className="absolute inset-0 z-20 pointer-events-none flex flex-col items-center justify-center p-6 sm:p-10 md:p-16 lg:p-24 pr-8 sm:pr-16 md:pr-28 lg:pr-36 text-center animate-fadeIn">
+            <div 
+              className="absolute inset-0 z-20 pointer-events-none flex flex-col items-center justify-center text-center animate-fadeIn"
+              style={{
+                paddingLeft: 'clamp(1.5rem, 6vw, 6rem)',
+                paddingRight: 'clamp(1.5rem, 6vw, 6rem)',
+                paddingTop: '5rem',
+                paddingBottom: '5rem'
+              }}
+            >
               <div className="max-w-3xl pointer-events-auto space-y-4">
                 
                 {/* Mechify Monolith Title */}
