@@ -1,541 +1,711 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-gsap.registerPlugin(ScrollTrigger);
+/* ─── 7 MECHIFY SERVICES SEQUENCE CONFIGURATION ────────────────── */
+const TOTAL_FRAMES = 300;
 
-/* ─── Scene definitions ───────────────────────────────────────── */
-const SCENES = [
+const SERVICES = [
   {
-    id: 'rental',
-    image: '/lambo_front.jpg',
-    accentColor: '#dc2626',
-    glowColor: 'rgba(220,38,38,0.55)',
-    bgTint: 'radial-gradient(ellipse 90% 70% at 50% 100%, rgba(220,38,38,0.25) 0%, transparent 65%)',
-    label: 'SCENE 01',
-    services: [
-      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m8-1v1m-1-4V8a2 2 0 00-2-2H9a2 2 0 00-2 2v3" /></svg>, title: 'Car Rental', desc: 'Rent exotic Lamborghinis, Ferraris, and luxury sedans for any occasion. Instant booking, flexible returns.' },
-    ],
-    cameraHint: 'Camera: Front Angle',
-    annotation: { x: '48%', y: '62%', text: 'FRONT SPLITTER', line: 'down' },
-    align: 'right',
+    id: 'roadside',
+    num: '01',
+    title: '24/7 Roadside Assistance',
+    desc: 'Emergency help, towing, battery, tire & roadside support.',
+    route: '/roadside',
+    ctaText: 'Request Roadside Support',
+    accent: '#ef4444',
+    // Frames 1 to 40 (Peak at 20)
+    frameStart: 1,
+    framePeak: 20,
+    frameEnd: 42,
+    cameraLabel: 'FRONT THREE-QUARTER · HEADLIGHT BEAM'
+  },
+  {
+    id: 'workshop',
+    num: '02',
+    title: 'Certified Workshop Services',
+    desc: 'Trusted repairs, diagnostics, maintenance & specialist care.',
+    route: '/workshop',
+    ctaText: 'Book Workshop Atelier',
+    accent: '#f97316',
+    // Frames 43 to 84 (Peak at 64)
+    frameStart: 43,
+    framePeak: 64,
+    frameEnd: 86,
+    cameraLabel: 'FRONT-LEFT · DIHEDRAL DOOR & COCKPIT REVEAL'
+  },
+  {
+    id: 'home-service',
+    num: '03',
+    title: 'Home Car Service',
+    desc: 'Professional mechanics come directly to your home or location.',
+    route: '/home-service',
+    ctaText: 'Book Doorstep Concierge',
+    accent: '#a8ffd2',
+    // Frames 87 to 128 (Peak at 108)
+    frameStart: 87,
+    framePeak: 108,
+    frameEnd: 130,
+    cameraLabel: 'SIDE PROFILE · AERODYNAMIC REAR-LEFT SWEEP'
   },
   {
     id: 'driver',
-    image: '/lambo_door.jpg',
-    accentColor: '#f97316',
-    glowColor: 'rgba(249,115,22,0.55)',
-    bgTint: 'radial-gradient(ellipse 90% 70% at 40% 100%, rgba(249,115,22,0.25) 0%, transparent 65%)',
-    label: 'SCENE 02',
-    services: [
-      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>, title: 'Hire a Driver', desc: 'Professional, certified chauffeurs available 24/7 for airport transfers, events, or hourly hire.' },
-    ],
-    cameraHint: 'Camera: Scissor Door Open',
-    annotation: { x: '55%', y: '45%', text: 'LUXURY COCKPIT', line: 'up' },
-    align: 'right',
+    num: '04',
+    title: 'Driver Hiring',
+    desc: 'Hire a professional driver with or without a car.',
+    route: '/idriver',
+    ctaText: 'Hire Executive Chauffeur',
+    accent: '#38bdf8',
+    // Frames 131 to 172 (Peak at 152)
+    frameStart: 131,
+    framePeak: 152,
+    frameEnd: 174,
+    cameraLabel: 'REAR PROFILE · DIFFUSER & TAILLIGHT GLOW'
   },
   {
-    id: 'engine',
-    image: '/lambo_engine.jpg',
-    accentColor: '#f59e0b',
-    glowColor: 'rgba(245,158,11,0.55)',
-    bgTint: 'radial-gradient(ellipse 90% 70% at 50% 100%, rgba(245,158,11,0.2) 0%, transparent 65%)',
-    label: 'SCENE 03',
-    services: [
-      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>, title: 'Workshop Service', desc: 'Certified mechanics & state-of-the-art workshops for full diagnostics and repairs.' },
-      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m8-1v1m-1-4V8a2 2 0 00-2-2H9a2 2 0 00-2 2v3" /></svg>, title: 'Emergency Mechanic', desc: 'Broken down? We dispatch a mechanic to your location — day or night.' },
-      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>, title: 'Emergency Fuel', desc: 'Out of fuel anywhere in the city? We rush to your GPS pin in under 12 minutes.' },
-    ],
-    cameraHint: 'Camera: Engine Bay — V10 Exposed',
-    annotation: { x: '50%', y: '48%', text: '5.2L V10 ENGINE', line: 'down' },
-    align: 'right',
+    id: 'rental',
+    num: '05',
+    title: 'Luxury & Supercar Rental',
+    desc: 'Experience premium, luxury and high-performance cars.',
+    route: '/car-rental',
+    ctaText: 'Explore Supercar Fleet',
+    accent: '#eab308',
+    // Frames 175 to 216 (Peak at 195)
+    frameStart: 175,
+    framePeak: 195,
+    frameEnd: 218,
+    cameraLabel: 'REAR-RIGHT · TOP-DOWN HORIZON ORBIT'
   },
   {
-    id: 'wheel',
-    image: '/lambo_wheel.jpg',
-    accentColor: '#3b82f6',
-    glowColor: 'rgba(59,130,246,0.55)',
-    bgTint: 'radial-gradient(ellipse 90% 70% at 50% 100%, rgba(59,130,246,0.25) 0%, transparent 65%)',
-    label: 'SCENE 04',
-    services: [
-      { icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>, title: 'Spare Parts Store', desc: '450+ genuine spare parts for all vehicle makes. Order online, check availability instantly.' },
-    ],
-    cameraHint: 'Camera: Wheel & Brake Caliper',
-    annotation: { x: '55%', y: '55%', text: 'BREMBO CALIPER', line: 'right' },
-    align: 'right',
+    id: 'parts',
+    num: '06',
+    title: 'Parts Marketplace',
+    desc: 'Find trusted car parts, accessories and automotive products.',
+    route: '/spare-parts',
+    ctaText: 'Browse Genuine Spares',
+    accent: '#a855f7',
+    // Frames 219 to 258 (Peak at 238)
+    frameStart: 219,
+    framePeak: 238,
+    frameEnd: 260,
+    cameraLabel: 'RIGHT FLANK · FORGED WHEEL & CARBON DETAIL'
   },
   {
-    id: 'conclusion',
-    image: '/lambo_wheel.jpg',
-    accentColor: '#ffffff',
-    glowColor: 'rgba(255,255,255,0.1)',
-    bgTint: 'rgba(0,0,0,0.85)',
-    label: 'SCENE 05',
-    services: [], // Custom layout used instead
-    cameraHint: 'Camera: Journey Complete',
-    align: 'center',
-    isCustom: true
+    id: 'fuel',
+    num: '07',
+    title: 'On-Demand Fuel Delivery',
+    desc: 'Get fuel delivered wherever your vehicle needs it.',
+    route: '/fuel-terms',
+    ctaText: 'Order On-Demand Fuel',
+    accent: '#ec4899',
+    // Frames 261 to 284 (Peak at 272)
+    frameStart: 261,
+    framePeak: 272,
+    frameEnd: 284,
+    cameraLabel: 'FRONT CLAMSHELL · POWERPLANT RETURN'
   }
 ];
 
-/* ─── Utility ─────────────────────────────────────────────────── */
-function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
-
 export default function Landing() {
-  const wrapRef = useRef(null);
-  const bottomRef = useRef(null);
-  const [rawProgress, setRawProgress] = useState(0); // 0..1 across the scroll zone
-  const [heroIn, setHeroIn] = useState(false);
-  
-  // State for animated numbers
-  const statsRef = useRef({ customers: 12000, services: 6, cities: 24, eta: 12 });
-  const [renderTrigger, setRenderTrigger] = useState(0);
+  const navigate = useNavigate();
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
 
-  /* Derived */
-  const totalScenes = SCENES.length;
-  // Progress across scenes 0 to 4
-  const sceneF = Math.min(rawProgress * totalScenes, totalScenes - 0.01);
-  const sceneIdx = clamp(Math.floor(sceneF), 0, totalScenes - 1);
-  const sceneT = clamp(sceneF - sceneIdx, 0, 1); // progress within current scene
+  // Animation & Frame States
+  const [currentFrame, setCurrentFrame] = useState(1);
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [scrollPercent, setScrollPercent] = useState(0);
 
-  const scene = SCENES[sceneIdx];
-  const nextScene = SCENES[Math.min(sceneIdx + 1, totalScenes - 1)];
+  // Cached HTML Image elements
+  const imagesCacheRef = useRef({});
+  const loadedCountRef = useRef(0);
+  const targetFrameRef = useRef(1);
+  const currentFrameRef = useRef(1);
+  const animationFrameIdRef = useRef(null);
+  const autoPlayIntervalRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const startFrameRef = useRef(1);
 
-  const crossfade = clamp((sceneT - 0.75) / 0.25, 0, 1);
-  const zoom = 1 + sceneT * 0.06;
-  const panX = [-2, 2, -1, 0, 0][sceneIdx] * sceneT;
-
-  useEffect(() => {
-    setTimeout(() => setHeroIn(true), 300);
+  // Format frame filename
+  const getFrameUrl = useCallback((index) => {
+    const padded = String(Math.max(1, Math.min(TOTAL_FRAMES, index))).padStart(3, '0');
+    return `/koenigsegg-frames/ezgif-frame-${padded}.jpg`;
   }, []);
 
+  /* ── 1. HIGH SPEED PROGRESSIVE PRELOADER ───────────────────────── */
   useEffect(() => {
-    // Animate numbers when reaching Scene 5
-    if (sceneIdx === 4) {
-      statsRef.current = { customers: 0, services: 0, cities: 0, eta: 0 };
-      setRenderTrigger(v => v + 1);
-      gsap.to(statsRef.current, {
-        customers: 12000,
-        services: 6,
-        cities: 24,
-        eta: 12,
-        duration: 1.5,
-        ease: 'power2.out',
-        onUpdate: () => setRenderTrigger(v => v + 1)
-      });
-      
-      // Also trigger enter animations for the steps
-      gsap.fromTo('.step-item', 
-        { y: 30, opacity: 0, scale: 0.95 }, 
-        { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.08, ease: 'power2.out' }
-      );
+    let isCancelled = false;
+    loadedCountRef.current = 0;
+
+    // Step 1: Priority Keyframes (Every 5th frame) so car displays immediately
+    const priorityFrames = [];
+    for (let i = 1; i <= TOTAL_FRAMES; i += 5) {
+      priorityFrames.push(i);
     }
-  }, [sceneIdx]);
+    if (!priorityFrames.includes(1)) priorityFrames.unshift(1);
+    if (!priorityFrames.includes(TOTAL_FRAMES)) priorityFrames.push(TOTAL_FRAMES);
 
-  const handleScroll = useCallback(() => {
-    if (!wrapRef.current) return;
-    const rect = wrapRef.current.getBoundingClientRect();
-    const scrollable = wrapRef.current.offsetHeight - window.innerHeight;
-    if (scrollable <= 0) return;
-    const scrolled = clamp(-rect.top, 0, scrollable);
-    setRawProgress(scrolled / scrollable);
+    // Step 2: Remaining frames
+    const remainingFrames = [];
+    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+      if (!priorityFrames.includes(i)) {
+        remainingFrames.push(i);
+      }
+    }
+
+    const loadSingleFrame = (idx) => {
+      return new Promise((resolve) => {
+        if (imagesCacheRef.current[idx]) {
+          resolve(imagesCacheRef.current[idx]);
+          return;
+        }
+        const img = new Image();
+        img.src = getFrameUrl(idx);
+        img.onload = () => {
+          if (!isCancelled) {
+            imagesCacheRef.current[idx] = img;
+            loadedCountRef.current += 1;
+            setLoadProgress(Math.round((loadedCountRef.current / TOTAL_FRAMES) * 100));
+            // As soon as frame 1 is ready, start rendering
+            if (idx === 1 && !isLoaded) {
+              setIsLoaded(true);
+            }
+          }
+          resolve(img);
+        };
+        img.onerror = () => {
+          resolve(null);
+        };
+      });
+    };
+
+    // Sequentially load priority first, then burst the rest
+    (async () => {
+      // Load first frame immediately
+      await loadSingleFrame(1);
+      if (!isCancelled) setIsLoaded(true);
+
+      // Load rest of priority in parallel
+      await Promise.all(priorityFrames.map(loadSingleFrame));
+
+      // Load remaining in chunks of 15
+      const chunkSize = 15;
+      for (let i = 0; i < remainingFrames.length; i += chunkSize) {
+        if (isCancelled) break;
+        const slice = remainingFrames.slice(i, i + chunkSize);
+        await Promise.all(slice.map(loadSingleFrame));
+      }
+    })();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [getFrameUrl, isLoaded]);
+
+  /* ── 2. CANVAS DRAW FUNCTION (PRESERVING 16:9 IN PURE BLACK STUDIO) ─ */
+  const drawFrame = useCallback((frameNumber) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Find requested frame or fallback to nearest available loaded frame
+    let img = imagesCacheRef.current[frameNumber];
+    if (!img) {
+      // Find nearest loaded frame
+      for (let delta = 1; delta < 30; delta++) {
+        if (imagesCacheRef.current[frameNumber - delta]) {
+          img = imagesCacheRef.current[frameNumber - delta];
+          break;
+        }
+        if (imagesCacheRef.current[frameNumber + delta]) {
+          img = imagesCacheRef.current[frameNumber + delta];
+          break;
+        }
+      }
+    }
+    if (!img) img = imagesCacheRef.current[1];
+    if (!img || !img.complete) return;
+
+    const cw = canvas.width;
+    const ch = canvas.height;
+
+    // Clear with dark studio background
+    ctx.fillStyle = '#060709';
+    ctx.fillRect(0, 0, cw, ch);
+
+    // Compute aspect ratio fit
+    const imgRatio = img.naturalWidth / img.naturalHeight || 16 / 9;
+    const canvasRatio = cw / ch;
+
+    let dw, dh, dx, dy;
+
+    if (canvasRatio > imgRatio) {
+      // Canvas is wider than image
+      dh = ch;
+      dw = ch * imgRatio;
+      dx = (cw - dw) / 2;
+      dy = 0;
+    } else {
+      // Canvas is taller than image (mobile portrait)
+      dw = cw;
+      dh = cw / imgRatio;
+      dx = 0;
+      dy = (ch - dh) / 2;
+    }
+
+    // Draw the photorealistic Koenigsegg frame
+    ctx.drawImage(img, dx, dy, dw, dh);
   }, []);
 
-  const scrollToScene = (index) => {
-    if (!wrapRef.current) return;
-    const scrollable = wrapRef.current.offsetHeight - window.innerHeight;
-    const targetScroll = (index / (totalScenes - 0.5)) * scrollable;
-    window.scrollTo({ top: targetScroll, behavior: 'smooth' });
-  };
+  /* ── 3. RESIZE HANDLER (RETINA RESOLUTION DAMPING) ─────────────── */
+  useEffect(() => {
+    const updateSize = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+
+      drawFrame(Math.round(currentFrameRef.current));
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, [drawFrame]);
+
+  /* ── 4. SMOOTH LERP RENDER LOOP (60FPS DOLBY CAMERA FEEL) ───────── */
+  useEffect(() => {
+    let animId;
+    const renderLoop = () => {
+      const target = targetFrameRef.current;
+      const current = currentFrameRef.current;
+      const diff = target - current;
+
+      if (Math.abs(diff) > 0.05) {
+        currentFrameRef.current += diff * 0.14; // Smooth interpolation
+        const frameInt = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(currentFrameRef.current)));
+        setCurrentFrame(frameInt);
+        drawFrame(frameInt);
+      }
+
+      animId = requestAnimationFrame(renderLoop);
+    };
+
+    animId = requestAnimationFrame(renderLoop);
+    return () => cancelAnimationFrame(animId);
+  }, [drawFrame]);
+
+  /* ── 5. SCROLL EVENT DRIVER ───────────────────────────────────── */
+  const handleScroll = useCallback(() => {
+    if (isPlaying) return; // Don't fight scroll when auto-tour is running
+    const container = containerRef.current;
+    if (!container) return;
+
+    const scrollTop = window.scrollY;
+    const scrollHeight = container.offsetHeight - window.innerHeight;
+    if (scrollHeight <= 0) return;
+
+    const progress = Math.max(0, Math.min(1, scrollTop / scrollHeight));
+    setScrollPercent(progress);
+
+    const mappedFrame = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(1 + progress * (TOTAL_FRAMES - 1))));
+    targetFrameRef.current = mappedFrame;
+  }, [isPlaying]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
-  // Touch gesture support for mobile Chrome & iOS Safari (where fixed inset-0 prevents standard body touch scroll)
+  /* ── 6. AUTOPLAY CINEMATIC TOUR ────────────────────────────────── */
+  const toggleAutoPlay = () => {
+    if (isPlaying) {
+      setIsPlaying(false);
+      clearInterval(autoPlayIntervalRef.current);
+    } else {
+      setIsPlaying(true);
+      autoPlayIntervalRef.current = setInterval(() => {
+        targetFrameRef.current = targetFrameRef.current >= TOTAL_FRAMES ? 1 : targetFrameRef.current + 1;
+        // Sync scroll position
+        const container = containerRef.current;
+        if (container) {
+          const scrollHeight = container.offsetHeight - window.innerHeight;
+          const targetY = ((targetFrameRef.current - 1) / (TOTAL_FRAMES - 1)) * scrollHeight;
+          window.scrollTo({ top: targetY, behavior: 'auto' });
+        }
+      }, 45); // ~22fps cinematic tour speed
+    }
+  };
+
   useEffect(() => {
-    let touchStartY = 0;
-    let touchStartX = 0;
-    let isTouchActive = false;
-
-    const onTouchStart = (e) => {
-      if (e.touches.length !== 1) return;
-      touchStartY = e.touches[0].clientY;
-      touchStartX = e.touches[0].clientX;
-      isTouchActive = true;
-    };
-
-    const onTouchMove = (e) => {
-      if (!isTouchActive || e.touches.length !== 1) return;
-      const currentY = e.touches[0].clientY;
-      const currentX = e.touches[0].clientX;
-      const deltaY = touchStartY - currentY;
-      const deltaX = touchStartX - currentX;
-
-      // Handle vertical swipe gestures
-      if (Math.abs(deltaY) > Math.abs(deltaX)) {
-        window.scrollBy(0, deltaY * 1.5);
-        touchStartY = currentY;
-        touchStartX = currentX;
-      }
-    };
-
-    const onTouchEnd = () => {
-      isTouchActive = false;
-    };
-
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchmove', onTouchMove, { passive: true });
-    window.addEventListener('touchend', onTouchEnd, { passive: true });
-
-    return () => {
-      window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('touchend', onTouchEnd);
-    };
+    return () => clearInterval(autoPlayIntervalRef.current);
   }, []);
 
-  /* Service card entrance — stagger */
-  // Scene 5 (conclusion) is always visible once reached; scenes 0-3 fade in and out with scene progress
-  const cardVisible = sceneIdx === totalScenes - 1 ? true : (sceneT > 0.15 && sceneT < 0.85);
+  /* ── 7. TOUCH / MOUSE HORIZONTAL SCRUBBING ON CANVAS ───────────── */
+  const handlePointerDown = (e) => {
+    isDraggingRef.current = true;
+    startXRef.current = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+    startFrameRef.current = targetFrameRef.current;
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDraggingRef.current) return;
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+    const deltaX = clientX - startXRef.current;
+    // 3px drag = 1 frame
+    const frameShift = Math.round(deltaX / 3);
+    const newTarget = Math.max(1, Math.min(TOTAL_FRAMES, startFrameRef.current - frameShift));
+    targetFrameRef.current = newTarget;
+
+    // Sync window scroll
+    const container = containerRef.current;
+    if (container) {
+      const scrollHeight = container.offsetHeight - window.innerHeight;
+      const targetY = ((newTarget - 1) / (TOTAL_FRAMES - 1)) * scrollHeight;
+      window.scrollTo({ top: targetY, behavior: 'auto' });
+    }
+  };
+
+  const handlePointerUp = () => {
+    isDraggingRef.current = false;
+  };
+
+  /* ── 8. DIRECT JUMP TO SERVICE ─────────────────────────────────── */
+  const jumpToService = (targetPeakFrame) => {
+    setIsPlaying(false);
+    clearInterval(autoPlayIntervalRef.current);
+    targetFrameRef.current = targetPeakFrame;
+
+    const container = containerRef.current;
+    if (container) {
+      const scrollHeight = container.offsetHeight - window.innerHeight;
+      const targetY = ((targetPeakFrame - 1) / (TOTAL_FRAMES - 1)) * scrollHeight;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    }
+  };
+
+  /* ── 9. CURRENT ACTIVE SERVICE CALCULATION ──────────────────────── */
+  const activeService = useMemo(() => {
+    return SERVICES.find(
+      (s) => currentFrame >= s.frameStart && currentFrame <= s.frameEnd
+    );
+  }, [currentFrame]);
+
+  // Is Final Hero Conclusion Active (Frames 284 to 300)
+  const isFinalHero = currentFrame >= 284;
 
   return (
-    <div className="bg-black text-white font-outfit">
+    <div className="bg-[#060709] text-white font-['Manrope',sans-serif] selection:bg-[#ff2a42] selection:text-white">
 
-      {/* ═══ SCROLL CONTAINER — 5 scenes ═══════════════════ */}
-      <div ref={wrapRef} style={{ height: `${totalScenes * 120}vh` }}>
+      {/* ─── SCROLL TRACK CONTAINER (700vh for cinematic pacing) ─── */}
+      <div ref={containerRef} className="relative w-full h-[700vh]">
 
-        {/* ─── FIXED CINEMATIC VIEWPORT (PERMANENTLY PINNED TO SCREEN) ─ */}
-        <div className="fixed inset-0 w-full h-[100dvh] overflow-hidden">
-
-          {/* ── Background tint layer ── */}
-          <div
-            className="absolute inset-0 z-0 transition-all duration-700"
-            style={{ background: scene.bgTint + ', #000' }}
+        {/* ─── FIXED CINEMATIC VIEWPORT ───────────────────────────── */}
+        <div 
+          className="fixed inset-0 w-full h-[100dvh] overflow-hidden select-none"
+          onMouseDown={handlePointerDown}
+          onMouseMove={handlePointerMove}
+          onMouseUp={handlePointerUp}
+          onTouchStart={handlePointerDown}
+          onTouchMove={handlePointerMove}
+          onTouchEnd={handlePointerUp}
+        >
+          {/* Canvas for 60FPS Koenigsegg Frames */}
+          <canvas
+            ref={canvasRef}
+            className="w-full h-full object-contain cursor-grab active:cursor-grabbing"
           />
 
-          {/* ── CURRENT scene image ── */}
-          <div
-            className="absolute inset-0 z-1 overflow-hidden"
-          >
-            <img
-              key={scene.id}
-              src={scene.image}
-              alt={scene.id}
-              className="absolute inset-0 w-full h-full object-cover"
-              style={{
-                transform: `scale(${zoom}) translateX(${panX}%)`,
-                transition: 'transform 0.1s linear',
-                filter: 'brightness(0.45)',
-              }}
-            />
-          </div>
-
-          {/* ── NEXT scene image (crossfade) ── */}
-          {crossfade > 0 && (
-            <div className="absolute inset-0 z-2 overflow-hidden">
-              <img
-                src={nextScene.image}
-                alt={nextScene.id}
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{
-                  transform: 'scale(1)',
-                  filter: 'brightness(0.45)',
-                  opacity: crossfade,
-                  transition: 'opacity 0.05s linear',
-                }}
-              />
-            </div>
-          )}
-
-          {/* ── Vignette overlay ── */}
-          <div
-            className="absolute inset-0 z-3 pointer-events-none"
-            style={{
-              background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, rgba(0,0,0,0.7) 100%)',
+          {/* Subtle Ambient Radial Lighting Layer on Ground */}
+          <div 
+            className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[85vw] max-w-[1200px] h-[320px] rounded-full blur-[140px] pointer-events-none transition-all duration-700"
+            style={{ 
+              background: activeService ? `${activeService.accent}15` : 'rgba(239,68,68,0.12)' 
             }}
           />
 
-          {/* ── Custom Scene Black Overlay ── */}
-          <div
-            className="absolute inset-0 z-5 pointer-events-none transition-all duration-1000"
-            style={{ backgroundColor: '#000', opacity: scene.isCustom ? 1 : 0 }}
+          {/* Cinematic Vignette */}
+          <div 
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse 85% 75% at 50% 50%, transparent 45%, rgba(6,7,9,0.85) 100%)'
+            }}
           />
 
-          {/* ── Bottom gradient ── */}
-          <div className="absolute bottom-0 left-0 right-0 h-40 z-3 pointer-events-none"
-            style={{ background: 'linear-gradient(to top, #000 0%, transparent 100%)' }} />
-
-          {/* ── Top gradient ── */}
-          <div className="absolute top-0 left-0 right-0 h-32 z-3 pointer-events-none"
-            style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%)' }} />
-
-          {/* ─── NAVBAR ─────────────────────────────────── */}
-          <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-4 sm:px-8 md:px-14 py-4 sm:py-6">
-            <Link to="/landing" className="flex items-center gap-2 sm:gap-3 group">
-              <svg className="w-9 h-8 sm:w-11 sm:h-10" viewBox="0 0 56 48" fill="none">
-                <rect width="56" height="48" rx="4" fill="#CC0000"/>
-                <text x="4" y="34" fontFamily="Arial Black,Arial" fontWeight="900" fontSize="32" fill="white">M</text>
-                <g transform="translate(32,30) scale(0.55)">
-                  <rect x="0" y="4" width="28" height="14" rx="2" fill="white"/>
-                  <rect x="22" y="0" width="10" height="18" rx="2" fill="white"/>
-                  <circle cx="6" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
-                  <circle cx="24" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5"/>
-                </g>
-              </svg>
-              <div>
-                <div className="font-black text-base sm:text-lg tracking-widest text-white">MECHIFY</div>
-                <div className="text-gray-400 text-[10px] sm:text-[11px] tracking-[0.18em] uppercase font-medium">Vehicle Support</div>
+          {/* ─── TOP CONCIERGE HUD NAVBAR ─────────────────────────── */}
+          <header className="absolute top-0 left-0 right-0 z-30 px-6 md:px-12 py-5 flex items-center justify-between pointer-events-auto">
+            {/* Logo */}
+            <Link to="/landing" className="flex items-center gap-3 group">
+              <div className="relative">
+                <svg width="48" height="40" viewBox="0 0 56 48" fill="none">
+                  <rect width="56" height="48" rx="4" fill="#CC0000" />
+                  <text x="4" y="34" fontFamily="Arial Black, Arial" fontWeight="900" fontSize="32" fill="white">M</text>
+                  <g transform="translate(32,30) scale(0.55)">
+                    <rect x="0" y="4" width="28" height="14" rx="2" fill="white" />
+                    <rect x="22" y="0" width="10" height="18" rx="2" fill="white" />
+                    <circle cx="6" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5" />
+                    <circle cx="24" cy="20" r="3.5" fill="#CC0000" stroke="white" strokeWidth="1.5" />
+                  </g>
+                </svg>
+              </div>
+              <div className="leading-tight">
+                <div className="text-white font-black text-lg tracking-widest font-['Space_Grotesk',sans-serif]">MECHIFY</div>
+                <div className="text-[#849396] text-[9px] tracking-[0.2em] uppercase font-mono">Hypercar Showcase</div>
               </div>
             </Link>
-            <div className="flex items-center gap-3 sm:gap-4">
-              <Link to="/auth"
-                className="font-black text-xs sm:text-sm tracking-widest uppercase transition-all hover:scale-105 px-3 py-1.5 rounded-full border border-white/20 bg-black/40 backdrop-blur-sm"
-                style={{ color: scene.accentColor, textShadow: `0 0 15px ${scene.glowColor}` }}
+
+            {/* Micro HUD Center Status */}
+            <div className="hidden lg:flex items-center gap-6 font-['JetBrains_Mono',monospace] text-[11px] text-[#bac9cc] bg-[#0b0e15]/80 backdrop-blur-md px-5 py-2 rounded-full border border-[#272a31]">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#a8ffd2] animate-pulse" />
+                KOENIGSEGG ATELIER
+              </span>
+              <span className="text-[#3b494c]">|</span>
+              <span className="text-white font-bold">FRAME {String(currentFrame).padStart(3, '0')} / 300</span>
+              <span className="text-[#3b494c]">|</span>
+              <span className="text-[#ffd799] uppercase">
+                {activeService ? activeService.cameraLabel : isFinalHero ? 'FINAL HERO COMPO' : 'TRANSITIONING'}
+              </span>
+            </div>
+
+            {/* Right Action Cluster */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={toggleAutoPlay}
+                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-[#191c23]/90 hover:bg-[#272a31] border border-[#3b494c] text-white font-['JetBrains_Mono',monospace] text-xs font-bold transition-all shadow-lg active:scale-95 cursor-pointer"
+                title="Toggle Automatic 360 Camera Orbit"
+              >
+                <span className="material-symbols-outlined text-[16px] text-[#ff2a42]">
+                  {isPlaying ? 'pause' : 'play_arrow'}
+                </span>
+                <span>{isPlaying ? 'PAUSE TOUR' : 'AUTO TOUR'}</span>
+              </button>
+
+              <Link
+                to="/auth"
+                className="px-5 py-2 rounded-full bg-[#ff2a42] hover:bg-[#ef4444] text-white font-['Space_Grotesk',sans-serif] text-xs uppercase font-bold tracking-wider transition-all shadow-[0_0_20px_rgba(255,42,66,0.4)] active:scale-95"
               >
                 Sign In
               </Link>
             </div>
-          </div>
+          </header>
 
-          {/* ─── HERO TEXT (only on scene 0 before scrolling) ─────── */}
-          <div
-            className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none transition-all duration-700 px-4"
-            style={{ opacity: rawProgress < 0.02 ? 1 : Math.max(0, 1 - rawProgress * 60) }}
-          >
-            <div
-              className="text-center px-4 sm:px-6 transition-all duration-1000 max-w-4xl"
-              style={{ opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(40px)' }}
-            >
-              <div className="inline-flex items-center gap-2 border border-red-500/30 text-red-400 text-[11px] sm:text-xs font-bold px-4 sm:px-5 py-1 sm:py-1.5 rounded-full mb-4 sm:mb-6 tracking-[0.2em] uppercase bg-red-600/10">
-                <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
-                Bangladesh's #1 Vehicle Platform
+          {/* ─── INITIAL PRELOAD PROGRESS BAR ────────────────────── */}
+          {!isLoaded && (
+            <div className="absolute inset-0 z-50 bg-[#060709] flex flex-col items-center justify-center p-6 space-y-4">
+              <div className="w-12 h-12 border-2 border-[#ff2a42] border-t-transparent rounded-full animate-spin" />
+              <div className="font-['JetBrains_Mono',monospace] text-xs uppercase tracking-widest text-[#bac9cc] text-center">
+                INITIALIZING KOENIGSEGG 7-SERVICE SHOWCASE · {loadProgress}%
               </div>
-              <h1 className="text-[clamp(36px,7vw,80px)] font-black leading-[0.95] tracking-tight mb-3 sm:mb-4">
-                <span className="block text-white">MECHIFY</span>
-                <span
-                  className="block text-transparent bg-clip-text"
-                  style={{ backgroundImage: 'linear-gradient(90deg,#dc2626,#f97316,#dc2626)', backgroundSize: '200%', animation: 'gradShift 3s linear infinite' }}
-                >
-                  DRIVES YOU.
-                </span>
-              </h1>
-              <p className="text-gray-400 text-xs sm:text-base md:text-lg mt-3 sm:mt-4 animate-bounce" style={{ animationDuration: '2s' }}>
-                Scroll to explore ↓
-              </p>
+              <div className="w-64 h-1 bg-[#191c23] rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-[#ff2a42] transition-all duration-200" 
+                  style={{ width: `${loadProgress}%` }} 
+                />
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* ─── STANDARD SERVICE PANEL (Scenes 1-4) ─── */}
-          {!scene.isCustom && (
-            <div
-              className="absolute inset-0 z-10 flex flex-col justify-center px-5 sm:px-8 md:px-14 lg:px-24 pr-12 sm:pr-16 md:pr-24 pointer-events-none"
-              style={{ opacity: rawProgress > 0.02 ? 1 : 0, transition: 'opacity 0.5s ease' }}
+          {/* ─── UNCLUTTERED MINIMAL SERVICE OVERLAY (ONE AT A TIME) ─ */}
+          {activeService && !isFinalHero && (
+            <div 
+              key={activeService.id}
+              className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-end md:justify-center p-6 sm:p-12 md:p-20 lg:p-24 transition-all duration-700"
             >
-            <div
-              className={`w-full max-w-3xl pointer-events-auto transition-all duration-700 ${
-                scene.align === 'right' ? 'ml-auto text-right' : 'mr-auto text-left'
-              }`}
-            >
-              {/* Service heading */}
-              <div
-                className="mb-4 sm:mb-8 transition-all duration-700"
+              <div 
+                className="max-w-2xl pointer-events-auto animate-fadeIn"
                 style={{
-                  opacity: cardVisible ? 1 : 0,
-                  transform: cardVisible ? 'translateY(0)' : 'translateY(30px)',
+                  textShadow: '0 4px 24px rgba(0,0,0,0.9)'
                 }}
               >
-                <h2
-                  className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-2 sm:mb-4"
-                  style={{ color: scene.accentColor, textShadow: `0 0 40px ${scene.glowColor}` }}
-                >
-                  {scene.services[0].title}
+                {/* Micro Service Badge */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0b0e15]/80 backdrop-blur-md border border-[#272a31] mb-3 sm:mb-4">
+                  <span 
+                    className="w-2 h-2 rounded-full" 
+                    style={{ backgroundColor: activeService.accent }} 
+                  />
+                  <span className="font-['JetBrains_Mono',monospace] text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#bac9cc] font-semibold">
+                    MECHIFY SERVICE {activeService.num} / 07
+                  </span>
+                </div>
+
+                {/* Large, Elegant, Thin / Semi-bold Service Title */}
+                <h2 className="font-['Space_Grotesk',sans-serif] text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-2 sm:mb-3">
+                  {activeService.title}
                 </h2>
-                {scene.services.length > 1 && (
-                  <div className={`flex gap-2 sm:gap-4 mt-2 sm:mt-4 flex-wrap ${scene.align === 'right' ? 'justify-end' : 'justify-start'}`}>
-                    {scene.services.slice(1).map(s => (
-                      <span key={s.title} className="text-[11px] sm:text-sm md:text-base font-bold tracking-widest uppercase px-3 sm:px-5 py-1 sm:py-2 rounded-full border backdrop-blur-sm"
-                        style={{ borderColor: scene.accentColor + '50', color: scene.accentColor, background: 'rgba(0,0,0,0.4)' }}>
-                        + {s.title}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
 
-              {/* Service cards column */}
-              <div className={`flex gap-3 sm:gap-6 flex-col ${scene.align === 'right' ? 'items-end' : 'items-start'}`}>
-                {scene.services.map((svc, i) => (
-                  <div
-                    key={svc.title}
-                    className="flex-1 min-w-0 max-w-full md:max-w-lg p-1 sm:p-2"
-                    style={{
-                      opacity: cardVisible ? 1 : 0,
-                      transform: cardVisible ? 'translateY(0)' : 'translateY(40px)',
-                      transition: cardVisible ? `all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) ${i * 0.1 + 0.1}s` : `all 0.2s ease-out`,
-                      textShadow: '0px 4px 20px rgba(0,0,0,0.8)'
-                    }}
+                {/* Much Smaller, Short, Single-sentence Description */}
+                <p className="font-['Manrope',sans-serif] text-xs sm:text-sm md:text-base text-[#bac9cc] font-light max-w-xl leading-relaxed mb-5 sm:mb-6">
+                  {activeService.desc}
+                </p>
+
+                {/* Direct Action Link */}
+                <div className="flex items-center gap-4">
+                  <Link
+                    to={activeService.route}
+                    className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg bg-[#ff2a42] hover:bg-[#ef4444] text-white font-['Space_Grotesk',sans-serif] text-xs sm:text-sm uppercase font-bold tracking-wider transition-all shadow-[0_0_24px_rgba(255,42,66,0.4)] active:scale-95"
                   >
-                    <div className={`flex items-center gap-2 sm:gap-4 mb-1 sm:mb-3 ${scene.align === 'right' ? 'justify-end flex-row-reverse' : 'justify-start'}`}>
-                      <span className="font-black text-white text-lg sm:text-2xl md:text-4xl">{svc.title}</span>
-                    </div>
-                    <p className="text-gray-200 text-xs sm:text-base md:text-lg leading-relaxed">{svc.desc}</p>
-                  </div>
-                ))}
-              </div>
+                    <span>{activeService.ctaText}</span>
+                    <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  </Link>
+
+                  <button
+                    onClick={() => jumpToService(activeService.framePeak + 38)}
+                    className="px-4 py-2.5 rounded-lg bg-[#191c23]/80 hover:bg-[#272a31] text-[#bac9cc] hover:text-white font-['JetBrains_Mono',monospace] text-xs font-semibold border border-[#272a31] transition-all cursor-pointer"
+                  >
+                    Next Angle →
+                  </button>
+                </div>
               </div>
             </div>
           )}
 
-          {/* ─── CUSTOM CONCLUSION PANEL (Scene 5) ─── */}
-          {scene.isCustom && (
-            <div
-              className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-auto transition-all duration-700 overflow-y-auto sm:overflow-hidden"
-              style={{ opacity: cardVisible ? 1 : 0, transform: cardVisible ? 'translateY(0)' : 'translateY(30px)' }}
-            >
-              <div className="w-full max-w-5xl px-4 sm:px-8 md:px-12 mx-auto flex flex-col justify-center min-h-full sm:h-full gap-4 sm:gap-6 md:gap-8 py-6 sm:py-8 md:py-10">
+          {/* ─── FINAL HERO TRANSITION: MECHIFY ────────────────────── */}
+          {isFinalHero && (
+            <div className="absolute inset-0 z-20 pointer-events-none flex flex-col items-center justify-center p-6 text-center animate-fadeIn">
+              <div className="max-w-3xl pointer-events-auto space-y-4">
                 
-                {/* ── STATS ── */}
-                <div className="stats-container grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 md:gap-8 text-center">
-                  {[
-                    { label: 'Happy Customers', valKey: 'customers', format: (v) => `${Math.round(v).toLocaleString()}+`, color: '#dc2626' },
-                    { label: 'Services', valKey: 'services', format: (v) => Math.round(v), color: '#f97316' },
-                    { label: 'Cities Covered', valKey: 'cities', format: (v) => `${Math.round(v)}+`, color: '#f59e0b' },
-                    { label: 'Avg. ETA', valKey: 'eta', format: (v) => `${Math.round(v)} min`, color: '#3b82f6' },
-                  ].map(({ label, valKey, format, color }) => (
-                    <div key={label} className="stat-item group">
-                      <div className="text-2xl sm:text-3xl md:text-5xl font-black mb-0.5 sm:mb-1 transition-colors" style={{ color }}>
-                        {format(statsRef.current[valKey] || 0)}
-                      </div>
-                      <p className="text-gray-400 text-[10px] sm:text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold">{label}</p>
-                    </div>
-                  ))}
-                </div>
+                {/* Mechify Monolith Title */}
+                <h1 className="font-['Space_Grotesk',sans-serif] text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-white leading-none">
+                  MECHIFY
+                </h1>
 
-                {/* ── HOW IT WORKS ── */}
-                <div className="how-it-works-container">
-                  <div className="text-center mb-3 sm:mb-6 md:mb-8">
-                    <p className="text-red-500 font-bold uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-0.5 sm:mb-1">Simple Process</p>
-                    <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-white">How It Works</h2>
+                {/* Clean Subtitle */}
+                <p className="font-['Manrope',sans-serif] text-base sm:text-xl md:text-2xl text-[#bac9cc] font-light tracking-wide">
+                  Everything Your Car Needs.
+                </p>
+
+                {/* 4 Objective Metrics HUD */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-6 font-['JetBrains_Mono',monospace]">
+                  <div className="p-3 rounded-lg bg-[#0b0e15]/80 backdrop-blur-md border border-[#272a31]">
+                    <div className="text-xl sm:text-2xl font-bold text-[#ff2a42]">12,000+</div>
+                    <div className="text-[10px] text-[#849396] uppercase mt-0.5">Verified Trips</div>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 md:gap-6 relative">
-                    <div className="hidden md:block absolute top-8 left-[12%] right-[12%] h-px"
-                      style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.4), transparent)' }} />
-                    {[
-                      { num: '01', title: 'Create Account', desc: 'Sign up in seconds.' },
-                      { num: '02', title: 'Pick a Service', desc: 'Choose from 6 premium services.' },
-                      { num: '03', title: 'Book Instantly', desc: 'Confirm instantly, no wait.' },
-                      { num: '04', title: 'Track Live', desc: 'Follow on a live map.' },
-                    ].map((step) => (
-                      <div key={step.num} className="step-item group text-center p-2 rounded-xl bg-white/[0.02]">
-                        <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 mx-auto mb-1.5 sm:mb-3 bg-gradient-to-br from-red-900/50 to-black border border-red-800/40 rounded-xl sm:rounded-2xl flex items-center justify-center text-xs sm:text-base md:text-2xl font-black text-red-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-500">
-                          {step.num}
-                        </div>
-                        <h3 className="text-xs sm:text-sm md:text-base font-bold mb-0.5 text-white group-hover:text-red-400 transition-colors">{step.title}</h3>
-                        <p className="text-gray-400 text-[11px] sm:text-xs leading-tight">{step.desc}</p>
-                      </div>
-                    ))}
+                  <div className="p-3 rounded-lg bg-[#0b0e15]/80 backdrop-blur-md border border-[#272a31]">
+                    <div className="text-xl sm:text-2xl font-bold text-[#ffd799]">24</div>
+                    <div className="text-[10px] text-[#849396] uppercase mt-0.5">Workshop Hubs</div>
+                  </div>
+                  <div className="p-3 rounded-lg bg-[#0b0e15]/80 backdrop-blur-md border border-[#272a31]">
+                    <div className="text-xl sm:text-2xl font-bold text-[#a8ffd2]">12 MIN</div>
+                    <div className="text-[10px] text-[#849396] uppercase mt-0.5">Avg Response</div>
+                  </div>
+                  <div className="p-3 rounded-lg bg-[#0b0e15]/80 backdrop-blur-md border border-[#272a31]">
+                    <div className="text-xl sm:text-2xl font-bold text-white">4.9 ★</div>
+                    <div className="text-[10px] text-[#849396] uppercase mt-0.5">App Store Rating</div>
                   </div>
                 </div>
 
-                {/* ── CTA ── */}
-                <div className="cta-container text-center relative">
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[400px] h-[150px] sm:h-[200px] bg-red-900/10 rounded-full blur-[60px] pointer-events-none" />
-                  <div className="relative z-10">
-                    <h2 className="text-xl sm:text-2xl md:text-3xl font-black mb-1 sm:mb-2 text-white">Ready to drive?</h2>
-                    <p className="text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4">Join thousands of drivers who trust Mechify.</p>
-                    <Link
-                      to="/auth"
-                      className="group relative inline-block bg-red-600 hover:bg-red-500 text-white font-black text-xs sm:text-sm px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-xl transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(220,38,38,0.5)] hover:shadow-[0_0_60px_rgba(220,38,38,0.7)] overflow-hidden"
-                    >
-                      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                      Sign Up or Sign In Today →
-                    </Link>
-                    <p className="text-gray-500 text-[11px] sm:text-xs mt-1.5 sm:mt-2">Free to join · No credit card required</p>
-                  </div>
+                {/* Action CTAs */}
+                <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                  <Link
+                    to="/home"
+                    className="px-8 py-4 rounded-xl bg-[#ff2a42] hover:bg-[#ef4444] text-white font-['Space_Grotesk',sans-serif] text-sm uppercase font-bold tracking-wider transition-all shadow-[0_0_30px_rgba(255,42,66,0.6)] active:scale-95"
+                  >
+                    Enter Mechify Platform →
+                  </Link>
+                  <Link
+                    to="/home-service"
+                    className="px-6 py-4 rounded-xl bg-[#191c23]/90 hover:bg-[#272a31] border border-[#3b494c] text-white font-['Space_Grotesk',sans-serif] text-sm uppercase font-bold tracking-wider transition-all active:scale-95"
+                  >
+                    Doorstep Service Concierge
+                  </Link>
+                  <button
+                    onClick={() => jumpToService(1)}
+                    className="px-4 py-4 rounded-xl bg-[#0b0e15]/80 text-[#bac9cc] hover:text-white border border-[#272a31] font-['JetBrains_Mono',monospace] text-xs uppercase cursor-pointer"
+                    title="Replay Koenigsegg Showcase"
+                  >
+                    Replay ↺
+                  </button>
                 </div>
-
               </div>
             </div>
           )}
-          {/* ─── RIGHT SIDE: Scene progress & nav ─────────── */}
-          <div className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-3 sm:gap-4">
-            {/* Progress track */}
-            <div className="h-32 sm:h-48 w-0.5 bg-white/10 rounded-full relative overflow-hidden">
-              <div
-                className="absolute top-0 left-0 w-full rounded-full transition-all duration-300"
-                style={{ height: `${rawProgress * 100}%`, background: scene.accentColor }}
+
+          {/* ─── BOTTOM MINIMAL TIMELINE SCRUBBER HUD ──────────────── */}
+          <div className="absolute bottom-6 left-6 right-6 z-30 flex flex-col items-center pointer-events-auto">
+            
+            {/* 7 Services Dot Markers */}
+            <div className="flex items-center gap-1.5 sm:gap-3 bg-[#0b0e15]/85 backdrop-blur-md px-4 sm:px-6 py-2.5 rounded-full border border-[#272a31] shadow-2xl overflow-x-auto max-w-full">
+              {SERVICES.map((s) => {
+                const isSelected = activeService?.id === s.id;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => jumpToService(s.framePeak)}
+                    className="group flex items-center gap-1.5 py-1 px-2 rounded-full transition-all cursor-pointer border-0 bg-transparent shrink-0"
+                    title={`${s.num} - ${s.title}`}
+                  >
+                    <span 
+                      className="w-2.5 h-2.5 rounded-full transition-all duration-300 block"
+                      style={{
+                        backgroundColor: isSelected ? s.accent : 'rgba(255,255,255,0.25)',
+                        transform: isSelected ? 'scale(1.4)' : 'scale(1)',
+                        boxShadow: isSelected ? `0 0 10px ${s.accent}` : 'none'
+                      }}
+                    />
+                    <span 
+                      className={`font-['JetBrains_Mono',monospace] text-[9px] sm:text-[10px] uppercase font-bold transition-colors hidden md:inline ${
+                        isSelected ? 'text-white' : 'text-[#849396] group-hover:text-[#e0e2ec]'
+                      }`}
+                    >
+                      {s.num} {s.title.split(' ')[0]}
+                    </span>
+                  </button>
+                );
+              })}
+
+              {/* Finale dot */}
+              <button
+                onClick={() => jumpToService(TOTAL_FRAMES)}
+                className="group flex items-center gap-1.5 py-1 px-2 rounded-full transition-all cursor-pointer border-0 bg-transparent shrink-0"
+                title="Final Hero: MECHIFY"
+              >
+                <span 
+                  className="w-2.5 h-2.5 rounded-full transition-all duration-300 block"
+                  style={{
+                    backgroundColor: isFinalHero ? '#ff2a42' : 'rgba(255,255,255,0.25)',
+                    transform: isFinalHero ? 'scale(1.4)' : 'scale(1)',
+                    boxShadow: isFinalHero ? '0 0 10px #ff2a42' : 'none'
+                  }}
+                />
+                <span className={`font-['JetBrains_Mono',monospace] text-[9px] sm:text-[10px] uppercase font-bold hidden md:inline ${isFinalHero ? 'text-white' : 'text-[#849396]'}`}>
+                  MECHIFY
+                </span>
+              </button>
+            </div>
+
+            {/* Micro Interaction Hint */}
+            <div className="mt-2 text-[10px] font-['JetBrains_Mono',monospace] text-[#849396] uppercase tracking-widest hidden sm:block">
+              Scroll or Drag To Orbit Koenigsegg · Click Any Marker For Direct Transition
+            </div>
+          </div>
+
+          {/* ─── VERTICAL RIGHT PROGRESS RAIL ──────────────────────── */}
+          <div className="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 z-20 flex-col items-center gap-3">
+            <span className="font-['JetBrains_Mono',monospace] text-[9px] text-[#849396] uppercase tracking-widest -rotate-90 origin-center mb-4">
+              CAMERA ORBIT
+            </span>
+            <div className="h-36 w-0.5 bg-[#272a31] rounded-full relative overflow-hidden">
+              <div 
+                className="absolute top-0 left-0 w-full bg-[#ff2a42] rounded-full transition-all duration-150"
+                style={{ height: `${(currentFrame / TOTAL_FRAMES) * 100}%` }}
               />
             </div>
-            {/* Scene dots */}
-            <div className="flex flex-col gap-1.5 sm:gap-3">
-              {SCENES.map((sc, i) => (
-                <button
-                  key={sc.id}
-                  onClick={() => scrollToScene(i)}
-                  title={sc.label}
-                  className="p-2 -m-2 flex items-center justify-center cursor-pointer border-0 bg-transparent focus:outline-none"
-                >
-                  <span
-                    className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-400 block"
-                    style={{
-                      background: i === sceneIdx ? sc.accentColor : 'rgba(255,255,255,0.25)',
-                      transform: i === sceneIdx ? 'scale(1.4)' : 'scale(1)',
-                      boxShadow: i === sceneIdx ? `0 0 8px ${sc.glowColor}` : 'none',
-                    }}
-                  />
-                </button>
-              ))}
-            </div>
+            <span className="font-['JetBrains_Mono',monospace] text-[10px] text-white font-bold font-mono">
+              {Math.round((currentFrame / TOTAL_FRAMES) * 100)}%
+            </span>
           </div>
 
-          {/* ─── MOBILE BOTTOM ACTION PILL ─────────────────── */}
-          <div className="sm:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2">
-            {sceneIdx < totalScenes - 1 ? (
-              <button
-                type="button"
-                onClick={() => scrollToScene(sceneIdx + 1)}
-                className="flex items-center gap-2 bg-black/80 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full text-xs font-bold text-white shadow-2xl active:scale-95 transition-all"
-              >
-                <span>Explore Scene 0{sceneIdx + 2}</span>
-                <span className="text-red-500 font-black animate-bounce text-sm">↓</span>
-              </button>
-            ) : (
-              <Link
-                to="/auth"
-                className="flex items-center gap-2 bg-red-600 px-5 py-2 rounded-full text-xs font-black text-white uppercase tracking-wider shadow-2xl active:scale-95 transition-all"
-              >
-                <span>Sign In / Join →</span>
-              </Link>
-            )}
-          </div>
-
-          {/* ─── BOTTOM RIGHT: Scene counter ──────────────── */}
-          <div className="absolute right-3 sm:right-14 bottom-3 sm:bottom-12 z-20 text-right pointer-events-none">
-            <div className="font-black text-2xl sm:text-4xl md:text-5xl leading-none" style={{ color: scene.accentColor }}>
-              0{sceneIdx + 1}
-            </div>
-            <div className="text-gray-600 text-[10px] sm:text-xs font-semibold tracking-widest">/ 05</div>
-          </div>
-
-          {/* ─── Glow highlight circle ──────────────────── */}
-          <div
-            className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-[80px] pointer-events-none z-0 transition-all duration-700"
-            style={{ background: scene.glowColor, opacity: 0.25 }}
-          />
         </div>
       </div>
 
-
-
-      <style>{`
-        @keyframes gradShift {
-          0%   { background-position: 0% center; }
-          100% { background-position: 200% center; }
-        }
-      `}</style>
     </div>
   );
 }
