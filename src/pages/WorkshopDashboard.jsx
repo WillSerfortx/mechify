@@ -24,6 +24,150 @@ const technicianMarkerIcon = new L.DivIcon({
   iconSize: [28, 28]
 });
 
+export const DEFAULT_MECHANICS = [
+  { id: 'm-101', name: 'Bruce Wayne', specialization: 'Master Supercar & Turbo Engine Tech', experience: '12 yrs', status: 'In-Bay Working', assignedBay: 'Bay #1', activeJob: 'Ferrari 488 Pista (KB 1024 KYG)', phone: '+880 1711-998811', efficiency: '99%', certifications: ['Ferrari Factory Certified', 'Bosch Master Tech', 'ASE Master Automobile'], hourlyRate: 3500 },
+  { id: 'm-102', name: 'Clark Kent', specialization: 'Chassis, Suspension & Active Dampers', experience: '9 yrs', status: 'In-Bay Working', assignedBay: 'Bay #2', activeJob: 'Toyota Land Cruiser LC300', phone: '+880 1711-998812', efficiency: '96%', certifications: ['Toyota Hybrid Pro', 'Bilstein Suspension Specialist'], hourlyRate: 1800 },
+  { id: 'm-103', name: 'Barry Allen', specialization: 'Rapid OBD-II Diagnostics & ECU Remapping', experience: '7 yrs', status: 'On Emergency Call', assignedBay: 'Bay #3', activeJob: 'Mobile Breakdown SOS (Banani 11)', phone: '+880 1711-998813', efficiency: '98%', certifications: ['Autel Certified Tech', 'CAN-Bus Telemetry Specialist'], hourlyRate: 2000 },
+  { id: 'm-104', name: 'Diana Prince', specialization: 'High-Performance Braking & Track Safety', experience: '10 yrs', status: 'In-Bay Working', assignedBay: 'Bay #4', activeJob: 'Audi RS6 Avant Quattro', phone: '+880 1711-998814', efficiency: '97%', certifications: ['Brembo Racing Certified', 'Hunter Hawkeye 3D Specialist'], hourlyRate: 2200 },
+  { id: 'm-105', name: 'Arthur Curry', specialization: 'High-Pressure Cooling & Fluid Dynamics', experience: '6 yrs', status: 'In-Bay Working', assignedBay: 'Bay #5', activeJob: 'Mercedes-AMG G63', phone: '+880 1711-998815', efficiency: '95%', certifications: ['Mercedes-Benz Star Certified', 'AC R134a/R1234yf Licensed'], hourlyRate: 1600 },
+  { id: 'm-106', name: 'Victor Stone', specialization: 'Electric Vehicle (EV) & Hybrid High-Voltage', experience: '8 yrs', status: 'Available', assignedBay: 'Bay #6', activeJob: 'Standby for EV Diagnostics', phone: '+880 1711-998816', efficiency: '99%', certifications: ['Tesla Approved Technician', 'Porsche E-Performance Specialist'], hourlyRate: 2500 }
+];
+
+export const DEFAULT_BAYS = [
+  { id: 1, name: 'Bay #1', type: 'Hydraulic 2-Post Supercar Lift', status: 'Occupied', currentVehicle: 'Ferrari 488 Pista (KB 1024 KYG)', mechanic: 'Bruce Wayne', service: 'Telemetry Calibration & Brembo Pads', progress: 65, eta: '45 mins remaining', icon: '🏎️', powerTools: 'Rotary 2-Post Lift 4.5T', voltage: '380V Industrial' },
+  { id: 2, name: 'Bay #2', type: 'Heavy Duty 4-Post Lift (5-Ton)', status: 'Occupied', currentVehicle: 'Toyota Land Cruiser LC300', mechanic: 'Clark Kent', service: 'Air Suspension Overhaul', progress: 80, eta: '20 mins remaining', icon: '🚙', powerTools: 'BendPak 4-Post 5T', voltage: '380V Industrial' },
+  { id: 3, name: 'Bay #3', type: 'Computerized OBD-II & Dyno Bay', status: 'Occupied', currentVehicle: 'BMW M4 Competition (G82)', mechanic: 'Barry Allen', service: 'Bootmod3 Stage 2 Map & Dyno Run', progress: 35, eta: '1h 15m remaining', icon: '💻', powerTools: 'Mainline AWD Hub Dyno', voltage: '220V Stabilized' },
+  { id: 4, name: 'Bay #4', type: 'Hunter 3D Laser Alignment Bay', status: 'Occupied', currentVehicle: 'Audi RS6 Avant Quattro', mechanic: 'Diana Prince', service: 'Precision High-Speed Tracking', progress: 90, eta: '10 mins remaining', icon: '🎯', powerTools: 'Hunter Hawkeye Elite 3D', voltage: '220V Clean' },
+  { id: 5, name: 'Bay #5', type: 'Fast Lube & Fluid Exchange Bay', status: 'Occupied', currentVehicle: 'Mercedes-AMG G63', mechanic: 'Arthur Curry', service: 'Mobil 1 Triple Synthetic Flush', progress: 40, eta: '50 mins remaining', icon: '🛢️', powerTools: 'Pneumatic Oil Extractor', voltage: 'Pneumatic Air Line' },
+  { id: 6, name: 'Bay #6', type: 'EV & High-Voltage Insulated Bay', status: 'Available', currentVehicle: null, mechanic: 'Victor Stone (On-Call)', service: 'Ready for Next Electric/Hybrid Check-in', progress: 0, eta: 'Free Now', icon: '⚡', powerTools: '22kW AC Charger & HV Tools', voltage: '1000V Insulated' },
+  { id: 7, name: 'Bay #7', type: 'Quick Service & Express Bay', status: 'Available', currentVehicle: null, mechanic: 'Unassigned', service: 'Open for Walk-In Customers', progress: 0, eta: 'Free Now', icon: '🛠️', powerTools: 'Scissor Lift 3.5T', voltage: '220V Standard' },
+  { id: 8, name: 'Bay #8', type: 'Emergency SOS Rapid Mobile Bay', status: 'Dispatched', currentVehicle: 'Toyota Allion G (On-Road SOS)', mechanic: 'Barry Allen', service: 'Mobile Rapid Response Van #1', progress: 75, eta: 'Tech En-Route', icon: '🚨', powerTools: 'Mobile Service Van Pack', voltage: '12V/24V Jump System' }
+];
+
+export const DEFAULT_SERVICES = [
+  { id: 'SRV-1', name: 'Periodic General Servicing (10,000 km)', category: 'Maintenance', startingPrice: 4500, duration: '2.5 hrs', mechanicType: 'General Tech', equipment: '2-Post Lift, Oil Drainer', description: 'Complete 40-point safety check, synthetic engine oil, OEM oil filter, air filter cleaning, and fluid top-up.', badge: 'Most Popular', active: true },
+  { id: 'SRV-2', name: 'Complete Computerized OBD-II Diagnostics', category: 'Diagnostics', startingPrice: 2500, duration: '1 hr', mechanicType: 'Diagnostic Specialist', equipment: 'Autel MaxiSys Diagnostic Tablet', description: 'Full electronic scan across ECU, TCU, ABS, and BCM modules with printable fault health report.', badge: 'Fast Service', active: true },
+  { id: 'SRV-3', name: 'Brake Disc Resurfacing & Pad Overhaul', category: 'Braking', startingPrice: 6000, duration: '2 hrs', mechanicType: 'Brake Specialist', equipment: 'On-Car Brake Lathe', description: 'Micro-precision disc skimming to remove judder, installation of ceramic pads, caliper pin lubrication and brake bleed.', badge: 'Safety Critical', active: true },
+  { id: 'SRV-4', name: 'High-Performance Supercar Telemetry Inspection', category: 'Supercars', startingPrice: 18000, duration: '3.5 hrs', mechanicType: 'Master Supercar Tech', equipment: 'Laser Alignment, Oscilloscope, AWD Dyno', description: 'Factory-grade telemetry logging, boost verification, clutch wear adaptation, and high-speed road test audit.', badge: 'Supercar Exclusive', active: true },
+  { id: 'SRV-5', name: 'Air Conditioning Evaporator Flush & Refrigerant Gas', category: 'AC & Cooling', startingPrice: 5500, duration: '2 hrs', mechanicType: 'HVAC Specialist', equipment: 'R134a Recovery & Recharge Station', description: 'Chemical foaming evaporator core cleanse, antibacterial cabin treatment, and precision refrigerant recharge.', badge: 'Summer Essential', active: true },
+  { id: 'SRV-6', name: 'Full Suspension Bushing & Coilover Tuning', category: 'Suspension', startingPrice: 12000, duration: '4 hrs', mechanicType: 'Suspension Specialist', equipment: 'Spring Compressor, Corner Weight Scales', description: 'Polyurethane or OEM rubber bushing replacement, damper rebound calibration, and ride-height corner balancing.', badge: 'Handling Pro', active: true },
+  { id: 'SRV-7', name: 'Automatic Transmission Fluid (ATF WS / Dual Clutch) Flush', category: 'Maintenance', startingPrice: 14500, duration: '3 hrs', mechanicType: 'Transmission Specialist', equipment: 'ATF Pressure Dial Exchange Unit', description: '100% fluid replacement with pan drop, magnet cleaning, and electronic transmission clutch adaptation.', badge: 'Transmission', active: true },
+  { id: 'SRV-8', name: 'Stage 1 / Stage 2 Performance ECU Remap', category: 'Supercars', startingPrice: 35000, duration: '3 hrs', mechanicType: 'ECU Software Tuner', equipment: 'Bootmod3 / Alientech Kess', description: 'Custom dyno-tuned fueling and ignition timing mapping. Adds +45 to +90 WHP with optional overrun crackle.', badge: 'Performance', active: true },
+  { id: 'SRV-9', name: 'Brembo Carbon-Ceramic Discs & Pads Overhaul', category: 'Braking', startingPrice: 24000, duration: '2.5 hrs', mechanicType: 'Master Brake Tech', equipment: 'Dial Indicator & Electronic Thickness Gauge', description: 'Factory torque angle bed-in procedure, carbon rotor runout check, and Castrol SRF racing brake fluid flush.', badge: 'Track Ready', active: true },
+  { id: 'SRV-10', name: '3D Hunter Hawkeye Laser Wheel Alignment & Balancing', category: 'Suspension', startingPrice: 3800, duration: '1.5 hrs', mechanicType: 'Alignment Tech', equipment: 'Hunter Hawkeye Elite 3D System', description: '4-wheel laser sensor setup with digital printout for toe, camber, and caster thrust angle calibration.', badge: 'Laser Accurate', active: true },
+  { id: 'SRV-11', name: 'High-Voltage EV/Hybrid Battery Balancing & Diagnostic', category: 'Diagnostics', startingPrice: 16500, duration: '3.5 hrs', mechanicType: 'HV Certified Tech', equipment: 'High-Voltage Insulated Safety Rig', description: 'Individual cell pack capacity test, internal resistance audit, and high-voltage contactor inspection.', badge: 'EV Certified', active: true },
+  { id: 'SRV-12', name: 'Supercar 3-Stage Paint Correction & Ceramic Coating', category: 'Detailing', startingPrice: 28000, duration: '6 hrs', mechanicType: 'Master Detailer', equipment: 'Rupes BigFoot Dual Action Polishers', description: '99% swirl removal with high-cut compound, jeweling polish, and 9H hardness quartz ceramic sealant.', badge: 'Concourse Detail', active: true }
+];
+
+export const DEFAULT_REVIEWS = [
+  {
+    id: 'REV-101',
+    author: 'Arman Khan',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop',
+    car: 'Ferrari 488 Pista (KB 1024 KYG)',
+    rating: 5,
+    date: 'Yesterday',
+    service: 'Telemetry Scheduled Maintenance & Brembo Overhaul',
+    invoiceId: 'RO-9402',
+    verified: true,
+    comment: 'Master technician Bruce Wayne calibrated the telemetry and changed the Brembo carbon-ceramic pads flawlessly. Zero track fade on my high-speed run on the expressway. Mechify live approval link made consenting to extra parts so easy.',
+    likes: 18,
+    photos: ['https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=500&h=300&fit=crop'],
+    reply: {
+      author: 'Tony Stark (Workshop Owner)',
+      date: '18 hours ago',
+      text: 'Honored to service your 488 Pista, Arman! The Brembo ceramic bed-in procedure was executed to factory spec. See you next track day!'
+    }
+  },
+  {
+    id: 'REV-102',
+    author: 'Mahi Rahman',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop',
+    car: 'Toyota Allion G-Superior (Dhaka Metro-Ga 34-9012)',
+    rating: 5,
+    date: '3 days ago',
+    service: 'Emergency Roadside Alternator Replacement',
+    invoiceId: 'RO-9405',
+    verified: true,
+    comment: 'My car stalled in Kemal Ataturk Ave during peak traffic. Dispatched Barry Allen who arrived in 14 minutes with a mobile diagnostic van, diagnosed the alternator, and replaced the battery on the spot. Absolute lifesaver!',
+    likes: 24,
+    photos: [],
+    reply: {
+      author: 'Tony Stark (Workshop Owner)',
+      date: '2 days ago',
+      text: 'Glad Barry reached you quickly, Mahi! We keep our emergency mobile van stocked 24/7 for exactly these roadside situations.'
+    }
+  },
+  {
+    id: 'REV-103',
+    author: 'Farhan Kabir',
+    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop',
+    car: 'BMW M4 Competition (G82)',
+    rating: 5,
+    date: '5 days ago',
+    service: 'Bootmod3 Stage 2 ECU Tune & AWD Dyno',
+    invoiceId: 'RO-9388',
+    verified: true,
+    comment: 'Gained +78 WHP on their dyno. Barry’s knowledge on S58 engine telemetry is world-class. The waiting lounge has great espresso and a clear glass view into the dyno bay!',
+    likes: 15,
+    photos: ['https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=500&h=300&fit=crop'],
+    reply: null
+  },
+  {
+    id: 'REV-104',
+    author: 'Sadia Chowdhury',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop',
+    car: 'Audi RS6 Avant Quattro',
+    rating: 5,
+    date: '1 week ago',
+    service: 'Hunter 3D Laser Alignment & Active Suspension Audit',
+    invoiceId: 'RO-9350',
+    verified: true,
+    comment: 'Diana Prince resolved an annoying high-speed steering drift that two other workshops in Tejgaon could not fix. Hunter laser printout was explained in full detail. Highly recommended for European cars.',
+    likes: 12,
+    photos: [],
+    reply: {
+      author: 'Tony Stark (Workshop Owner)',
+      date: '6 days ago',
+      text: 'Thank you Sadia! Diana has over 10 years of experience with Audi Quattro steering geometry. Appreciate your trust!'
+    }
+  },
+  {
+    id: 'REV-105',
+    author: 'Tanvir Hossain',
+    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop',
+    car: 'Honda CR-V Turbo AWD',
+    rating: 4,
+    date: '2 weeks ago',
+    service: 'Rear Suspension Damper & 10-Pt Digital Inspection',
+    invoiceId: 'RO-9312',
+    verified: true,
+    comment: 'Workmanship was top tier and digital inspection report with photos was super clear. Took slightly longer than quoted because of genuine Honda parts transit, but result is 10/10.',
+    likes: 9,
+    photos: [],
+    reply: {
+      author: 'Tony Stark (Workshop Owner)',
+      date: '12 days ago',
+      text: 'Thanks for the feedback Tanvir! We had to procure OEM suspension struts from Japan via Mechify Marketplace, which added 45 mins. Glad she drives like new!'
+    }
+  },
+  {
+    id: 'REV-106',
+    author: 'Zubair Al-Mamun',
+    avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&h=150&fit=crop',
+    car: 'Mercedes-AMG G63',
+    rating: 5,
+    date: '3 weeks ago',
+    service: 'Mobil 1 Fluid Flush & AC Chemical Deep Clean',
+    invoiceId: 'RO-9289',
+    verified: true,
+    comment: 'Arthur Curry did a phenomenal job on the V8 Biturbo cooling lines and AC evaporator. Ice cold climate control now in Dhaka 36°C heat.',
+    likes: 11,
+    photos: [],
+    reply: null
+  }
+];
+
 export default function WorkshopDashboard() {
   const navigate = useNavigate();
 
@@ -70,7 +214,20 @@ export default function WorkshopDashboard() {
 
   // ─── 3. Comprehensive Datasets (All 40 Specification Modules) ───
   const [bookingsList, setBookingsList] = useState(() => currentWorkshop.bookings || []);
-  const [mechanicsList, setMechanicsList] = useState(() => currentWorkshop.mechanics || []);
+  const [mechanicsList, setMechanicsList] = useState(() => (currentWorkshop.mechanics && currentWorkshop.mechanics.length > 0) ? currentWorkshop.mechanics : DEFAULT_MECHANICS);
+  const [baysList, setBaysList] = useState(DEFAULT_BAYS);
+  const [bayFilter, setBayFilter] = useState('all'); // 'all' | 'occupied' | 'available' | 'dispatched'
+  const [selectedBayForDetails, setSelectedBayForDetails] = useState(null);
+  const [showAddMechanicModal, setShowAddMechanicModal] = useState(false);
+  const [newMechanicForm, setNewMechanicForm] = useState({
+    name: '',
+    specialization: 'Master Supercar & Turbo Engine Tech',
+    experience: '6 yrs',
+    phone: '+880 1700-112233',
+    hourlyRate: 2000,
+    certifications: 'ASE Certified & Mechify Master',
+    status: 'Available'
+  });
 
   // Job Cards / Repair Orders (Spec Section 10)
   const [jobCardsList, setJobCardsList] = useState([
@@ -200,14 +357,53 @@ export default function WorkshopDashboard() {
   ]);
 
   // Workshop Configured Services Catalog (Spec Section 14)
-  const [servicesCatalog, setServicesCatalog] = useState([
-    { id: 'SRV-1', name: 'Periodic General Servicing (10,000 km)', category: 'Maintenance', startingPrice: 4500, duration: '2.5 hrs', mechanicType: 'General Tech', equipment: '2-Post Lift, Oil Drainer' },
-    { id: 'SRV-2', name: 'Complete Computerized OBD-II Diagnostics', category: 'Diagnostics', startingPrice: 2500, duration: '1 hr', mechanicType: 'Diagnostic Specialist', equipment: 'Autel MaxiSys Diagnostic Tablet' },
-    { id: 'SRV-3', name: 'Brake Disc Resurfacing & Pad Overhaul', category: 'Braking', startingPrice: 6000, duration: '2 hrs', mechanicType: 'Brake Specialist', equipment: 'On-Car Brake Lathe' },
-    { id: 'SRV-4', name: 'High-Performance Supercar Telemetry Inspection', category: 'Supercars', startingPrice: 15000, duration: '3.5 hrs', mechanicType: 'Master Supercar Tech', equipment: 'Laser Alignment, Oscilloscope' },
-    { id: 'SRV-5', name: 'Air Conditioning Evaporator Flush & Refrigerant Gas', category: 'AC & Cooling', startingPrice: 5500, duration: '2 hrs', mechanicType: 'HVAC Specialist', equipment: 'R134a Recovery & Recharge Station' },
-    { id: 'SRV-6', name: 'Full Suspension Bushing & Coilover Tuning', category: 'Suspension', startingPrice: 8000, duration: '4 hrs', mechanicType: 'Suspension Specialist', equipment: 'Spring Compressor, Corner Weight Scales' }
-  ]);
+  const [servicesCatalog, setServicesCatalog] = useState(DEFAULT_SERVICES);
+  const [serviceCategoryFilter, setServiceCategoryFilter] = useState('All');
+  const [searchServiceQuery, setSearchServiceQuery] = useState('');
+  const [showAddServiceModal, setShowAddServiceModal] = useState(false);
+  const [newServiceForm, setNewServiceForm] = useState({
+    name: '',
+    category: 'Maintenance',
+    startingPrice: 5000,
+    duration: '2.0 hrs',
+    mechanicType: 'General Tech',
+    equipment: 'Hydraulic Lift & Scanner',
+    description: '',
+    badge: 'New Offering'
+  });
+
+  // Reviews & Reputation (Spec Section 22)
+  const [reviewsList, setReviewsList] = useState(DEFAULT_REVIEWS);
+  const [reviewFilter, setReviewFilter] = useState('all'); // 'all' | '5' | '4' | 'photos' | 'supercar'
+  const [replyingToReviewId, setReplyingToReviewId] = useState(null);
+  const [replyText, setReplyText] = useState('');
+
+  // Public Hub Profile Preview (Spec Section 23)
+  const [publicViewDevice, setPublicViewDevice] = useState('desktop'); // 'desktop' | 'mobile'
+  const [showEditPublicProfileModal, setShowEditPublicProfileModal] = useState(false);
+  const [publicProfileData, setPublicProfileData] = useState({
+    tagline: 'Official Mechify Diamond Certified Supercar & Automotive Performance Center',
+    about: 'Equipped with 8 high-clearance hydraulic lifts, Hunter 3D laser wheel alignment, Mainline AWD dyno, and manufacturer-certified technicians specializing in Ferrari, Porsche, AMG, BMW M, and premium Japanese hybrids. We provide 24/7 rapid emergency breakdown response across Dhaka.',
+    workingHours: 'Open Every Day: 08:30 AM — 09:30 PM (24/7 Emergency Dispatch Hub)',
+    emergencyPhone: '+880 1304-098448',
+    announcement: '⚡ Free Computerized OBD-II Health Scan with every Major Scheduled Service this week!',
+    amenities: [
+      { name: 'Air-Conditioned VIP Customer Lounge', icon: '🛋️' },
+      { name: 'Complimentary Fresh Espresso Bar', icon: '☕' },
+      { name: 'Ultra High-Speed Fiber WiFi', icon: '📶' },
+      { name: 'Service Bay Glass Viewing Gallery', icon: '🔍' },
+      { name: '22kW Level-2 EV Fast Charger', icon: '⚡' },
+      { name: '24/7 Monitored CCTV Security Compound', icon: '🛡️' },
+      { name: 'Low-Clearance Supercar Hydraulic Lifts', icon: '🏎️' },
+      { name: 'Cashless bKash / Card / Wire Checkout', icon: '💳' }
+    ],
+    gallery: [
+      { title: 'Supercar Service Bays & Lifts', img: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=800&h=500&fit=crop' },
+      { title: 'Customer VIP Waiting Lounge', img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&h=500&fit=crop' },
+      { title: 'Hunter 3D Laser Alignment & Wheel Bay', img: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=800&h=500&fit=crop' },
+      { title: 'Dyno Tuning & Computerized Diagnostics', img: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800&h=500&fit=crop' }
+    ]
+  });
 
   // Customer Directory & Digital Vehicle Passports (Spec Section 8 & 9)
   const [customerDirectory, setCustomerDirectory] = useState([
@@ -372,7 +568,7 @@ export default function WorkshopDashboard() {
   // Sync state on demo workshop change
   useEffect(() => {
     setBookingsList(currentWorkshop.bookings || []);
-    setMechanicsList(currentWorkshop.mechanics || []);
+    setMechanicsList((currentWorkshop.mechanics && currentWorkshop.mechanics.length > 0) ? currentWorkshop.mechanics : DEFAULT_MECHANICS);
     setTotalBays(currentWorkshop.bays || 8);
     setOccupiedBays(currentWorkshop.occupiedBays || 5);
   }, [currentWorkshop]);
@@ -1505,70 +1701,245 @@ export default function WorkshopDashboard() {
 
           {/* ══════════════════ TAB 10: PUBLIC HUB PROFILE PREVIEW (SPEC SECTION 23) ══════════════════ */}
           {activeNav === 'public_profile' && (
-            <div className="max-w-4xl mx-auto space-y-6 animate-fadeIn">
-              <div className="flex justify-between items-center">
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-2xl font-black">Public Hub Profile Preview</h2>
-                  <p className="text-xs text-gray-400">This is the verified customer-facing profile displayed on the Mechify consumer mobile & web app.</p>
+                  <p className="text-xs text-gray-400">Verified customer-facing profile displayed on the Mechify consumer mobile & web directory.</p>
                 </div>
-                <button
-                  onClick={() => alert("Changes saved to Public Mechify Directory!")}
-                  className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-md"
-                >
-                  Save & Publish Live
-                </button>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center bg-[#10131d] border border-white/10 p-1 rounded-xl">
+                    <button
+                      onClick={() => setPublicViewDevice('desktop')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        publicViewDevice === 'desktop' ? 'bg-red-600 text-white shadow' : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      🖥️ Desktop View
+                    </button>
+                    <button
+                      onClick={() => setPublicViewDevice('mobile')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        publicViewDevice === 'mobile' ? 'bg-red-600 text-white shadow' : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      📱 Mobile App View
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => setShowEditPublicProfileModal(true)}
+                    className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/10"
+                  >
+                    ✏️ Edit Hub Details
+                  </button>
+                  <button
+                    onClick={() => alert("All profile edits and verified credentials published to Mechify Consumer Directory & Google Maps!")}
+                    className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-[0_0_15px_rgba(220,38,38,0.4)]"
+                  >
+                    Save & Publish Live
+                  </button>
+                </div>
               </div>
 
-              <div className="rounded-3xl border border-white/15 overflow-hidden bg-black/40 shadow-2xl relative">
-                <div className="h-52 w-full relative">
-                  <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=1200&h=400&fit=crop" alt="Cover" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+              {/* Announcement Banner */}
+              {publicProfileData.announcement && (
+                <div className="p-3.5 rounded-2xl bg-gradient-to-r from-red-950/60 to-black border border-red-500/30 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2 text-red-300 font-bold">
+                    <span>📢 Live Public Announcement:</span>
+                    <span className="text-white font-medium">{publicProfileData.announcement}</span>
+                  </div>
+                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30">Active</span>
                 </div>
+              )}
 
-                <div className="p-8 pt-0 relative -mt-16 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
-                  <div className="flex items-end gap-4">
+              {/* Wrapper supporting Desktop or Mobile frame */}
+              <div className={`transition-all duration-300 mx-auto ${publicViewDevice === 'mobile' ? 'max-w-md bg-[#0a0c13] p-4 rounded-[40px] border-4 border-white/20 shadow-2xl' : 'max-w-5xl'}`}>
+                
+                {/* Mobile top status bar simulation */}
+                {publicViewDevice === 'mobile' && (
+                  <div className="flex justify-between items-center text-[10px] text-gray-400 font-mono px-4 py-1 mb-2">
+                    <span>09:41</span>
+                    <div className="flex items-center gap-1.5">
+                      <span>5G</span>
+                      <span>100%</span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="rounded-3xl border border-white/15 overflow-hidden bg-[#10131d] shadow-2xl relative">
+                  
+                  {/* Hero Cover Banner */}
+                  <div className="h-60 w-full relative">
                     <img
-                      src={currentWorkshop.avatar}
-                      alt="Logo"
-                      className="w-24 h-24 rounded-3xl object-cover border-4 border-[#07080d] shadow-2xl"
+                      src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=1400&h=500&fit=crop"
+                      alt="Workshop Cover"
+                      className="w-full h-full object-cover"
                     />
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-2xl font-black text-white">{currentWorkshop.workshopName}</h3>
-                        <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                          ✓ Mechify Certified
-                        </span>
-                      </div>
-                      <p className="text-xs text-gray-300 mt-1">📍 {currentWorkshop.address} • ⭐ <strong>{currentWorkshop.rating}</strong> ({currentWorkshop.reviews} reviews)</p>
-                      <div className="text-[11px] text-gray-400 mt-1">Operating Hours: 08:30 AM - 09:00 PM • 24/7 Emergency Dispatch Hub</div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#10131d] via-[#10131d]/50 to-transparent" />
+                    
+                    {/* Top Badges */}
+                    <div className="absolute top-4 right-4 flex flex-wrap gap-2">
+                      <span className="text-[11px] font-black uppercase px-3 py-1 rounded-full bg-emerald-500 text-black shadow-lg flex items-center gap-1">
+                        <span>✓</span> Mechify Diamond Partner
+                      </span>
+                      <span className="text-[11px] font-black uppercase px-3 py-1 rounded-full bg-red-600 text-white shadow-lg">
+                        🚨 24/7 Roadside SOS Hub
+                      </span>
                     </div>
                   </div>
 
-                  {/* Public Customer CTAs (Spec Section 23) */}
-                  <div className="flex flex-wrap gap-2">
-                    <button className="px-4 py-2 rounded-xl bg-red-600 text-white font-black text-xs shadow-md">
-                      Book Service
-                    </button>
-                    <a href={`tel:${currentWorkshop.phone}`} className="px-3 py-2 rounded-xl bg-white/10 text-white font-bold text-xs">
-                      📞 Call Workshop
-                    </a>
-                  </div>
-                </div>
-
-                {/* Available Slots & Services Preview */}
-                <div className="p-8 pt-4 border-t border-white/10 space-y-4">
-                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">Available Services & Starting Rates</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    {servicesCatalog.map(s => (
-                      <div key={s.id} className="p-3 rounded-xl bg-white/5 border border-white/5 flex justify-between items-center">
-                        <div>
-                          <strong className="text-white block">{s.name}</strong>
-                          <span className="text-gray-400">{s.duration} • {s.mechanicType}</span>
+                  {/* Profile Header Info */}
+                  <div className="p-6 sm:p-8 pt-0 relative -mt-16 flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5">
+                      <img
+                        src={currentWorkshop.avatar}
+                        alt="Logo"
+                        className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl object-cover border-4 border-[#10131d] shadow-2xl bg-black"
+                      />
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="text-2xl sm:text-3xl font-black text-white">{currentWorkshop.workshopName}</h3>
+                          <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                            Verified Hub
+                          </span>
                         </div>
-                        <strong className="text-emerald-400">From ৳{s.startingPrice.toLocaleString()}</strong>
+                        <p className="text-xs text-red-400 font-bold">{publicProfileData.tagline}</p>
+                        <p className="text-xs text-gray-300">📍 {currentWorkshop.address} ({currentWorkshop.zone})</p>
+                        <div className="flex items-center gap-3 text-xs text-gray-400 pt-1">
+                          <span className="text-amber-400 font-black flex items-center gap-1">
+                            ★ {currentWorkshop.rating} <strong className="text-gray-400 font-normal">({currentWorkshop.reviews} reviews)</strong>
+                          </span>
+                          <span>•</span>
+                          <span className="text-emerald-400 font-bold">🟢 Open Now</span>
+                          <span>•</span>
+                          <span>{totalBays} Service Bays</span>
+                        </div>
                       </div>
-                    ))}
+                    </div>
+
+                    {/* Customer Action CTAs */}
+                    <div className="flex flex-wrap gap-2.5 shrink-0 w-full md:w-auto">
+                      <button
+                        onClick={() => alert(`Simulating Consumer Booking Modal for ${currentWorkshop.workshopName}`)}
+                        className="flex-1 md:flex-initial px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-black text-xs shadow-lg shadow-red-900/40"
+                      >
+                        📅 Book Service Slot
+                      </button>
+                      <a
+                        href={`tel:${publicProfileData.emergencyPhone || currentWorkshop.phone}`}
+                        className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5"
+                      >
+                        📞 Call Workshop
+                      </a>
+                      <button
+                        onClick={() => window.open(`https://maps.google.com/?q=${currentWorkshop.lat},${currentWorkshop.lng}`, '_blank')}
+                        className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs"
+                        title="Open in Google Maps"
+                      >
+                        🗺️ Directions
+                      </button>
+                    </div>
                   </div>
+
+                  {/* Bio & Working Hours */}
+                  <div className="px-6 sm:px-8 pb-6 text-xs text-gray-300 leading-relaxed border-b border-white/10">
+                    <p>{publicProfileData.about}</p>
+                    <div className="mt-3 flex flex-wrap gap-4 text-gray-400">
+                      <div>🕒 <strong>Hours:</strong> {publicProfileData.workingHours}</div>
+                      <div>🚨 <strong>Emergency Hotline:</strong> <span className="text-red-400 font-bold">{publicProfileData.emergencyPhone}</span></div>
+                    </div>
+                  </div>
+
+                  {/* Virtual Facility Gallery */}
+                  <div className="p-6 sm:p-8 space-y-4 border-b border-white/10">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-black text-white uppercase tracking-wider">Facility & Equipment Showcase</h4>
+                      <span className="text-xs text-gray-400">High-Definition Visual Tour</span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {publicProfileData.gallery.map((g, idx) => (
+                        <div key={idx} className="group relative rounded-2xl overflow-hidden border border-white/10 aspect-video">
+                          <img src={g.img} alt={g.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-2.5">
+                            <span className="text-[11px] font-bold text-white leading-tight">{g.title}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Customer Amenities & Highlights */}
+                  <div className="p-6 sm:p-8 space-y-4 border-b border-white/10">
+                    <h4 className="text-sm font-black text-white uppercase tracking-wider">Workshop Amenities & Customer Standards</h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                      {publicProfileData.amenities.map((a, i) => (
+                        <div key={i} className="p-3 rounded-xl bg-white/5 border border-white/5 flex items-center gap-2.5">
+                          <span className="text-lg">{a.icon}</span>
+                          <span className="text-gray-300 font-medium">{a.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Verified Service Offerings Preview */}
+                  <div className="p-6 sm:p-8 space-y-4 border-b border-white/10">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-black text-white uppercase tracking-wider">Available Services & Transparent Pricing</h4>
+                      <span className="text-xs text-red-400 font-bold">{servicesCatalog.length} Total Services</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      {servicesCatalog.slice(0, 6).map(s => (
+                        <div key={s.id} className="p-3.5 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center hover:border-red-500/30 transition-colors">
+                          <div className="space-y-0.5">
+                            <div className="flex items-center gap-2">
+                              <strong className="text-white text-sm">{s.name}</strong>
+                              {s.badge && (
+                                <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-red-600/30 text-red-300 border border-red-500/20">
+                                  {s.badge}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-gray-400 block">{s.duration} • Handled by {s.mechanicType}</span>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <span className="text-emerald-400 font-black text-sm block">৳{s.startingPrice.toLocaleString()}</span>
+                            <button
+                              onClick={() => alert(`Simulated booking for ${s.name}`)}
+                              className="mt-1 text-[11px] font-bold text-red-400 hover:text-red-300"
+                            >
+                              Book Now →
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Customer Testimonials on Profile */}
+                  <div className="p-6 sm:p-8 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-black text-white uppercase tracking-wider">Featured Verified Reviews</h4>
+                      <span className="text-xs text-amber-400 font-bold">★ {currentWorkshop.rating} / 5.0 Rating</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      {reviewsList.slice(0, 2).map(r => (
+                        <div key={r.id} className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                          <div className="flex justify-between items-start">
+                            <div className="flex items-center gap-2.5">
+                              <img src={r.avatar} alt={r.author} className="w-8 h-8 rounded-full object-cover border border-white/10" />
+                              <div>
+                                <strong className="text-white block font-bold">{r.author}</strong>
+                                <span className="text-[11px] text-red-400">{r.car}</span>
+                              </div>
+                            </div>
+                            <span className="text-amber-400">{'★'.repeat(r.rating)}</span>
+                          </div>
+                          <p className="text-gray-300 leading-relaxed">{r.comment}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -1577,155 +1948,654 @@ export default function WorkshopDashboard() {
           {/* ══════════════════ TAB 11: REVIEWS & REPUTATION (SPEC SECTION 22) ══════════════════ */}
           {activeNav === 'reviews_reputation' && (
             <div className="space-y-6 animate-fadeIn">
-              <div>
-                <h2 className="text-2xl font-black">Customer Reviews & Workshop Reputation</h2>
-                <p className="text-xs text-gray-400">Verified driver feedback connected to job cards and services.</p>
-              </div>
-
-              <div className="p-6 rounded-3xl bg-[#10131d] border border-white/10 flex flex-col sm:flex-row items-center gap-8">
-                <div className="text-center sm:border-r border-white/10 sm:pr-8 shrink-0">
-                  <div className="text-5xl font-black text-amber-400">{currentWorkshop.rating}</div>
-                  <div className="text-amber-400 text-lg mt-1">★★★★★</div>
-                  <div className="text-xs text-gray-400 mt-1">Based on {currentWorkshop.reviews} verified reviews</div>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-2xl font-black">Customer Reviews & Workshop Reputation</h2>
+                  <p className="text-xs text-gray-400">Verified driver feedback authenticated by paid Mechify Repair Orders.</p>
                 </div>
-                <div className="flex-1 w-full space-y-1.5 text-xs">
-                  {[{ star: 5, pct: 82 }, { star: 4, pct: 14 }, { star: 3, pct: 3 }, { star: 2, pct: 1 }, { star: 1, pct: 0 }].map(b => (
-                    <div key={b.star} className="flex items-center gap-3">
-                      <span className="w-12 font-bold">{b.star} Star</span>
-                      <div className="flex-1 h-2 rounded-full bg-white/10 overflow-hidden">
-                        <div className="bg-amber-400 h-full rounded-full" style={{ width: `${b.pct}%` }} />
-                      </div>
-                      <span className="w-8 text-right text-gray-400">{b.pct}%</span>
-                    </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-gray-400">Filter By:</span>
+                  {['all', '5', '4', 'photos', 'supercar'].map(f => (
+                    <button
+                      key={f}
+                      onClick={() => setReviewFilter(f)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold capitalize transition-all ${
+                        reviewFilter === f ? 'bg-red-600 text-white shadow' : 'bg-white/5 text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      {f === 'all' ? `All (${reviewsList.length})` : f === 'photos' ? 'With Photos' : f === 'supercar' ? 'Supercars' : `${f} Stars`}
+                    </button>
                   ))}
                 </div>
               </div>
 
-              <div className="space-y-4">
-                {[
-                  { name: 'Arman Khan', car: 'Ferrari 488 Pista', rating: 5, comment: 'Master technician Bruce Wayne calibrated the telemetry and changed the Brembo pads flawlessly. Zero track fade.', date: 'Yesterday' },
-                  { name: 'Mahi Rahman', car: 'Toyota Allion', rating: 5, comment: 'Mobile emergency unit arrived in Banani 11 intersection within 14 minutes. Jump-started and swapped alternator. Lifesaver!', date: '3 days ago' }
-                ].map((r, idx) => (
-                  <div key={idx} className="p-5 rounded-2xl bg-[#10131d] border border-white/10 space-y-2 text-xs">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <strong className="text-white text-sm block">{r.name}</strong>
-                        <span className="text-red-400 font-bold">{r.car}</span>
-                      </div>
-                      <span className="text-amber-400">{'★'.repeat(r.rating)}</span>
+              {/* Reputation Scorecard & Trust Pillars */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                {/* Rating Breakdown */}
+                <div className="p-6 rounded-3xl bg-[#10131d] border border-white/10 flex flex-col justify-center">
+                  <div className="flex items-center gap-6">
+                    <div className="text-center">
+                      <div className="text-5xl font-black text-amber-400">{currentWorkshop.rating}</div>
+                      <div className="text-amber-400 text-lg mt-0.5">★★★★★</div>
+                      <div className="text-xs text-gray-400 mt-1">{currentWorkshop.reviews} verified reviews</div>
                     </div>
-                    <p className="text-gray-300 leading-relaxed">{r.comment}</p>
-                    <div className="pt-2 border-t border-white/5 flex justify-end">
-                      <button onClick={() => alert("Reply dialog opened!")} className="text-xs font-bold text-red-400 hover:text-red-300">
-                        Reply as Owner
-                      </button>
+                    <div className="flex-1 space-y-1.5 text-xs">
+                      {[
+                        { star: 5, pct: 84 },
+                        { star: 4, pct: 12 },
+                        { star: 3, pct: 3 },
+                        { star: 2, pct: 1 },
+                        { star: 1, pct: 0 }
+                      ].map(b => (
+                        <div key={b.star} className="flex items-center gap-2">
+                          <span className="w-10 font-bold text-gray-300">{b.star}★</span>
+                          <div className="flex-1 h-2 rounded-full bg-white/10 overflow-hidden">
+                            <div className="bg-amber-400 h-full rounded-full" style={{ width: `${b.pct}%` }} />
+                          </div>
+                          <span className="w-7 text-right text-[11px] text-gray-400">{b.pct}%</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                ))}
+                </div>
+
+                {/* Trust Pillars */}
+                <div className="lg:col-span-2 p-6 rounded-3xl bg-[#10131d] border border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 flex flex-col justify-between">
+                    <span className="text-2xl mb-2">🛡️</span>
+                    <div>
+                      <div className="text-lg font-black text-white">100%</div>
+                      <span className="text-[11px] text-gray-400 font-bold">Verified Invoices</span>
+                    </div>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 flex flex-col justify-between">
+                    <span className="text-2xl mb-2">👍</span>
+                    <div>
+                      <div className="text-lg font-black text-emerald-400">98.4%</div>
+                      <span className="text-[11px] text-gray-400 font-bold">Recommendation</span>
+                    </div>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 flex flex-col justify-between">
+                    <span className="text-2xl mb-2">⏱️</span>
+                    <div>
+                      <div className="text-lg font-black text-red-400">12 min</div>
+                      <span className="text-[11px] text-gray-400 font-bold">Avg SOS Dispatch</span>
+                    </div>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 flex flex-col justify-between">
+                    <span className="text-2xl mb-2">✨</span>
+                    <div>
+                      <div className="text-lg font-black text-amber-400">4.9 / 5.0</div>
+                      <span className="text-[11px] text-gray-400 font-bold">Lounge Cleanliness</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Customer Review Stream */}
+              <div className="space-y-4">
+                {reviewsList
+                  .filter(r => {
+                    if (reviewFilter === '5') return r.rating === 5;
+                    if (reviewFilter === '4') return r.rating === 4;
+                    if (reviewFilter === 'photos') return r.photos && r.photos.length > 0;
+                    if (reviewFilter === 'supercar') return r.car.toLowerCase().includes('ferrari') || r.car.toLowerCase().includes('bmw') || r.car.toLowerCase().includes('audi') || r.car.toLowerCase().includes('mercedes');
+                    return true;
+                  })
+                  .map(r => (
+                    <div key={r.id} className="p-6 rounded-3xl bg-[#10131d] border border-white/10 space-y-4 text-xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="flex items-center gap-3">
+                          <img src={r.avatar} alt={r.author} className="w-10 h-10 rounded-full object-cover border border-white/15" />
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <strong className="text-sm font-bold text-white">{r.author}</strong>
+                              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                                ✓ Verified Booking
+                              </span>
+                            </div>
+                            <span className="text-gray-400 text-[11px]">{r.date} • Invoice #{r.invoiceId}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <span className="text-amber-400 text-sm">{'★'.repeat(r.rating)}</span>
+                          <span className="px-3 py-1 rounded-lg bg-red-600/20 text-red-300 font-bold text-[11px] border border-red-500/20">
+                            {r.car}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Service Tag */}
+                      <div className="text-[11px] text-gray-400">
+                        Service Performed: <strong className="text-white">{r.service}</strong>
+                      </div>
+
+                      {/* Review Comment */}
+                      <p className="text-gray-200 text-sm leading-relaxed">{r.comment}</p>
+
+                      {/* Photos Attached by Customer */}
+                      {r.photos && r.photos.length > 0 && (
+                        <div className="flex gap-3 pt-1">
+                          {r.photos.map((p, idx) => (
+                            <img
+                              key={idx}
+                              src={p}
+                              alt="Review Photo"
+                              className="w-32 h-20 rounded-xl object-cover border border-white/10 cursor-pointer hover:opacity-90"
+                              onClick={() => window.open(p, '_blank')}
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Owner Reply Block */}
+                      {r.reply ? (
+                        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-red-400 text-xs flex items-center gap-1.5">
+                              🏭 {r.reply.author}
+                              <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30">
+                                Verified Owner
+                              </span>
+                            </span>
+                            <span className="text-[10px] text-gray-500">{r.reply.date}</span>
+                          </div>
+                          <p className="text-gray-300 text-xs leading-relaxed">{r.reply.text}</p>
+                        </div>
+                      ) : (
+                        <div>
+                          {replyingToReviewId === r.id ? (
+                            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                              <label className="block text-xs font-bold text-white">Reply as Workshop Owner ({currentWorkshop.ownerName}):</label>
+                              <textarea
+                                rows={2}
+                                value={replyText}
+                                onChange={(e) => setReplyText(e.target.value)}
+                                placeholder="Thank the customer or address their experience professionally..."
+                                className="w-full p-2.5 rounded-xl bg-black/50 border border-white/15 text-white text-xs"
+                              />
+                              <div className="flex justify-end gap-2">
+                                <button
+                                  onClick={() => { setReplyingToReviewId(null); setReplyText(''); }}
+                                  className="px-3 py-1.5 rounded-lg bg-white/10 text-xs font-bold"
+                                >
+                                  Cancel
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    if (!replyText.trim()) return;
+                                    setReviewsList(prev => prev.map(rev => rev.id === r.id ? {
+                                      ...rev,
+                                      reply: {
+                                        author: `${currentWorkshop.ownerName} (Workshop Owner)`,
+                                        date: 'Just now',
+                                        text: replyText
+                                      }
+                                    } : rev));
+                                    setReplyingToReviewId(null);
+                                    setReplyText('');
+                                    alert("Your owner reply has been published live to the Mechify platform!");
+                                  }}
+                                  className="px-4 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-black"
+                                >
+                                  Publish Reply
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex justify-between items-center pt-2 border-t border-white/5">
+                              <button
+                                onClick={() => {
+                                  setReviewsList(prev => prev.map(rev => rev.id === r.id ? { ...rev, likes: (rev.likes || 0) + 1 } : rev));
+                                }}
+                                className="text-xs text-gray-400 hover:text-white flex items-center gap-1.5 font-bold"
+                              >
+                                👍 Helpful ({r.likes || 0})
+                              </button>
+                              <button
+                                onClick={() => { setReplyingToReviewId(r.id); setReplyText(''); }}
+                                className="px-3 py-1 rounded-lg bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white transition-all text-xs font-bold border border-red-500/20"
+                              >
+                                💬 Reply as Owner
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
               </div>
             </div>
           )}
 
           {/* ══════════════════ TAB 12: MECHANICS & CAPACITY MANAGEMENT (SPEC SECTION 13 & 24) ══════════════════ */}
           {activeNav === 'mechanics_capacity' && (
-            <div className="space-y-6 animate-fadeIn">
+            <div className="space-y-8 animate-fadeIn">
+              
+              {/* Header */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-2xl font-black">Specialist Mechanics & Facility Bay Allocation</h2>
-                  <p className="text-xs text-gray-400">Technician certifications, active job tracking, and service bay capacity limits.</p>
+                  <p className="text-xs text-gray-400">Manage hydraulic lift assignments, specialized tooling, master technician shifts, and live bay occupancy.</p>
                 </div>
-                <button
-                  onClick={() => alert("Add Mechanic form modal opened!")}
-                  className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-md"
-                >
-                  + Add Certified Mechanic
-                </button>
-              </div>
-
-              {/* Bay Capacity Controller (Spec Section 24) */}
-              <div className="p-6 rounded-3xl bg-[#10131d] border border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-1">Total Service Bays</label>
-                  <input
-                    type="number"
-                    value={totalBays}
-                    onChange={(e) => setTotalBays(parseInt(e.target.value) || 8)}
-                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white font-black text-lg"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-1">Occupied Lift Bays</label>
-                  <input
-                    type="number"
-                    value={occupiedBays}
-                    onChange={(e) => setOccupiedBays(parseInt(e.target.value) || 0)}
-                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-amber-400 font-black text-lg"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-400 mb-1">Calculated Free Capacity</label>
-                  <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-black text-lg">
-                    {availableBays} Bays Available for Dispatch
-                  </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowAddMechanicModal(true)}
+                    className="px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-[0_0_15px_rgba(220,38,38,0.4)] flex items-center gap-2"
+                  >
+                    <span>+</span> Add Certified Mechanic
+                  </button>
                 </div>
               </div>
 
-              {/* Mechanics Roster */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {mechanicsList.map(m => (
-                  <div key={m.id} className="p-5 rounded-2xl bg-[#10131d] border border-white/10 flex items-center justify-between text-xs">
-                    <div>
-                      <h4 className="font-bold text-sm text-white">{m.name}</h4>
-                      <p className="text-red-400 font-bold mt-0.5">{m.specialization}</p>
-                      <p className="text-gray-400 mt-1">Experience: <strong className="text-white">{m.experience}</strong> • Phone: {m.phone}</p>
-                    </div>
-                    <div className="text-right">
-                      <span className={`text-[10px] font-black px-2.5 py-1 rounded-full uppercase block mb-2 ${
-                        m.status === 'Available' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'
-                      }`}>
-                        {m.status}
-                      </span>
-                      <a href={`tel:${m.phone}`} className="inline-block px-3 py-1 rounded-lg bg-white/10 text-white font-bold">
-                        📞 Call Tech
-                      </a>
-                    </div>
+              {/* Bay Capacity Controller & Live Status Header */}
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div className="p-5 rounded-3xl bg-[#10131d] border border-white/10">
+                  <span className="text-xs font-bold text-gray-400">Total Workshop Bays</span>
+                  <div className="flex items-center gap-3 mt-2">
+                    <input
+                      type="number"
+                      value={totalBays}
+                      onChange={(e) => setTotalBays(parseInt(e.target.value) || 8)}
+                      className="w-20 p-2 rounded-xl bg-white/5 border border-white/10 text-white font-black text-2xl"
+                    />
+                    <span className="text-xs text-gray-400">Active Lifts</span>
                   </div>
-                ))}
+                </div>
+
+                <div className="p-5 rounded-3xl bg-[#10131d] border border-white/10">
+                  <span className="text-xs font-bold text-gray-400">Occupied Bays</span>
+                  <div className="flex items-center gap-3 mt-2">
+                    <input
+                      type="number"
+                      value={occupiedBays}
+                      onChange={(e) => setOccupiedBays(parseInt(e.target.value) || 0)}
+                      className="w-20 p-2 rounded-xl bg-white/5 border border-white/10 text-amber-400 font-black text-2xl"
+                    />
+                    <span className="text-xs text-amber-400 font-bold">In-Service</span>
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-3xl bg-[#10131d] border border-emerald-500/20 bg-emerald-950/20">
+                  <span className="text-xs font-bold text-emerald-400">Available Free Bays</span>
+                  <div className="text-3xl font-black text-emerald-400 mt-2">{availableBays} Bays</div>
+                  <span className="text-[11px] text-emerald-400/80">Ready for walk-ins & SOS</span>
+                </div>
+
+                <div className="p-5 rounded-3xl bg-[#10131d] border border-white/10">
+                  <span className="text-xs font-bold text-gray-400">Specialist Staff</span>
+                  <div className="text-3xl font-black text-white mt-2">{mechanicsList.length} Techs</div>
+                  <span className="text-[11px] text-gray-400">100% ASE / OEM Verified</span>
+                </div>
               </div>
+
+              {/* Physical Bay Grid (Visual Service Facility Layout) */}
+              <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-lg font-black text-white flex items-center gap-2">
+                      <span>🏭</span> Live Facility Service Bay Grid
+                    </h3>
+                    <p className="text-xs text-gray-400">Interactive bird's-eye view of all 8 physical hydraulic lift bays.</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {['all', 'occupied', 'available', 'dispatched'].map(filter => (
+                      <button
+                        key={filter}
+                        onClick={() => setBayFilter(filter)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold capitalize transition-all ${
+                          bayFilter === filter ? 'bg-red-600 text-white' : 'bg-white/5 text-gray-400 hover:text-white'
+                        }`}
+                      >
+                        {filter === 'all' ? `All Bays (${baysList.length})` : filter}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {baysList
+                    .filter(b => {
+                      if (bayFilter === 'occupied') return b.status === 'Occupied';
+                      if (bayFilter === 'available') return b.status === 'Available';
+                      if (bayFilter === 'dispatched') return b.status === 'Dispatched';
+                      return true;
+                    })
+                    .map(b => (
+                      <div
+                        key={b.id}
+                        onClick={() => setSelectedBayForDetails(b)}
+                        className={`p-5 rounded-3xl border transition-all cursor-pointer hover:scale-[1.02] relative ${
+                          b.status === 'Occupied'
+                            ? 'bg-[#10131d] border-amber-500/30 hover:border-amber-500'
+                            : b.status === 'Available'
+                            ? 'bg-[#10131d] border-emerald-500/30 hover:border-emerald-500'
+                            : 'bg-[#10131d] border-red-500/40 hover:border-red-500'
+                        }`}
+                      >
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-2xl">{b.icon}</span>
+                            <div>
+                              <strong className="text-white text-sm block font-black">{b.name}</strong>
+                              <span className="text-[10px] text-gray-400 block">{b.type}</span>
+                            </div>
+                          </div>
+                          <span className={`text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full ${
+                            b.status === 'Occupied' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                            b.status === 'Available' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                            'bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse'
+                          }`}>
+                            {b.status}
+                          </span>
+                        </div>
+
+                        {b.currentVehicle ? (
+                          <div className="space-y-2 text-xs">
+                            <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-1">
+                              <span className="text-red-400 font-bold block truncate">{b.currentVehicle}</span>
+                              <span className="text-gray-300 text-[11px] block truncate">{b.service}</span>
+                              <span className="text-[10px] text-gray-400 block">Tech: <strong className="text-white">{b.mechanic}</strong></span>
+                            </div>
+
+                            <div>
+                              <div className="flex justify-between text-[10px] text-gray-400 mb-1">
+                                <span>Progress</span>
+                                <span className="font-bold text-white">{b.progress}% ({b.eta})</span>
+                              </div>
+                              <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-red-600 to-amber-500 rounded-full" style={{ width: `${b.progress}%` }} />
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="py-6 text-center space-y-2">
+                            <div className="text-emerald-400 text-xs font-bold">🟢 Ready for Allocation</div>
+                            <p className="text-[11px] text-gray-400">Equipped with {b.powerTools}</p>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowNewJobCardModal(true);
+                              }}
+                              className="px-3 py-1 rounded-lg bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white text-xs font-bold transition-colors"
+                            >
+                              Assign Incoming Job
+                            </button>
+                          </div>
+                        )}
+
+                        <div className="mt-3 pt-2.5 border-t border-white/5 flex justify-between items-center text-[10px] text-gray-400">
+                          <span>{b.powerTools}</span>
+                          <span className="text-red-400 font-bold">Inspect Bay →</span>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              {/* Master Mechanics Roster */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-black text-white flex items-center gap-2">
+                      <span>👨‍🔧</span> Master Technicians & Certified Specialists Roster
+                    </h3>
+                    <p className="text-xs text-gray-400">Individual credentials, hourly labor rates, active bay assignments, and efficiency scores.</p>
+                  </div>
+                  <span className="text-xs font-bold text-gray-400">{mechanicsList.length} Active Technicians</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {mechanicsList.map(m => (
+                    <div key={m.id} className="p-5 rounded-3xl bg-[#10131d] border border-white/10 space-y-4 text-xs">
+                      <div className="flex justify-between items-start">
+                        <div className="flex items-center gap-3">
+                          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-red-600 to-red-950 flex items-center justify-center font-black text-white text-base shadow-lg">
+                            {m.name.split(' ').map(n => n[0]).join('')}
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-sm text-white">{m.name}</h4>
+                            <span className="text-[11px] text-red-400 font-semibold block">{m.specialization}</span>
+                            <span className="text-[10px] text-gray-500 font-mono">ID: {m.id}</span>
+                          </div>
+                        </div>
+                        <span className={`text-[10px] font-black px-2.5 py-1 rounded-full uppercase ${
+                          m.status === 'Available' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                          m.status === 'On Emergency Call' ? 'bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse' :
+                          'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                        }`}>
+                          {m.status}
+                        </span>
+                      </div>
+
+                      {/* Workload & Assigned Bay */}
+                      <div className="p-3 bg-white/5 rounded-2xl border border-white/5 space-y-1.5">
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Assigned Bay:</span>
+                          <strong className="text-white">{m.assignedBay || 'Standby'}</strong>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Active Job:</span>
+                          <strong className="text-red-400 truncate max-w-[150px]">{m.activeJob || 'Available'}</strong>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Labor Hourly Rate:</span>
+                          <strong className="text-emerald-400">৳{(m.hourlyRate || 1800).toLocaleString()}/hr</strong>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">First-Time Fix Rate:</span>
+                          <strong className="text-amber-400">{m.efficiency || '98%'}</strong>
+                        </div>
+                      </div>
+
+                      {/* Certifications Tags */}
+                      {m.certifications && (
+                        <div className="flex flex-wrap gap-1">
+                          {m.certifications.map((c, idx) => (
+                            <span key={idx} className="text-[10px] px-2 py-0.5 rounded-lg bg-white/5 text-gray-300 border border-white/5">
+                              {c}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Action buttons */}
+                      <div className="flex gap-2 pt-2 border-t border-white/5">
+                        <a
+                          href={`tel:${m.phone}`}
+                          className="flex-1 py-2 text-center rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors"
+                        >
+                          📞 Call Tech
+                        </a>
+                        <button
+                          onClick={() => {
+                            setMechanicsList(prev => prev.map(tech => tech.id === m.id ? {
+                              ...tech,
+                              status: tech.status === 'Available' ? 'In-Bay Working' : 'Available'
+                            } : tech));
+                          }}
+                          className="flex-1 py-2 rounded-xl bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white font-black text-xs transition-colors border border-red-500/20"
+                        >
+                          Toggle Status
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           )}
 
           {/* ══════════════════ TAB 13: SERVICES & PRICING CATALOG (SPEC SECTION 14) ══════════════════ */}
           {activeNav === 'services_catalog' && (
-            <div className="space-y-6 animate-fadeIn">
+            <div className="space-y-8 animate-fadeIn">
+              
+              {/* Header */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-2xl font-black">Workshop Service Catalog & Pricing</h2>
-                  <p className="text-xs text-gray-400">Configure services, equipment requirements, labor durations, and customer starting rates.</p>
+                  <p className="text-xs text-gray-400">Configure standard services, performance tuning packages, equipment requirements, and customer starting rates.</p>
                 </div>
                 <button
-                  onClick={() => alert("Add Service dialog opened!")}
-                  className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-md"
+                  onClick={() => setShowAddServiceModal(true)}
+                  className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-[0_0_15px_rgba(220,38,38,0.4)] flex items-center gap-2"
                 >
-                  + Add Service Offering
+                  <span>+</span> Add Service Offering
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {servicesCatalog.map(s => (
-                  <div key={s.id} className="p-5 rounded-2xl bg-[#10131d] border border-white/10 space-y-2 text-xs">
-                    <div className="flex justify-between items-start">
-                      <h4 className="font-bold text-sm text-white">{s.name}</h4>
-                      <span className="text-emerald-400 font-black text-sm">৳{s.startingPrice.toLocaleString()}</span>
-                    </div>
-                    <div className="text-gray-400">Duration: <strong className="text-white">{s.duration}</strong> • Category: <strong className="text-red-400">{s.category}</strong></div>
-                    <div className="text-gray-400">Required Tech: <strong className="text-white">{s.mechanicType}</strong></div>
-                    <div className="p-2 bg-white/5 rounded-lg border border-white/5 text-[11px] text-gray-300">
-                      Equipment: {s.equipment}
-                    </div>
+              {/* Service Package Bundles Showcase */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="p-5 rounded-3xl bg-gradient-to-br from-[#10131d] to-[#151927] border border-white/10 relative overflow-hidden">
+                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">City Care</span>
+                  <h4 className="text-base font-black text-white mt-2">Bronze Periodic Package</h4>
+                  <p className="text-xs text-gray-400 mt-1">Motul Synthetic lube + OEM filter + 40-pt safety check.</p>
+                  <div className="mt-4 flex items-baseline justify-between">
+                    <span className="text-2xl font-black text-emerald-400">৳6,500</span>
+                    <span className="text-[11px] text-gray-400">Save 15%</span>
                   </div>
-                ))}
+                </div>
+
+                <div className="p-5 rounded-3xl bg-gradient-to-br from-[#10131d] to-[#1d2235] border border-blue-500/30 relative overflow-hidden">
+                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">Most Popular</span>
+                  <h4 className="text-base font-black text-white mt-2">Silver Executive Overhaul</h4>
+                  <p className="text-xs text-gray-400 mt-1">Full brake overhaul, AC gas recharge, OBD scan & fluid flush.</p>
+                  <div className="mt-4 flex items-baseline justify-between">
+                    <span className="text-2xl font-black text-emerald-400">৳18,000</span>
+                    <span className="text-[11px] text-gray-400">Save 22%</span>
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-3xl bg-gradient-to-br from-[#10131d] to-[#251318] border border-red-500/40 relative overflow-hidden">
+                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30">Supercars & Exotics</span>
+                  <h4 className="text-base font-black text-white mt-2">Gold Track & Dyno Package</h4>
+                  <p className="text-xs text-gray-400 mt-1">Hunter 3D alignment, Brembo carbon pads, AWD Dyno run & ECU tune.</p>
+                  <div className="mt-4 flex items-baseline justify-between">
+                    <span className="text-2xl font-black text-emerald-400">৳45,000</span>
+                    <span className="text-[11px] text-gray-400">Exotic Spec</span>
+                  </div>
+                </div>
               </div>
+
+              {/* Category Filter Pills & Search */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="flex flex-wrap gap-2">
+                  {['All', 'Maintenance', 'Diagnostics', 'Braking', 'Supercars', 'AC & Cooling', 'Suspension', 'Detailing'].map(cat => (
+                    <button
+                      key={cat}
+                      onClick={() => setServiceCategoryFilter(cat)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                        serviceCategoryFilter === cat ? 'bg-red-600 text-white shadow' : 'bg-white/5 text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      {cat} {cat === 'All' ? `(${servicesCatalog.length})` : ''}
+                    </button>
+                  ))}
+                </div>
+                <div className="w-full sm:w-64">
+                  <input
+                    type="text"
+                    value={searchServiceQuery}
+                    onChange={(e) => setSearchServiceQuery(e.target.value)}
+                    placeholder="Search services, parts, equipment..."
+                    className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs placeholder-gray-500 focus:outline-none focus:border-red-500"
+                  />
+                </div>
+              </div>
+
+              {/* Service Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {servicesCatalog
+                  .filter(s => {
+                    if (serviceCategoryFilter !== 'All' && s.category !== serviceCategoryFilter) return false;
+                    if (searchServiceQuery) {
+                      const q = searchServiceQuery.toLowerCase();
+                      return s.name.toLowerCase().includes(q) || s.category.toLowerCase().includes(q) || (s.description || '').toLowerCase().includes(q);
+                    }
+                    return true;
+                  })
+                  .map(s => (
+                    <div key={s.id} className="p-5 rounded-3xl bg-[#10131d] border border-white/10 space-y-3 text-xs flex flex-col justify-between hover:border-red-500/30 transition-all">
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-mono text-[10px] font-black text-gray-400 bg-white/5 px-2 py-0.5 rounded">
+                              {s.id}
+                            </span>
+                            <span className="text-[10px] font-bold text-red-400 bg-red-500/10 px-2 py-0.5 rounded">
+                              {s.category}
+                            </span>
+                            {s.badge && (
+                              <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">
+                                {s.badge}
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-emerald-400 font-black text-base">
+                            ৳{s.startingPrice.toLocaleString()}
+                          </span>
+                        </div>
+
+                        <h4 className="font-bold text-sm text-white leading-snug">{s.name}</h4>
+                        <p className="text-gray-400 text-[11px] leading-relaxed">{s.description}</p>
+                      </div>
+
+                      <div className="space-y-2 pt-2 border-t border-white/5 text-[11px]">
+                        <div className="flex justify-between text-gray-300">
+                          <span>Est. Duration:</span>
+                          <strong className="text-white">{s.duration}</strong>
+                        </div>
+                        <div className="flex justify-between text-gray-300">
+                          <span>Specialist Required:</span>
+                          <strong className="text-white">{s.mechanicType}</strong>
+                        </div>
+                        <div className="p-2 bg-black/40 rounded-xl border border-white/5 text-[10px] text-gray-400">
+                          Equipment: <strong className="text-gray-300">{s.equipment}</strong>
+                        </div>
+                        <div className="flex justify-between items-center pt-2">
+                          <span className="text-gray-400">Consumer Visibility:</span>
+                          <button
+                            onClick={() => {
+                              setServicesCatalog(prev => prev.map(srv => srv.id === s.id ? { ...srv, active: !srv.active } : srv));
+                            }}
+                            className={`px-3 py-1 rounded-full text-[10px] font-black transition-colors ${
+                              s.active !== false ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-white/10 text-gray-400'
+                            }`}
+                          >
+                            {s.active !== false ? '🟢 Active in Directory' : '⚪ Hidden'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+
+              {/* Labor Hourly Billing Rates Reference */}
+              <div className="p-6 rounded-3xl bg-[#10131d] border border-white/10 space-y-3">
+                <h4 className="font-black text-white text-sm">Workshop Standard Hourly Labor Rates Reference (Spec Section 14)</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <strong className="text-white block text-sm">Standard Mechanical Work</strong>
+                    <span className="text-gray-400 block mt-0.5">Oil, filters, brakes, fluids</span>
+                    <span className="text-emerald-400 font-black text-base mt-2 block">৳1,200 / hr</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <strong className="text-white block text-sm">Diagnostics & ECU Electronics</strong>
+                    <span className="text-gray-400 block mt-0.5">CAN bus, OBD-II, rewiring, sensors</span>
+                    <span className="text-emerald-400 font-black text-base mt-2 block">৳1,800 / hr</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <strong className="text-white block text-sm">Supercar & Exotic Tuning</strong>
+                    <span className="text-gray-400 block mt-0.5">Ferrari, Porsche, dyno telemetry</span>
+                    <span className="text-emerald-400 font-black text-base mt-2 block">৳3,500 / hr</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
           )}
 
@@ -2254,6 +3124,465 @@ export default function WorkshopDashboard() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL: ADD CERTIFIED MECHANIC (SPEC SECTION 13) ─── */}
+      {showAddMechanicModal && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+          <div className="bg-[#121522] border border-white/20 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setShowAddMechanicModal(false)}
+              className="absolute top-5 right-5 text-gray-400 hover:text-white p-2 text-xl font-bold"
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-black text-white">Add Certified Mechanic / Master Tech</h3>
+            <p className="text-xs text-gray-400 mb-4">Register new technician, assign bay allocations, and configure hourly labor billing rate.</p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const newTech = {
+                  id: `m-${Date.now()}`,
+                  name: newMechanicForm.name,
+                  specialization: newMechanicForm.specialization,
+                  experience: newMechanicForm.experience || '5 yrs',
+                  phone: newMechanicForm.phone || '+880 1700-000000',
+                  hourlyRate: parseInt(newMechanicForm.hourlyRate) || 2000,
+                  certifications: newMechanicForm.certifications.split(',').map(c => c.trim()),
+                  status: 'Available',
+                  efficiency: '98%',
+                  assignedBay: 'Standby'
+                };
+                setMechanicsList(prev => [newTech, ...prev]);
+                setShowAddMechanicModal(false);
+                setNewMechanicForm({ name: '', specialization: 'Master Supercar & Turbo Engine Tech', experience: '6 yrs', phone: '+880 1700-112233', hourlyRate: 2000, certifications: 'ASE Certified & Mechify Master', status: 'Available' });
+                alert(`Master Technician ${newTech.name} successfully onboarded to workshop roster!`);
+              }}
+              className="space-y-3.5 text-xs"
+            >
+              <div>
+                <label className="block font-bold mb-1 text-gray-300">Technician Full Name</label>
+                <input
+                  required
+                  type="text"
+                  value={newMechanicForm.name}
+                  onChange={(e) => setNewMechanicForm({ ...newMechanicForm, name: e.target.value })}
+                  placeholder="e.g. Tariqul Islam"
+                  className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold mb-1 text-gray-300">Specialization</label>
+                  <select
+                    value={newMechanicForm.specialization}
+                    onChange={(e) => setNewMechanicForm({ ...newMechanicForm, specialization: e.target.value })}
+                    className="w-full p-2.5 rounded-xl bg-[#1a1d2e] border border-white/10 text-white"
+                  >
+                    <option>Master Supercar & Turbo Engine Tech</option>
+                    <option>Chassis, Suspension & Active Dampers</option>
+                    <option>Rapid OBD-II Diagnostics & ECU Remap</option>
+                    <option>High-Performance Braking & Track Safety</option>
+                    <option>High-Pressure Cooling & Fluid Dynamics</option>
+                    <option>Electric Vehicle (EV) & Hybrid High-Voltage</option>
+                    <option>General Automotive Master Technician</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-bold mb-1 text-gray-300">Experience</label>
+                  <input
+                    type="text"
+                    value={newMechanicForm.experience}
+                    onChange={(e) => setNewMechanicForm({ ...newMechanicForm, experience: e.target.value })}
+                    placeholder="e.g. 8 yrs"
+                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold mb-1 text-gray-300">Contact Phone</label>
+                  <input
+                    required
+                    type="text"
+                    value={newMechanicForm.phone}
+                    onChange={(e) => setNewMechanicForm({ ...newMechanicForm, phone: e.target.value })}
+                    placeholder="+880 1711-000000"
+                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold mb-1 text-gray-300">Hourly Labor Rate (৳)</label>
+                  <input
+                    type="number"
+                    value={newMechanicForm.hourlyRate}
+                    onChange={(e) => setNewMechanicForm({ ...newMechanicForm, hourlyRate: e.target.value })}
+                    placeholder="2000"
+                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold mb-1 text-gray-300">Certifications (comma separated)</label>
+                <input
+                  type="text"
+                  value={newMechanicForm.certifications}
+                  onChange={(e) => setNewMechanicForm({ ...newMechanicForm, certifications: e.target.value })}
+                  placeholder="e.g. ASE Master, Bosch Diagnostics, Ferrari Certified"
+                  className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4 border-t border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setShowAddMechanicModal(false)}
+                  className="px-4 py-2 rounded-xl bg-white/10 text-xs font-bold text-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs shadow-md"
+                >
+                  Save & Register Tech
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL: SERVICE BAY INSPECTOR & CONTROLLER (SPEC SECTION 24) ─── */}
+      {selectedBayForDetails && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+          <div className="bg-[#121522] border border-white/20 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative">
+            <button
+              onClick={() => setSelectedBayForDetails(null)}
+              className="absolute top-5 right-5 text-gray-400 hover:text-white p-2 text-xl font-bold"
+            >
+              ✕
+            </button>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-3xl">{selectedBayForDetails.icon}</span>
+              <div>
+                <h3 className="text-xl font-black text-white">{selectedBayForDetails.name}</h3>
+                <p className="text-xs text-red-400 font-bold">{selectedBayForDetails.type}</p>
+              </div>
+            </div>
+
+            <div className="my-4 p-4 rounded-2xl bg-black/40 border border-white/10 space-y-2 text-xs">
+              <div className="flex justify-between text-gray-300">
+                <span>Lift & Power Rig:</span>
+                <strong className="text-white">{selectedBayForDetails.powerTools}</strong>
+              </div>
+              <div className="flex justify-between text-gray-300">
+                <span>Power Source:</span>
+                <strong className="text-emerald-400">{selectedBayForDetails.voltage || 'Industrial 380V'}</strong>
+              </div>
+              <div className="flex justify-between text-gray-300">
+                <span>Current Bay Status:</span>
+                <span className={`font-black uppercase px-2 py-0.5 rounded text-[10px] ${
+                  selectedBayForDetails.status === 'Occupied' ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'
+                }`}>
+                  {selectedBayForDetails.status}
+                </span>
+              </div>
+            </div>
+
+            {selectedBayForDetails.currentVehicle ? (
+              <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2 text-xs mb-4">
+                <div><strong className="text-gray-400 block text-[10px] uppercase">Vehicle in Bay:</strong> <span className="text-white font-black text-sm">{selectedBayForDetails.currentVehicle}</span></div>
+                <div><strong className="text-gray-400 block text-[10px] uppercase">Active Service Order:</strong> <span className="text-gray-200">{selectedBayForDetails.service}</span></div>
+                <div><strong className="text-gray-400 block text-[10px] uppercase">Assigned Master Tech:</strong> <span className="text-red-400 font-bold">{selectedBayForDetails.mechanic}</span></div>
+                <div><strong className="text-gray-400 block text-[10px] uppercase">Completion Progress:</strong> <span className="text-emerald-400 font-bold">{selectedBayForDetails.progress}% ({selectedBayForDetails.eta})</span></div>
+              </div>
+            ) : (
+              <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center text-xs mb-4">
+                <span className="text-emerald-400 font-bold text-sm block mb-1">🟢 Bay is Clean, Empty & Ready</span>
+                <p className="text-gray-400">Can be immediately allocated for walk-in servicing, rapid inspection, or scheduled appointments.</p>
+              </div>
+            )}
+
+            <div className="flex flex-wrap justify-end gap-2 pt-3 border-t border-white/10 text-xs">
+              <button
+                onClick={() => setSelectedBayForDetails(null)}
+                className="px-4 py-2 rounded-xl bg-white/10 text-gray-300 font-bold"
+              >
+                Close
+              </button>
+              {selectedBayForDetails.currentVehicle ? (
+                <button
+                  onClick={() => {
+                    setBaysList(prev => prev.map(b => b.id === selectedBayForDetails.id ? {
+                      ...b,
+                      status: 'Available',
+                      currentVehicle: null,
+                      service: 'Vacant & Cleaned',
+                      progress: 0,
+                      eta: 'Free Now'
+                    } : b));
+                    setOccupiedBays(prev => Math.max(0, prev - 1));
+                    setSelectedBayForDetails(null);
+                    alert(`${selectedBayForDetails.name} has been cleared, cleaned, and marked Available!`);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black"
+                >
+                  Clear & Free Up Bay
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setSelectedBayForDetails(null);
+                    setShowNewJobCardModal(true);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black"
+                >
+                  Assign Job Card to this Bay
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL: ADD SERVICE OFFERING (SPEC SECTION 14) ─── */}
+      {showAddServiceModal && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+          <div className="bg-[#121522] border border-white/20 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setShowAddServiceModal(false)}
+              className="absolute top-5 right-5 text-gray-400 hover:text-white p-2 text-xl font-bold"
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-black text-white">Add Workshop Service Offering</h3>
+            <p className="text-xs text-gray-400 mb-4">Create a new service listing, set starting prices, technician requirements, and required equipment.</p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const newSrv = {
+                  id: `SRV-${servicesCatalog.length + 1}`,
+                  name: newServiceForm.name,
+                  category: newServiceForm.category,
+                  startingPrice: parseInt(newServiceForm.startingPrice) || 4500,
+                  duration: newServiceForm.duration || '2 hrs',
+                  mechanicType: newServiceForm.mechanicType || 'General Tech',
+                  equipment: newServiceForm.equipment || 'Standard Lift & Tools',
+                  description: newServiceForm.description || 'Professional automotive service performed to OEM factory standards.',
+                  badge: newServiceForm.badge || 'New Service',
+                  active: true
+                };
+                setServicesCatalog(prev => [newSrv, ...prev]);
+                setShowAddServiceModal(false);
+                setNewServiceForm({ name: '', category: 'Maintenance', startingPrice: 5000, duration: '2.0 hrs', mechanicType: 'General Tech', equipment: 'Hydraulic Lift & Scanner', description: '', badge: 'New Offering' });
+                alert(`Service "${newSrv.name}" successfully added to workshop catalog and published live!`);
+              }}
+              className="space-y-3.5 text-xs"
+            >
+              <div>
+                <label className="block font-bold mb-1 text-gray-300">Service Name</label>
+                <input
+                  required
+                  type="text"
+                  value={newServiceForm.name}
+                  onChange={(e) => setNewServiceForm({ ...newServiceForm, name: e.target.value })}
+                  placeholder="e.g. Supercar Carbon Ceramic Rotor Skimming"
+                  className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold mb-1 text-gray-300">Category</label>
+                  <select
+                    value={newServiceForm.category}
+                    onChange={(e) => setNewServiceForm({ ...newServiceForm, category: e.target.value })}
+                    className="w-full p-2.5 rounded-xl bg-[#1a1d2e] border border-white/10 text-white"
+                  >
+                    <option>Maintenance</option>
+                    <option>Diagnostics</option>
+                    <option>Braking</option>
+                    <option>Supercars</option>
+                    <option>AC & Cooling</option>
+                    <option>Suspension</option>
+                    <option>Detailing</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-bold mb-1 text-gray-300">Starting Price (BDT ৳)</label>
+                  <input
+                    required
+                    type="number"
+                    value={newServiceForm.startingPrice}
+                    onChange={(e) => setNewServiceForm({ ...newServiceForm, startingPrice: e.target.value })}
+                    placeholder="6500"
+                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold mb-1 text-gray-300">Estimated Duration</label>
+                  <input
+                    type="text"
+                    value={newServiceForm.duration}
+                    onChange={(e) => setNewServiceForm({ ...newServiceForm, duration: e.target.value })}
+                    placeholder="e.g. 2.5 hrs"
+                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold mb-1 text-gray-300">Required Specialist</label>
+                  <input
+                    type="text"
+                    value={newServiceForm.mechanicType}
+                    onChange={(e) => setNewServiceForm({ ...newServiceForm, mechanicType: e.target.value })}
+                    placeholder="e.g. Master Brake Tech"
+                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold mb-1 text-gray-300">Required Equipment</label>
+                <input
+                  type="text"
+                  value={newServiceForm.equipment}
+                  onChange={(e) => setNewServiceForm({ ...newServiceForm, equipment: e.target.value })}
+                  placeholder="e.g. On-Car Brake Lathe, Dial Indicator"
+                  className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold mb-1 text-gray-300">Service Deliverables / Description</label>
+                <textarea
+                  rows={2}
+                  value={newServiceForm.description}
+                  onChange={(e) => setNewServiceForm({ ...newServiceForm, description: e.target.value })}
+                  placeholder="Detail what is included for the customer..."
+                  className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4 border-t border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setShowAddServiceModal(false)}
+                  className="px-4 py-2 rounded-xl bg-white/10 text-xs font-bold text-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs shadow-md"
+                >
+                  Publish Service Offering
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL: EDIT PUBLIC HUB DETAILS (SPEC SECTION 23) ─── */}
+      {showEditPublicProfileModal && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+          <div className="bg-[#121522] border border-white/20 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setShowEditPublicProfileModal(false)}
+              className="absolute top-5 right-5 text-gray-400 hover:text-white p-2 text-xl font-bold"
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-black text-white">Edit Public Workshop Profile</h3>
+            <p className="text-xs text-gray-400 mb-4">Update public business details, operating hours, emergency hotline, and consumer announcement banner.</p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setShowEditPublicProfileModal(false);
+                alert("Public profile details updated successfully! Synchronized across Mechify consumer apps.");
+              }}
+              className="space-y-3.5 text-xs"
+            >
+              <div>
+                <label className="block font-bold mb-1 text-gray-300">Workshop Tagline</label>
+                <input
+                  type="text"
+                  value={publicProfileData.tagline}
+                  onChange={(e) => setPublicProfileData({ ...publicProfileData, tagline: e.target.value })}
+                  className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold mb-1 text-gray-300">About Workshop & Facility Bio</label>
+                <textarea
+                  rows={3}
+                  value={publicProfileData.about}
+                  onChange={(e) => setPublicProfileData({ ...publicProfileData, about: e.target.value })}
+                  className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white leading-relaxed"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold mb-1 text-gray-300">Operating Business Hours</label>
+                  <input
+                    type="text"
+                    value={publicProfileData.workingHours}
+                    onChange={(e) => setPublicProfileData({ ...publicProfileData, workingHours: e.target.value })}
+                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block font-bold mb-1 text-gray-300">24/7 Roadside Hotline</label>
+                  <input
+                    type="text"
+                    value={publicProfileData.emergencyPhone}
+                    onChange={(e) => setPublicProfileData({ ...publicProfileData, emergencyPhone: e.target.value })}
+                    className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold mb-1 text-gray-300">Public Live Announcement Banner</label>
+                <input
+                  type="text"
+                  value={publicProfileData.announcement}
+                  onChange={(e) => setPublicProfileData({ ...publicProfileData, announcement: e.target.value })}
+                  placeholder="e.g. Free Computerized OBD-II Health Scan this week!"
+                  className="w-full p-2.5 rounded-xl bg-white/5 border border-white/10 text-white"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4 border-t border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setShowEditPublicProfileModal(false)}
+                  className="px-4 py-2 rounded-xl bg-white/10 text-xs font-bold text-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs shadow-md"
+                >
+                  Save Profile Changes
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
