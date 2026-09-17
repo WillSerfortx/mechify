@@ -236,27 +236,33 @@ export default function Landing() {
     ctx.fillStyle = '#060709';
     ctx.fillRect(0, 0, cw, ch);
 
-    // Compute aspect ratio fit
-    const imgRatio = img.naturalWidth / img.naturalHeight || 16 / 9;
+    // Cover mode: scale image so it completely covers 100% of the canvas with ZERO side/top black gaps
+    const imgRatio = (img.naturalWidth && img.naturalHeight) 
+      ? img.naturalWidth / img.naturalHeight 
+      : 16 / 9;
     const canvasRatio = cw / ch;
 
     let dw, dh, dx, dy;
 
     if (canvasRatio > imgRatio) {
-      // Canvas is wider than image
-      dh = ch;
-      dw = ch * imgRatio;
-      dx = (cw - dw) / 2;
-      dy = 0;
-    } else {
-      // Canvas is taller than image (mobile portrait)
+      // Screen is wider than image (e.g. desktop widescreen): stretch width to full canvas width
       dw = cw;
       dh = cw / imgRatio;
       dx = 0;
-      dy = (ch - dh) / 2;
+      dy = (ch - dh) / 2; // Center vertically
+    } else {
+      // Screen is taller than image (e.g. mobile vertical): stretch height to full canvas height
+      dh = ch;
+      dw = ch * imgRatio;
+      dx = (cw - dw) / 2; // Center horizontally
+      dy = 0;
     }
 
-    // Draw the photorealistic Koenigsegg frame
+    // High quality bicubic image smoothing
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
+    // Draw the photorealistic Koenigsegg frame covering the entire canvas
     ctx.drawImage(img, dx, dy, dw, dh);
   }, []);
 
@@ -420,7 +426,7 @@ export default function Landing() {
           {/* Canvas for 60FPS Koenigsegg Frames */}
           <canvas
             ref={canvasRef}
-            className="w-full h-full object-contain cursor-grab active:cursor-grabbing"
+            className="w-full h-full block cursor-grab active:cursor-grabbing"
           />
 
           {/* Subtle Ambient Radial Lighting Layer on Ground */}
@@ -440,7 +446,7 @@ export default function Landing() {
           />
 
           {/* ─── TOP CONCIERGE HUD NAVBAR ─────────────────────────── */}
-          <header className="absolute top-0 left-0 right-0 z-30 px-6 md:px-12 py-5 flex items-center justify-between pointer-events-auto">
+          <header className="absolute top-0 left-0 right-0 z-30 px-6 sm:px-10 md:px-16 lg:px-20 pr-10 sm:pr-16 md:pr-24 lg:pr-32 py-5 flex items-center justify-between pointer-events-auto">
             {/* Logo */}
             <Link to="/landing" className="flex items-center gap-3 group">
               <div className="relative">
@@ -475,7 +481,7 @@ export default function Landing() {
               </span>
             </div>
 
-            {/* Right Action Cluster */}
+            {/* Right Action Cluster with generous right gap */}
             <div className="flex items-center gap-3">
               <button
                 onClick={toggleAutoPlay}
@@ -517,10 +523,10 @@ export default function Landing() {
           {activeService && !isFinalHero && (
             <div 
               key={activeService.id}
-              className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-end md:justify-center p-6 sm:p-12 md:p-20 lg:p-24 transition-all duration-700"
+              className="absolute inset-0 z-20 pointer-events-none flex flex-col justify-end md:justify-center p-6 sm:p-12 md:p-16 lg:p-24 pr-12 sm:pr-24 md:pr-36 lg:pr-56 xl:pr-72 transition-all duration-700"
             >
               <div 
-                className="max-w-2xl pointer-events-auto animate-fadeIn"
+                className="max-w-xl pointer-events-auto animate-fadeIn"
                 style={{
                   textShadow: '0 4px 24px rgba(0,0,0,0.9)'
                 }}
@@ -537,12 +543,12 @@ export default function Landing() {
                 </div>
 
                 {/* Large, Elegant, Thin / Semi-bold Service Title */}
-                <h2 className="font-['Space_Grotesk',sans-serif] text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.05] mb-2 sm:mb-3">
+                <h2 className="font-['Space_Grotesk',sans-serif] text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-white leading-[1.05] mb-2 sm:mb-3">
                   {activeService.title}
                 </h2>
 
                 {/* Much Smaller, Short, Single-sentence Description */}
-                <p className="font-['Manrope',sans-serif] text-xs sm:text-sm md:text-base text-[#bac9cc] font-light max-w-xl leading-relaxed mb-5 sm:mb-6">
+                <p className="font-['Manrope',sans-serif] text-xs sm:text-sm md:text-base text-[#bac9cc] font-light max-w-lg leading-relaxed mb-5 sm:mb-6">
                   {activeService.desc}
                 </p>
 
@@ -569,7 +575,7 @@ export default function Landing() {
 
           {/* ─── FINAL HERO TRANSITION: MECHIFY ────────────────────── */}
           {isFinalHero && (
-            <div className="absolute inset-0 z-20 pointer-events-none flex flex-col items-center justify-center p-6 text-center animate-fadeIn">
+            <div className="absolute inset-0 z-20 pointer-events-none flex flex-col items-center justify-center p-6 sm:p-10 md:p-16 lg:p-24 pr-8 sm:pr-16 md:pr-28 lg:pr-36 text-center animate-fadeIn">
               <div className="max-w-3xl pointer-events-auto space-y-4">
                 
                 {/* Mechify Monolith Title */}
@@ -687,8 +693,8 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* ─── VERTICAL RIGHT PROGRESS RAIL ──────────────────────── */}
-          <div className="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 z-20 flex-col items-center gap-3">
+          {/* ─── VERTICAL RIGHT PROGRESS RAIL WITH GENEROUS RIGHT GAP ─── */}
+          <div className="hidden lg:flex absolute right-10 lg:right-16 top-1/2 -translate-y-1/2 z-20 flex-col items-center gap-3">
             <span className="font-['JetBrains_Mono',monospace] text-[9px] text-[#849396] uppercase tracking-widest -rotate-90 origin-center mb-4">
               CAMERA ORBIT
             </span>
