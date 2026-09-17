@@ -13,6 +13,7 @@ import {
 
 import { WORKSHOP_DEMO_ACCOUNTS } from '../data/workshopAccounts';
 import { SUPPLIER_DEMO_ACCOUNTS } from '../data/supplierAccounts';
+import { DRIVER_DEMO_ACCOUNTS } from '../data/driverAccounts';
 
 const USERS_STORAGE_KEY = 'mechify_database_users';
 
@@ -78,6 +79,24 @@ const getStoredUsers = () => {
       role: 'supplier',
       companyName: s.companyName,
       phone: s.phone,
+      isVerified: true,
+      createdAt: new Date().toISOString()
+    });
+  });
+
+  // Add demo drivers to defaults
+  DRIVER_DEMO_ACCOUNTS.forEach(d => {
+    defaults.push({
+      id: d.id,
+      email: d.email,
+      password: '123',
+      firstName: d.name.split(' ')[0],
+      lastName: d.name.split(' ').slice(1).join(' ') || 'Driver',
+      name: d.name,
+      role: 'driver',
+      driverType: d.driverType,
+      phone: d.phone,
+      avatar: d.avatar,
       isVerified: true,
       createdAt: new Date().toISOString()
     });
