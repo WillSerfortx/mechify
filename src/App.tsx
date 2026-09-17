@@ -34,6 +34,7 @@ import RoadsideLanding from './pages/RoadsideLanding';
 import RoadsideRequest from './pages/RoadsideRequest';
 import WorkshopDashboard from './pages/WorkshopDashboard';
 import SupplierDashboard from './pages/SupplierDashboard';
+import HomeService from './pages/HomeService';
 
 
 function ScrollToTop() {
@@ -68,6 +69,7 @@ export default function App() {
         <Route path="/about" element={<Layout><About /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/services" element={<Layout><Services /></Layout>} />
+        <Route path="/home-service" element={<Layout><HomeService /></Layout>} />
         <Route path="/workshop" element={<Layout><Workshop /></Layout>} />
         <Route path="/workshop-search" element={<Layout showNav={false} showFooter={false}><WorkshopSearch /></Layout>} />
         <Route path="/workshop-select" element={<Layout showNav={false} showFooter={false}><WorkshopSelect /></Layout>} />
