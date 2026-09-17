@@ -19,7 +19,7 @@ const SCENES = [
     ],
     cameraHint: 'Camera: Front Angle',
     annotation: { x: '48%', y: '62%', text: 'FRONT SPLITTER', line: 'down' },
-    align: 'right', // User requested to change this to the other side
+    align: 'right',
   },
   {
     id: 'driver',
@@ -33,7 +33,7 @@ const SCENES = [
     ],
     cameraHint: 'Camera: Scissor Door Open',
     annotation: { x: '55%', y: '45%', text: 'LUXURY COCKPIT', line: 'up' },
-    align: 'right', // User didn't ask to change this one
+    align: 'right',
   },
   {
     id: 'engine',
@@ -49,7 +49,7 @@ const SCENES = [
     ],
     cameraHint: 'Camera: Engine Bay — V10 Exposed',
     annotation: { x: '50%', y: '48%', text: '5.2L V10 ENGINE', line: 'down' },
-    align: 'right', // User requested to change this to the other side
+    align: 'right',
   },
   {
     id: 'wheel',
@@ -63,7 +63,7 @@ const SCENES = [
     ],
     cameraHint: 'Camera: Wheel & Brake Caliper',
     annotation: { x: '55%', y: '55%', text: 'BREMBO CALIPER', line: 'right' },
-    align: 'right', // User didn't ask to change this one
+    align: 'right',
   },
   {
     id: 'conclusion',
@@ -287,7 +287,7 @@ export default function Landing() {
               </svg>
               <div>
                 <div className="font-black text-base sm:text-lg tracking-widest text-white">MECHIFY</div>
-                <div className="text-gray-400 text-[7px] sm:text-[8px] tracking-[0.2em] uppercase">Vehicle Support</div>
+                <div className="text-gray-400 text-[10px] sm:text-[11px] tracking-[0.18em] uppercase font-medium">Vehicle Support</div>
               </div>
             </Link>
             <div className="flex items-center gap-3 sm:gap-4">
@@ -309,11 +309,11 @@ export default function Landing() {
               className="text-center px-4 sm:px-6 transition-all duration-1000 max-w-4xl"
               style={{ opacity: heroIn ? 1 : 0, transform: heroIn ? 'translateY(0)' : 'translateY(40px)' }}
             >
-              <div className="inline-flex items-center gap-2 border border-red-500/30 text-red-400 text-[9px] sm:text-[10px] font-black px-4 sm:px-5 py-1 sm:py-1.5 rounded-full mb-4 sm:mb-6 tracking-[0.25em] uppercase bg-red-600/10">
+              <div className="inline-flex items-center gap-2 border border-red-500/30 text-red-400 text-[11px] sm:text-xs font-bold px-4 sm:px-5 py-1 sm:py-1.5 rounded-full mb-4 sm:mb-6 tracking-[0.2em] uppercase bg-red-600/10">
                 <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
                 Bangladesh's #1 Vehicle Platform
               </div>
-              <h1 className="text-[clamp(36px,8vw,110px)] font-black leading-[0.95] tracking-tight mb-3 sm:mb-4">
+              <h1 className="text-[clamp(36px,7vw,80px)] font-black leading-[0.95] tracking-tight mb-3 sm:mb-4">
                 <span className="block text-white">MECHIFY</span>
                 <span
                   className="block text-transparent bg-clip-text"
@@ -348,7 +348,7 @@ export default function Landing() {
                 }}
               >
                 <h2
-                  className="text-3xl sm:text-5xl md:text-7xl lg:text-[90px] font-black leading-tight mb-2 sm:mb-4"
+                  className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-2 sm:mb-4"
                   style={{ color: scene.accentColor, textShadow: `0 0 40px ${scene.glowColor}` }}
                 >
                   {scene.services[0].title}
@@ -356,7 +356,7 @@ export default function Landing() {
                 {scene.services.length > 1 && (
                   <div className={`flex gap-2 sm:gap-4 mt-2 sm:mt-4 flex-wrap ${scene.align === 'right' ? 'justify-end' : 'justify-start'}`}>
                     {scene.services.slice(1).map(s => (
-                      <span key={s.title} className="text-[11px] sm:text-sm md:text-base font-black tracking-widest uppercase px-3 sm:px-5 py-1 sm:py-2 rounded-full border backdrop-blur-sm"
+                      <span key={s.title} className="text-[11px] sm:text-sm md:text-base font-bold tracking-widest uppercase px-3 sm:px-5 py-1 sm:py-2 rounded-full border backdrop-blur-sm"
                         style={{ borderColor: scene.accentColor + '50', color: scene.accentColor, background: 'rgba(0,0,0,0.4)' }}>
                         + {s.title}
                       </span>
@@ -409,7 +409,7 @@ export default function Landing() {
                       <div className="text-2xl sm:text-3xl md:text-5xl font-black mb-0.5 sm:mb-1 transition-colors" style={{ color }}>
                         {format(statsRef.current[valKey] || 0)}
                       </div>
-                      <p className="text-gray-400 text-[8px] sm:text-[10px] md:text-xs uppercase tracking-[0.2em] font-black">{label}</p>
+                      <p className="text-gray-400 text-[10px] sm:text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold">{label}</p>
                     </div>
                   ))}
                 </div>
@@ -417,7 +417,7 @@ export default function Landing() {
                 {/* ── HOW IT WORKS ── */}
                 <div className="how-it-works-container">
                   <div className="text-center mb-3 sm:mb-6 md:mb-8">
-                    <p className="text-red-500 font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-0.5 sm:mb-1">Simple Process</p>
+                    <p className="text-red-500 font-bold uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-0.5 sm:mb-1">Simple Process</p>
                     <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-white">How It Works</h2>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 md:gap-6 relative">
@@ -433,8 +433,8 @@ export default function Landing() {
                         <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 mx-auto mb-1.5 sm:mb-3 bg-gradient-to-br from-red-900/50 to-black border border-red-800/40 rounded-xl sm:rounded-2xl flex items-center justify-center text-xs sm:text-base md:text-2xl font-black text-red-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all duration-500">
                           {step.num}
                         </div>
-                        <h3 className="text-xs sm:text-sm md:text-base font-black mb-0.5 text-white group-hover:text-red-400 transition-colors">{step.title}</h3>
-                        <p className="text-gray-400 text-[10px] sm:text-xs leading-tight">{step.desc}</p>
+                        <h3 className="text-xs sm:text-sm md:text-base font-bold mb-0.5 text-white group-hover:text-red-400 transition-colors">{step.title}</h3>
+                        <p className="text-gray-400 text-[11px] sm:text-xs leading-tight">{step.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -445,7 +445,7 @@ export default function Landing() {
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[400px] h-[150px] sm:h-[200px] bg-red-900/10 rounded-full blur-[60px] pointer-events-none" />
                   <div className="relative z-10">
                     <h2 className="text-xl sm:text-2xl md:text-3xl font-black mb-1 sm:mb-2 text-white">Ready to drive?</h2>
-                    <p className="text-gray-400 text-[11px] sm:text-xs md:text-sm mb-3 sm:mb-4">Join thousands of drivers who trust Mechify.</p>
+                    <p className="text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4">Join thousands of drivers who trust Mechify.</p>
                     <Link
                       to="/auth"
                       className="group relative inline-block bg-red-600 hover:bg-red-500 text-white font-black text-xs sm:text-sm px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-xl transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(220,38,38,0.5)] hover:shadow-[0_0_60px_rgba(220,38,38,0.7)] overflow-hidden"
@@ -453,7 +453,7 @@ export default function Landing() {
                       <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                       Sign Up or Sign In Today →
                     </Link>
-                    <p className="text-gray-600 text-[8px] sm:text-[9px] mt-1.5 sm:mt-2">Free to join · No credit card required</p>
+                    <p className="text-gray-500 text-[11px] sm:text-xs mt-1.5 sm:mt-2">Free to join · No credit card required</p>
                   </div>
                 </div>
 
