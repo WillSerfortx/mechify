@@ -567,7 +567,7 @@ export default function Landing() {
                 {/* Direct Action Link */}
                 <div className="flex items-center gap-4">
                   <Link
-                    to={activeService.route}
+                    to={`/auth?redirect=${encodeURIComponent(activeService.route)}`}
                     className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg bg-[#ff2a42] hover:bg-[#ef4444] text-white font-['Space_Grotesk',sans-serif] text-xs sm:text-sm uppercase font-bold tracking-wider transition-all shadow-[0_0_24px_rgba(255,42,66,0.4)] active:scale-95"
                   >
                     <span>{activeService.ctaText}</span>
@@ -631,13 +631,13 @@ export default function Landing() {
                 {/* Action CTAs */}
                 <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
                   <Link
-                    to="/home"
+                    to={`/auth?redirect=${encodeURIComponent('/home')}`}
                     className="px-8 py-4 rounded-xl bg-[#ff2a42] hover:bg-[#ef4444] text-white font-['Space_Grotesk',sans-serif] text-sm uppercase font-bold tracking-wider transition-all shadow-[0_0_30px_rgba(255,42,66,0.6)] active:scale-95"
                   >
                     Enter Mechify Platform →
                   </Link>
                   <Link
-                    to="/home-service"
+                    to={`/auth?redirect=${encodeURIComponent('/home-service')}`}
                     className="px-6 py-4 rounded-xl bg-[#191c23]/90 hover:bg-[#272a31] border border-[#3b494c] text-white font-['Space_Grotesk',sans-serif] text-sm uppercase font-bold tracking-wider transition-all active:scale-95"
                   >
                     Doorstep Service Concierge

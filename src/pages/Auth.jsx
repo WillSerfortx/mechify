@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import FigmaScreenWrapper from '../components/FigmaScreenWrapper';
 import { authService } from '../services/authService';
 
@@ -13,6 +13,9 @@ const imgLine4 = "/images/auth/line4.svg";
  */
 export default function Auth() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectUrl = searchParams.get('redirect');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('123');
   const [showPassword, setShowPassword] = useState(false);
@@ -45,6 +48,8 @@ export default function Auth() {
         navigate('/supplier-dashboard');
       } else if (role === 'driver' || finalEmail.toLowerCase().includes('driver')) {
         navigate('/driver-dashboard');
+      } else if (redirectUrl) {
+        navigate(redirectUrl);
       } else {
         navigate('/home');
       }
@@ -67,6 +72,8 @@ export default function Auth() {
           navigate('/workshop-dashboard');
         } else if (role === 'driver' || userEmail.includes('driver')) {
           navigate('/driver-dashboard');
+        } else if (redirectUrl) {
+          navigate(redirectUrl);
         } else {
           navigate('/home');
         }
@@ -128,6 +135,14 @@ export default function Auth() {
         {errorMessage && (
           <div className="absolute left-[1155px] top-[195px] w-[563px] bg-red-50 border border-red-300 text-red-600 px-4 py-2 rounded-lg text-sm font-semibold z-20">
             {errorMessage}
+          </div>
+        )}
+
+        {/* ─── Service Redirect Banner ─── */}
+        {redirectUrl && !errorMessage && (
+          <div className="absolute left-[1155px] top-[192px] w-[563px] bg-red-50 border border-red-200 text-[#cc0000] px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 z-20 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#cc0000] animate-pulse shrink-0" />
+            Please sign in first to access Mechify services.
           </div>
         )}
 
