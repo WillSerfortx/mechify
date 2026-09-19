@@ -128,83 +128,28 @@ export default function Landing() {
   const startXRef = useRef(0);
   const startFrameRef = useRef(1);
 
-  // Format frame filename
-  const getFrameUrl = useCallback((index) => {
-    const padded = String(Math.max(1, Math.min(TOTAL_FRAMES, index))).padStart(3, '0');
-    return `/koenigsegg-frames/ezgif-frame-${padded}.jpg`;
+  const hasInitialDrawnRef = useRef(false);
+
+  // Robust BASE_URL resolution for GitHub Pages subpath (/mechify/) and Localhost
+  const getBaseAssetPath = useCallback(() => {
+    const envBase = import.meta.env.BASE_URL;
+    if (envBase && envBase !== './' && envBase !== '/') {
+      return envBase.replace(/\/$/, '');
+    }
+    if (typeof window !== 'undefined' && window.location.pathname.includes('/mechify')) {
+      return '/mechify';
+    }
+    return '';
   }, []);
 
-  /* ── 1. HIGH SPEED PROGRESSIVE PRELOADER ───────────────────────── */
-  useEffect(() => {
-    let isCancelled = false;
-    loadedCountRef.current = 0;
+  // Format frame filename with GitHub Pages base path
+  const getFrameUrl = useCallback((index) => {
+    const padded = String(Math.max(1, Math.min(TOTAL_FRAMES, index))).padStart(3, '0');
+    const basePath = getBaseAssetPath();
+    return `${basePath}/koenigsegg-frames/ezgif-frame-${padded}.jpg`;
+  }, [getBaseAssetPath]);
 
-    // Step 1: Priority Keyframes (Every 5th frame) so car displays immediately
-    const priorityFrames = [];
-    for (let i = 1; i <= TOTAL_FRAMES; i += 5) {
-      priorityFrames.push(i);
-    }
-    if (!priorityFrames.includes(1)) priorityFrames.unshift(1);
-    if (!priorityFrames.includes(TOTAL_FRAMES)) priorityFrames.push(TOTAL_FRAMES);
-
-    // Step 2: Remaining frames
-    const remainingFrames = [];
-    for (let i = 1; i <= TOTAL_FRAMES; i++) {
-      if (!priorityFrames.includes(i)) {
-        remainingFrames.push(i);
-      }
-    }
-
-    const loadSingleFrame = (idx) => {
-      return new Promise((resolve) => {
-        if (imagesCacheRef.current[idx]) {
-          resolve(imagesCacheRef.current[idx]);
-          return;
-        }
-        const img = new Image();
-        img.src = getFrameUrl(idx);
-        img.onload = () => {
-          if (!isCancelled) {
-            imagesCacheRef.current[idx] = img;
-            loadedCountRef.current += 1;
-            setLoadProgress(Math.round((loadedCountRef.current / TOTAL_FRAMES) * 100));
-            // As soon as frame 1 is ready, start rendering
-            if (idx === 1 && !isLoaded) {
-              setIsLoaded(true);
-            }
-          }
-          resolve(img);
-        };
-        img.onerror = () => {
-          resolve(null);
-        };
-      });
-    };
-
-    // Sequentially load priority first, then burst the rest
-    (async () => {
-      // Load first frame immediately
-      await loadSingleFrame(1);
-      if (!isCancelled) setIsLoaded(true);
-
-      // Load rest of priority in parallel
-      await Promise.all(priorityFrames.map(loadSingleFrame));
-
-      // Load remaining in chunks of 15
-      const chunkSize = 15;
-      for (let i = 0; i < remainingFrames.length; i += chunkSize) {
-        if (isCancelled) break;
-        const slice = remainingFrames.slice(i, i + chunkSize);
-        await Promise.all(slice.map(loadSingleFrame));
-      }
-    })();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [getFrameUrl, isLoaded]);
-
-  /* ── 2. CANVAS DRAW FUNCTION (PRESERVING 16:9 IN PURE BLACK STUDIO) ─ */
+  /* ── 1. CANVAS DRAW FUNCTION (PRESERVING FULL BLEED IN PURE BLACK STUDIO) ─ */
   const drawFrame = useCallback((frameNumber) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -227,7 +172,7 @@ export default function Landing() {
       }
     }
     if (!img) img = imagesCacheRef.current[1];
-    if (!img || !img.complete) return;
+    if (!img || !img.complete || img.naturalWidth === 0) return;
 
     const cw = canvas.width;
     const ch = canvas.height;
@@ -266,6 +211,107 @@ export default function Landing() {
     ctx.drawImage(img, dx, dy, dw, dh);
   }, []);
 
+  /* ── 2. HIGH SPEED PROGRESSIVE PRELOADER ───────────────────────── */
+  useEffect(() => {
+    let isCancelled = false;
+    loadedCountRef.current = 0;
+
+    // Step 1: Priority Keyframes (Every 5th frame) so car displays immediately
+    const priorityFrames = [];
+    for (let i = 1; i <= TOTAL_FRAMES; i += 5) {
+      priorityFrames.push(i);
+    }
+    if (!priorityFrames.includes(1)) priorityFrames.unshift(1);
+    if (!priorityFrames.includes(TOTAL_FRAMES)) priorityFrames.push(TOTAL_FRAMES);
+
+    // Step 2: Remaining frames
+    const remainingFrames = [];
+    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+      if (!priorityFrames.includes(i)) {
+        remainingFrames.push(i);
+      }
+    }
+
+    const loadSingleFrame = (idx) => {
+      return new Promise((resolve) => {
+        if (imagesCacheRef.current[idx]) {
+          resolve(imagesCacheRef.current[idx]);
+          return;
+        }
+        const img = new Image();
+        const primarySrc = getFrameUrl(idx);
+        img.src = primarySrc;
+
+        const handleSuccess = (loadedImg) => {
+          if (!isCancelled) {
+            imagesCacheRef.current[idx] = loadedImg;
+            loadedCountRef.current += 1;
+            setLoadProgress(Math.round((loadedCountRef.current / TOTAL_FRAMES) * 100));
+            // As soon as frame 1 is ready, start rendering immediately
+            if (idx === 1) {
+              setIsLoaded(true);
+              drawFrame(1);
+            }
+          }
+          resolve(loadedImg);
+        };
+
+        img.onload = () => handleSuccess(img);
+
+        img.onerror = () => {
+          const padded = String(Math.max(1, Math.min(TOTAL_FRAMES, idx))).padStart(3, '0');
+          // Fallback 1: try /mechify/ prefix if primary didn't contain it
+          if (!primarySrc.includes('/mechify/')) {
+            const retryImg = new Image();
+            retryImg.src = `/mechify/koenigsegg-frames/ezgif-frame-${padded}.jpg`;
+            retryImg.onload = () => handleSuccess(retryImg);
+            retryImg.onerror = () => {
+              // Fallback 2: relative path
+              const relImg = new Image();
+              relImg.src = `./koenigsegg-frames/ezgif-frame-${padded}.jpg`;
+              relImg.onload = () => handleSuccess(relImg);
+              relImg.onerror = () => resolve(null);
+            };
+            return;
+          }
+          resolve(null);
+        };
+      });
+    };
+
+    // Sequentially load priority first, then burst the rest
+    (async () => {
+      // Load first frame immediately
+      await loadSingleFrame(1);
+      if (!isCancelled) {
+        setIsLoaded(true);
+        drawFrame(1);
+      }
+
+      // Load rest of priority in parallel
+      await Promise.all(priorityFrames.map(loadSingleFrame));
+
+      // Load remaining in chunks of 15
+      const chunkSize = 15;
+      for (let i = 0; i < remainingFrames.length; i += chunkSize) {
+        if (isCancelled) break;
+        const slice = remainingFrames.slice(i, i + chunkSize);
+        await Promise.all(slice.map(loadSingleFrame));
+      }
+    })();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [getFrameUrl, drawFrame]);
+
+  // Ensure initial render once loaded
+  useEffect(() => {
+    if (isLoaded) {
+      drawFrame(Math.round(currentFrameRef.current || 1));
+    }
+  }, [isLoaded, drawFrame]);
+
   /* ── 3. RESIZE HANDLER (RETINA RESOLUTION DAMPING) ─────────────── */
   useEffect(() => {
     const updateSize = () => {
@@ -299,6 +345,9 @@ export default function Landing() {
         const frameInt = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(currentFrameRef.current)));
         setCurrentFrame(frameInt);
         drawFrame(frameInt);
+      } else if (!hasInitialDrawnRef.current && imagesCacheRef.current[1]) {
+        hasInitialDrawnRef.current = true;
+        drawFrame(1);
       }
 
       animId = requestAnimationFrame(renderLoop);
